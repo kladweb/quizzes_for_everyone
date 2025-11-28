@@ -1,0 +1,80 @@
+import React, { useState } from "react";
+import { Question } from "../types/Quiz";
+
+export const QuestionComponent: React.FC<{
+  question: Question;
+  onAnswer: (isCorrect: boolean) => void;
+}> = ({ question, onAnswer }) => {
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [isLocked, setIsLocked] = useState(false);
+
+  const handleOptionClick = (index: number) => {
+    if (isLocked) return;
+
+    setSelectedIndex(index);
+    setIsLocked(true);
+    onAnswer(index === question.correctIndex);
+  };
+
+  const getButtonStyle = (index: number): React.CSSProperties => {
+    if (!isLocked) {
+      return {};
+    }
+
+    if (index === question.correctIndex) {
+      return { backgroundColor: '#4caf50', color: 'white', borderColor: '#4caf50' };
+    }
+
+    if (index === selectedIndex && index !== question.correctIndex) {
+      return { backgroundColor: '#f44336', color: 'white', borderColor: '#f44336' };
+    }
+
+    return { opacity: 0.5 };
+  };
+
+  return (
+    <div style={{
+      marginBottom: '30px',
+      padding: '20px',
+      border: '1px solid #ddd',
+      borderRadius: '8px',
+      backgroundColor: '#f9f9f9'
+    }}>
+      <h3 style={{ marginBottom: '15px', color: '#333' }}>{question.question}</h3>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        {question.options.map((option, index) => (
+          <button
+            key={index}
+            onClick={() => handleOptionClick(index)}
+            disabled={isLocked}
+            style={{
+              padding: '12px 20px',
+              fontSize: '16px',
+              border: '2px solid #ddd',
+              borderRadius: '6px',
+              backgroundColor: 'white',
+              cursor: isLocked ? 'not-allowed' : 'pointer',
+              transition: 'all 0.3s ease',
+              textAlign: 'left',
+              ...getButtonStyle(index)
+            }}
+          >
+            {option}
+          </button>
+        ))}
+      </div>
+      {isLocked && (
+        <div style={{
+          marginTop: '15px',
+          padding: '12px',
+          backgroundColor: '#e3f2fd',
+          borderRadius: '6px',
+          color: '#1976d2',
+          fontSize: '14px'
+        }}>
+          <strong>Explanation:</strong> {question.explanation}
+        </div>
+      )}
+    </div>
+  );
+};
