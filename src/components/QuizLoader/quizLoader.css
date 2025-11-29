@@ -1,0 +1,81 @@
+.loaderContainer {
+  max-width: 600px;
+  margin: 10px auto;
+  padding: 40px;
+  text-align: center;
+  border: 2px dashed #ddd;
+  border-radius: 12px;
+  background-color: #fafafa;
+
+  & h1 {
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  & p {
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 16px;
+  }
+}
+
+.loadInput {
+  padding: 12px;
+  font-size: 12px;
+  border: 2px solid #1976d2;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.textError {
+  margin-top: 20px;
+  color: #f44336;
+  font-size: 14px;
+  padding: 10px;
+  background-color: #ffebee;
+  border-radius: 6px;
+}
+
+.buttonCopy {
+  padding: 8px 16px;
+  font-size: 14px;
+  background-Color: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.buttonCopied {
+  background-Color: #4caf50;
+}
+
+.jsonExampleContainer {
+  margin-top: 40px;
+  padding: 20px;
+  background-color: #e3f2fd;
+  border-radius: 8px;
+  text-align: left;
+}
+
+.jsonExampleField {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+
+  & h3 {
+    color: #1976d2;
+    margin: 0;
+  }
+}
+
+.jsonExampleText {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 6px;
+  overflow: auto;
+  font-size: 12px;
+  color: #333;
+}

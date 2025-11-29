@@ -7,6 +7,8 @@ export interface Question {
 }
 
 export interface Quiz {
+  testId: string;
+  createdBy: string;
   title: string;
   description: string;
   questions: Question[];

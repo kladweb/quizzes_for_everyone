@@ -1,0 +1,36 @@
+.buttonMain {
+  display: block;
+  margin: 30px auto;
+  padding: 8px 16px;
+  font-size: 14px;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0.8;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.buttonCreate {
+  background-Color: #1976d2;
+}
+
+.buttonLogin {
+  background-Color: #f67d32;
+}
+
+.noticeBlock {
+  transition: all 0.3s ease;
+
+  & .noticeText {
+    color: #f63917;
+  }
+}
+
+.close {
+  display: none;
+}

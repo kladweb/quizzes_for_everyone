@@ -1,31 +1,34 @@
 import React, { useState } from "react";
-import { Question } from "../types/Quiz";
+import { Question } from "../../types/Quiz";
 
 export const QuestionComponent: React.FC<{
   question: Question;
-  onAnswer: (isCorrect: boolean) => void;
-}> = ({ question, onAnswer }) => {
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const [isLocked, setIsLocked] = useState(false);
+  selectedIndex: number | null;
+  onAnswer: (index: number) => void;
+  isSubmitted: boolean;
+}> = ({ question, selectedIndex, onAnswer, isSubmitted }) => {
 
   const handleOptionClick = (index: number) => {
-    if (isLocked) return;
-
-    setSelectedIndex(index);
-    setIsLocked(true);
-    onAnswer(index === question.correctIndex);
+    if (isSubmitted) return;
+    onAnswer(index);
   };
 
   const getButtonStyle = (index: number): React.CSSProperties => {
-    if (!isLocked) {
-      return {};
+    const isSelected = index === selectedIndex;
+
+    if (!isSubmitted) {
+      return {
+        backgroundColor: isSelected ? '#1976d2' : 'white',
+        color: isSelected ? 'white' : '#333',
+        borderColor: isSelected ? '#1976d2' : '#ddd'
+      };
     }
 
     if (index === question.correctIndex) {
       return { backgroundColor: '#4caf50', color: 'white', borderColor: '#4caf50' };
     }
 
-    if (index === selectedIndex && index !== question.correctIndex) {
+    if (isSelected && index !== question.correctIndex) {
       return { backgroundColor: '#f44336', color: 'white', borderColor: '#f44336' };
     }
 
@@ -46,14 +49,14 @@ export const QuestionComponent: React.FC<{
           <button
             key={index}
             onClick={() => handleOptionClick(index)}
-            disabled={isLocked}
+            disabled={isSubmitted}
             style={{
               padding: '12px 20px',
               fontSize: '16px',
               border: '2px solid #ddd',
               borderRadius: '6px',
               backgroundColor: 'white',
-              cursor: isLocked ? 'not-allowed' : 'pointer',
+              cursor: isSubmitted ? 'not-allowed' : 'pointer',
               transition: 'all 0.3s ease',
               textAlign: 'left',
               ...getButtonStyle(index)
@@ -63,7 +66,7 @@ export const QuestionComponent: React.FC<{
           </button>
         ))}
       </div>
-      {isLocked && (
+      {isSubmitted && (
         <div style={{
           marginTop: '15px',
           padding: '12px',

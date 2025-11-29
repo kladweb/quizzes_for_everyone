@@ -1,0 +1,13 @@
+{
+  "title": "English Test: Present Simple",
+  "description": "Mini test",
+  "questions": [
+    {
+      "id": 1,
+      "question": "She ___ to school.",
+      "options": ["go", "goes", "went", "going"],
+      "correctIndex": 1,
+      "explanation": "He/She/It → goes"
+    }
+  ]
+}
