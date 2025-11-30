@@ -10,6 +10,6 @@ export interface Quiz {
   testId: string;
   createdBy: string;
   title: string;
-  description: string;
+  description?: string;
   questions: Question[];
 }

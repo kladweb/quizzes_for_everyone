@@ -4,7 +4,7 @@ import "./linkQuiz.css";
 export const LinkQuiz: React.FC<{ testId: string }> = ({testId}) => {
   const [copied, setCopied] = useState(false);
   const currentLink = `${window.location.href}tests/${testId}`;
-  console.log(window.location.href);
+  // console.log(window.location.href);
 
   const handleCopy = async () => {
     try {
@@ -26,6 +26,7 @@ export const LinkQuiz: React.FC<{ testId: string }> = ({testId}) => {
       >
         {copied ? '✓ Copied!' : 'Копировать ссылку в буфер'}
       </button>
+      <a className="linkTest" href={currentLink} target="_blank">Перейти на страницу теста</a>
     </div>
   )
 }

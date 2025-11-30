@@ -6,7 +6,8 @@ export const QuestionComponent: React.FC<{
   selectedIndex: number | null;
   onAnswer: (index: number) => void;
   isSubmitted: boolean;
-}> = ({ question, selectedIndex, onAnswer, isSubmitted }) => {
+  showExplanation: boolean;
+}> = ({ question, selectedIndex, onAnswer, isSubmitted, showExplanation }) => {
 
   const handleOptionClick = (index: number) => {
     if (isSubmitted) return;
@@ -66,7 +67,7 @@ export const QuestionComponent: React.FC<{
           </button>
         ))}
       </div>
-      {isSubmitted && (
+      {isSubmitted && showExplanation && (
         <div style={{
           marginTop: '15px',
           padding: '12px',
