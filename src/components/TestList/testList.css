@@ -1,0 +1,24 @@
+.testListBlock {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.testItem {
+  margin: 6px 0;
+  padding: 0;
+  width: fit-content;
+  border: 1px solid #16a34a;
+  border-radius: 6px;
+}
+
+.testItemName {
+  margin: 0;
+  padding: 5px;
+  color: #0055ff;
+}
+
+.buttonDel {
+  display: inline-block;
+  margin-bottom: 4px;
+}

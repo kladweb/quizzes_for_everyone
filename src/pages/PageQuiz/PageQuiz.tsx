@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { QuizComponent } from "../components/Quiz/Quiz";
+import { QuizComponent } from "../../components/Quiz/Quiz";
 import { child, get, ref } from "firebase/database";
-import { database } from "../firebase/firebase";
-import type { Quiz } from "../types/Quiz";
+import { database } from "../../firebase/firebase";
+import type { Quiz } from "../../types/Quiz";
 import { useParams } from "react-router-dom";
 
 export const PageQuiz = () => {

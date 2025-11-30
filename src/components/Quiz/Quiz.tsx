@@ -7,6 +7,7 @@ export const QuizComponent: React.FC<{ quiz: Quiz; onReset: () => void }> = ({qu
     new Array(quiz.questions.length).fill(null)
   );
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [showCorrectExplanations, setShowCorrectExplanations] = useState(false);
 
   const handleAnswer = (questionIndex: number, optionIndex: number) => {
     const newAnswers = [...selectedAnswers];
@@ -39,11 +40,34 @@ export const QuizComponent: React.FC<{ quiz: Quiz; onReset: () => void }> = ({qu
           selectedIndex={selectedAnswers[index]}
           onAnswer={(optionIndex) => handleAnswer(index, optionIndex)}
           isSubmitted={isSubmitted}
+          showExplanation={selectedAnswers[index] !== question.correctIndex || showCorrectExplanations}
         />
       ))}
 
       {!isSubmitted && (
         <div style={{textAlign: 'center', marginTop: '30px'}}>
+          <div style={{marginBottom: '20px'}}>
+            <label style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              cursor: 'pointer',
+              fontSize: '16px',
+              color: '#333'
+            }}>
+              <input
+                type="checkbox"
+                checked={showCorrectExplanations}
+                onChange={(e) => setShowCorrectExplanations(e.target.checked)}
+                style={{
+                  width: '18px',
+                  height: '18px',
+                  marginRight: '10px',
+                  cursor: 'pointer'
+                }}
+              />
+              Show explanations for correct answers
+            </label>
+          </div>
           <button
             onClick={handleSubmit}
             disabled={!allAnswered}

@@ -7,3 +7,12 @@
   font-size: 1.5rem;
   color: #f63917;
 }
+
+.linkTest {
+  display: block;
+  margin-top: 2rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: #f67d32;
+}
