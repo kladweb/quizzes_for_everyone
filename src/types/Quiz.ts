@@ -13,3 +13,20 @@ export interface Quiz {
   description?: string;
   questions: Question[];
 }
+
+interface IAnswer {
+  questionId: string;
+  isCorrect: boolean;
+  selectedIndex: number;
+  correctIndex: number;
+}
+
+export interface IStatistics {
+  statistics: {
+    userName: string;
+    startedAt: string;
+    finishedAt: string;
+    score: number;
+    answers: IAnswer[];
+  }
+}

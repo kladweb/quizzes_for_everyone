@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Question } from "../../types/Quiz";
 
 export const QuestionComponent: React.FC<{

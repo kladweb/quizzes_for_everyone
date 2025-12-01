@@ -5,6 +5,9 @@
 }
 
 .testItem {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   margin: 6px 0;
   padding: 0;
   width: fit-content;
@@ -20,5 +23,24 @@
 
 .buttonDel {
   display: inline-block;
-  margin-bottom: 4px;
+  height: 1.6rem;
+  margin: 4px;
+}
+
+.linkOpenTest {
+  margin: 0.2rem;
+  padding: 0;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-decoration: none;
+  color: #f67d32;
+  line-height: 1.6rem;
+
+}
+
+.testInfo {
+  margin-top: -7px;
+  flex-basis: 100%;
+  border: 1px solid #16a34a;
+  border-radius: 6px;
 }

@@ -18,8 +18,9 @@ export const PageMain: React.FC = () => {
   const [user, setUser] = useState<IUser | null>(null);
   const [isNotice, setIsNotice] = useState(true);
   const [currentTestId, setCurrentTestId] = useState<string | null>(null);
-  // const [quizIds, setQuizIds] = useState<string[]>([]);
   const [testList, setTestList] = useState<Quiz[]>([]);
+  const [loadingMyTests, setLoadingMyTests] = useState(true);
+  const [isLoadCurrenTest, setIsLoadCurrenTest] = useState(false);
 
   const initUser = () => {
     onAuthStateChanged(auth, (getUser) => {
@@ -40,28 +41,33 @@ export const PageMain: React.FC = () => {
     const dbRef = ref(database, `users/${user.uid}`);
     get(dbRef).then((snapshot) => {
       if (snapshot.exists()) {
-        const quizIds = snapshot.val();
+        const quizIds = JSON.parse(snapshot.val());
         console.log(quizIds);
         // setQuizIds([...quizIds]);
         loadQuizzes([...quizIds])
           .then((value) => {
             setTestList([...value.map(item => JSON.parse(item))]);
+            setLoadingMyTests(false);
           })
           .catch((error) => {
             console.log(error);
           });
       } else {
         console.log("No collection available");
+        console.log("или данные отсутствуют");
       }
     }).catch((error) => {
-      console.error(error);
-    });
+        console.error(error);
+      })
+      .finally(() => {
+        setLoadingMyTests(false);
+      });
   }
 
   const loadQuizzes = async (ids: string[]) => {
     const dbRef = ref(database);
     const promises = ids.map(id =>
-      get(child(dbRef, `tests/${id}`)).then(s => s.val())
+      get(child(dbRef, `tests/${id}/test`)).then(s => s.val())
     );
     return Promise.all(promises);
   };
@@ -76,8 +82,12 @@ export const PageMain: React.FC = () => {
 
   const createTest = () => {
     console.log('Creating test...');
-    setIsNotice(false);
-    setTimeout(() => setIsNotice(true), 2000);
+    if (user) {
+      setIsLoadCurrenTest(true);
+    } else {
+      setIsNotice(false);
+      setTimeout(() => setIsNotice(true), 2000);
+    }
   }
 
   const loginGoogle = function () {
@@ -108,49 +118,76 @@ export const PageMain: React.FC = () => {
   const saveQuiz = async (quiz: Quiz) => {
     // console.log(typeof (quiz));
     if (user) {
-      await set(ref(database, `tests/${quiz.testId}`), JSON.stringify(quiz));
+      await set(ref(database, `tests/${quiz.testId}/test`), JSON.stringify(quiz));
       const idList = testList.map(item => item.testId);
-      console.log("idList: ", idList);
-      await set(ref(database, `users/${user.uid}`), [...idList, quiz.testId]);
+      await set(ref(database, `users/${user.uid}`), JSON.stringify([...idList, quiz.testId]));
       setCurrentTestId(quiz.testId);
+      setTestList([...testList, quiz]);
     }
+    setIsLoadCurrenTest(false)
     console.log("Данные вроде как загружены! )");
   }
 
+  const deleteTest = async (testId: string) => {
+    const IdsArray = testList.map(quiz => quiz.testId);
+    let index = IdsArray.indexOf(testId);
+    if (index !== -1) {
+      IdsArray.splice(index, 1);
+      const newTestList = [...testList];
+      newTestList.splice(index, 1);
+      setTestList(newTestList);
+      setCurrentTestId(null);
+    }
+    if (user) {
+      const promise1 = set(ref(database, `tests/${testId}`), null);
+      const promise2 = set(ref(database, `users/${user.uid}`), JSON.stringify(IdsArray));
+      Promise.all([promise1, promise2])
+        .then(() => {
+          console.log("Данные успешно изменены!")
+        })
+        .catch((error) => {
+          console.log("Ошибка удаления: ", error);
+        })
+    }
+  }
 
-  console.log(testList);
   return (
     <>
       <div className='loaderContainer'>
         {
           (user) ?
             <button className='buttonMain buttonLogin' onClick={logoutGoogle}>LOGOUT</button> :
-            <>
-              <button className='buttonMain buttonCreate' onClick={createTest}>Создать новый тест</button>
-              <button className='buttonMain buttonLogin' onClick={loginGoogle}>GOOGLE LOGIN</button>
-              <div className={`noticeBlock${(isNotice ? " close" : "")}`}>
-                <p className='noticeText'>Сначала нужно войти в систему!</p>
-                <p className='noticeText'>Нажните кнопку GOOGLE LOGIN!</p>
-              </div>
-            </>
+            <button className='buttonMain buttonLogin' onClick={loginGoogle}>GOOGLE LOGIN</button>
         }
+        <>
+          <button className='buttonMain buttonCreate' onClick={createTest}>Создать новый тест</button>
+          <div className={`noticeBlock${(isNotice ? " close" : "")}`}>
+            <p className='noticeText'>Сначала нужно войти в систему!</p>
+            <p className='noticeText'>Нажните кнопку GOOGLE LOGIN!</p>
+          </div>
+        </>
         {
-          (user && !currentTestId) ?
+          (user && isLoadCurrenTest) ?
             <QuizLoader onQuizLoad={saveQuiz} userUID={user.uid}/> : null
         }
         {
-          (currentTestId) ?
+          (currentTestId && !isLoadCurrenTest) ?
             <LinkQuiz
               testId={currentTestId}
             /> :
             null
         }
       </div>
-      <div className='loaderContainer'>
-        {
-          user ? <TestList testList={testList}/> : null
-        }
-      </div>
+      {
+        user ?
+          <TestList
+            testList={testList}
+            deleteTest={deleteTest}
+            loadingMyTests={loadingMyTests}
+          />
+          :
+          null
+      }
     </>
   );
 };

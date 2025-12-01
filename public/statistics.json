@@ -1,0 +1,22 @@
+{
+  "statistics": {
+    "userName": "Anna",
+    "startedAt": 1735002000000,
+    "finishedAt": 1735002600000,
+    "score": 8,
+    "answers": [
+      {
+        "questionId": "q1",
+        "isCorrect": false,
+        "selectedIndex": 0,
+        "correctIndex": 1
+      },
+      {
+        "questionId": "q2",
+        "isCorrect": true,
+        "selectedIndex": 2,
+        "correctIndex": 2
+      }
+    ]
+  }
+}

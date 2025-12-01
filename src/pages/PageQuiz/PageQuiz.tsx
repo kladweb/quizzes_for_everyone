@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { QuizComponent } from "../../components/Quiz/Quiz";
-import { child, get, ref } from "firebase/database";
+import { child, get, ref, set } from "firebase/database";
 import { database } from "../../firebase/firebase";
-import type { Quiz } from "../../types/Quiz";
+import { IStatistics, Quiz } from "../../types/Quiz";
 import { useParams } from "react-router-dom";
 
 export const PageQuiz = () => {
@@ -15,9 +15,18 @@ export const PageQuiz = () => {
     setQuiz(null);
   };
 
+  const saveStatistic = async (statistics: string) => {
+    console.log("saveStatistic", statistics);
+    await set(ref(database, `tests/${testId}/statistics`), statistics);
+  }
+
   useEffect(() => {
+    if (quiz) {
+      return;
+    }
     const dbRef = ref(database);
-    get(child(dbRef, `tests/${testId}`)).then((snapshot) => {
+    get(child(dbRef, `tests/${testId}/test`)).then((snapshot) => {
+      console.log("Загружаем данные");
       if (snapshot.exists()) {
         const dataString = snapshot.val();
         let quiz = JSON.parse(dataString);
@@ -35,7 +44,7 @@ export const PageQuiz = () => {
     <>
       {
         (quiz) ?
-          <QuizComponent quiz={quiz} onReset={handleReset}/> :
+          <QuizComponent quiz={quiz} onReset={handleReset} saveStatistic={saveStatistic}/> :
           <div>LOADING ...</div>
       }
     </>
