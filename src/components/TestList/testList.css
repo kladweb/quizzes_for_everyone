@@ -6,19 +6,29 @@
 
 .testItem {
   display: flex;
+  padding: 0;
+  margin: 6px 0;
+  width: 80%;
+  align-self: start;
   flex-wrap: wrap;
   justify-content: center;
-  margin: 6px 0;
-  padding: 0;
-  width: fit-content;
   border: 1px solid #16a34a;
   border-radius: 6px;
 }
 
+.testBlock {
+  width: 100%;
+}
+
 .testItemName {
+  display: inline-block;
   margin: 0;
   padding: 5px;
   color: #0055ff;
+}
+
+.buttonsBlock {
+  display: inline-block;
 }
 
 .buttonDel {
@@ -39,8 +49,5 @@
 }
 
 .testInfo {
-  margin-top: -7px;
-  flex-basis: 100%;
-  border: 1px solid #16a34a;
-  border-radius: 6px;
+  margin: 0.2rem;
 }

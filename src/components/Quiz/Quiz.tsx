@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { type Quiz } from "../../types/Quiz";
+import { IStatistics, type Quiz } from "../../types/Quiz";
 import { QuestionComponent } from "../Question/Question";
 
 interface IQuizProps {
   quiz: Quiz;
   onReset: () => void;
-  saveStatistic: (statistics: string) => void;
+  saveStatistic: (statistics: IStatistics) => void;
 }
 
 export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatistic}) => {
@@ -42,7 +42,7 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
         correctIndex: question.correctIndex
       }))
     };
-    saveStatistic(JSON.stringify(statistics));
+    saveStatistic(statistics);
     // console.log(JSON.stringify(statistics, null, 2));
   };
 

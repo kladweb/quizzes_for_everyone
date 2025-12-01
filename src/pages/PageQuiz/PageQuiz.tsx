@@ -15,9 +15,9 @@ export const PageQuiz = () => {
     setQuiz(null);
   };
 
-  const saveStatistic = async (statistics: string) => {
+  const saveStatistic = async (statistics: IStatistics) => {
     console.log("saveStatistic", statistics);
-    await set(ref(database, `tests/${testId}/statistics`), statistics);
+    await set(ref(database, `tests/${testId}/statistics/${statistics.finishedAt}`), JSON.stringify(statistics));
   }
 
   useEffect(() => {

@@ -34,6 +34,7 @@ export const PageMain: React.FC = () => {
     });
   }
 
+
   const loadTests = () => {
     if (!user) {
       return;
