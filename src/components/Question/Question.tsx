@@ -36,6 +36,8 @@ export const QuestionComponent: React.FC<{
     return { opacity: 0.5 };
   };
 
+  console.log(question);
+
   return (
     <div style={{
       marginBottom: '30px',
@@ -44,7 +46,7 @@ export const QuestionComponent: React.FC<{
       borderRadius: '8px',
       backgroundColor: '#f9f9f9'
     }}>
-      <h3 style={{ marginBottom: '15px', color: '#333' }}>{question.question}</h3>
+      <h3 style={{ marginBottom: '15px', color: '#333' }}>{`${question.id}) ${question.question}`}</h3>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         {question.options.map((option, index) => (
           <button
