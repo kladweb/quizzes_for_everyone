@@ -12,7 +12,8 @@ export const PageQuiz = () => {
   const [quiz, setQuiz] = useState<Quiz | null>(null);
 
   const handleReset = () => {
-    setQuiz(null);
+    // setQuiz(null);
+    location.reload()
   };
 
   const saveStatistic = async (statistics: IStatistics) => {
