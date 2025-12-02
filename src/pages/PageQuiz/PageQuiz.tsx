@@ -12,12 +12,13 @@ export const PageQuiz = () => {
   const [quiz, setQuiz] = useState<Quiz | null>(null);
 
   const handleReset = () => {
-    setQuiz(null);
+    // setQuiz(null);
+    location.reload()
   };
 
-  const saveStatistic = async (statistics: string) => {
+  const saveStatistic = async (statistics: IStatistics) => {
     console.log("saveStatistic", statistics);
-    await set(ref(database, `tests/${testId}/statistics`), statistics);
+    await set(ref(database, `tests/${testId}/statistics/${statistics.finishedAt}`), JSON.stringify(statistics));
   }
 
   useEffect(() => {

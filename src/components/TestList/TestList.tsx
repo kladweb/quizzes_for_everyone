@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { type Quiz } from "../../types/Quiz";
 import "./testList.css";
+import { Statistics } from "../Statistics/Statistics";
 
 interface ITestListProps {
   testList: Quiz[],
@@ -9,28 +10,40 @@ interface ITestListProps {
 }
 
 export const TestList: React.FC<ITestListProps> = ({testList, deleteTest, loadingMyTests}) => {
-  const currentInfoId = "IO8gOEFbqmW7";
+  const [isOpenStatistics, setIsOpenStatistics] = useState<boolean>(false);
+  const [currentTestId, setCurrentTestId] = useState<string | null>(null);
 
   const openStatistic = (testId: string) => {
-
+    if (currentTestId !== testId) {
+      setIsOpenStatistics(true);
+    } else {
+      setIsOpenStatistics(prevState => !prevState);
+    }
+    setCurrentTestId(testId);
   }
 
   const testsElements = testList.map((quiz, i) => {
     return (
-      <>
-        <div className='testItem' key={quiz.testId}>
+      <div className='testItem' key={quiz.testId}>
+        <div className='testBlock'>
           <p className='testItemName'>{i + 1}) {quiz.title}</p>
-          <button className='buttonDel' onClick={() => deleteTest(quiz.testId)}>Удалить</button>
-          <button className='buttonDel' onClick={() => openStatistic(quiz.testId)}>Статистика</button>
-          <a className="linkOpenTest" href={`${window.location.href}tests/${quiz.testId}`} target="_blank">
-            <span>Открыть</span>
-          </a>
+          <div className='buttonsBlock'>
+            <button className='buttonDel' onClick={() => deleteTest(quiz.testId)}>Удалить</button>
+            <button className='buttonDel' onClick={() => openStatistic(quiz.testId)}>Статистика</button>
+            <a className="linkOpenTest" href={`${window.location.href}tests/${quiz.testId}`} target="_blank">
+              <span>Открыть</span>
+            </a>
+          </div>
         </div>
         {
-          (quiz.testId === currentInfoId) ?
-            <div className='testInfo'>Информация</div> : null
+          (isOpenStatistics && quiz.testId === currentTestId) ?
+            <div>
+              <h4 className='testInfo'>Статистика</h4>
+              <Statistics testId={quiz.testId}/>
+            </div>
+            : null
         }
-      </>
+      </div>
     )
   })
 

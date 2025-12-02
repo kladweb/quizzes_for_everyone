@@ -15,18 +15,16 @@ export interface Quiz {
 }
 
 interface IAnswer {
-  questionId: string;
+  questionId: number;
   isCorrect: boolean;
-  selectedIndex: number;
+  selectedIndex: number | null;
   correctIndex: number;
 }
 
 export interface IStatistics {
-  statistics: {
-    userName: string;
-    startedAt: string;
-    finishedAt: string;
-    score: number;
-    answers: IAnswer[];
-  }
+  userName: string;
+  startedAt: number;
+  finishedAt: number;
+  score: number;
+  answers: IAnswer[];
 }
