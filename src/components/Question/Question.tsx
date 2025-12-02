@@ -76,7 +76,7 @@ export const QuestionComponent: React.FC<{
           color: '#1976d2',
           fontSize: '14px'
         }}>
-          <strong>Explanation:</strong> {question.explanation}
+          <strong>Объяснение:</strong> {question.explanation}
         </div>
       )}
     </div>
