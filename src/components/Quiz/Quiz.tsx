@@ -139,7 +139,7 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
           )}
           {allAnswered && !userName.trim() && (
             <p style={{marginTop: '10px', color: '#f44336', fontSize: '14px'}}>
-              Please enter your name before submitting
+              Пожалуйста, введите Ваше имя перед отправкой
             </p>
           )}
         </div>
