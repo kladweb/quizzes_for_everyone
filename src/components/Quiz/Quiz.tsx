@@ -64,7 +64,7 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
           <div style={{marginTop: '20px'}}>
             <input
               type="text"
-              placeholder="Enter your name *"
+              placeholder="Ваше имя и/или фамилия *"
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
               style={{
@@ -112,7 +112,7 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
                   cursor: 'pointer'
                 }}
               />
-              Show explanations for correct answers
+              Показать объяснения по завершении теста и для правильных ответов
             </label>
           </div>
           <button
@@ -130,16 +130,16 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
               transition: 'all 0.3s ease'
             }}
           >
-            SUBMIT
+            ПОКАЗАТЬ РЕЗУЛЬТАТ
           </button>
           {!allAnswered && (
             <p style={{marginTop: '10px', color: '#f44336', fontSize: '14px'}}>
-              Please answer all questions before submitting
+              Пожалуйста, ответьте на все вопросы перед отправкой
             </p>
           )}
           {allAnswered && !userName.trim() && (
             <p style={{marginTop: '10px', color: '#f44336', fontSize: '14px'}}>
-              Please enter your name before submitting
+              Пожалуйста, введите Ваше имя перед отправкой
             </p>
           )}
         </div>
@@ -153,15 +153,15 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
           borderRadius: '8px',
           textAlign: 'center'
         }}>
-          <h2 style={{color: '#2e7d32', marginBottom: '15px'}}>Quiz Complete!</h2>
+          <h2 style={{color: '#2e7d32', marginBottom: '15px'}}>Тест выполнен!</h2>
           <p style={{fontSize: '18px', marginBottom: '10px'}}>
-            <strong>Correct:</strong> {correctCount} ✓
+            <strong>Верных ответов:</strong> {correctCount} ✓
           </p>
           <p style={{fontSize: '18px', marginBottom: '20px'}}>
-            <strong>Incorrect:</strong> {incorrectCount} ✗
+            <strong>Неверных ответов:</strong> {incorrectCount} ✗
           </p>
           <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1b5e20'}}>
-            Score: {Math.round((correctCount / quiz.questions.length) * 100)}%
+            Результат: {Math.round((correctCount / quiz.questions.length) * 100)}%
           </p>
           <button
             onClick={onReset}
@@ -176,7 +176,7 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
               cursor: 'pointer'
             }}
           >
-            Load Another Quiz
+            Пройти тест ещё раз
           </button>
         </div>
       )}
