@@ -2,12 +2,13 @@ import React from "react";
 import { Question } from "../../types/Quiz";
 
 export const QuestionComponent: React.FC<{
+  number: number;
   question: Question;
   selectedIndex: number | null;
   onAnswer: (index: number) => void;
   isSubmitted: boolean;
   showExplanation: boolean;
-}> = ({ question, selectedIndex, onAnswer, isSubmitted, showExplanation }) => {
+}> = ({number, question, selectedIndex, onAnswer, isSubmitted, showExplanation }) => {
 
   const handleOptionClick = (index: number) => {
     if (isSubmitted) return;
@@ -36,7 +37,7 @@ export const QuestionComponent: React.FC<{
     return { opacity: 0.5 };
   };
 
-  console.log(question);
+  // console.log(question);
 
   return (
     <div style={{
@@ -46,7 +47,7 @@ export const QuestionComponent: React.FC<{
       borderRadius: '8px',
       backgroundColor: '#f9f9f9'
     }}>
-      <h3 style={{ marginBottom: '15px', color: '#333' }}>{`${question.id}) ${question.question}`}</h3>
+      <h3 style={{ marginBottom: '15px', color: '#333' }}>{`${number}) ${question.question}`}</h3>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         {question.options.map((option, index) => (
           <button

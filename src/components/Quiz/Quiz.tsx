@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { IStatistics, type Quiz } from "../../types/Quiz";
+import { IStatistics, type Question, type Quiz } from "../../types/Quiz";
 import { QuestionComponent } from "../Question/Question";
 
 interface IQuizProps {
@@ -9,8 +9,16 @@ interface IQuizProps {
 }
 
 export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatistic}) => {
+  const [shuffledQuestions] = useState<Question[]>(() => {
+    const questions = [...quiz.questions];
+    for (let i = questions.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [questions[i], questions[j]] = [questions[j], questions[i]];
+    }
+    return questions;
+  });
   const [selectedAnswers, setSelectedAnswers] = useState<(number | null)[]>(
-    new Array(quiz.questions.length).fill(null)
+    new Array(shuffledQuestions.length).fill(null)
   );
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showCorrectExplanations, setShowCorrectExplanations] = useState(true);
@@ -42,7 +50,7 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
         correctIndex: question.correctIndex
       }))
     };
-    saveStatistic(statistics);
+    // saveStatistic(statistics);
     // console.log(JSON.stringify(statistics, null, 2));
   };
 
@@ -80,9 +88,10 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
         )}
       </div>
 
-      {quiz.questions.map((question, index) => (
+      {shuffledQuestions.map((question, index) => (
         <QuestionComponent
           key={question.id}
+          number={index + 1}
           question={question}
           selectedIndex={selectedAnswers[index]}
           onAnswer={(optionIndex) => handleAnswer(index, optionIndex)}
