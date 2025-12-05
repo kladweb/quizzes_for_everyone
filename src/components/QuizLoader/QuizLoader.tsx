@@ -14,16 +14,31 @@ export const QuizLoader: React.FC<{ onQuizLoad: (quiz: Quiz) => void, userUID: s
   один из которых верный. Добавь краткое объяснение
   для каждого вопроса. Тест оформи в JSON файл по
   такому примеру:
-  {
+{
   "title": "English Test: Present Simple",
   "description": "Mini test",
   "questions": [
     {
       "id": 1,
       "question": "She ___ to school.",
-      "options": ["go", "goes", "went", "going"],
-      "correctIndex": 1,
+      "options": [
+        ["go", false],
+        ["goes", true],
+        ["went", false],
+        ["going", false]
+      ],
       "explanation": "He/She/It → goes"
+    },
+    {
+      "id": 2,
+      "question": "Which of these are correct present simple forms?",
+      "options": [
+        ["I am", true],
+        ["He are", false],
+        ["They are", true],
+        ["She am", false]
+      ],
+      "explanation": "I am, They are - correct forms"
     }
   ]
 }`;
@@ -38,7 +53,7 @@ export const QuizLoader: React.FC<{ onQuizLoad: (quiz: Quiz) => void, userUID: s
     reader.onload = (e) => {
       try {
         const content = e.target?.result as string;
-        const quiz = JSON.parse(content);
+        const quiz = JSON.parse(content) as Quiz;
         quiz.testId = nanoid(12);
         quiz.createdBy = userUID;
 
@@ -74,12 +89,8 @@ export const QuizLoader: React.FC<{ onQuizLoad: (quiz: Quiz) => void, userUID: s
   return (
     <div className='loaderBlock'>
       <h1>Создайте новый тест</h1>
-      <p>
-        Загрузите тест из JSON файла
-      </p>
-
+      <p>Загрузите тест из JSON файла</p>
       <input
-        className='loadInput'
         type="file"
         accept=".json"
         onChange={handleFileChange}

@@ -8,71 +8,109 @@ interface IQuizProps {
   saveStatistic: (statistics: IStatistics) => void;
 }
 
-export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatistic}) => {
+export const QuizComponent: React.FC<{ quiz: Quiz; onReset: () => void }> = ({ quiz, onReset }) => {
   const [shuffledQuestions] = useState<Question[]>(() => {
-    const questions = [...quiz.questions];
+    const questions = quiz.questions.map(q => {
+      const optionsWithIndices = q.options.map((option, index) => ({ option, index }));
+
+      // Fisher-Yates shuffle for options
+      for (let i = optionsWithIndices.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [optionsWithIndices[i], optionsWithIndices[j]] = [optionsWithIndices[j], optionsWithIndices[i]];
+      }
+
+      return {
+        ...q,
+        options: optionsWithIndices.map(item => item.option)
+      };
+    });
+
+    // Fisher-Yates shuffle for questions
     for (let i = questions.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [questions[i], questions[j]] = [questions[j], questions[i]];
     }
+
     return questions;
   });
-  const [selectedAnswers, setSelectedAnswers] = useState<(number | null)[]>(
-    new Array(shuffledQuestions.length).fill(null)
+
+  const [selectedAnswers, setSelectedAnswers] = useState<number[][]>(
+    new Array(shuffledQuestions.length).fill(null).map(() => [])
   );
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showCorrectExplanations, setShowCorrectExplanations] = useState(true);
   const [userName, setUserName] = useState('');
   const [startTime] = useState<number>(Date.now());
 
-  const handleAnswer = (questionIndex: number, optionIndex: number) => {
+  const handleAnswer = (questionIndex: number, indices: number[]) => {
     const newAnswers = [...selectedAnswers];
-    newAnswers[questionIndex] = optionIndex;
+    newAnswers[questionIndex] = indices;
     setSelectedAnswers(newAnswers);
+  };
+
+  const isQuestionCorrect = (questionIndex: number): boolean => {
+    const question = shuffledQuestions[questionIndex];
+    const selected = selectedAnswers[questionIndex];
+    const correctIndices = question.options
+      .map((opt, idx) => opt[1] ? idx : -1)
+      .filter(idx => idx !== -1);
+
+    // All-or-nothing: must select ALL correct and NO incorrect
+    if (selected.length !== correctIndices.length) return false;
+    return correctIndices.every(idx => selected.includes(idx)) &&
+      selected.every(idx => correctIndices.includes(idx));
   };
 
   const handleSubmit = () => {
     setIsSubmitted(true);
 
     const finishTime = Date.now();
-    const correctCount = selectedAnswers.filter((answer, index) => answer === quiz.questions[index].correctIndex).length;
-    const score = Math.round((correctCount / quiz.questions.length) * 100);
+    const correctCount = shuffledQuestions.filter((_, index) => isQuestionCorrect(index)).length;
+    const score = Math.round((correctCount / shuffledQuestions.length) * 100);
 
     const statistics = {
-      userName: userName.trim(),
-      startedAt: startTime,
-      finishedAt: finishTime,
-      score: score,
-      answers: quiz.questions.map((question, index) => ({
-        questionId: question.id,
-        isCorrect: selectedAnswers[index] === question.correctIndex,
-        selectedIndex: selectedAnswers[index],
-        correctIndex: question.correctIndex
-      }))
+      statistics: {
+        userName: userName.trim(),
+        startedAt: startTime,
+        finishedAt: finishTime,
+        score: score,
+        answers: shuffledQuestions.map((question, index) => {
+          const correctIndices = question.options
+            .map((opt, idx) => opt[1] ? idx : -1)
+            .filter(idx => idx !== -1);
+
+          return {
+            questionId: question.id,
+            isCorrect: isQuestionCorrect(index),
+            selectedIndices: selectedAnswers[index],
+            correctIndices: correctIndices
+          };
+        })
+      }
     };
-    // saveStatistic(statistics);
-    // console.log(JSON.stringify(statistics, null, 2));
+
+    console.log(JSON.stringify(statistics, null, 2));
   };
 
-  const allAnswered = selectedAnswers.every(answer => answer !== null);
+  const allAnswered = selectedAnswers.every(answer => answer.length > 0);
   const canSubmit = allAnswered && userName.trim().length > 0;
 
   const correctCount = isSubmitted
-    ? selectedAnswers.filter((answer, index) => answer === quiz.questions[index].correctIndex).length
+    ? shuffledQuestions.filter((_, index) => isQuestionCorrect(index)).length
     : 0;
-  const incorrectCount = isSubmitted ? quiz.questions.length - correctCount : 0;
+  const incorrectCount = isSubmitted ? shuffledQuestions.length - correctCount : 0;
 
   return (
-    <div style={{maxWidth: '600px', margin: '0 auto', padding: '20px'}}>
-      <div style={{textAlign: 'center', marginBottom: '30px'}}>
-        <h1 style={{color: '#333', marginBottom: '10px'}}>{quiz.title}</h1>
-        <p style={{color: '#666', fontSize: '16px'}}>{quiz.description}</p>
+    <div style={{ maxWidth: '600px', margin: '0 auto', padding: '20px' }}>
+      <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+        <h1 style={{ color: '#333', marginBottom: '10px' }}>{quiz.title}</h1>
+        <p style={{ color: '#666', fontSize: '16px' }}>{quiz.description}</p>
 
         {!isSubmitted && (
-          <div style={{marginTop: '20px'}}>
+          <div style={{ marginTop: '20px' }}>
             <input
               type="text"
-              placeholder="Ваше имя и/или фамилия *"
+              placeholder="Enter your name *"
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
               style={{
@@ -91,18 +129,17 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
       {shuffledQuestions.map((question, index) => (
         <QuestionComponent
           key={question.id}
-          number={index + 1}
           question={question}
-          selectedIndex={selectedAnswers[index]}
-          onAnswer={(optionIndex) => handleAnswer(index, optionIndex)}
+          selectedIndices={selectedAnswers[index]}
+          onAnswer={(indices) => handleAnswer(index, indices)}
           isSubmitted={isSubmitted}
-          showExplanation={selectedAnswers[index] !== question.correctIndex || showCorrectExplanations}
+          showExplanation={!isQuestionCorrect(index) || showCorrectExplanations}
         />
       ))}
 
       {!isSubmitted && (
-        <div style={{textAlign: 'center', marginTop: '30px'}}>
-          <div style={{marginBottom: '20px'}}>
+        <div style={{ textAlign: 'center', marginTop: '30px' }}>
+          <div style={{ marginBottom: '20px' }}>
             <label style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -139,16 +176,16 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
               transition: 'all 0.3s ease'
             }}
           >
-            ПОКАЗАТЬ РЕЗУЛЬТАТ
+            SUBMIT
           </button>
           {!allAnswered && (
-            <p style={{marginTop: '10px', color: '#f44336', fontSize: '14px'}}>
+            <p style={{ marginTop: '10px', color: '#f44336', fontSize: '14px' }}>
               Пожалуйста, ответьте на все вопросы перед отправкой
             </p>
           )}
           {allAnswered && !userName.trim() && (
-            <p style={{marginTop: '10px', color: '#f44336', fontSize: '14px'}}>
-              Пожалуйста, введите Ваше имя перед отправкой
+            <p style={{ marginTop: '10px', color: '#f44336', fontSize: '14px' }}>
+              Пожалуйста, введите Ваше имя и/или фамилию перед отправкой
             </p>
           )}
         </div>
@@ -162,15 +199,15 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
           borderRadius: '8px',
           textAlign: 'center'
         }}>
-          <h2 style={{color: '#2e7d32', marginBottom: '15px'}}>Тест выполнен!</h2>
-          <p style={{fontSize: '18px', marginBottom: '10px'}}>
-            <strong>Верных ответов:</strong> {correctCount} ✓
+          <h2 style={{ color: '#2e7d32', marginBottom: '15px' }}>Quiz Complete!</h2>
+          <p style={{ fontSize: '18px', marginBottom: '10px' }}>
+            <strong>Correct:</strong> {correctCount} ✓
           </p>
-          <p style={{fontSize: '18px', marginBottom: '20px'}}>
-            <strong>Неверных ответов:</strong> {incorrectCount} ✗
+          <p style={{ fontSize: '18px', marginBottom: '20px' }}>
+            <strong>Incorrect:</strong> {incorrectCount} ✗
           </p>
-          <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1b5e20'}}>
-            Результат: {Math.round((correctCount / quiz.questions.length) * 100)}%
+          <p style={{ fontSize: '20px', fontWeight: 'bold', color: '#1b5e20' }}>
+            Score: {Math.round((correctCount / shuffledQuestions.length) * 100)}%
           </p>
           <button
             onClick={onReset}
@@ -185,7 +222,7 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
               cursor: 'pointer'
             }}
           >
-            Пройти тест ещё раз
+            Load Another Quiz
           </button>
         </div>
       )}
