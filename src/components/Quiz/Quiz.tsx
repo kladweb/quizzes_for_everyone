@@ -8,33 +8,34 @@ interface IQuizProps {
   saveStatistic: (statistics: IStatistics) => void;
 }
 
-export const QuizComponent: React.FC<{ quiz: Quiz; onReset: () => void }> = ({ quiz, onReset }) => {
+export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatistic}) => {
   const [shuffledQuestions] = useState<Question[]>(() => {
-    const questions = quiz.questions.map(q => {
-      const optionsWithIndices = q.options.map((option, index) => ({ option, index }));
-
+    // First, shuffle options within each question
+    const questionsWithShuffledOptions = quiz.questions.map(q => {
+      const shuffledOptions = [...q.options];
       // Fisher-Yates shuffle for options
-      for (let i = optionsWithIndices.length - 1; i > 0; i--) {
+      for (let i = shuffledOptions.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [optionsWithIndices[i], optionsWithIndices[j]] = [optionsWithIndices[j], optionsWithIndices[i]];
+        [shuffledOptions[i], shuffledOptions[j]] = [shuffledOptions[j], shuffledOptions[i]];
       }
 
       return {
         ...q,
-        options: optionsWithIndices.map(item => item.option)
+        options: shuffledOptions
       };
     });
 
-    // Fisher-Yates shuffle for questions
-    for (let i = questions.length - 1; i > 0; i--) {
+    // Then shuffle the questions themselves
+    const shuffledQuestions = [...questionsWithShuffledOptions];
+    for (let i = shuffledQuestions.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [questions[i], questions[j]] = [questions[j], questions[i]];
+      [shuffledQuestions[i], shuffledQuestions[j]] = [shuffledQuestions[j], shuffledQuestions[i]];
     }
 
-    return questions;
+    return shuffledQuestions;
   });
 
-  const [selectedAnswers, setSelectedAnswers] = useState<number[][]>(
+  const [selectedAnswers, setSelectedAnswers] = useState<string[][]>(
     new Array(shuffledQuestions.length).fill(null).map(() => [])
   );
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -42,72 +43,91 @@ export const QuizComponent: React.FC<{ quiz: Quiz; onReset: () => void }> = ({ q
   const [userName, setUserName] = useState('');
   const [startTime] = useState<number>(Date.now());
 
-  const handleAnswer = (questionIndex: number, indices: number[]) => {
+  const handleAnswer = (questionIndex: number, optionIds: string[]) => {
     const newAnswers = [...selectedAnswers];
-    newAnswers[questionIndex] = indices;
+    newAnswers[questionIndex] = optionIds;
     setSelectedAnswers(newAnswers);
   };
 
-  const isQuestionCorrect = (questionIndex: number): boolean => {
+  const calculateQuestionScore = (questionIndex: number): number => {
     const question = shuffledQuestions[questionIndex];
     const selected = selectedAnswers[questionIndex];
-    const correctIndices = question.options
-      .map((opt, idx) => opt[1] ? idx : -1)
-      .filter(idx => idx !== -1);
+    const correct = question.correctAnswers;
 
-    // All-or-nothing: must select ALL correct and NO incorrect
-    if (selected.length !== correctIndices.length) return false;
-    return correctIndices.every(idx => selected.includes(idx)) &&
-      selected.every(idx => correctIndices.includes(idx));
+    // If any wrong answer is selected, score is 0
+    const hasWrongAnswer = selected.some(id => !correct.includes(id));
+    if (hasWrongAnswer) return 0;
+
+    // If no answers selected, score is 0
+    if (selected.length === 0) return 0;
+
+    // Score = correct choices selected / total number of correct answers
+    const correctSelected = selected.filter(id => correct.includes(id)).length;
+    return correctSelected / correct.length;
+  };
+
+  const isQuestionCorrect = (questionIndex: number): boolean => {
+    return calculateQuestionScore(questionIndex) === 1;
   };
 
   const handleSubmit = () => {
     setIsSubmitted(true);
 
     const finishTime = Date.now();
+
+    // Calculate total score with partial credit
+    const totalScore = shuffledQuestions.reduce((sum, _, index) => {
+      return sum + calculateQuestionScore(index);
+    }, 0);
+
+    const maxScore = shuffledQuestions.length;
+    const scorePercentage = Math.round((totalScore / maxScore) * 100);
+
     const correctCount = shuffledQuestions.filter((_, index) => isQuestionCorrect(index)).length;
-    const score = Math.round((correctCount / shuffledQuestions.length) * 100);
 
     const statistics = {
-      statistics: {
-        userName: userName.trim(),
-        startedAt: startTime,
-        finishedAt: finishTime,
-        score: score,
-        answers: shuffledQuestions.map((question, index) => {
-          const correctIndices = question.options
-            .map((opt, idx) => opt[1] ? idx : -1)
-            .filter(idx => idx !== -1);
-
-          return {
-            questionId: question.id,
-            isCorrect: isQuestionCorrect(index),
-            selectedIndices: selectedAnswers[index],
-            correctIndices: correctIndices
-          };
-        })
-      }
+      userName: userName.trim(),
+      startedAt: startTime,
+      finishedAt: finishTime,
+      score: scorePercentage,
+      totalScore: totalScore,
+      maxScore: maxScore,
+      correctCount: correctCount,
+      answers: shuffledQuestions.map((question, index) => {
+        const questionScore = calculateQuestionScore(index);
+        return {
+          questionId: question.id,
+          isCorrect: questionScore === 1,
+          score: questionScore,
+          selectedOptionIds: selectedAnswers[index],
+          correctOptionIds: question.correctAnswers
+        };
+      })
     };
 
+    saveStatistic(statistics);
     console.log(JSON.stringify(statistics, null, 2));
   };
 
   const allAnswered = selectedAnswers.every(answer => answer.length > 0);
   const canSubmit = allAnswered && userName.trim().length > 0;
 
+  const totalScore = isSubmitted
+    ? shuffledQuestions.reduce((sum, _, index) => sum + calculateQuestionScore(index), 0)
+    : 0;
   const correctCount = isSubmitted
     ? shuffledQuestions.filter((_, index) => isQuestionCorrect(index)).length
     : 0;
   const incorrectCount = isSubmitted ? shuffledQuestions.length - correctCount : 0;
 
   return (
-    <div style={{ maxWidth: '600px', margin: '0 auto', padding: '20px' }}>
-      <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-        <h1 style={{ color: '#333', marginBottom: '10px' }}>{quiz.title}</h1>
-        <p style={{ color: '#666', fontSize: '16px' }}>{quiz.description}</p>
+    <div style={{maxWidth: '600px', margin: '0 auto', padding: '20px'}}>
+      <div style={{textAlign: 'center', marginBottom: '30px'}}>
+        <h1 style={{color: '#333', marginBottom: '10px'}}>{quiz.title}</h1>
+        <p style={{color: '#666', fontSize: '16px'}}>{quiz.description}</p>
 
         {!isSubmitted && (
-          <div style={{ marginTop: '20px' }}>
+          <div style={{marginTop: '20px'}}>
             <input
               type="text"
               placeholder="Enter your name *"
@@ -130,16 +150,16 @@ export const QuizComponent: React.FC<{ quiz: Quiz; onReset: () => void }> = ({ q
         <QuestionComponent
           key={question.id}
           question={question}
-          selectedIndices={selectedAnswers[index]}
-          onAnswer={(indices) => handleAnswer(index, indices)}
+          selectedIds={selectedAnswers[index]}
+          onAnswer={(ids) => handleAnswer(index, ids)}
           isSubmitted={isSubmitted}
           showExplanation={!isQuestionCorrect(index) || showCorrectExplanations}
         />
       ))}
 
       {!isSubmitted && (
-        <div style={{ textAlign: 'center', marginTop: '30px' }}>
-          <div style={{ marginBottom: '20px' }}>
+        <div style={{textAlign: 'center', marginTop: '30px'}}>
+          <div style={{marginBottom: '20px'}}>
             <label style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -176,15 +196,15 @@ export const QuizComponent: React.FC<{ quiz: Quiz; onReset: () => void }> = ({ q
               transition: 'all 0.3s ease'
             }}
           >
-            SUBMIT
+            ПРОВЕРИТЬ РЕЗУЛЬТАТ
           </button>
           {!allAnswered && (
-            <p style={{ marginTop: '10px', color: '#f44336', fontSize: '14px' }}>
+            <p style={{marginTop: '10px', color: '#f44336', fontSize: '14px'}}>
               Пожалуйста, ответьте на все вопросы перед отправкой
             </p>
           )}
           {allAnswered && !userName.trim() && (
-            <p style={{ marginTop: '10px', color: '#f44336', fontSize: '14px' }}>
+            <p style={{marginTop: '10px', color: '#f44336', fontSize: '14px'}}>
               Пожалуйста, введите Ваше имя и/или фамилию перед отправкой
             </p>
           )}
@@ -199,15 +219,18 @@ export const QuizComponent: React.FC<{ quiz: Quiz; onReset: () => void }> = ({ q
           borderRadius: '8px',
           textAlign: 'center'
         }}>
-          <h2 style={{ color: '#2e7d32', marginBottom: '15px' }}>Quiz Complete!</h2>
-          <p style={{ fontSize: '18px', marginBottom: '10px' }}>
-            <strong>Correct:</strong> {correctCount} ✓
+          <h2 style={{color: '#2e7d32', marginBottom: '15px'}}>Тест выполнен!</h2>
+          <p style={{fontSize: '18px', marginBottom: '10px'}}>
+            <strong>Верных ответов:</strong> {correctCount} ✓
           </p>
-          <p style={{ fontSize: '18px', marginBottom: '20px' }}>
-            <strong>Incorrect:</strong> {incorrectCount} ✗
+          <p style={{fontSize: '18px', marginBottom: '10px'}}>
+            <strong>Неверных/частично верных ответов:</strong> {incorrectCount} ✗
           </p>
-          <p style={{ fontSize: '20px', fontWeight: 'bold', color: '#1b5e20' }}>
-            Score: {Math.round((correctCount / shuffledQuestions.length) * 100)}%
+          <p style={{fontSize: '18px', marginBottom: '20px'}}>
+            <strong>Общий итог:</strong> {totalScore.toFixed(2)} / {shuffledQuestions.length}
+          </p>
+          <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1b5e20'}}>
+            Ваш результат: {Math.round((totalScore / shuffledQuestions.length) * 100)}%
           </p>
           <button
             onClick={onReset}
@@ -222,7 +245,7 @@ export const QuizComponent: React.FC<{ quiz: Quiz; onReset: () => void }> = ({ q
               cursor: 'pointer'
             }}
           >
-            Load Another Quiz
+            Пройти тест ещё раз
           </button>
         </div>
       )}

@@ -19,25 +19,27 @@ export const QuizLoader: React.FC<{ onQuizLoad: (quiz: Quiz) => void, userUID: s
   "description": "Mini test",
   "questions": [
     {
-      "id": 1,
+      "id": "q1",
       "question": "She ___ to school.",
       "options": [
-        ["go", false],
-        ["goes", true],
-        ["went", false],
-        ["going", false]
+        { "id": "q1_a", "text": "go" },
+        { "id": "q1_b", "text": "goes" },
+        { "id": "q1_c", "text": "went" },
+        { "id": "q1_d", "text": "going" }
       ],
+      "correctAnswers": ["q1_b"],
       "explanation": "He/She/It → goes"
     },
     {
-      "id": 2,
-      "question": "Which of these are correct present simple forms?",
+      "id": "q2",
+      "question": "Which are correct present simple forms?",
       "options": [
-        ["I am", true],
-        ["He are", false],
-        ["They are", true],
-        ["She am", false]
+        { "id": "q2_a", "text": "I am" },
+        { "id": "q2_b", "text": "He are" },
+        { "id": "q2_c", "text": "They are" },
+        { "id": "q2_d", "text": "She am" }
       ],
+      "correctAnswers": ["q2_a", "q2_c"],
       "explanation": "I am, They are - correct forms"
     }
   ]
@@ -57,14 +59,30 @@ export const QuizLoader: React.FC<{ onQuizLoad: (quiz: Quiz) => void, userUID: s
         quiz.testId = nanoid(12);
         quiz.createdBy = userUID;
 
-        // Basic validation
+        // Validation
         if (!quiz.title || !quiz.questions || !Array.isArray(quiz.questions)) {
-          throw new Error('Invalid quiz format');
+          throw new Error('Неверный формат файла. Выберите, пожалуйста, другой файл.');
         }
+
+        // Validate each question has the new structure
+        quiz.questions.forEach((q, idx) => {
+          if (!q.id) throw new Error(`Question ${idx + 1} missing id`);
+          if (!q.options || !Array.isArray(q.options)) {
+            throw new Error(`Question ${idx + 1} missing options array`);
+          }
+          if (!q.correctAnswers || !Array.isArray(q.correctAnswers)) {
+            throw new Error(`Question ${idx + 1} missing correctAnswers array`);
+          }
+          q.options.forEach((opt, optIdx) => {
+            if (!opt.id || !opt.text) {
+              throw new Error(`Question ${idx + 1}, option ${optIdx + 1} missing id or text`);
+            }
+          });
+        });
 
         onQuizLoad(quiz);
       } catch (err) {
-        setError('Error loading quiz file. Please check the JSON format.');
+        setError(`Error loading quiz: ${(err as Error).message}`);
         console.error(err);
       }
     };

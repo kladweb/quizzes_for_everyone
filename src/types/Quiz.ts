@@ -1,7 +1,13 @@
+interface Option {
+  id: string;
+  text: string;
+}
+
 export interface Question {
-  id: number;
+  id: string;
   question: string;
-  options: string[];
+  options: Option[];
+  correctAnswers: string[];
   explanation: string;
 }
 
@@ -14,10 +20,11 @@ export interface Quiz {
 }
 
 interface IAnswer {
-  questionId: number;
+  questionId: string;
   isCorrect: boolean;
-  selectedIndex: number | null;
-  correctIndex: number;
+  score: number;
+  selectedOptionIds: string[];
+  correctOptionIds: string[];
 }
 
 export interface IStatistics {
@@ -25,5 +32,8 @@ export interface IStatistics {
   startedAt: number;
   finishedAt: number;
   score: number;
+  totalScore: number;
+  maxScore: number;
+  correctCount: number;
   answers: IAnswer[];
 }
