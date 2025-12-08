@@ -149,6 +149,7 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
       {shuffledQuestions.map((question, index) => (
         <QuestionComponent
           key={question.id}
+          num={index + 1}
           question={question}
           selectedIds={selectedAnswers[index]}
           onAnswer={(ids) => handleAnswer(index, ids)}

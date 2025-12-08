@@ -2,12 +2,13 @@ import React from "react";
 import { type Question } from "../../types/Quiz";
 
 export const QuestionComponent: React.FC<{
+  num: number;
   question: Question;
   selectedIds: string[];
   onAnswer: (ids: string[]) => void;
   isSubmitted: boolean;
   showExplanation: boolean;
-}> = ({ question, selectedIds, onAnswer, isSubmitted, showExplanation }) => {
+}> = ({num, question, selectedIds, onAnswer, isSubmitted, showExplanation}) => {
 
   const isMultipleChoice = question.correctAnswers.length > 1;
 
@@ -106,13 +107,14 @@ export const QuestionComponent: React.FC<{
       borderRadius: '8px',
       backgroundColor: '#f9f9f9'
     }}>
-      <h3 style={{ marginBottom: '15px', color: '#333' }}>
+      <h3 style={{marginBottom: '15px', color: '#333'}}>
+        <span style={{fontSize: '16px', color: '#0366d6'}}>{`${num}) `}</span>
         {question.question}
-        {isMultipleChoice && <span style={{ display: "block", color: '#666', fontSize: '14px', marginLeft: '10px' }}>
+        {isMultipleChoice && <span style={{display: "block", color: '#666', fontSize: '14px', marginLeft: '10px'}}>
           (Несколько вариантов ответов)
         </span>}
       </h3>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
         {question.options.map((option) => (
           <button
             key={option.id}
@@ -157,9 +159,9 @@ export const QuestionComponent: React.FC<{
           color: '#e65100'
         }}>
           <strong>Обозначения:</strong>{' '}
-          <span style={{ color: '#2e7d32', fontWeight: 'bold' }}>Сплошная зеленая рамка</span> = Ваш верный выбор{' '}
-          | <span style={{ color: '#66bb6a', fontWeight: 'bold' }}>Пунктирная зеленая</span> = Правильный вариант{' '}
-          | <span style={{ color: '#c62828', fontWeight: 'bold' }}>Красная рамка</span> = Ваш неверный ответ
+          <span style={{color: '#2e7d32', fontWeight: 'bold'}}>Сплошная зеленая рамка</span> = Ваш верный выбор{' '}
+          | <span style={{color: '#66bb6a', fontWeight: 'bold'}}>Пунктирная зеленая</span> = Правильный вариант{' '}
+          | <span style={{color: '#c62828', fontWeight: 'bold'}}>Красная рамка</span> = Ваш неверный ответ
         </div>
       )}
     </div>
