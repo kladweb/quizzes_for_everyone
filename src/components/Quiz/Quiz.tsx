@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { IStatistics, type Question, type Quiz } from "../../types/Quiz";
 import { QuestionComponent } from "../Question/Question";
+import { QuizStorageManager } from "../../utils/QuizStorageManager";
 
 interface IQuizProps {
   quiz: Quiz;
@@ -18,7 +19,6 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
         const j = Math.floor(Math.random() * (i + 1));
         [shuffledOptions[i], shuffledOptions[j]] = [shuffledOptions[j], shuffledOptions[i]];
       }
-
       return {
         ...q,
         options: shuffledOptions
@@ -105,8 +105,9 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
       })
     };
 
-    saveStatistic(statistics);
     console.log(JSON.stringify(statistics, null, 2));
+    saveStatistic(statistics);
+    QuizStorageManager.saveResult(quiz.testId, statistics);
   };
 
   const allAnswered = selectedAnswers.every(answer => answer.length > 0);
