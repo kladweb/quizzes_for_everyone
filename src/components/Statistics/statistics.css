@@ -1,6 +1,7 @@
 .statCard {
   margin: 1em 0.2em;
   padding: 0.5em;
+  width: fit-content;
   text-align: left;
   border: 1px solid #f67d32;
   border-radius: 6px;
@@ -8,5 +9,6 @@
   & p {
     margin: 0;
     padding: 0;
+    font-size: 0.8em;
   }
 }

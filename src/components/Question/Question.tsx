@@ -1,39 +1,35 @@
 import React from "react";
-import { Question } from "../../types/Quiz";
+import { type Question } from "../../types/Quiz";
 
 export const QuestionComponent: React.FC<{
   question: Question;
-  selectedIndices: number[];
-  onAnswer: (indices: number[]) => void;
+  selectedIds: string[];
+  onAnswer: (ids: string[]) => void;
   isSubmitted: boolean;
   showExplanation: boolean;
-}> = ({ question, selectedIndices, onAnswer, isSubmitted, showExplanation }) => {
+}> = ({ question, selectedIds, onAnswer, isSubmitted, showExplanation }) => {
 
-  const correctIndices = question.options
-    .map((opt, idx) => opt[1] ? idx : -1)
-    .filter(idx => idx !== -1);
+  const isMultipleChoice = question.correctAnswers.length > 1;
 
-  const isMultipleChoice = correctIndices.length > 1;
-
-  const handleOptionClick = (index: number) => {
+  const handleOptionClick = (optionId: string) => {
     if (isSubmitted) return;
 
     if (isMultipleChoice) {
       // Checkbox logic
-      if (selectedIndices.includes(index)) {
-        onAnswer(selectedIndices.filter(i => i !== index));
+      if (selectedIds.includes(optionId)) {
+        onAnswer(selectedIds.filter(id => id !== optionId));
       } else {
-        onAnswer([...selectedIndices, index]);
+        onAnswer([...selectedIds, optionId]);
       }
     } else {
       // Radio button logic
-      onAnswer([index]);
+      onAnswer([optionId]);
     }
   };
 
-  const getButtonStyle = (index: number): React.CSSProperties => {
-    const isSelected = selectedIndices.includes(index);
-    const isCorrect = question.options[index][1];
+  const getButtonStyle = (optionId: string): React.CSSProperties => {
+    const isSelected = selectedIds.includes(optionId);
+    const isCorrect = question.correctAnswers.includes(optionId);
 
     if (!isSubmitted) {
       return {
@@ -43,28 +39,62 @@ export const QuestionComponent: React.FC<{
       };
     }
 
-    if (isCorrect) {
-      return { backgroundColor: '#4caf50', color: 'white', borderColor: '#4caf50' };
+    // After submission
+    if (isCorrect && isSelected) {
+      // User selected a correct answer - bright green with thick border
+      return {
+        backgroundColor: '#4caf50',
+        color: 'white',
+        borderColor: '#2e7d32',
+        borderWidth: '3px',
+        boxShadow: '0 0 8px rgba(76, 175, 80, 0.4)'
+      };
     }
 
-    if (isSelected && !isCorrect) {
-      return { backgroundColor: '#f44336', color: 'white', borderColor: '#f44336' };
+    if (isCorrect && !isSelected) {
+      // Correct answer that user didn't select - lighter green, dashed border
+      return {
+        backgroundColor: '#a5d6a7',
+        color: '#1b5e20',
+        borderColor: '#66bb6a',
+        borderWidth: '2px',
+        borderStyle: 'dashed'
+      };
     }
 
-    return { opacity: 0.5 };
+    if (!isCorrect && isSelected) {
+      // User selected wrong answer - red with thick border
+      return {
+        backgroundColor: '#f44336',
+        color: 'white',
+        borderColor: '#c62828',
+        borderWidth: '3px',
+        boxShadow: '0 0 8px rgba(244, 67, 54, 0.4)'
+      };
+    }
+
+    // Not selected and not correct - faded
+    return {
+      opacity: 0.4,
+      backgroundColor: '#f5f5f5',
+      color: '#999'
+    };
   };
 
-  const getButtonPrefix = (index: number): string => {
+  const getButtonPrefix = (optionId: string): string => {
     if (!isMultipleChoice) return '';
 
-    const isSelected = selectedIndices.includes(index);
+    const isSelected = selectedIds.includes(optionId);
+    const isCorrect = question.correctAnswers.includes(optionId);
+
     if (!isSubmitted) {
       return isSelected ? '☑ ' : '☐ ';
     }
 
-    const isCorrect = question.options[index][1];
-    if (isCorrect) return '☑ ';
-    if (isSelected && !isCorrect) return '☑ ';
+    // After submission
+    if (isCorrect && isSelected) return '✅ ';  // User got it right
+    if (isCorrect && !isSelected) return '✓ ';  // Should have selected
+    if (!isCorrect && isSelected) return '❌ ';  // Wrong choice
     return '☐ ';
   };
 
@@ -78,13 +108,15 @@ export const QuestionComponent: React.FC<{
     }}>
       <h3 style={{ marginBottom: '15px', color: '#333' }}>
         {question.question}
-        {isMultipleChoice && <span style={{ display: 'block', color: '#666', fontSize: '14px', marginLeft: '10px' }}>(Может быть несколько верных ответов)</span>}
+        {isMultipleChoice && <span style={{ display: "block", color: '#666', fontSize: '14px', marginLeft: '10px' }}>
+          (Несколько вариантов ответов)
+        </span>}
       </h3>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        {question.options.map(([option], index) => (
+        {question.options.map((option) => (
           <button
-            key={index}
-            onClick={() => handleOptionClick(index)}
+            key={option.id}
+            onClick={() => handleOptionClick(option.id)}
             disabled={isSubmitted}
             style={{
               padding: '12px 20px',
@@ -95,10 +127,10 @@ export const QuestionComponent: React.FC<{
               cursor: isSubmitted ? 'not-allowed' : 'pointer',
               transition: 'all 0.3s ease',
               textAlign: 'left',
-              ...getButtonStyle(index)
+              ...getButtonStyle(option.id)
             }}
           >
-            {getButtonPrefix(index)}{option}
+            {getButtonPrefix(option.id)}{option.text}
           </button>
         ))}
       </div>
@@ -111,7 +143,23 @@ export const QuestionComponent: React.FC<{
           color: '#1976d2',
           fontSize: '14px'
         }}>
-          <strong>Explanation:</strong> {question.explanation}
+          <strong>Объяснение:</strong> {question.explanation}
+        </div>
+      )}
+
+      {isSubmitted && (
+        <div style={{
+          marginTop: '10px',
+          padding: '8px',
+          backgroundColor: '#fff3e0',
+          borderRadius: '4px',
+          fontSize: '12px',
+          color: '#e65100'
+        }}>
+          <strong>Обозначения:</strong>{' '}
+          <span style={{ color: '#2e7d32', fontWeight: 'bold' }}>Сплошная зеленая рамка</span> = Ваш верный выбор{' '}
+          | <span style={{ color: '#66bb6a', fontWeight: 'bold' }}>Пунктирная зеленая</span> = Правильный вариант{' '}
+          | <span style={{ color: '#c62828', fontWeight: 'bold' }}>Красная рамка</span> = Ваш неверный ответ
         </div>
       )}
     </div>

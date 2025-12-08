@@ -48,6 +48,14 @@
 
 }
 
+.statInfoBlock {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
 .testInfo {
+  width: 100%;
   margin: 0.2rem;
 }
