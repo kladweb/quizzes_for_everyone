@@ -148,22 +148,6 @@ export const QuestionComponent: React.FC<{
           <strong>Объяснение:</strong> {question.explanation}
         </div>
       )}
-
-      {isSubmitted && (
-        <div style={{
-          marginTop: '10px',
-          padding: '8px',
-          backgroundColor: '#fff3e0',
-          borderRadius: '4px',
-          fontSize: '12px',
-          color: '#e65100'
-        }}>
-          <strong>Обозначения:</strong>{' '}
-          <span style={{color: '#2e7d32', fontWeight: 'bold'}}>Сплошная зеленая рамка</span> = Ваш верный выбор{' '}
-          | <span style={{color: '#66bb6a', fontWeight: 'bold'}}>Пунктирная зеленая</span> = Правильный вариант{' '}
-          | <span style={{color: '#c62828', fontWeight: 'bold'}}>Красная рамка</span> = Ваш неверный ответ
-        </div>
-      )}
     </div>
   );
 };
