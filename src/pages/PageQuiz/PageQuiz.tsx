@@ -13,10 +13,9 @@ export const PageQuiz = () => {
   // const [isLoaded, setIsLoaded] = useState(false);
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [savedResult, setSavedResult] = useState<IStatistics | null>(null);
-  const [isShowingResult, setIsShowingResult] = useState(false);
 
   const handleReset = () => {
-    // setQuiz(null);
+    QuizStorageManager.clearResult(testId as string);
     location.reload();
   };
 
@@ -31,7 +30,6 @@ export const PageQuiz = () => {
       const existingResult = QuizStorageManager.getResult(testId);
       if (existingResult) {
         setSavedResult(existingResult);
-        setIsShowingResult(true);
       }
     }
     if (quiz) {
@@ -56,12 +54,10 @@ export const PageQuiz = () => {
   return (
     <>
       {
-        (!savedResult && quiz) ?
-          <QuizComponent quiz={quiz} onReset={handleReset} saveStatistic={saveStatistic}/> :
+        (savedResult) ? <QuizResultView result={savedResult} onReset={handleReset}/> :
           <>
             {
-              (savedResult) ?
-                <QuizResultView result={savedResult}/> :
+              (quiz) ? <QuizComponent quiz={quiz} onReset={handleReset} saveStatistic={saveStatistic}/> :
                 <div>LOADING ...</div>
             }
           </>

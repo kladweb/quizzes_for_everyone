@@ -31,6 +31,7 @@ export interface IStatistics {
   userName: string;
   startedAt: number;
   finishedAt: number;
+  incorrectCount: number;
   score: number;
   totalScore: number;
   maxScore: number;

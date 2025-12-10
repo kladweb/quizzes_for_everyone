@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { IStatistics, type Question, type Quiz } from "../../types/Quiz";
 import { QuestionComponent } from "../Question/Question";
 import { QuizStorageManager } from "../../utils/QuizStorageManager";
+import { QuizResultView } from "../QuizResultView/QuizResultView";
 
 interface IQuizProps {
   quiz: Quiz;
@@ -10,6 +11,7 @@ interface IQuizProps {
 }
 
 export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatistic}) => {
+  const [currentStatistics, setCurrentStatistics] = useState<IStatistics | null>(null);
   const [shuffledQuestions] = useState<Question[]>(() => {
     // First, shuffle options within each question
     const questionsWithShuffledOptions = quiz.questions.map(q => {
@@ -85,10 +87,11 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
 
     const correctCount = shuffledQuestions.filter((_, index) => isQuestionCorrect(index)).length;
 
-    const statistics = {
+    const statistics: IStatistics = {
       userName: userName.trim(),
       startedAt: startTime,
       finishedAt: finishTime,
+      incorrectCount: incorrectCount,
       score: scorePercentage,
       totalScore: totalScore,
       maxScore: maxScore,
@@ -105,6 +108,7 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
       })
     };
 
+    setCurrentStatistics(statistics);
     console.log(JSON.stringify(statistics, null, 2));
     saveStatistic(statistics);
     QuizStorageManager.saveResult(quiz.testId, statistics);
@@ -113,9 +117,9 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
   const allAnswered = selectedAnswers.every(answer => answer.length > 0);
   const canSubmit = allAnswered && userName.trim().length > 0;
 
-  const totalScore = isSubmitted
-    ? shuffledQuestions.reduce((sum, _, index) => sum + calculateQuestionScore(index), 0)
-    : 0;
+  // const totalScore = isSubmitted
+  //   ? shuffledQuestions.reduce((sum, _, index) => sum + calculateQuestionScore(index), 0)
+  //   : 0;
   const correctCount = isSubmitted
     ? shuffledQuestions.filter((_, index) => isQuestionCorrect(index)).length
     : 0;
@@ -227,44 +231,7 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
         </div>
       )}
 
-      {isSubmitted && (
-        <div style={{
-          marginTop: '30px',
-          padding: '20px',
-          backgroundColor: '#e8f5e9',
-          borderRadius: '8px',
-          textAlign: 'center'
-        }}>
-          <h2 style={{color: '#2e7d32', marginBottom: '15px'}}>Тест выполнен!</h2>
-          <p style={{fontSize: '18px', marginBottom: '10px'}}>
-            <strong>Верных ответов:</strong> {correctCount} ✓
-          </p>
-          <p style={{fontSize: '18px', marginBottom: '10px'}}>
-            <strong>Неверных/частично верных ответов:</strong> {incorrectCount} ✗
-          </p>
-          <p style={{fontSize: '18px', marginBottom: '20px'}}>
-            <strong>Общий итог:</strong> {totalScore.toFixed(2)} / {shuffledQuestions.length}
-          </p>
-          <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1b5e20'}}>
-            Ваш результат: {Math.round((totalScore / shuffledQuestions.length) * 100)}%
-          </p>
-          <button
-            onClick={onReset}
-            style={{
-              marginTop: '20px',
-              padding: '12px 24px',
-              fontSize: '16px',
-              backgroundColor: '#1976d2',
-              color: 'white',
-              border: 'none',
-              borderRadius: '6px',
-              cursor: 'pointer'
-            }}
-          >
-            Пройти тест ещё раз
-          </button>
-        </div>
-      )}
+      {currentStatistics && isSubmitted && <QuizResultView result={currentStatistics} onReset={onReset}/>}
     </div>
   );
 };

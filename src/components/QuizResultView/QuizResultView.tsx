@@ -2,34 +2,49 @@ import React from "react";
 import { type IStatistics } from "../../types/Quiz";
 
 interface QuizResultViewProps {
-  result: IStatistics | null;
+  result: IStatistics;
+  onReset: () => void;
 }
 
-export const QuizResultView: React.FC<QuizResultViewProps> = ({result}) => {
-  if (!result) {
-    return null;
-  }
+export const QuizResultView: React.FC<QuizResultViewProps> = ({result, onReset}) => {
   return (
-    <div className="quiz-result">
-      <h2>Quiz Results</h2>
-      <div className="score-summary">
-        <p>Score: {result.maxScore}</p>
-        <p>Completed: {new Date(result.finishedAt).toLocaleString()}</p>
+    <div style={{maxWidth: '600px', margin: '0 auto', padding: '20px'}}>
+      <div style={{
+        marginTop: '30px',
+        padding: '20px',
+        backgroundColor: '#e8f5e9',
+        borderRadius: '8px',
+        textAlign: 'center'
+      }}>
+        <h2 style={{color: '#2e7d32', marginBottom: '15px'}}>Тест выполнен!</h2>
+        <p style={{fontSize: '18px', marginBottom: '10px'}}>
+          <strong>Верных ответов:</strong> {result.correctCount} ✓
+        </p>
+        <p style={{fontSize: '18px', marginBottom: '10px'}}>
+          <strong>Неверных/частично верных ответов:</strong> {result.incorrectCount} ✗
+        </p>
+        <p style={{fontSize: '18px', marginBottom: '20px'}}>
+          <strong>Общий итог:</strong> {result.totalScore.toFixed(2)} / {result.answers.length}
+        </p>
+        <p style={{fontSize: '20px', fontWeight: 'bold', color: '#1b5e20'}}>
+          Ваш результат: {Math.round((result.totalScore / result.answers.length) * 100)}%
+        </p>
+        <button
+          onClick={onReset}
+          style={{
+            marginTop: '20px',
+            padding: '12px 24px',
+            fontSize: '16px',
+            backgroundColor: '#1976d2',
+            color: 'white',
+            border: 'none',
+            borderRadius: '6px',
+            cursor: 'pointer'
+          }}
+        >
+          Пройти тест ещё раз
+        </button>
       </div>
-
-      <div className="answers-review">
-        <h3>Your Answers</h3>
-        {result.answers.map((answer, index) => (
-          <div key={answer.questionId} className={answer.isCorrect ? 'correct' : 'incorrect'}>
-            <p>Question {index + 1}</p>
-            <p>Your answer: {...answer.selectedOptionIds}</p>
-            {!answer.isCorrect && (
-              <p>Correct answer: {...answer.correctOptionIds}</p>
-            )}
-          </div>
-        ))}
-      </div>
-
     </div>
   );
 }

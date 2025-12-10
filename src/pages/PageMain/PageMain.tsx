@@ -43,7 +43,6 @@ export const PageMain: React.FC = () => {
     get(dbRef).then((snapshot) => {
       if (snapshot.exists()) {
         const quizIds = JSON.parse(snapshot.val());
-        console.log(quizIds);
         // setQuizIds([...quizIds]);
         loadQuizzes([...quizIds])
           .then((value) => {
