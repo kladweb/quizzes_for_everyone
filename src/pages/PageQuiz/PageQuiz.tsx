@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { QuizComponent } from "../../components/Quiz/Quiz";
 import { child, get, ref, set } from "firebase/database";
 import { database } from "../../firebase/firebase";
-import { IStatistics, Quiz } from "../../types/Quiz";
+import { IQuizStorage, IStatistics, Quiz } from "../../types/Quiz";
 import { useParams } from "react-router-dom";
 import { QuizStorageManager } from "../../utils/QuizStorageManager";
 import { QuizResultView } from "../../components/QuizResultView/QuizResultView";
@@ -41,8 +41,14 @@ export const PageQuiz = () => {
       if (snapshot.exists()) {
         const dataString = snapshot.val();
         let quiz = JSON.parse(dataString);
-        console.log("DATA: ", quiz);
+        // console.log("DATA: ", quiz);
         setQuiz(quiz);
+        const recentQuiz: IQuizStorage = {
+          testId: quiz.testId,
+          title: quiz.title,
+          finishedAt: null,
+        }
+        QuizStorageManager.saveRecentQuiz(recentQuiz);
       } else {
         console.log("No data available");
       }

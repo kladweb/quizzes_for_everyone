@@ -74,20 +74,16 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
 
   const handleSubmit = () => {
     setIsSubmitted(true);
-
     const finishTime = Date.now();
-
     // Calculate total score with partial credit
     const totalScore = shuffledQuestions.reduce((sum, _, index) => {
       return sum + calculateQuestionScore(index);
     }, 0);
-
     const maxScore = shuffledQuestions.length;
     const scorePercentage = Math.round((totalScore / maxScore) * 100);
-
     const correctCount = shuffledQuestions.filter((_, index) => isQuestionCorrect(index)).length;
-
     const statistics: IStatistics = {
+      testId: quiz.testId,
       userName: userName.trim(),
       startedAt: startTime,
       finishedAt: finishTime,
@@ -107,11 +103,16 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
         };
       })
     };
-
     setCurrentStatistics(statistics);
     console.log(JSON.stringify(statistics, null, 2));
     saveStatistic(statistics);
     QuizStorageManager.saveResult(quiz.testId, statistics);
+    const recentQuiz = {
+      testId: quiz.testId,
+      title: quiz.title,
+      finishedAt: finishTime,
+    }
+    QuizStorageManager.saveRecentQuiz(recentQuiz);
   };
 
   const allAnswered = selectedAnswers.every(answer => answer.length > 0);
@@ -230,7 +231,6 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
           )}
         </div>
       )}
-
       {currentStatistics && isSubmitted && <QuizResultView result={currentStatistics} onReset={onReset}/>}
     </div>
   );

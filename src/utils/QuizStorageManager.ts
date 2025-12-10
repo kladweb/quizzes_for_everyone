@@ -1,4 +1,5 @@
-import { type IStatistics } from "../types/Quiz";
+import type { IQuizStorage, IStatistics } from "../types/Quiz";
+import { RecentQuizzes } from "../components/RecentQuizzes/RecentQuizzes";
 
 interface QuizAnswer {
   questionId: string;
@@ -53,6 +54,45 @@ export const QuizStorageManager = {
       localStorage.removeItem(storageKey);
     } catch (error) {
       console.error('Failed to clear quiz result:', error);
+    }
+  },
+
+  saveRecentQuiz(quizStorage: IQuizStorage): void {
+    let quizzes: IQuizStorage[] = [quizStorage];
+    const recentQuizzes: IQuizStorage[] | null = this.getRecentQuizzes();
+    console.log('recentQuizzes: ', recentQuizzes);
+    console.log('quizStorage: ', quizStorage);
+    let isQuizExists = false;
+    if (recentQuizzes && recentQuizzes.length > 0) {
+      recentQuizzes.forEach((quiz) => {
+        if (quiz.testId === quizStorage.testId) {
+          quiz.finishedAt = quizStorage.finishedAt;
+          isQuizExists = true;
+        }
+      });
+      if (isQuizExists) {
+        quizzes = [...recentQuizzes];
+      } else {
+        quizzes = [quizStorage, ...recentQuizzes];
+      }
+    }
+    try {
+      const storageKey = `recentQuizzes`;
+      localStorage.setItem(storageKey, JSON.stringify(quizzes));
+    } catch (error) {
+      console.error('Failed to save recent quiz:', error);
+    }
+  },
+
+  getRecentQuizzes(): IQuizStorage[] | null {
+    try {
+      const storageKey = `recentQuizzes`;
+      const stored = localStorage.getItem(storageKey);
+      if (!stored) return null;
+      return JSON.parse(stored);
+    } catch (error) {
+      console.error('Failed to retrieve quiz result:', error);
+      return null;
     }
   },
 

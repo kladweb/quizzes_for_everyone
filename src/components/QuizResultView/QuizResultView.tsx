@@ -1,5 +1,6 @@
 import React from "react";
 import { type IStatistics } from "../../types/Quiz";
+import { RecentQuizzes } from "../RecentQuizzes/RecentQuizzes";
 
 interface QuizResultViewProps {
   result: IStatistics;
@@ -45,6 +46,7 @@ export const QuizResultView: React.FC<QuizResultViewProps> = ({result, onReset})
           Пройти тест ещё раз
         </button>
       </div>
+      <RecentQuizzes currentTestId={result.testId}/>
     </div>
   );
 }

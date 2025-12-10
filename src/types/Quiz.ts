@@ -28,6 +28,7 @@ interface IAnswer {
 }
 
 export interface IStatistics {
+  testId: string;
   userName: string;
   startedAt: number;
   finishedAt: number;
@@ -37,4 +38,10 @@ export interface IStatistics {
   maxScore: number;
   correctCount: number;
   answers: IAnswer[];
+}
+
+export interface IQuizStorage {
+  testId: string;
+  title: string;
+  finishedAt: number | null;
 }
