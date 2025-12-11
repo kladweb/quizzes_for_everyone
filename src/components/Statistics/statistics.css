@@ -1,5 +1,6 @@
 .statCard {
-  margin: 1em 0.2em;
+  position: relative;
+  margin: 0.4em 0.2em;
   padding: 0.5em;
   width: fit-content;
   text-align: left;
@@ -10,5 +11,19 @@
     margin: 0;
     padding: 0;
     font-size: 0.8em;
+  }
+}
+
+.buttonClose {
+  position: absolute;
+  top: -0.3em;
+  right: -0.3em;
+  font-size: .7em;
+  color: #f67d32;
+  background: rgba(255, 255, 255, 0);
+  border: none;
+  cursor: pointer;
+  &:hover {
+    color: #d54f00;
   }
 }

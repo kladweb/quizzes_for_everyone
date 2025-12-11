@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { child, get, ref } from "firebase/database";
+import { child, get, ref, set } from "firebase/database";
 import { database } from "../../firebase/firebase";
 import { IStatistics } from "../../types/Quiz";
 import "./statistics.css";
 
 export const Statistics: React.FC<{ testId: string }> = ({testId}) => {
   const [statistics, setStatistics] = useState<IStatistics[] | null>(null);
+
+  const deleteStat = async (currentIdStat: number) => {
+    await set(ref(database, `tests/${testId}/statistics/${currentIdStat}`), null);
+    if (statistics) {
+      const newStat = statistics.filter((stat) => stat.finishedAt !== currentIdStat);
+      setStatistics(newStat);
+    }
+  }
 
   useEffect(() => {
     const dbRef = ref(database);
@@ -35,7 +43,8 @@ export const Statistics: React.FC<{ testId: string }> = ({testId}) => {
             {
               statistics.map(item => (
                 <div className="statCard" key={item.finishedAt}>
-                  <p>Дата выполения: <span>{(new Date(item.finishedAt)).toLocaleDateString()}</span></p>
+                  <button className="buttonClose" title="Удалить" onClick={() => deleteStat(item.finishedAt)}>✖</button>
+                  <p>Дата выполнения: <span>{(new Date(item.finishedAt)).toLocaleDateString()}</span></p>
                   <p>Имя: <span>{item.userName}</span></p>
                   <p>Результат: <span>{item.score}</span></p>
                 </div>

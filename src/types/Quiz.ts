@@ -28,12 +28,20 @@ interface IAnswer {
 }
 
 export interface IStatistics {
+  testId: string;
   userName: string;
   startedAt: number;
   finishedAt: number;
+  incorrectCount: number;
   score: number;
   totalScore: number;
   maxScore: number;
   correctCount: number;
   answers: IAnswer[];
+}
+
+export interface IQuizStorage {
+  testId: string;
+  title: string;
+  finishedAt: number | null;
 }
