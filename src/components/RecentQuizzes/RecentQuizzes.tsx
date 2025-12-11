@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { QuizStorageManager } from "../../utils/QuizStorageManager";
-import type { IQuizStorage } from "../../types/Quiz";
+import type { IStatistics } from "../../types/Quiz";
 import "./recentQuizzes.css";
 
 interface IRecentQuizzes {
@@ -10,23 +10,23 @@ interface IRecentQuizzes {
 
 export const RecentQuizzes: React.FC<IRecentQuizzes> = ({currentTestId}) => {
   const navigate = useNavigate();
-  const [recentQuizzes, setRecentQuizzes] = useState<IQuizStorage[]>([]);
+  const [recentStat, setRecentStat] = useState<IStatistics[]>([]);
 
   const openRecentQuiz = (testId: string) => {
     console.log("testId: ", testId);
-    QuizStorageManager.clearResult(testId);
+    // QuizStorageManager.clearResult(testId);
     navigate(`/tests/${testId}`);
-    location.reload();
+    // location.reload();
   }
 
   useEffect(() => {
-    const quizzes = QuizStorageManager.getRecentQuizzes();
+    const quizzes = QuizStorageManager.getRecentAllStat();
     if (quizzes && quizzes.length > 0) {
-      setRecentQuizzes(quizzes);
+      setRecentStat(quizzes);
     }
   }, [currentTestId]);
 
-  const quizElements = recentQuizzes.map((recentQuiz: IQuizStorage) => {
+  const quizElements = recentStat.map((recentQuiz: IStatistics) => {
     return (
       <div className='recentTestItem' key={recentQuiz.testId}>
         <p className='recentTestName '>{recentQuiz.title}</p>
@@ -48,7 +48,7 @@ export const RecentQuizzes: React.FC<IRecentQuizzes> = ({currentTestId}) => {
         </div>
       </div>
     )
-  })
+  });
 
   return (
     <div className='loaderContainer'>

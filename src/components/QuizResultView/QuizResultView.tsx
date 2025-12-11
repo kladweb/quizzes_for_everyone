@@ -12,12 +12,9 @@ export const QuizResultView: React.FC<QuizResultViewProps> = ({result, onReset})
 
   useEffect(() => {
     if (myRef.current) {
-      myRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
+      myRef.current.scrollTo();
     }
-  }, []);
+  }, [myRef]);
 
   return (
     <div ref={myRef} style={{maxWidth: '600px', margin: '0 auto', padding: '20px'}}>
