@@ -63,9 +63,9 @@ export const QuizStorageManager = {
     // console.log('quizStorage: ', quizStorage);
     let isQuizExists = false;
     if (recentQuizzes && recentQuizzes.length > 0) {
-      recentQuizzes.forEach((quiz) => {
+      recentQuizzes.forEach((quiz: IQuizStorage, i) => {
         if (quiz.testId === quizStorage.testId) {
-          quiz.finishedAt = quizStorage.finishedAt;
+          recentQuizzes[i] = quizStorage;
           isQuizExists = true;
         }
       });

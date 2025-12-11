@@ -50,7 +50,8 @@ export const Statistics: React.FC<{ testId: string }> = ({testId}) => {
                 </div>
               ))
             }
-          </> :
+          </>
+          :
           <div className="statCard">
             <p>Информация отсутствует. <span>Тест ещё никто не проходил.</span></p>
           </div>

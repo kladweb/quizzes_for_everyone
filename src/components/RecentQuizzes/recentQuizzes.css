@@ -18,6 +18,22 @@
   color: #0055ff;
 }
 
+.recentInfoBlock {
+  width: 100%;
+  text-align: left;
+}
+
+.recentInfo {
+  width: 100%;
+  margin: 0.1rem 0.3rem;
+  font-size: 0.8rem;
+  font-style: inherit;
+
+  span {
+    color: #16a34a;
+  }
+}
+
 .recentButtons {
   display: inline-block;
 }

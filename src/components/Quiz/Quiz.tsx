@@ -79,12 +79,14 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
     const maxScore = shuffledQuestions.length;
     const scorePercentage = Math.round((totalScore / maxScore) * 100);
     const correctCount = shuffledQuestions.filter((_, index) => isQuestionCorrect(index)).length;
+    const incorrectCount = shuffledQuestions.length - correctCount;
     const statistics: IStatistics = {
       testId: quiz.testId,
+      title: quiz.title,
       userName: userName.trim(),
       startedAt: startTime,
       finishedAt: finishTime,
-      incorrectCount: incorrectCount,
+      incorrectCount: shuffledQuestions.length - correctCount,
       score: scorePercentage,
       totalScore: totalScore,
       maxScore: maxScore,
@@ -100,6 +102,7 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
         };
       })
     };
+    console.log("statistics: ", statistics);
     setCurrentStatistics(statistics);
     console.log(JSON.stringify(statistics, null, 2));
     saveStatistic(statistics);
@@ -108,20 +111,20 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
       testId: quiz.testId,
       title: quiz.title,
       finishedAt: finishTime,
+      correctCount: correctCount,
+      incorrectCount: incorrectCount,
+      score: scorePercentage
     }
+    console.log('Срабатывание 2');
+    console.log(recentQuiz);
     QuizStorageManager.saveRecentQuiz(recentQuiz);
   };
 
   const allAnswered = selectedAnswers.every(answer => answer.length > 0);
   const canSubmit = allAnswered && userName.trim().length > 0;
 
-  // const totalScore = isSubmitted
-  //   ? shuffledQuestions.reduce((sum, _, index) => sum + calculateQuestionScore(index), 0)
-  //   : 0;
-  const correctCount = isSubmitted
-    ? shuffledQuestions.filter((_, index) => isQuestionCorrect(index)).length
-    : 0;
-  const incorrectCount = isSubmitted ? shuffledQuestions.length - correctCount : 0;
+  console.log(isSubmitted);
+  console.log(shuffledQuestions.length);
 
   return (
     <div style={{maxWidth: '600px', margin: '0 auto', padding: '20px'}}>

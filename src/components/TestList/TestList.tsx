@@ -38,7 +38,7 @@ export const TestList: React.FC<ITestListProps> = ({testList, deleteTest, loadin
         {
           (isOpenStatistics && quiz.testId === currentTestId) ?
             <div className="statInfoBlock">
-              <h4 className='testInfo'>Статистика</h4>
+              <h3 className='testInfo'>Статистика</h3>
               <Statistics testId={quiz.testId}/>
             </div>
             : null

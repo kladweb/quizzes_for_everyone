@@ -15,7 +15,9 @@ export const PageQuiz = () => {
   const [savedResult, setSavedResult] = useState<IStatistics | null>(null);
 
   const handleReset = () => {
-    QuizStorageManager.clearResult(testId as string);
+    if (testId) {
+      QuizStorageManager.clearResult(testId);
+    }
     location.reload();
   };
 
@@ -46,8 +48,13 @@ export const PageQuiz = () => {
         const recentQuiz: IQuizStorage = {
           testId: quiz.testId,
           title: quiz.title,
-          finishedAt: null,
+          finishedAt: quiz.finishedAt,
+          correctCount: quiz.correctCount,
+          incorrectCount: quiz.incorrectCount,
+          score: quiz.score,
         }
+        console.log('Срабатывание 1');
+        console.log(recentQuiz);
         QuizStorageManager.saveRecentQuiz(recentQuiz);
       } else {
         console.log("No data available");

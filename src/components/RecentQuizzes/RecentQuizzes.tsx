@@ -30,11 +30,21 @@ export const RecentQuizzes: React.FC<IRecentQuizzes> = ({currentTestId}) => {
     return (
       <div className='recentTestItem' key={recentQuiz.testId}>
         <p className='recentTestName '>{recentQuiz.title}</p>
+        {
+          (recentQuiz.finishedAt) ?
+            <div className='recentInfoBlock'>
+              <p className='recentInfo'>Результат: <span>{recentQuiz.score}%</span></p>
+              <p className='recentInfo'>Верных ответов: <span>{recentQuiz.correctCount}</span></p>
+              <p className='recentInfo'>Неверных/частично верных ответов: <span>{recentQuiz.incorrectCount}</span></p>
+            </div>
+            :
+            <p className='recentInfo'>Результаты отсутствуют</p>
+        }
         <div className='recentButtons'>
-          <button className='buttonRecent' onClick={() => openRecentQuiz(recentQuiz.testId)}>Открыть</button>
-          {/*<NavLink to={`/tests/${recentQuiz.testId}`} className='linkOpenTest'>*/}
-          {/*  <span>Открыть</span>*/}
-          {/*</NavLink>*/}
+          <button className='buttonRecent' onClick={() => openRecentQuiz(recentQuiz.testId)}>
+            {/*{(recentQuiz.testId === currentTestId) ? 'Пройти тест ещё раз' : 'Открыть'}*/}
+            Открыть тест
+          </button>
         </div>
       </div>
     )

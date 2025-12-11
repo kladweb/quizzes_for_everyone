@@ -29,6 +29,7 @@ interface IAnswer {
 
 export interface IStatistics {
   testId: string;
+  title: string;
   userName: string;
   startedAt: number;
   finishedAt: number;
@@ -44,4 +45,7 @@ export interface IQuizStorage {
   testId: string;
   title: string;
   finishedAt: number | null;
+  correctCount: number | null;
+  incorrectCount: number | null;
+  score: number | null;
 }
