@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { type IStatistics } from "../../types/Quiz";
 import { RecentQuizzes } from "../RecentQuizzes/RecentQuizzes";
 
@@ -8,8 +8,19 @@ interface QuizResultViewProps {
 }
 
 export const QuizResultView: React.FC<QuizResultViewProps> = ({result, onReset}) => {
+  const myRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (myRef.current) {
+      myRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+  }, []);
+
   return (
-    <div style={{maxWidth: '600px', margin: '0 auto', padding: '20px'}}>
+    <div ref={myRef} style={{maxWidth: '600px', margin: '0 auto', padding: '20px'}}>
       <div style={{
         marginTop: '30px',
         padding: '20px',

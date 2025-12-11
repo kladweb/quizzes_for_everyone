@@ -55,14 +55,11 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
     const question = shuffledQuestions[questionIndex];
     const selected = selectedAnswers[questionIndex];
     const correct = question.correctAnswers;
-
     // If any wrong answer is selected, score is 0
     const hasWrongAnswer = selected.some(id => !correct.includes(id));
     if (hasWrongAnswer) return 0;
-
     // If no answers selected, score is 0
     if (selected.length === 0) return 0;
-
     // Score = correct choices selected / total number of correct answers
     const correctSelected = selected.filter(id => correct.includes(id)).length;
     return correctSelected / correct.length;

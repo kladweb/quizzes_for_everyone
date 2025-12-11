@@ -1,5 +1,4 @@
 import type { IQuizStorage, IStatistics } from "../types/Quiz";
-import { RecentQuizzes } from "../components/RecentQuizzes/RecentQuizzes";
 
 interface QuizAnswer {
   questionId: string;
@@ -60,8 +59,8 @@ export const QuizStorageManager = {
   saveRecentQuiz(quizStorage: IQuizStorage): void {
     let quizzes: IQuizStorage[] = [quizStorage];
     const recentQuizzes: IQuizStorage[] | null = this.getRecentQuizzes();
-    console.log('recentQuizzes: ', recentQuizzes);
-    console.log('quizStorage: ', quizStorage);
+    // console.log('recentQuizzes: ', recentQuizzes);
+    // console.log('quizStorage: ', quizStorage);
     let isQuizExists = false;
     if (recentQuizzes && recentQuizzes.length > 0) {
       recentQuizzes.forEach((quiz) => {
