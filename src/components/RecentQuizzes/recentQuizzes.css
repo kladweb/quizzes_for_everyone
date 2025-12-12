@@ -26,10 +26,11 @@
 .recentInfo {
   width: 100%;
   margin: 0.1rem 0.3rem;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   font-style: inherit;
 
   span {
+    font-weight: bold;
     color: #16a34a;
   }
 }
@@ -42,4 +43,8 @@
   display: inline-block;
   height: 1.6rem;
   margin: 4px;
+}
+.recentWarning {
+  font-size: 0.7rem;
+  color: #dc2626;
 }

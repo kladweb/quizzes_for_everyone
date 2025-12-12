@@ -112,6 +112,11 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
   const allAnswered = selectedAnswers.every(answer => answer.length > 0);
   const canSubmit = allAnswered && userName.trim().length > 0;
 
+  const handleReset = () => {
+    // onReset();
+    setTimeout(() => location.reload(), 0);
+  }
+
   useEffect(() => {
     const startStatistics: IStatistics = {
       testId: quiz.testId,
@@ -236,7 +241,7 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
           )}
         </div>
       )}
-      {currentStatistics && isSubmitted && <QuizResultView result={currentStatistics} onReset={onReset}/>}
+      {currentStatistics && isSubmitted && <QuizResultView result={currentStatistics} onReset={handleReset}/>}
     </div>
   );
 };

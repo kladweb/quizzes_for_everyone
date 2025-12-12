@@ -11,9 +11,11 @@ export const QuizResultView: React.FC<QuizResultViewProps> = ({result, onReset})
   const myRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (myRef.current) {
-      myRef.current.scrollTo();
-    }
+    setTimeout(() => {
+      if (myRef.current) {
+        myRef.current.scrollIntoView({behavior: 'smooth'});
+      }
+    }, 100)
   }, [myRef]);
 
   return (

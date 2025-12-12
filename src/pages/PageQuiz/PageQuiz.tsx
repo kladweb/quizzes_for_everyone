@@ -15,17 +15,20 @@ export const PageQuiz = () => {
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [savedResultStorage, setSavedResultStorage] = useState<IStatistics | null>(null);
 
-  const handleReset = () => {
+  const handleReset = async () => {
+    // QuizStorageManager.clearResult();
     console.log(testId)
-    if (testId && savedResultStorage) {
-      const resultStorage = savedResultStorage;
-      resultStorage.finishedAt = 0;
-      console.log("statistics 03: ", resultStorage);
-      QuizStorageManager.saveRecentStat(resultStorage);
-      // QuizStorageManager.clearResult();
+    if (testId) {
+      const resultStorage = await QuizStorageManager.getRecentStatTestId(testId);
+      if (resultStorage) {
+        console.log("Получили данные из localStorage: ", resultStorage);
+        resultStorage.finishedAt = 0;
+        console.log("statistics 03: ", resultStorage);
+        await QuizStorageManager.saveRecentStat(resultStorage);
+      }
     }
     setSavedResultStorage(null);
-    location.reload();
+    // setTimeout(() => location.reload(), 0);
   };
 
   const saveStatistic = async (statistics: IStatistics) => {
