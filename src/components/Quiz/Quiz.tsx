@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { IStatistics, type Question, type Quiz } from "../../types/Quiz";
+import React, { useEffect, useState } from "react";
+import type { IStatistics, Question, Quiz } from "../../types/Quiz";
 import { QuestionComponent } from "../Question/Question";
 import { QuizStorageManager } from "../../utils/QuizStorageManager";
 import { QuizResultView } from "../QuizResultView/QuizResultView";
@@ -102,29 +102,39 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
         };
       })
     };
-    console.log("statistics: ", statistics);
     setCurrentStatistics(statistics);
-    console.log(JSON.stringify(statistics, null, 2));
+    // console.log(JSON.stringify(statistics, null, 2));
     saveStatistic(statistics);
-    QuizStorageManager.saveResult(quiz.testId, statistics);
-    const recentQuiz = {
-      testId: quiz.testId,
-      title: quiz.title,
-      finishedAt: finishTime,
-      correctCount: correctCount,
-      incorrectCount: incorrectCount,
-      score: scorePercentage
-    }
-    console.log('Срабатывание 2');
-    console.log(recentQuiz);
-    QuizStorageManager.saveRecentQuiz(recentQuiz);
+    console.log("statistics 01: ", statistics);
+    QuizStorageManager.saveRecentStat(statistics);
   };
 
   const allAnswered = selectedAnswers.every(answer => answer.length > 0);
   const canSubmit = allAnswered && userName.trim().length > 0;
 
-  console.log(isSubmitted);
-  console.log(shuffledQuestions.length);
+  const handleReset = () => {
+    // onReset();
+    setTimeout(() => location.reload(), 0);
+  }
+
+  useEffect(() => {
+    const startStatistics: IStatistics = {
+      testId: quiz.testId,
+      title: quiz.title,
+      userName: userName.trim(),
+      startedAt: startTime,
+      finishedAt: 0,
+      incorrectCount: 0,
+      score: 0,
+      totalScore: 0,
+      maxScore: 0,
+      correctCount: 0,
+      answers: [],
+    };
+    console.log("statistics 02: ", startStatistics);
+    QuizStorageManager.saveRecentStat(startStatistics);
+
+  }, []);
 
   return (
     <div style={{maxWidth: '600px', margin: '0 auto', padding: '20px'}}>
@@ -231,7 +241,7 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
           )}
         </div>
       )}
-      {currentStatistics && isSubmitted && <QuizResultView result={currentStatistics} onReset={onReset}/>}
+      {currentStatistics && isSubmitted && <QuizResultView result={currentStatistics} onReset={handleReset}/>}
     </div>
   );
 };
