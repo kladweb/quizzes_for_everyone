@@ -11,7 +11,11 @@ export const Statistics: React.FC<{ testId: string }> = ({testId}) => {
     await set(ref(database, `tests/${testId}/statistics/${currentIdStat}`), null);
     if (statistics) {
       const newStat = statistics.filter((stat) => stat.finishedAt !== currentIdStat);
-      setStatistics(newStat);
+      if (newStat.length === 0) {
+        setStatistics(null);
+      } else {
+        setStatistics(newStat);
+      }
     }
   }
 

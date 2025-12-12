@@ -33,7 +33,6 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
       const j = Math.floor(Math.random() * (i + 1));
       [shuffledQuestions[i], shuffledQuestions[j]] = [shuffledQuestions[j], shuffledQuestions[i]];
     }
-
     return shuffledQuestions;
   });
 

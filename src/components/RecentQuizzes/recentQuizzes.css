@@ -6,8 +6,12 @@
   align-self: start;
   flex-wrap: wrap;
   justify-content: center;
-  border: 1px solid #16a34a;
+  border: 1px solid #f67d32;
   border-radius: 6px;
+}
+
+.recentTestFinished {
+  border: 1px solid #16a34a;
 }
 
 .recentTestName {
@@ -44,7 +48,8 @@
   height: 1.6rem;
   margin: 4px;
 }
+
 .recentWarning {
   font-size: 0.7rem;
-  color: #dc2626;
+  color: #f67d32;
 }

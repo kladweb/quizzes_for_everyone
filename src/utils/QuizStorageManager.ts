@@ -86,19 +86,22 @@ export const QuizStorageManager = {
     }
   },
 
-  removeRecentStat(testId: string): void {
+  removeRecentStat(testId: string): IStatistics[] | null {
     const storageKey = `recentQuizzes`;
     const recentStatistic: IStatistics[] | null = this.getRecentAllStat();
+    let newStatistic: IStatistics[] = [];
     if (recentStatistic && recentStatistic.length > 0) {
-      recentStatistic.filter((statistic: IStatistics) => statistic.testId !== testId);
+      newStatistic = recentStatistic.filter((statistic: IStatistics) => statistic.testId !== testId);
     } else {
       console.error('Неизвестная ошибка.');
-      return;
+      return null;
     }
     try {
-      localStorage.setItem(storageKey, JSON.stringify(recentStatistic));
+      localStorage.setItem(storageKey, JSON.stringify(newStatistic));
+      return newStatistic;
     } catch (error) {
       console.error('Failed to clear quiz result:', error);
+      return null;
     }
   },
 

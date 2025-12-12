@@ -25,6 +25,13 @@ export const RecentQuizzes: React.FC<IRecentQuizzes> = ({currentTestId}) => {
     setTimeout(() => location.reload(), 0);
   }
 
+  const deleteRecentQuiz = (testId: string) => {
+    const newRecentStat = QuizStorageManager.removeRecentStat(testId);
+    if (newRecentStat) {
+      setRecentStat(newRecentStat);
+    }
+  }
+
   useEffect(() => {
     const quizzes = QuizStorageManager.getRecentAllStat();
     if (quizzes && quizzes.length > 0) {
@@ -35,7 +42,7 @@ export const RecentQuizzes: React.FC<IRecentQuizzes> = ({currentTestId}) => {
 
   const quizElements = recentStat.map((recentQuiz: IStatistics) => {
     return (
-      <div className='recentTestItem' key={recentQuiz.testId}>
+      <div className={`recentTestItem${(recentQuiz.finishedAt) ? " recentTestFinished" : ""}`} key={recentQuiz.testId}>
         <p className='recentTestName '>{recentQuiz.title}</p>
         {
           (recentQuiz.finishedAt) ?
@@ -45,12 +52,15 @@ export const RecentQuizzes: React.FC<IRecentQuizzes> = ({currentTestId}) => {
               <p className='recentInfo'>Неверных/частично верных ответов: <span>{recentQuiz.incorrectCount}</span></p>
             </div>
             :
-            <p className='recentInfo'>Результаты отсутствуют</p>
+            <p className='recentInfo'>Тест не пройден!</p>
         }
         <div className='recentButtons'>
+          {/*{(recentQuiz.testId === currentTestId) ? 'Пройти тест ещё раз' : 'Открыть'}*/}
           <button className='buttonRecent' onClick={() => openRecentQuiz(recentQuiz.testId)}>
-            {/*{(recentQuiz.testId === currentTestId) ? 'Пройти тест ещё раз' : 'Открыть'}*/}
             Открыть тест
+          </button>
+          <button className='buttonRecent' onClick={() => deleteRecentQuiz(recentQuiz.testId)}>
+            Удалить из истории
           </button>
         </div>
       </div>

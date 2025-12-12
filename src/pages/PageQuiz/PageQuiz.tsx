@@ -63,7 +63,6 @@ export const PageQuiz = () => {
     });
   }, []);
 
-  console.log(savedResultStorage);
   return (
     <>
       {

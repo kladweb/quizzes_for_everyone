@@ -46,7 +46,7 @@ export const PageMain: React.FC = () => {
         // setQuizIds([...quizIds]);
         loadQuizzes([...quizIds])
           .then((value) => {
-            setTestList([...value.map(item => JSON.parse(item))]);
+            setTestList([...value.map(item => JSON.parse(item))].reverse());
             setLoadingMyTests(false);
           })
           .catch((error) => {
