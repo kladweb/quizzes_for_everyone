@@ -11,13 +11,12 @@ export const QuizResultView: React.FC<QuizResultViewProps> = ({result, onReset})
   const myRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (myRef.current) {
-      myRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
-    }
-  }, []);
+    setTimeout(() => {
+      if (myRef.current) {
+        myRef.current.scrollIntoView({behavior: 'smooth'});
+      }
+    }, 100)
+  }, [myRef]);
 
   return (
     <div ref={myRef} style={{maxWidth: '600px', margin: '0 auto', padding: '20px'}}>
@@ -29,6 +28,7 @@ export const QuizResultView: React.FC<QuizResultViewProps> = ({result, onReset})
         textAlign: 'center'
       }}>
         <h2 style={{color: '#2e7d32', marginBottom: '15px'}}>Тест выполнен!</h2>
+        <h3 style={{color: '#2e7d32', marginBottom: '15px'}}>{result.title}</h3>
         <p style={{fontSize: '18px', marginBottom: '10px'}}>
           <strong>Верных ответов:</strong> {result.correctCount} ✓
         </p>

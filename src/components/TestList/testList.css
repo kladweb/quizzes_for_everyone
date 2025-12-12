@@ -22,19 +22,22 @@
 
 .testItemName {
   display: inline-block;
+  width: 100%;
   margin: 0;
   padding: 5px;
-  color: #0055ff;
+  color: #16a34aff;
+  font-weight: bold;
 }
 
 .buttonsBlock {
   display: inline-block;
 }
 
-.buttonDel {
+.buttonTest {
   display: inline-block;
-  height: 1.6rem;
+  height: 1.2rem;
   margin: 4px;
+  font-size: 0.7rem;
 }
 
 .linkOpenTest {
@@ -58,4 +61,5 @@
 .testInfo {
   width: 100%;
   margin: 0.2rem;
+  color: #0366d6;
 }

@@ -28,8 +28,8 @@ export const TestList: React.FC<ITestListProps> = ({testList, deleteTest, loadin
         <div className='testBlock'>
           <p className='testItemName'>{i + 1}) {quiz.title}</p>
           <div className='buttonsBlock'>
-            <button className='buttonDel' onClick={() => deleteTest(quiz.testId)}>Удалить</button>
-            <button className='buttonDel' onClick={() => openStatistic(quiz.testId)}>Статистика</button>
+            <button className='buttonTest' onClick={() => deleteTest(quiz.testId)}>Удалить</button>
+            <button className='buttonTest' onClick={() => openStatistic(quiz.testId)}>Статистика</button>
             <a className="linkOpenTest" href={`${window.location.href}tests/${quiz.testId}`} target="_blank">
               <span>Открыть</span>
             </a>
@@ -38,7 +38,7 @@ export const TestList: React.FC<ITestListProps> = ({testList, deleteTest, loadin
         {
           (isOpenStatistics && quiz.testId === currentTestId) ?
             <div className="statInfoBlock">
-              <h4 className='testInfo'>Статистика</h4>
+              <h3 className='testInfo'>Статистика</h3>
               <Statistics testId={quiz.testId}/>
             </div>
             : null

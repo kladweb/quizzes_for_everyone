@@ -29,9 +29,10 @@ interface IAnswer {
 
 export interface IStatistics {
   testId: string;
+  title: string;
   userName: string;
   startedAt: number;
-  finishedAt: number;
+  finishedAt: number;  //0 - not finished;
   incorrectCount: number;
   score: number;
   totalScore: number;
@@ -40,8 +41,11 @@ export interface IStatistics {
   answers: IAnswer[];
 }
 
-export interface IQuizStorage {
-  testId: string;
-  title: string;
-  finishedAt: number | null;
-}
+// export interface IQuizStorage {
+//   testId: string;
+//   title: string;
+//   finishedAt: number | null;
+//   correctCount: number | null;
+//   incorrectCount: number | null;
+//   score: number | null;
+// }

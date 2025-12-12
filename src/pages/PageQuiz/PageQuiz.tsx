@@ -2,21 +2,33 @@ import { useEffect, useState } from "react";
 import { QuizComponent } from "../../components/Quiz/Quiz";
 import { child, get, ref, set } from "firebase/database";
 import { database } from "../../firebase/firebase";
-import { IQuizStorage, IStatistics, Quiz } from "../../types/Quiz";
-import { useParams } from "react-router-dom";
+import type { IStatistics, Quiz } from "../../types/Quiz";
+import { useNavigate, useParams } from "react-router-dom";
 import { QuizStorageManager } from "../../utils/QuizStorageManager";
 import { QuizResultView } from "../../components/QuizResultView/QuizResultView";
 
 export const PageQuiz = () => {
+  const navigate = useNavigate();
   const params = useParams();
   const testId = params.testid;
   // const [isLoaded, setIsLoaded] = useState(false);
   const [quiz, setQuiz] = useState<Quiz | null>(null);
-  const [savedResult, setSavedResult] = useState<IStatistics | null>(null);
+  const [savedResultStorage, setSavedResultStorage] = useState<IStatistics | null>(null);
 
-  const handleReset = () => {
-    QuizStorageManager.clearResult(testId as string);
-    location.reload();
+  const handleReset = async () => {
+    // QuizStorageManager.clearResult();
+    console.log(testId)
+    if (testId) {
+      const resultStorage = await QuizStorageManager.getRecentStatTestId(testId);
+      if (resultStorage) {
+        console.log("Получили данные из localStorage: ", resultStorage);
+        resultStorage.finishedAt = 0;
+        console.log("statistics 03: ", resultStorage);
+        await QuizStorageManager.saveRecentStat(resultStorage);
+      }
+    }
+    setSavedResultStorage(null);
+    // setTimeout(() => location.reload(), 0);
   };
 
   const saveStatistic = async (statistics: IStatistics) => {
@@ -26,10 +38,9 @@ export const PageQuiz = () => {
 
   useEffect(() => {
     if (testId) {
-      // Check if quiz was already completed
-      const existingResult = QuizStorageManager.getResult(testId);
-      if (existingResult) {
-        setSavedResult(existingResult);
+      const existingStat = QuizStorageManager.getRecentStatTestId(testId);
+      if (existingStat && existingStat.finishedAt) {
+        setSavedResultStorage(existingStat);
       }
     }
     if (quiz) {
@@ -43,24 +54,19 @@ export const PageQuiz = () => {
         let quiz = JSON.parse(dataString);
         // console.log("DATA: ", quiz);
         setQuiz(quiz);
-        const recentQuiz: IQuizStorage = {
-          testId: quiz.testId,
-          title: quiz.title,
-          finishedAt: null,
-        }
-        QuizStorageManager.saveRecentQuiz(recentQuiz);
+        // QuizStorageManager.saveRecentQuiz(recentQuiz);
       } else {
         console.log("No data available");
       }
     }).catch((error) => {
       console.error(error);
     });
-  }, [testId]);
+  }, []);
 
   return (
     <>
       {
-        (savedResult) ? <QuizResultView result={savedResult} onReset={handleReset}/> :
+        (savedResultStorage) ? <QuizResultView result={savedResultStorage} onReset={handleReset}/> :
           <>
             {
               (quiz) ? <QuizComponent quiz={quiz} onReset={handleReset} saveStatistic={saveStatistic}/> :
