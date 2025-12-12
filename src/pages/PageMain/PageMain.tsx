@@ -7,6 +7,7 @@ import "./pageMain.css";
 import { Quiz } from "../../types/Quiz";
 import { LinkQuiz } from "../../components/LinkQuiz/LinkQuiz";
 import { TestList } from "../../components/TestList/TestList";
+import { QuizStorageManager } from "../../utils/QuizStorageManager";
 
 interface IUser {
   uid: string;
@@ -46,7 +47,7 @@ export const PageMain: React.FC = () => {
         // setQuizIds([...quizIds]);
         loadQuizzes([...quizIds])
           .then((value) => {
-            setTestList([...value.map(item => JSON.parse(item))].reverse());
+            setTestList([...value.map(item => JSON.parse(item))]);
             setLoadingMyTests(false);
           })
           .catch((error) => {
@@ -143,6 +144,7 @@ export const PageMain: React.FC = () => {
       const promise2 = set(ref(database, `users/${user.uid}`), JSON.stringify(IdsArray));
       Promise.all([promise1, promise2])
         .then(() => {
+          QuizStorageManager.removeRecentStat(testId);
           console.log("Данные успешно изменены!")
         })
         .catch((error) => {

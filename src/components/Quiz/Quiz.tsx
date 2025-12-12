@@ -145,7 +145,7 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
           <div style={{marginTop: '20px'}}>
             <input
               type="text"
-              placeholder="Enter your name *"
+              placeholder="Введите Ваше имя и/или Фамилию"
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
               style={{
