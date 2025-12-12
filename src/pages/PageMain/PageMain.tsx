@@ -123,7 +123,7 @@ export const PageMain: React.FC = () => {
       const idList = testList.map(item => item.testId);
       await set(ref(database, `users/${user.uid}`), JSON.stringify([...idList, quiz.testId]));
       setCurrentTestId(quiz.testId);
-      setTestList([...testList, quiz]);
+      setTestList([quiz, ...testList]);
     }
     setIsLoadCurrenTest(false)
     console.log("Данные вроде как загружены! )");
