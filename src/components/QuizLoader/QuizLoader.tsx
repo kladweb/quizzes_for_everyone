@@ -58,6 +58,7 @@ export const QuizLoader: React.FC<{ onQuizLoad: (quiz: Quiz) => void, userUID: s
         const quiz = JSON.parse(content) as Quiz;
         quiz.testId = nanoid(12);
         quiz.createdBy = userUID;
+        quiz.createAt = Date.now();
 
         // Validation
         if (!quiz.title || !quiz.questions || !Array.isArray(quiz.questions)) {
@@ -122,10 +123,10 @@ export const QuizLoader: React.FC<{ onQuizLoad: (quiz: Quiz) => void, userUID: s
         <div className='jsonExampleField'>
           <h3>Образец промпта для AI:</h3>
           <button
-            className={`buttonCopy${copied ? " buttonCopied" : ""}`}
+            className={`buttonMain buttonCopy${copied ? " buttonCopied" : ""}`}
             onClick={handleCopyJSON}
           >
-            {copied ? '✓ Copied!' : 'Copy'}
+            {copied ? '✓ Скопировано!' : 'Копировать в буфер'}
           </button>
         </div>
         <pre className='jsonExampleText'>{sampleJSON}</pre>

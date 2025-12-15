@@ -1,0 +1,58 @@
+:root {
+  /* ===== Backgrounds ===== */
+  --color-bg-page: #D0ECF7;
+  --color-bg-card: #F4FAFD;
+  --color-bg-footer: #E6F4FA;
+  /*--color-bg-card: #FDFEFE;*/
+
+  /* ===== Text ===== */
+  --color-text-primary: #1F2933;
+  --color-text-secondary: #4B5563;
+
+  /* ===== UI ===== */
+  --color-border: #E5E7EB;
+  --color-disabled: #94A3B8;
+  --color-selected-bg: #FFF8E1;
+
+  /* ===== Brand ===== */
+  --color-primary: #015B76;
+  --color-primary-hover: #017A9B;
+  --color-primary-active: #01475D;
+
+  /* ===== States ===== */
+  --color-success: #2E7D32;
+  --color-success-bg: #E6F4EA;
+
+  --color-error: #C62828;
+  --color-error-bg: #FDEAEA;
+
+  --color-warning: #F59E0B;
+  --color-warning-bg: #FFF8E1;
+}
+
+[data-theme="dark"] {
+  /* ===== Backgrounds ===== */
+  --color-bg-page: #0F172A;
+  --color-bg-card: #1E293B;
+  --color-bg-footer: #0F172A;
+
+  /* ===== Text ===== */
+  --color-text-primary: #E5E7EB;
+  --color-text-secondary: #9CA3AF;
+
+  /* ===== UI ===== */
+  --color-border: #334155;
+  --color-disabled: #64748B;
+
+  /* ===== Brand ===== */
+  --color-primary: #38BDF8;
+  --color-primary-hover: #7DD3FC;
+
+  /* ===== States ===== */
+  --color-success: #4ADE80;
+  --color-success-bg: #064E3B;
+
+  --color-error: #F87171;
+  --color-error-bg: #7F1D1D;
+}
+

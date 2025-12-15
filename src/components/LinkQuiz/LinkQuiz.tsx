@@ -21,10 +21,10 @@ export const LinkQuiz: React.FC<{ testId: string }> = ({testId}) => {
       <h4 className='linkHead'>Ваша ссылка на страницу с тестом:</h4>
       <p className='linkBody'>{currentLink}</p>
       <button
-        className={`buttonCopy${copied ? " buttonCopied" : ""}`}
+        className={`buttonMain buttonCopy buttonLink${copied ? " buttonCopied" : ""}`}
         onClick={handleCopy}
       >
-        {copied ? '✓ Copied!' : 'Копировать ссылку в буфер'}
+        {copied ? '✓ Скопировано!' : 'Копировать ссылку в буфер'}
       </button>
       <a className="linkTest" href={currentLink} target="_blank">Перейти на страницу теста</a>
     </div>

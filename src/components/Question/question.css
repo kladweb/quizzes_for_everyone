@@ -1,0 +1,92 @@
+.questionsContainer {
+  margin-bottom: 30px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.questionsTitle {
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.questionRadio {
+  font-size: 16px;
+  color: #0366d6;
+}
+
+.questionCheckbox {
+  display: block;
+  margin-left: 10px;
+  color: #666;
+  font-size: 14px;
+}
+
+.questionOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.questionButton {
+  padding: 12px 20px;
+  font-size: 16px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+}
+
+.answerDefault {
+  opacity: 0.4;
+  background-color: #f5f5f5;
+  color: #999;
+}
+
+.selectedNoCorrectAnswer {
+  background-color: #f44336;
+  color: white;
+  border-color: #c62828;
+  border-width: 3px;
+  box-shadow: 0 0 8px rgba(244, 67, 54, 0.4);
+}
+
+.correctedAnswer {
+  background-color: #a5d6a7;
+  color: #1b5e20;
+  border-color: #66bb6a;
+  border-width: 2px;
+  border-style: dashed;
+}
+
+.correctedAndSelectedAnswer {
+  background-color: #4caf50;
+  color: white;
+  border-color: #2e7d32;
+  border-width: 3px;
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.4);
+}
+
+.questionSelected {
+  background-color: #1976d2;
+  color: white;
+  border-color: #1976d2;
+}
+
+.questionMissed {
+  background-color: white;
+  color: #333;
+  border-color: #ddd;
+}
+
+.questionExplain {
+  margin-top: 15px;
+  padding: 12px;
+  background-color: #e3f2fd;
+  border-radius: 6px;
+  color: #1976d2;
+  font-size: 14px;
+}
