@@ -1,18 +1,29 @@
 .linkHead {
+  margin: 1rem;
   font-size: 1.5rem;
-  color: #0055ff;
+  color: var(--color-text-secondary);
 }
 
 .linkBlock .linkBody {
+  margin: 1rem;
   font-size: 1.5rem;
-  color: #f63917;
+  color: var(--color-warning);
 }
 
 .linkTest {
   display: block;
-  margin-top: 2rem;
+  margin: 1rem;
   font-size: 1.2rem;
   font-weight: bold;
   text-decoration: none;
-  color: #f67d32;
+  color: var(--color-warning);
+  transition: all 0.3s ease;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.buttonMain.buttonLink {
+  margin: 0 auto;
 }

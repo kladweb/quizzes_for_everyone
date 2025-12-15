@@ -112,7 +112,7 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
   const canSubmit = allAnswered && userName.trim().length > 0;
 
   const handleReset = () => {
-    // onReset();
+    onReset();
     setTimeout(() => location.reload(), 0);
   }
 

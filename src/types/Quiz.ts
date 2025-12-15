@@ -15,6 +15,8 @@ export interface Quiz {
   testId: string;
   createdBy: string;
   title: string;
+  createAt?: number;
+  category?: string;
   description?: string;
   questions: Question[];
 }

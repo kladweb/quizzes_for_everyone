@@ -1,13 +1,15 @@
 import { BrowserRouter } from "react-router-dom";
 import { PagesRouter } from "./router/PagesRouter";
 import { Header } from "./components/Header/Header";
+import { Footer } from "./components/Footer/Footer";
 
 function App() {
 
   return (
     <BrowserRouter>
-      <Header/>
-      <PagesRouter/>
+        <Header/>
+          <PagesRouter/>
+        <Footer/>
     </BrowserRouter>
   )
 }
