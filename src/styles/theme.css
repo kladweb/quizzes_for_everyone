@@ -8,11 +8,14 @@
   /* ===== Text ===== */
   --color-text-primary: #1F2933;
   --color-text-secondary: #4B5563;
+  --color-text-contrast: white;
 
   /* ===== UI ===== */
   --color-border: #E5E7EB;
   --color-disabled: #94A3B8;
   --color-selected-bg: #FFF8E1;
+  --color-err-shadow: rgba(244, 67, 54, 0.4);
+  /*--color-checkbox: #666;*/
 
   /* ===== Brand ===== */
   --color-primary: #015B76;
@@ -21,10 +24,12 @@
 
   /* ===== States ===== */
   --color-success: #2E7D32;
-  --color-success-bg: #E6F4EA;
+  --color-success-bg: #a5d6a7;
+  --color-success-border: #66bb6a;
+  --color-success-shadow: rgba(76, 175, 80, 0.4);
 
-  --color-error: #C62828;
-  --color-error-bg: #FDEAEA;
+  --color-error: #f44336;
+  --color-error-bg: #C62828;
 
   --color-warning: #F59E0B;
   --color-warning-bg: #FFF8E1;
@@ -43,6 +48,8 @@
   /* ===== UI ===== */
   --color-border: #334155;
   --color-disabled: #64748B;
+  --color-selected-bg: #FFF8E1;
+  /*--color-checkbox: #666;*/
 
   /* ===== Brand ===== */
   --color-primary: #38BDF8;

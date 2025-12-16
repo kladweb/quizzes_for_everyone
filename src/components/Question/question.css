@@ -1,9 +1,9 @@
 .questionsContainer {
   margin-bottom: 30px;
   padding: 20px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-border);
   border-radius: 8px;
-  background-color: #f9f9f9;
+  background-color: var(--color-bg-card);
 }
 
 .questionsTitle {
@@ -13,13 +13,13 @@
 
 .questionRadio {
   font-size: 16px;
-  color: #0366d6;
+  color: var(--color-text-secondary);
 }
 
 .questionCheckbox {
   display: block;
   margin-left: 10px;
-  color: #666;
+  color: var(--color-text-secondary);
   font-size: 14px;
 }
 
@@ -32,9 +32,9 @@
 .questionButton {
   padding: 12px 20px;
   font-size: 16px;
-  border: 2px solid #ddd;
+  border: 2px solid var(--color-border);
   border-radius: 6px;
-  background-color: white;
+  background-color: var(--color-bg-card);
   cursor: pointer;
   transition: all 0.3s ease;
   text-align: left;
@@ -42,51 +42,53 @@
 
 .answerDefault {
   opacity: 0.4;
-  background-color: #f5f5f5;
-  color: #999;
+  background-color: var(--color-bg-card);
+  color:  var(--color-text-secondary);
 }
 
 .selectedNoCorrectAnswer {
-  background-color: #f44336;
-  color: white;
-  border-color: #c62828;
+  /*background-color: #f44336;*/
+  background-color: var(--color-error);
+  color: var(--color-text-contrast);
+  /*border-color: #c62828;*/
+  border-color:var(--color-error-bg);
   border-width: 3px;
-  box-shadow: 0 0 8px rgba(244, 67, 54, 0.4);
+  box-shadow: 0 0 8px var(--color-err-shadow);
 }
 
 .correctedAnswer {
-  background-color: #a5d6a7;
-  color: #1b5e20;
-  border-color: #66bb6a;
+  background-color: var(--color-success-bg);
+  color: var(--color-success);
+  border-color: var(--color-success-border);
   border-width: 2px;
   border-style: dashed;
 }
 
 .correctedAndSelectedAnswer {
-  background-color: #4caf50;
-  color: white;
-  border-color: #2e7d32;
+  background-color:  var(--color-success-border);
+  color: var(--color-text-contrast);
+  border-color: var(--color-success);
   border-width: 3px;
-  box-shadow: 0 0 8px rgba(76, 175, 80, 0.4);
+  box-shadow: 0 0 8px var(--color-success-shadow);
 }
 
 .questionSelected {
-  background-color: #1976d2;
+  background-color: var(--color-primary);
   color: white;
-  border-color: #1976d2;
+  border-color: var(--color-primary);
 }
 
 .questionMissed {
-  background-color: white;
-  color: #333;
-  border-color: #ddd;
+  background-color: var(--color-text-contrast);
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
 }
 
 .questionExplain {
   margin-top: 15px;
   padding: 12px;
-  background-color: #e3f2fd;
+  background-color: var(--color-bg-page);
   border-radius: 6px;
-  color: #1976d2;
+  color: var(--color-primary);
   font-size: 14px;
 }
