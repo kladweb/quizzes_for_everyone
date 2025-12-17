@@ -15,8 +15,10 @@ export interface Quiz {
   testId: string;
   createdBy: string;
   title: string;
-  createAt?: number;
+  createdAt: number;
+  modifiedAt?: number;
   category?: string;
+  lang: string;
   description?: string;
   questions: Question[];
 }
