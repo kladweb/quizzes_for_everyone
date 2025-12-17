@@ -8,12 +8,11 @@ export const QuizLoader: React.FC<{ onQuizLoad: (quiz: Quiz) => void, userUID: s
   const [copied, setCopied] = useState(false);
 
   const sampleJSON = `
-  Сделай (придумай) тест по [описание теста/тема/примеру: пример теста]
-  состоящий из [кол-во вопросов] вопросов.
-  В каждом вопросе должно быть три варианта ответов, 
-  один из которых верный. Добавь краткое объяснение
-  для каждого вопроса. Тест оформи в JSON файл по
-  такому примеру:
+Сделай (придумай) тест по [описание теста/тема/примеру: пример теста] состоящий из [кол-во вопросов] вопросов.
+В каждом вопросе должно быть три варианта ответов, 
+один из которых верный. Добавь краткое объяснение
+для каждого вопроса. Тест оформи в JSON файл по
+такому примеру:
 {
   "title": "English Test: Present Simple",
   "description": "Mini test",
@@ -58,7 +57,8 @@ export const QuizLoader: React.FC<{ onQuizLoad: (quiz: Quiz) => void, userUID: s
         const quiz = JSON.parse(content) as Quiz;
         quiz.testId = nanoid(12);
         quiz.createdBy = userUID;
-        quiz.createAt = Date.now();
+        quiz.createdAt = Date.now();
+        quiz.modifiedAt = Date.now();
 
         // Validation
         if (!quiz.title || !quiz.questions || !Array.isArray(quiz.questions)) {
