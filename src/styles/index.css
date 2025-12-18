@@ -61,7 +61,7 @@ input[type="file"] {
   margin: 30px auto;
   padding: 8px 16px;
   font-size: 14px;
-  color: white;
+  color: var(--color-text-contrast);
   background-color: var(--color-primary);
   border: none;
   border-radius: 6px;

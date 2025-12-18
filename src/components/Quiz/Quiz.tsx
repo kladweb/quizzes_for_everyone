@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import type { IStatistics, Question, Quiz } from "../../types/Quiz";
-import { QuestionComponent } from "../Question/Question";
-import { QuizStorageManager } from "../../utils/QuizStorageManager";
-import { QuizResultView } from "../QuizResultView/QuizResultView";
+import React, {useEffect, useState} from "react";
+import type {IStatistics, Question, Quiz} from "../../types/Quiz";
+import {QuestionComponent} from "../Question/Question";
+import {QuizStorageManager} from "../../utils/QuizStorageManager";
+import {QuizResultView} from "../QuizResultView/QuizResultView";
 import "./quiz.css";
 
 interface IQuizProps {
@@ -145,6 +145,7 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
         {!isSubmitted && (
           <div className='quizHeadBody'>
             <input
+              name='questionId'
               type="text"
               placeholder="Введите Ваше имя и/или Фамилию"
               value={userName}

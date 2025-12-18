@@ -4,7 +4,7 @@
   padding: 0.5em;
   width: fit-content;
   text-align: left;
-  border: 1px solid #f67d32;
+  border: 1px solid var(--color-warning);
   border-radius: 6px;
 
   & p {
@@ -19,11 +19,13 @@
   top: -0.3em;
   right: -0.3em;
   font-size: .7em;
-  color: #f67d32;
+  color: var(--color-warning);
   background: rgba(255, 255, 255, 0);
   border: none;
   cursor: pointer;
+  transition: all 0.3s ease;
+
   &:hover {
-    color: #d54f00;
+    color: var(--color-error);
   }
 }

@@ -1,0 +1,54 @@
+.result-wrapper {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.result-card {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: var(--color-success-bg-light);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.result-title {
+  color: var(--color-success);
+  margin-bottom: 15px;
+}
+
+.result-subtitle {
+  color: var(--color-success);
+  margin-bottom: 15px;
+}
+
+.result-text {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.result-text--total {
+  margin-bottom: 20px;
+}
+
+.result-percent {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--color-success);
+}
+
+.result-button {
+  margin-top: 20px;
+  padding: 12px 24px;
+  font-size: 16px;
+  color: var(--color-text-contrast);
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.result-button:hover {
+  background-color: var(--color-primary-hover);
+}
