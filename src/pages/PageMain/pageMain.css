@@ -1,12 +1,12 @@
 .buttonMain.buttonLogin {
-  background-Color: #f67d32;
+  background-Color: var(--color-warning);
 }
 
 .noticeBlock {
   transition: all 0.3s ease;
 
   & .noticeText {
-    color: #f63917;
+    color: var(--color-error);
   }
 }
 

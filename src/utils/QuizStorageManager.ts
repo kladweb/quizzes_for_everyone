@@ -59,12 +59,9 @@ export const QuizStorageManager = {
   },
 
   saveRecentStat(statisticInfo: IStatistics): void {
-    console.log(statisticInfo.testId);
-    console.log(statisticInfo);
     const storageKey = `recentQuizzes`;
     let currentStatistic: IStatistics[] = [statisticInfo];
     const recentStatistic: IStatistics[] | null = this.getRecentAllStat();
-    console.log(recentStatistic);
     let isCurrentExists = false;
     if (recentStatistic && recentStatistic.length > 0) {
       recentStatistic.forEach((statistic: IStatistics, i) => {

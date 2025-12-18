@@ -25,6 +25,7 @@
   /* ===== States ===== */
   --color-success: #2E7D32;
   --color-success-bg: #a5d6a7;
+  --color-success-bg-light: #e8f5e9;
   --color-success-border: #66bb6a;
   --color-success-shadow: rgba(76, 175, 80, 0.4);
 
@@ -58,6 +59,7 @@
   /* ===== States ===== */
   --color-success: #4ADE80;
   --color-success-bg: #064E3B;
+  --color-success-bg-light: #064E3B;
 
   --color-error: #F87171;
   --color-error-bg: #7F1D1D;

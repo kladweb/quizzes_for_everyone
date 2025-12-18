@@ -52,7 +52,7 @@ export const RecentQuizzes: React.FC<IRecentQuizzes> = ({currentTestId}) => {
               <p className='recentInfo'>Неверных/частично верных ответов: <span>{recentQuiz.incorrectCount}</span></p>
             </div>
             :
-            <p className='recentInfo'>Тест не пройден!</p>
+            <p className='recentInfo recent-empty'>Тест не пройден!</p>
         }
         <div className='recentButtons'>
           {/*{(recentQuiz.testId === currentTestId) ? 'Пройти тест ещё раз' : 'Открыть'}*/}

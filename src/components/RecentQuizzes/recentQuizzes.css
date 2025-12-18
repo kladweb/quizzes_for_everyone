@@ -6,12 +6,13 @@
   align-self: start;
   flex-wrap: wrap;
   justify-content: center;
-  border: 2px solid #f67d32;
+  border: 2px solid var(--color-warning);
+  background-color: var(--color-text-contrast);
   border-radius: 6px;
 }
 
 .recentTestFinished {
-  border: 2px solid #16a34a;
+  border: 2px solid var(--color-success-border);
 }
 
 .recentTestName {
@@ -19,7 +20,8 @@
   width: 100%;
   margin: 0;
   padding: 5px;
-  color: #0055ff;
+  color: var(--color-primary-hover);
+  font-weight: bold;
 }
 
 .recentInfoBlock {
@@ -35,8 +37,12 @@
 
   span {
     font-weight: bold;
-    color: #16a34a;
+    color: var(--color-success);
   }
+}
+
+.recent-empty {
+  color: var(--color-warning);
 }
 
 .recentButtons {
@@ -52,5 +58,5 @@
 
 .recentWarning {
   font-size: 0.7rem;
-  color: #f67d32;
+  color: var(--color-error);
 }

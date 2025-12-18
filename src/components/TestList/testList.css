@@ -12,7 +12,8 @@
   align-self: start;
   flex-wrap: wrap;
   justify-content: center;
-  border: 1px solid #16a34a;
+  background-color: var(--color-text-contrast);
+  border: 1px solid var(--color-success-border);
   border-radius: 6px;
 }
 
@@ -25,7 +26,7 @@
   width: 100%;
   margin: 0;
   padding: 5px;
-  color: #16a34aff;
+  color: var(--color-success);
   font-weight: bold;
 }
 
@@ -46,9 +47,13 @@
   font-size: 0.8rem;
   font-weight: bold;
   text-decoration: none;
-  color: #f67d32;
+  color: var(--color-warning);
   line-height: 1.6rem;
+  transition: all 0.3s ease;
 
+  &:hover {
+    color: var(--color-success-border);
+  }
 }
 
 .statInfoBlock {
@@ -61,5 +66,5 @@
 .testInfo {
   width: 100%;
   margin: 0.2rem;
-  color: #0366d6;
+  color: var(--color-text-secondary);
 }
