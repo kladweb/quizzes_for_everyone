@@ -3,6 +3,7 @@ import type { IStatistics, Question, Quiz } from "../../types/Quiz";
 import { QuestionComponent } from "../Question/Question";
 import { QuizStorageManager } from "../../utils/QuizStorageManager";
 import { QuizResultView } from "../QuizResultView/QuizResultView";
+import "./quiz.css";
 
 interface IQuizProps {
   quiz: Quiz;
@@ -136,26 +137,18 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
   }, []);
 
   return (
-    <div style={{maxWidth: '600px', margin: '0 auto', padding: '20px'}}>
-      <div style={{textAlign: 'center', marginBottom: '30px'}}>
-        <h1 style={{color: '#333', marginBottom: '10px'}}>{quiz.title}</h1>
-        <p style={{color: '#666', fontSize: '16px'}}>{quiz.description}</p>
+    <div className='quizContainer'>
+      <div className='quizHeadBlock'>
+        <h1 className='quizHead'>{quiz.title}</h1>
+        <p>{quiz.description}</p>
 
         {!isSubmitted && (
-          <div style={{marginTop: '20px'}}>
+          <div className='quizHeadBody'>
             <input
               type="text"
               placeholder="Введите Ваше имя и/или Фамилию"
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
-              style={{
-                padding: '10px 15px',
-                fontSize: '16px',
-                border: '2px solid #ddd',
-                borderRadius: '6px',
-                width: '100%',
-                maxWidth: '300px'
-              }}
             />
           </div>
         )}
@@ -173,68 +166,39 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
         />
       ))}
       {isSubmitted && (
-        <div style={{
-          marginTop: '10px',
-          padding: '8px',
-          backgroundColor: '#fff3e0',
-          borderRadius: '4px',
-          fontSize: '12px',
-          color: '#e65100'
-        }}>
+        <div className='submittedInfoBlock'>
           <strong>Обозначения:</strong>{' '}
-          <span style={{color: '#2e7d32', fontWeight: 'bold'}}>Сплошная зеленая рамка</span> = Ваш верный выбор{' '}
-          | <span style={{color: '#66bb6a', fontWeight: 'bold'}}>Пунктирная зеленая</span> = Правильный вариант{' '}
-          | <span style={{color: '#c62828', fontWeight: 'bold'}}>Красная рамка</span> = Ваш неверный ответ
+          <span className='textCorrect'>Сплошная зеленая рамка</span> = Ваш верный выбор{' '}
+          | <span className='textPossibleCorrect'>Пунктирная зеленая</span> = Правильный вариант{' '}
+          | <span className='textIncorrect'>Красная рамка</span> = Ваш неверный ответ
         </div>
       )}
       {!isSubmitted && (
-        <div style={{textAlign: 'center', marginTop: '30px'}}>
-          <div style={{marginBottom: '20px'}}>
-            <label style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              cursor: 'pointer',
-              fontSize: '16px',
-              color: '#333'
-            }}>
+        <div className='submitBlock'>
+          <div className='submitSettings'>
+            <label>
               <input
                 type="checkbox"
                 checked={showCorrectExplanations}
                 onChange={(e) => setShowCorrectExplanations(e.target.checked)}
-                style={{
-                  width: '18px',
-                  height: '18px',
-                  marginRight: '10px',
-                  cursor: 'pointer'
-                }}
               />
               Показать объяснения по завершении теста и для правильных ответов
             </label>
           </div>
           <button
+            className={`quizSubmitButton${canSubmit ? ' canSubmitButton' : ''}`}
             onClick={handleSubmit}
             disabled={!canSubmit}
-            style={{
-              padding: '15px 40px',
-              fontSize: '18px',
-              fontWeight: 'bold',
-              backgroundColor: canSubmit ? '#1976d2' : '#ccc',
-              color: 'white',
-              border: 'none',
-              borderRadius: '8px',
-              cursor: canSubmit ? 'pointer' : 'not-allowed',
-              transition: 'all 0.3s ease'
-            }}
           >
             ПРОВЕРИТЬ РЕЗУЛЬТАТ
           </button>
           {!allAnswered && (
-            <p style={{marginTop: '10px', color: '#f44336', fontSize: '14px'}}>
+            <p className='warningInfo'>
               Пожалуйста, ответьте на все вопросы перед отправкой
             </p>
           )}
           {allAnswered && !userName.trim() && (
-            <p style={{marginTop: '10px', color: '#f44336', fontSize: '14px'}}>
+            <p className='warningInfo'>
               Пожалуйста, введите Ваше имя и/или фамилию перед отправкой
             </p>
           )}
