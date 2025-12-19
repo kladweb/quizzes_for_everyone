@@ -6,6 +6,7 @@
   border: 2px dashed var(--color-border);
   border-radius: 12px;
   background-color: var(--color-bg-card);
+  transition: background-color ease 0.25s;
 }
 
 h1 {

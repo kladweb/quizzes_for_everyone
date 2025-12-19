@@ -21,6 +21,7 @@ body {
   /*align-items: center;*/
   /*justify-content: center;*/
   /*padding: 24px;*/
+  transition: background-color ease 0.5s;
 }
 
 #root {
