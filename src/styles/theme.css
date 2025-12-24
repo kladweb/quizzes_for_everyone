@@ -45,6 +45,7 @@
   /* ===== Text ===== */
   --color-text-primary: #E5E7EB;
   --color-text-secondary: #9CA3AF;
+  --color-text-contrast: #0F172A;
 
   /* ===== UI ===== */
   --color-border: #334155;
@@ -53,8 +54,9 @@
   /*--color-checkbox: #666;*/
 
   /* ===== Brand ===== */
-  --color-primary: #38BDF8;
-  --color-primary-hover: #7DD3FC;
+  --color-primary: #7DD3FC;
+  --color-primary-hover: #38BDF8;
+  /*--color-primary-hover: #7DD3FC;*/
 
   /* ===== States ===== */
   --color-success: #4ADE80;

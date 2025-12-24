@@ -1,10 +1,13 @@
 import React from "react";
+import "./header.css"
+import ThemeSwitch from "../ThemeSwitch/ThemeSwitch";
 
 export const Header: React.FC = () => {
 
   return (
-    <header>
-      <div></div>
+    <header className="header-container">
+      {/*<ThemeToggle/>*/}
+      <ThemeSwitch/>
     </header>
   );
 };
