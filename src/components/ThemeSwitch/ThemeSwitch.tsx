@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import './ThemeSwitch.css';
 import { setTheme } from "../../utils/theme";
+import './themeSwitch.css';
 
 export const ThemeSwitch: React.FC = () => {
   const [theme, setCurrentTheme] = useState(
