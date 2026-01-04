@@ -8,12 +8,11 @@
 
 .questionsTitle {
   margin-bottom: 15px;
-  color: #333;
+  color: var(--color-text-secondary);
 }
 
 .questionRadio {
   font-size: 16px;
-  color: var(--color-text-secondary);
 }
 
 .questionCheckbox {

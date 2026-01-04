@@ -131,7 +131,7 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
       correctCount: 0,
       answers: [],
     };
-    console.log("statistics 02: ", startStatistics);
+    // console.log("statistics 02: ", startStatistics);
     QuizStorageManager.saveRecentStat(startStatistics);
 
   }, []);
