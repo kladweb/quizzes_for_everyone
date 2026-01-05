@@ -46,7 +46,6 @@ export const PageMain: React.FC = () => {
         // setQuizIds([...quizIds]);
         loadQuizzes([...quizIds])
           .then((value) => {
-            console.log(value);
             const correctIds = [...quizIds];
             value.forEach((item, index) => {
               if (!item) {
@@ -141,7 +140,7 @@ export const PageMain: React.FC = () => {
       setTestList([quiz, ...testList]);
     }
     setIsLoadCurrenTest(false)
-    console.log("Данные вроде как загружены! )");
+    console.log("Data loaded! )");
   }
 
   const deleteTest = async (testId: string) => {
