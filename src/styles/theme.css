@@ -3,7 +3,7 @@
   --color-bg-page: #D0ECF7;
   --color-bg-card: #F4FAFD;
   --color-bg-footer: #E6F4FA;
-  /*--color-bg-card: #FDFEFE;*/
+  --color-bg-contrast: white;
 
   /* ===== Text ===== */
   --color-text-primary: #1F2933;
@@ -39,8 +39,9 @@
 [data-theme="dark"] {
   /* ===== Backgrounds ===== */
   --color-bg-page: #0F172A;
-  --color-bg-card: #1E293B;
+  --color-bg-card: #334155;
   --color-bg-footer: #0F172A;
+  --color-bg-contrast: #1E293B;
 
   /* ===== Text ===== */
   --color-text-primary: #E5E7EB;

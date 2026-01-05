@@ -12,7 +12,7 @@
   align-self: start;
   flex-wrap: wrap;
   justify-content: center;
-  background-color: var(--color-text-contrast);
+  background-color: var(--color-bg-contrast);
   border: 1px solid var(--color-success-border);
   border-radius: 6px;
 }
@@ -39,6 +39,16 @@
   height: 1.2rem;
   margin: 4px;
   font-size: 0.7rem;
+  color: var(--color-text-contrast);
+  background-Color: var(--color-warning);
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: var(--color-primary-hover);
+  }
 }
 
 .linkOpenTest {
@@ -52,7 +62,7 @@
   transition: all 0.3s ease;
 
   &:hover {
-    color: var(--color-success-border);
+    color: var(--color-primary-hover);
   }
 }
 
