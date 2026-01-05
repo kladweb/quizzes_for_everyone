@@ -24,21 +24,21 @@ export const TestList: React.FC<ITestListProps> = ({testList, deleteTest, loadin
 
   const testsElements = testList.map((quiz, i) => {
     return (
-      <div className='testItem' key={quiz.testId}>
-        <div className='testBlock'>
-          <p className='testItemName'>{i + 1}) {quiz.title}</p>
-          <div className='buttonsBlock'>
-            <button className='buttonTest' onClick={() => deleteTest(quiz.testId)}>Удалить</button>
-            <button className='buttonTest' onClick={() => openStatistic(quiz.testId)}>Статистика</button>
-            <a className="linkOpenTest" href={`${window.location.href}tests/${quiz.testId}`} target="_blank">
+      <div className='test-item' key={quiz.testId}>
+        <div className='test-content'>
+          <p className='test-name'>{i + 1}) {quiz.title}</p>
+          <div className='test-buttons-block'>
+            <button className='button-test' onClick={() => deleteTest(quiz.testId)}>Удалить</button>
+            <button className='button-test' onClick={() => openStatistic(quiz.testId)}>Статистика</button>
+            <a className="link-open-test" href={`${window.location.href}tests/${quiz.testId}`} target="_blank">
               <span>Открыть</span>
             </a>
           </div>
         </div>
         {
           (isOpenStatistics && quiz.testId === currentTestId) ?
-            <div className="statInfoBlock">
-              <h3 className='testInfo'>Статистика</h3>
+            <div className="stat-info-block">
+              <h3 className='stat-info-head'>Статистика</h3>
               <Statistics testId={quiz.testId}/>
             </div>
             : null
@@ -48,14 +48,14 @@ export const TestList: React.FC<ITestListProps> = ({testList, deleteTest, loadin
   })
 
   return (
-    <div className='loaderContainer'>
-      <h3 className="testListName">МОИ ТЕСТЫ:</h3>
-      <div className='testListBlock'>
+    <div className='tests-container'>
+      <h3 className="test-list-name">МОИ ТЕСТЫ:</h3>
+      <div className='test-list-block'>
         {
           (loadingMyTests) ? <div>...идёт загрузка...</div> :
             <>
               {
-                (testsElements.length === 0) ? <div className='testItemName'>Список пуст</div> :
+                (testsElements.length === 0) ? <div className='test-name'>Список пуст</div> :
                   <>
                     {testsElements}
                   </>

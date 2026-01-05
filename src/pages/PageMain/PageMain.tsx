@@ -3,11 +3,11 @@ import {child, get, ref, set} from "firebase/database";
 import {GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut} from "firebase/auth";
 import {auth, database} from "../../firebase/firebase";
 import {QuizLoader} from "../../components/QuizLoader/QuizLoader";
-import "./pageMain.css";
 import {Quiz} from "../../types/Quiz";
 import {LinkQuiz} from "../../components/LinkQuiz/LinkQuiz";
 import {TestList} from "../../components/TestList/TestList";
 import {QuizStorageManager} from "../../utils/QuizStorageManager";
+import "./pageMain.css";
 
 interface IUser {
   uid: string;
@@ -159,14 +159,14 @@ export const PageMain: React.FC = () => {
 
   return (
       <>
-        <div className='loaderContainer'>
+        <div className='tests-container'>
           {
             (user) ?
-                <button className='buttonMain buttonLogin' onClick={logoutGoogle}>LOGOUT</button> :
-                <button className='buttonMain buttonLogin' onClick={loginGoogle}>GOOGLE LOGIN</button>
+                <button className='btn button-login' onClick={logoutGoogle}>LOGOUT</button> :
+                <button className='btn button-login ' onClick={loginGoogle}>GOOGLE LOGIN</button>
           }
           <>
-            <button className='buttonMain buttonCreate' onClick={createTest}>Создать новый тест</button>
+            <button className='btn button-create' onClick={createTest}>Создать новый тест</button>
             <div className={`noticeBlock${(isNotice ? " close" : "")}`}>
               <p className='noticeText'>Сначала нужно войти в систему!</p>
               <p className='noticeText'>Нажните кнопку GOOGLE LOGIN!</p>

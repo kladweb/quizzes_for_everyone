@@ -42,24 +42,24 @@ export const RecentQuizzes: React.FC<IRecentQuizzes> = ({currentTestId}) => {
 
   const quizElements = recentStat.map((recentQuiz: IStatistics) => {
     return (
-      <div className={`recentTestItem${(recentQuiz.finishedAt) ? " recentTestFinished" : ""}`} key={recentQuiz.testId}>
-        <p className='recentTestName '>{recentQuiz.title}</p>
+      <div className={`recent-test-block${(recentQuiz.finishedAt) ? " recent-test--finished" : ""}`} key={recentQuiz.testId}>
+        <p className='recent-test-name '>{recentQuiz.title}</p>
         {
           (recentQuiz.finishedAt) ?
-            <div className='recentInfoBlock'>
-              <p className='recentInfo'>Ваш результат: <span>{recentQuiz.score}%</span></p>
-              <p className='recentInfo'>Верных ответов: <span>{recentQuiz.correctCount}</span></p>
-              <p className='recentInfo'>Неверных/частично верных ответов: <span>{recentQuiz.incorrectCount}</span></p>
+            <div className='recent-info-block'>
+              <p className='recent-info'>Ваш результат: <span>{recentQuiz.score}%</span></p>
+              <p className='recent-info'>Верных ответов: <span>{recentQuiz.correctCount}</span></p>
+              <p className='recent-info'>Неверных/частично верных ответов: <span>{recentQuiz.incorrectCount}</span></p>
             </div>
             :
-            <p className='recentInfo recent-empty'>Тест не пройден!</p>
+            <p className='recent-info recent-empty'>Тест не пройден!</p>
         }
-        <div className='recentButtons'>
+        <div className='recent-buttons'>
           {/*{(recentQuiz.testId === currentTestId) ? 'Пройти тест ещё раз' : 'Открыть'}*/}
-          <button className='buttonRecent' onClick={() => openRecentQuiz(recentQuiz.testId)}>
+          <button className='button-recent' onClick={() => openRecentQuiz(recentQuiz.testId)}>
             Открыть тест
           </button>
-          <button className='buttonRecent' onClick={() => deleteRecentQuiz(recentQuiz.testId)}>
+          <button className='button-recent' onClick={() => deleteRecentQuiz(recentQuiz.testId)}>
             Удалить из истории
           </button>
         </div>
@@ -68,12 +68,12 @@ export const RecentQuizzes: React.FC<IRecentQuizzes> = ({currentTestId}) => {
   });
 
   return (
-    <div className='loaderContainer'>
-      <h3 className="testListName">ВАШИ НЕДАВНИЕ ТЕСТЫ:</h3>
-      <div className='testListBlock'>
+    <div className='tests-container'>
+      <h3 className="tests-name">ВАШИ НЕДАВНИЕ ТЕСТЫ:</h3>
+      <div className='tests-block'>
         {quizElements}
       </div>
-      <p className='recentInfo recentWarning'>После открытия теста старые результаты будут стерты!</p>
+      <p className='recent-info recent-warning'>После открытия теста старые результаты будут стерты!</p>
     </div>
   );
 }
