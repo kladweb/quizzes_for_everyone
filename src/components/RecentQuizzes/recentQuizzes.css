@@ -1,4 +1,4 @@
-.recentTestItem {
+.recent-test-block {
   display: flex;
   padding: 0;
   margin: 6px 0;
@@ -11,25 +11,25 @@
   border-radius: 6px;
 }
 
-.recentTestFinished {
+.recent-test--finished {
   border: 2px solid var(--color-success-border);
 }
 
-.recentTestName {
+.recent-test-name {
   display: block;
   width: 100%;
   margin: 0;
   padding: 5px;
-  color: var(--color-primary-hover);
+  color: var(--color-secondary);
   font-weight: bold;
 }
 
-.recentInfoBlock {
+.recentI-info-block {
   width: 100%;
   text-align: left;
 }
 
-.recentInfo {
+.recent-info {
   width: 100%;
   margin: 0.1rem 0.3rem;
   font-size: 0.9rem;
@@ -45,18 +45,18 @@
   color: var(--color-warning);
 }
 
-.recentButtons {
+.recent-buttons {
   display: inline-block;
 }
 
-.buttonRecent {
+.button-recent {
   display: inline-block;
   height: 1.2rem;
   margin: 4px;
   font-size: 0.7rem;
 }
 
-.recentWarning {
+.recent-warning {
   font-size: 0.7rem;
   color: var(--color-error);
 }

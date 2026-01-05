@@ -1,10 +1,10 @@
-.testListBlock {
+.test-list-block {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
 }
 
-.testItem {
+.test-item {
   display: flex;
   padding: 0;
   margin: 6px 0;
@@ -17,11 +17,11 @@
   border-radius: 6px;
 }
 
-.testBlock {
+.test-content {
   width: 100%;
 }
 
-.testItemName {
+.test-name {
   display: inline-block;
   width: 100%;
   margin: 0;
@@ -30,50 +30,50 @@
   font-weight: bold;
 }
 
-.buttonsBlock {
+.test-buttons-block {
   display: inline-block;
 }
 
-.buttonTest {
+.button-test {
   display: inline-block;
   height: 1.2rem;
   margin: 4px;
   font-size: 0.7rem;
   color: var(--color-text-contrast);
-  background-Color: var(--color-warning);
+  background-Color: var(--color-primary);
   border: none;
   border-radius: 3px;
   cursor: pointer;
   transition: all 0.3s ease;
 
   &:hover {
-    background-color: var(--color-primary-hover);
+    background-color: var(--color-quaternary);
   }
 }
 
-.linkOpenTest {
+.link-open-test {
   margin: 0.2rem;
   padding: 0;
   font-size: 0.8rem;
   font-weight: bold;
   text-decoration: none;
-  color: var(--color-warning);
+  color: var(--color-primary);
   line-height: 1.6rem;
   transition: all 0.3s ease;
 
   &:hover {
-    color: var(--color-primary-hover);
+    color: var(--color-quaternary);
   }
 }
 
-.statInfoBlock {
+.stat-info-block {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
 }
 
-.testInfo {
+.stat-info-head {
   width: 100%;
   margin: 0.2rem;
   color: var(--color-text-secondary);

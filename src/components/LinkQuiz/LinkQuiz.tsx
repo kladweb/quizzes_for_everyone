@@ -17,16 +17,16 @@ export const LinkQuiz: React.FC<{ testId: string }> = ({testId}) => {
   };
 
   return (
-    <div className='linkBlock'>
-      <h4 className='linkHead'>Ваша ссылка на страницу с тестом:</h4>
-      <p className='linkBody'>{currentLink}</p>
+    <div className='link-block'>
+      <h4 className='link-head'>Ваша ссылка на страницу с тестом:</h4>
+      <p className='link-body'>{currentLink}</p>
       <button
-        className={`buttonMain buttonCopy buttonLink${copied ? " buttonCopied" : ""}`}
+        className={`btn btn-link-copy ${copied ? " btn-link-copy--copied" : ""}`}
         onClick={handleCopy}
       >
-        {copied ? '✓ Скопировано!' : 'Копировать ссылку в буфер'}
+        {copied ? 'Скопировано!' : 'Копировать ссылку в буфер'}
       </button>
-      <a className="linkTest" href={currentLink} target="_blank">Перейти на страницу теста</a>
+      <a className="link-newTest" href={currentLink} target="_blank">Перейти на страницу теста</a>
     </div>
   )
 }

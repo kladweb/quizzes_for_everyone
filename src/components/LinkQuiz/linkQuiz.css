@@ -1,16 +1,44 @@
-.linkHead {
+.link-head {
   margin: 1rem;
   font-size: 1.5rem;
   color: var(--color-text-secondary);
 }
 
-.linkBlock .linkBody {
+.link-block .link-body {
   margin: 1rem;
   font-size: 1.5rem;
   color: var(--color-warning);
 }
 
-.linkTest {
+.btn-link-copy {
+  margin: 0 auto;
+  padding: 8px 16px;
+  font-size: 14px;
+  alignment-baseline: text-bottom;
+  color: var(--color-text-contrast);
+  background-color: var(--color-primary);
+  border-radius: 6px;
+
+  &:hover {
+    background-color: var(--color-secondary);
+  }
+
+  &:active {
+    background-color: var(--color-tertiary);
+  }
+}
+
+.btn-link-copy--copied,
+.btn-link-copy--copied:is(:hover, :active) {
+  background-color: var(--color-success);
+
+  &::before {
+    font-size: 0.8em;
+    content: '✓ ';
+  }
+}
+
+.link-newTest {
   display: block;
   margin: 1rem;
   font-size: 1.2rem;
@@ -22,8 +50,4 @@
   &:hover {
     opacity: 0.8;
   }
-}
-
-.buttonMain.buttonLink {
-  margin: 0 auto;
 }

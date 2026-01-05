@@ -108,29 +108,30 @@ export const QuizLoader: React.FC<{ onQuizLoad: (quiz: Quiz) => void, userUID: s
 
   return (
     <div className='loaderBlock'>
-      <h1>Создайте новый тест</h1>
-      <p>Загрузите тест из JSON файла</p>
+      <h1 className='loader-head'>Создайте новый тест</h1>
+      <p className='loader-dsc'>Загрузите тест из JSON файла</p>
       <input
+        className='input-loader'
         type="file"
         accept=".json"
         onChange={handleFileChange}
       />
 
       {error && (
-        <p className='textError'>{error}</p>
+        <p className='text-error'>{error}</p>
       )}
 
-      <div className='jsonExampleContainer'>
-        <div className='jsonExampleField'>
+      <div className='json-example-container'>
+        <div className='json-example-field'>
           <h3>Образец промпта для AI:</h3>
           <button
-            className={`buttonMain buttonCopy${copied ? " buttonCopied" : ""}`}
+            className={`btn btn-copy${copied ? " btn-copy--copied" : ""}`}
             onClick={handleCopyJSON}
           >
-            {copied ? '✓ Скопировано!' : 'Копировать в буфер'}
+            {copied ? 'Скопировано!' : 'Копировать в буфер'}
           </button>
         </div>
-        <pre className='jsonExampleText'>{sampleJSON}</pre>
+        <pre className='json-example-content'>{sampleJSON}</pre>
       </div>
     </div>
   );

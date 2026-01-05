@@ -19,8 +19,9 @@
 
   /* ===== Brand ===== */
   --color-primary: #015B76;
-  --color-primary-hover: #017A9B;
-  --color-primary-active: #01475D;
+  --color-secondary: #017A9B;
+  --color-tertiary: #01475D;
+  --color-quaternary: #F59E0B;
 
   /* ===== States ===== */
   --color-success: #2E7D32;
@@ -56,8 +57,8 @@
 
   /* ===== Brand ===== */
   --color-primary: #7DD3FC;
-  --color-primary-hover: #38BDF8;
-  /*--color-primary-hover: #7DD3FC;*/
+  --color-secondary: #38BDF8;
+  --color-tertiary: #7DD3FC;
 
   /* ===== States ===== */
   --color-success: #4ADE80;
