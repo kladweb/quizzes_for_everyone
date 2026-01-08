@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import { type Quiz } from "../../types/Quiz";
+import React, {useState} from "react";
+import {type Quiz} from "../../types/Quiz";
+import {Statistics} from "../Statistics/Statistics";
+import {Loader} from "../Loader/Loader";
 import "./testList.css";
-import { Statistics } from "../Statistics/Statistics";
 
 interface ITestListProps {
   testList: Quiz[],
@@ -52,7 +53,7 @@ export const TestList: React.FC<ITestListProps> = ({testList, deleteTest, loadin
       <h3 className="test-list-name">МОИ ТЕСТЫ:</h3>
       <div className='test-list-block'>
         {
-          (loadingMyTests) ? <div>...идёт загрузка...</div> :
+          (loadingMyTests) ? <Loader/> :
             <>
               {
                 (testsElements.length === 0) ? <div className='test-name'>Список пуст</div> :

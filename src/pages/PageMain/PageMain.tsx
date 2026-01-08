@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { child, get, ref, set } from "firebase/database";
-import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from "firebase/auth";
-import { auth, database } from "../../firebase/firebase";
-import { QuizLoader } from "../../components/QuizLoader/QuizLoader";
-import { Quiz } from "../../types/Quiz";
-import { LinkQuiz } from "../../components/LinkQuiz/LinkQuiz";
-import { TestList } from "../../components/TestList/TestList";
-import { QuizStorageManager } from "../../utils/QuizStorageManager";
+import React, {useEffect, useState} from "react";
+import {child, get, ref, set} from "firebase/database";
+import {GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut} from "firebase/auth";
+import {auth, database} from "../../firebase/firebase";
+import {QuizLoader} from "../../components/QuizLoader/QuizLoader";
+import {Quiz} from "../../types/Quiz";
+import {LinkQuiz} from "../../components/LinkQuiz/LinkQuiz";
+import {TestList} from "../../components/TestList/TestList";
+import {QuizStorageManager} from "../../utils/QuizStorageManager";
 import "./pageMain.css";
 
 interface IUser {
@@ -20,7 +20,7 @@ export const PageMain: React.FC = () => {
   const [isNotice, setIsNotice] = useState(true);
   const [currentTestId, setCurrentTestId] = useState<string | null>(null);
   const [testList, setTestList] = useState<Quiz[]>([]);
-  const [loadingMyTests, setLoadingMyTests] = useState(true);
+  const [loadingMyTests, setLoadingMyTests] = useState(false);
   const [isLoadCurrenTest, setIsLoadCurrenTest] = useState(false);
 
   const initUser = () => {
@@ -39,6 +39,7 @@ export const PageMain: React.FC = () => {
     if (!user) {
       return;
     }
+    setLoadingMyTests(true);
     const dbRef = ref(database, `users/${user.uid}`);
     get(dbRef).then((snapshot) => {
       if (snapshot.exists()) {
@@ -61,8 +62,8 @@ export const PageMain: React.FC = () => {
             if (quizzes) {
               quizzes.sort((a, b) => b.createdAt - a.createdAt);
               setTestList([...quizzes]);
+              setLoadingMyTests(false);
             }
-            setLoadingMyTests(false);
           })
           .catch((error) => {
             console.log(error);
@@ -72,11 +73,8 @@ export const PageMain: React.FC = () => {
         console.log("или данные отсутствуют");
       }
     }).catch((error) => {
-        console.error(error);
-      })
-      .finally(() => {
-        setLoadingMyTests(false);
-      });
+      console.error(error);
+    });
   }
 
   const loadQuizzes = async (ids: string[]) => {

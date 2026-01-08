@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
-import { QuizComponent } from "../../components/Quiz/Quiz";
-import { child, get, ref, set } from "firebase/database";
-import { database } from "../../firebase/firebase";
-import type { IStatistics, Quiz } from "../../types/Quiz";
-import { useNavigate, useParams } from "react-router-dom";
-import { QuizStorageManager } from "../../utils/QuizStorageManager";
-import { QuizResultView } from "../../components/QuizResultView/QuizResultView";
+import {useNavigate, useParams} from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {child, get, ref, set} from "firebase/database";
+import {QuizComponent} from "../../components/Quiz/Quiz";
+import {database} from "../../firebase/firebase";
+import type {IStatistics, Quiz} from "../../types/Quiz";
+import {QuizStorageManager} from "../../utils/QuizStorageManager";
+import {QuizResultView} from "../../components/QuizResultView/QuizResultView";
+import {Loader} from "../../components/Loader/Loader";
 
 export const PageQuiz = () => {
   const navigate = useNavigate();
@@ -70,7 +71,9 @@ export const PageQuiz = () => {
           <>
             {
               (quiz) ? <QuizComponent quiz={quiz} onReset={handleReset} saveStatistic={saveStatistic}/> :
-                <div>LOADING ...</div>
+                <div className='loader-container'>
+                  <Loader/>
+                </div>
             }
           </>
       }
