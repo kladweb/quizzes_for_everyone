@@ -7,6 +7,7 @@ import type {IStatistics, Quiz} from "../../types/Quiz";
 import {QuizStorageManager} from "../../utils/QuizStorageManager";
 import {QuizResultView} from "../../components/QuizResultView/QuizResultView";
 import {Loader} from "../../components/Loader/Loader";
+import {PageEmpty} from "../PageEmpty/PageEmpty";
 
 export const PageQuiz = () => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ export const PageQuiz = () => {
   // const [isLoaded, setIsLoaded] = useState(false);
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [savedResultStorage, setSavedResultStorage] = useState<IStatistics | null>(null);
+  const [isPageEmpty, setIsPageEmpty] = useState(false);
 
   const handleReset = async () => {
     // QuizStorageManager.clearResult();
@@ -58,6 +60,7 @@ export const PageQuiz = () => {
         // QuizStorageManager.saveRecentQuiz(recentQuiz);
       } else {
         console.log("No data available");
+        setIsPageEmpty(true)
       }
     }).catch((error) => {
       console.error(error);
@@ -72,7 +75,9 @@ export const PageQuiz = () => {
             {
               (quiz) ? <QuizComponent quiz={quiz} onReset={handleReset} saveStatistic={saveStatistic}/> :
                 <div className='loader-container'>
-                  <Loader/>
+                  {
+                    isPageEmpty ? <PageEmpty/> : <Loader/>
+                  }
                 </div>
             }
           </>
