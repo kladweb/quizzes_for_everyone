@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { QuizStorageManager } from "../../utils/QuizStorageManager";
-import type { IStatistics } from "../../types/Quiz";
+import React, {useEffect, useState} from "react";
+import {NavLink, useNavigate, useParams, type Params} from "react-router-dom";
+import {QuizStorageManager} from "../../utils/QuizStorageManager";
+import type {IStatistics} from "../../types/Quiz";
 import "./recentQuizzes.css";
 
 interface IRecentQuizzes {
@@ -11,25 +11,35 @@ interface IRecentQuizzes {
 export const RecentQuizzes: React.FC<IRecentQuizzes> = ({currentTestId}) => {
   const navigate = useNavigate();
   const [recentStat, setRecentStat] = useState<IStatistics[]>([]);
+  const params: Readonly<Params<string>> = useParams();
+  const testId: string | undefined = params.testid;
 
-  const openRecentQuiz = (testId: string) => {
-    console.log("testId: ", testId);
-    navigate(`/tests/${testId}`);
-    const resultStorage = QuizStorageManager.getRecentStatTestId(testId);
-    if (resultStorage) {
-      console.log("Получили данные из localStorage: ", resultStorage);
-      resultStorage.finishedAt = 0;
-      console.log("statistics 03: ", resultStorage);
-      QuizStorageManager.saveRecentStat(resultStorage);
-    }
-    setTimeout(() => location.reload(), 0);
-  }
+  console.log(params.testid);
+
+  // const openRecentQuiz = (testId: string) => {
+  //   console.log("testId: ", testId);
+  //   navigate(`/tests/${testId}`);
+  //   const resultStorage = QuizStorageManager.getRecentStatTestId(testId);
+  //   if (resultStorage) {
+  //     console.log("Получили данные из localStorage: ", resultStorage);
+  //     resultStorage.finishedAt = 0;
+  //     console.log("statistics 03: ", resultStorage);
+  //     QuizStorageManager.saveRecentStat(resultStorage);
+  //   }
+  //   setTimeout(() => location.reload(), 0);
+  // }
 
   const deleteRecentQuiz = (testId: string) => {
     const newRecentStat = QuizStorageManager.removeRecentStat(testId);
     if (newRecentStat) {
       setRecentStat(newRecentStat);
     }
+  }
+
+  const handlerReload = () => {
+    setTimeout(() => {
+      window.location.reload();
+    }, 0)
   }
 
   useEffect(() => {
@@ -39,10 +49,10 @@ export const RecentQuizzes: React.FC<IRecentQuizzes> = ({currentTestId}) => {
     }
   }, [currentTestId]);
 
-
   const quizElements = recentStat.map((recentQuiz: IStatistics) => {
     return (
-      <div className={`recent-test-block${(recentQuiz.finishedAt) ? " recent-test--finished" : ""}`} key={recentQuiz.testId}>
+      <div className={`recent-test-block${(recentQuiz.finishedAt) ? " recent-test--finished" : ""}`}
+           key={recentQuiz.testId}>
         <p className='recent-test-name '>{recentQuiz.title}</p>
         {
           (recentQuiz.finishedAt) ?
@@ -56,10 +66,13 @@ export const RecentQuizzes: React.FC<IRecentQuizzes> = ({currentTestId}) => {
         }
         <div className='recent-buttons'>
           {/*{(recentQuiz.testId === currentTestId) ? 'Пройти тест ещё раз' : 'Открыть'}*/}
-          <button className='button-recent' onClick={() => openRecentQuiz(recentQuiz.testId)}>
-            Открыть тест
-          </button>
-          <button className='button-recent' onClick={() => deleteRecentQuiz(recentQuiz.testId)}>
+          {/*<button className='button-recent' onClick={() => openRecentQuiz(recentQuiz.testId)}>*/}
+          {/*  Открыть тест*/}
+          {/*</button>*/}
+          <NavLink className="link-open-test" to={`/tests/${recentQuiz.testId}`} target='_blank'>
+            <span>Открыть</span>
+          </NavLink>
+          <button className='button-test' onClick={() => deleteRecentQuiz(recentQuiz.testId)}>
             Удалить из истории
           </button>
         </div>
@@ -70,10 +83,10 @@ export const RecentQuizzes: React.FC<IRecentQuizzes> = ({currentTestId}) => {
   return (
     <div className='tests-container'>
       <h3 className="tests-name">ВАШИ НЕДАВНИЕ ТЕСТЫ:</h3>
+      {/*<p className='recent-info recent-warning'>После открытия теста старые результаты будут стерты!</p>*/}
       <div className='tests-block'>
         {quizElements}
       </div>
-      <p className='recent-info recent-warning'>После открытия теста старые результаты будут стерты!</p>
     </div>
   );
 }
