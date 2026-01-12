@@ -87,6 +87,9 @@ export const PageMain: React.FC = () => {
 
   useEffect(
     () => {
+      if (user) {
+        // getQuizzes(user.uid);
+      }
       initUser();
       loadTests();
       console.log('init');
@@ -106,7 +109,6 @@ export const PageMain: React.FC = () => {
   const loginGoogle = function () {
     signInWithPopup(auth, provider)
       .then((result) => {
-        console.log("result: ", result);
         const getUser = auth.currentUser as IUser;
         const user: IUser = {
           uid: getUser.uid,

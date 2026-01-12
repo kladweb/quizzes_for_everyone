@@ -9,8 +9,8 @@ interface IInitialState {
 }
 
 interface IActions {
-  getQuizzes: (userUid: string) => void;
-  deleteQuiz: () => void;
+  loadUserQuizzes: (userUid: string) => void;
+  deleteQuiz: (testId: string) => void;
 }
 
 interface IQuizzesState extends IInitialState, IActions {
@@ -23,19 +23,44 @@ const initialState: IInitialState = {
 
 const myQuizzesStore: StateCreator<IQuizzesState> = (set) => ({
   ...initialState,
-  getQuizzes: (userUid) => {
+  loadUserQuizzes: async (userUid) => {
     set({isLoading: true});
     const dbRef = ref(database);
     try {
-      const snapshot = get(child(dbRef, `users/${userUid}`));
-      console.log(snapshot);
+      const snapshot = await get(child(dbRef, `users/${userUid}`));
+      if (snapshot.exists()) {
+        const quizIds = JSON.parse(snapshot.val());
+        let quizzes = await Promise.all(quizIds.map((id: string) =>
+          (get(child(dbRef, `tests/${id}/test`)).then(s => s.val()))
+        ));
+        quizzes = quizzes.map(item => JSON.parse(item));
+        if (quizzes) {
+          quizzes.sort((a, b) => b.createdAt - a.createdAt);
+          set({myQuizzes: quizzes});
+        }
+      } else {
+        throw new Error('No such quiz found!');
+      }
     } catch (error) {
-
+      console.log(error);
+    } finally {
+      set({isLoading: false});
     }
   },
-  deleteQuiz: () => set((state) => ({myQuizzes: state.myQuizzes}))
+  deleteQuiz: (testId: string) => {
+    const testList = useMyQuizzesStore((state) => state.myQuizzes);
+    const IdsArray = testList.map(quiz => quiz.testId);
+    let index = IdsArray.indexOf(testId);
+    if (index !== -1) {
+      IdsArray.splice(index, 1);
+      const newTestList = [...testList];
+      newTestList.splice(index, 1);
+      set((state) => ({myQuizzes: state.myQuizzes}))
+    }
+  }
 })
 
 const useMyQuizzesStore = create<IQuizzesState>()(myQuizzesStore);
 
-export const getQuizzes = () => useMyQuizzesStore().getQuizzes;
+const useUserQuizzes = useMyQuizzesStore((state) => state.myQuizzes);
+export const loadUserQuizzes = (userUid: string) => useMyQuizzesStore.getState().loadUserQuizzes(userUid);
