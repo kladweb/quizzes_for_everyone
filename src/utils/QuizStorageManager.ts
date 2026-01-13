@@ -1,6 +1,6 @@
-import type { IStatistics } from "../types/Quiz";
-import { Simulate } from "react-dom/test-utils";
-import error = Simulate.error;
+import {child, get, ref, set} from "firebase/database";
+import type {IStatistics, Quiz} from "../types/Quiz";
+import {database} from "../firebase/firebase";
 
 interface QuizAnswer {
   questionId: string;
@@ -20,6 +20,29 @@ interface QuizAnswer {
 // }
 
 export const QuizStorageManager = {
+  async fetchUserQuizzes(userUid: string): Promise<Quiz[]> {
+    const dbRef = ref(database);
+    try {
+      const snapshot = await get(child(dbRef, `users/${userUid}`));
+      if (!snapshot.exists()) {
+        throw new Error('No such quiz found!');
+      }
+      const quizIds: string[] = JSON.parse(snapshot.val());
+      const quizzesRaw = await Promise.all(
+        quizIds.map(id =>
+          get(child(dbRef, `tests/${id}/test`)).then(s => s.val())
+        )
+      );
+      const quizzes: Quiz[] = quizzesRaw
+        .map(item => JSON.parse(item))
+        .sort((a, b) => b.createdAt - a.createdAt);
+      return quizzes;
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  },
+
   // Save quiz result
   // saveResult(testId: string, statistics: IStatistics): void {
   //   try {
