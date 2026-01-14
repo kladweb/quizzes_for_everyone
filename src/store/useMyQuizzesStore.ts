@@ -5,6 +5,7 @@ import {QuizStorageManager} from "../utils/QuizStorageManager";
 interface IInitialState {
   myQuizzes: Quiz[],
   isLoading: boolean,
+  errorLoading: string
 }
 
 interface IActions {
@@ -17,18 +18,36 @@ interface IQuizzesState extends IInitialState, IActions {
 
 const initialState: IInitialState = {
   myQuizzes: [],
-  isLoading: false
+  isLoading: false,
+  errorLoading: ""
 }
 
-const myQuizzesStore: StateCreator<IQuizzesState> = (set) => ({
+const myQuizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
   ...initialState,
   loadUserQuizzes: async (userUid) => {
-    const quizzes = await QuizStorageManager.fetchUserQuizzes(userUid);
-    set((state) => ({myQuizzes: quizzes}));
+    try {
+      const quizzes = await QuizStorageManager.fetchUserQuizzes(userUid);
+      set(() => ({myQuizzes: quizzes}));
+    } catch (error) {
+      set(() => ({myQuizzes: []}));
+      set(() => ({errorLoading: "Ошибка загрузки данных!"}));
+    }
   },
-  deleteUserQuiz: (testId: string) => {
-    const testList = useMyQuizzesStore((state) => state.myQuizzes);
+  deleteUserQuiz: (testId: string, userUid: string) => {
+    const testListPrev = get().myQuizzes;
+    const testListNext = testListPrev.filter((quiz: Quiz) => quiz.testId !== testId);
+    set(() => ({myQuizzes: testListPrev}));
+
+
+
     const IdsArray = testList.map(quiz => quiz.testId);
+    let indexQuiz = IdsArray.indexOf(testId);
+    if (indexQuiz !== -1) {
+      IdsArray.splice(indexQuiz, 1);
+      const newTestList = [...testList];
+      newTestList.splice(indexQuiz, 1);
+    }
+
     let index = IdsArray.indexOf(testId);
     if (index !== -1) {
       IdsArray.splice(index, 1);

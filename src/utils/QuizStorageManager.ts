@@ -39,8 +39,20 @@ export const QuizStorageManager = {
       return quizzes;
     } catch (error) {
       console.error(error);
-      return [];
+      throw error;
     }
+  },
+
+  async removeUserQuiz(testId: string, testList: Quiz[], userUid: string): Promise<void> {
+    try {
+      const promiseTests = set(ref(database, `tests/${testId}`), null);
+      const promiseUserList = set(ref(database, `users/${userUid}`), JSON.stringify(IdsArray));
+      await Promise.all([promiseTests, promiseUserList]);
+      return Promise.resolve(promiseUserList);
+    } catch (error) {
+      console.error(error);
+    }
+
   },
 
   // Save quiz result
