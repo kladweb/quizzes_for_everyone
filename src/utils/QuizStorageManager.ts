@@ -43,7 +43,7 @@ export const QuizStorageManager = {
     }
   },
 
-  async removeUserQuiz(testId: string, testList: Quiz[], userUid: string): Promise<void> {
+  async removeUserQuiz(testId: string, userUid: string): Promise<void> {
     try {
       const promiseTests = set(ref(database, `tests/${testId}`), null);
       const promiseUserList = set(ref(database, `users/${userUid}`), JSON.stringify(IdsArray));

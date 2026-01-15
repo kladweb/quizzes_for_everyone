@@ -10,7 +10,7 @@ interface IInitialState {
 
 interface IActions {
   loadUserQuizzes: (userUid: string) => void;
-  deleteUserQuiz: (testId: string) => void;
+  deleteUserQuiz: (testId: string, userUid: string) => Promise<void>;
 }
 
 interface IQuizzesState extends IInitialState, IActions {
@@ -28,33 +28,24 @@ const myQuizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
     try {
       const quizzes = await QuizStorageManager.fetchUserQuizzes(userUid);
       set(() => ({myQuizzes: quizzes}));
+      set(() => ({errorLoading: ""}));
     } catch (error) {
       set(() => ({myQuizzes: []}));
       set(() => ({errorLoading: "Ошибка загрузки данных!"}));
     }
   },
-  deleteUserQuiz: (testId: string, userUid: string) => {
+  deleteUserQuiz: async (testId: string, userUid: string) => {
     const testListPrev = get().myQuizzes;
     const testListNext = testListPrev.filter((quiz: Quiz) => quiz.testId !== testId);
-    set(() => ({myQuizzes: testListPrev}));
-
-
-
-    const IdsArray = testList.map(quiz => quiz.testId);
-    let indexQuiz = IdsArray.indexOf(testId);
-    if (indexQuiz !== -1) {
-      IdsArray.splice(indexQuiz, 1);
-      const newTestList = [...testList];
-      newTestList.splice(indexQuiz, 1);
+    set(() => ({myQuizzes: testListNext}));
+    try {
+      await QuizStorageManager.removeUserQuiz(testId, userUid);
+      set(() => ({errorLoading: ""}));
+    } catch (error) {
+      set(() => ({myQuizzes: testListPrev}));
+      set(() => ({errorLoading: "Ошибка удаления!"}));
     }
 
-    let index = IdsArray.indexOf(testId);
-    if (index !== -1) {
-      IdsArray.splice(index, 1);
-      const newTestList = [...testList];
-      newTestList.splice(index, 1);
-      set((state) => ({myQuizzes: state.myQuizzes}))
-    }
   }
 })
 
