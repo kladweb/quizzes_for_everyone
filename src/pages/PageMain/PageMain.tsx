@@ -8,6 +8,7 @@ import {LinkQuiz} from "../../components/LinkQuiz/LinkQuiz";
 import {TestList} from "../../components/TestList/TestList";
 import {QuizStorageManager} from "../../utils/QuizStorageManager";
 import "./pageMain.css";
+import {loadUserQuizzes, useIsLoading, useMyQuizzes} from "../../store/useMyQuizzesStore";
 
 interface IUser {
   uid: string;
@@ -19,9 +20,12 @@ export const PageMain: React.FC = () => {
   const [user, setUser] = useState<IUser | null>(null);
   const [isNotice, setIsNotice] = useState(true);
   const [currentTestId, setCurrentTestId] = useState<string | null>(null);
-  const [testList, setTestList] = useState<Quiz[]>([]);
-  const [loadingMyTests, setLoadingMyTests] = useState(false);
+  // const [testList, setTestList] = useState<Quiz[]>([]);
+  // const [loadingMyTests, setLoadingMyTests] = useState(false);
   const [isLoadCurrenTest, setIsLoadCurrenTest] = useState(false);
+  const testList = useMyQuizzes();
+  const loadingMyTests = useIsLoading();
+
 
   const initUser = () => {
     onAuthStateChanged(auth, (getUser) => {
@@ -35,63 +39,14 @@ export const PageMain: React.FC = () => {
     });
   }
 
-  const loadTests = () => {
-    if (!user) {
-      return;
-    }
-    setLoadingMyTests(true);
-    const dbRef = ref(database, `users/${user.uid}`);
-    get(dbRef).then((snapshot) => {
-      if (snapshot.exists()) {
-        const quizIds = JSON.parse(snapshot.val());
-        // setQuizIds([...quizIds]);
-        loadQuizzes([...quizIds])
-          .then((value) => {
-            const correctIds = [...quizIds];
-            value.forEach((item, index) => {
-              if (!item) {
-                value.splice(index, 1);
-                correctIds.splice(index, 1);
-              }
-            });
-            if (correctIds.length != quizIds.length) {
-              set(ref(database, `users/${user.uid}`), JSON.stringify(correctIds));
-              console.log("Database corrected !");
-            }
-            const quizzes: Quiz[] = value.map(item => JSON.parse(item));
-            if (quizzes) {
-              quizzes.sort((a, b) => b.createdAt - a.createdAt);
-              setTestList([...quizzes]);
-              setLoadingMyTests(false);
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      } else {
-        console.log("No collection available");
-        console.log("или данные отсутствуют");
-      }
-    }).catch((error) => {
-      console.error(error);
-    });
-  }
-
-  const loadQuizzes = async (ids: string[]) => {
-    const dbRef = ref(database);
-    const promises = ids.map(id =>
-      get(child(dbRef, `tests/${id}/test`)).then(s => s.val())
-    );
-    return Promise.all(promises);
-  };
-
   useEffect(
     () => {
       if (user) {
         // getQuizzes(user.uid);
+        loadUserQuizzes(user.uid);
       }
       initUser();
-      loadTests();
+      // loadTests();
       console.log('init');
     }, [user?.uid]);
 
@@ -130,42 +85,42 @@ export const PageMain: React.FC = () => {
     });
   }
 
-  const saveQuiz = async (quiz: Quiz) => {
-    // console.log(typeof (quiz));
-    if (user) {
-      await set(ref(database, `tests/${quiz.testId}/test`), JSON.stringify(quiz));
-      const idList = testList.map(item => item.testId);
-      await set(ref(database, `users/${user.uid}`), JSON.stringify([...idList, quiz.testId]));
-      setCurrentTestId(quiz.testId);
-      setTestList([quiz, ...testList]);
-    }
-    setIsLoadCurrenTest(false)
-    console.log("Data loaded! )");
-  }
-
-  const deleteTest = async (testId: string) => {
-    const IdsArray = testList.map(quiz => quiz.testId);
-    let index = IdsArray.indexOf(testId);
-    if (index !== -1) {
-      IdsArray.splice(index, 1);
-      const newTestList = [...testList];
-      newTestList.splice(index, 1);
-      setTestList(newTestList);
-      setCurrentTestId(null);
-    }
-    if (user) {
-      const promise1 = set(ref(database, `tests/${testId}`), null);
-      const promise2 = set(ref(database, `users/${user.uid}`), JSON.stringify(IdsArray));
-      Promise.all([promise1, promise2])
-        .then(() => {
-          QuizStorageManager.removeRecentStat(testId);
-          console.log("Данные успешно изменены!")
-        })
-        .catch((error) => {
-          console.log("Ошибка удаления: ", error);
-        })
-    }
-  }
+  // const saveQuiz = async (quiz: Quiz) => {
+  //   // console.log(typeof (quiz));
+  //   if (user) {
+  //     await set(ref(database, `tests/${quiz.testId}/test`), JSON.stringify(quiz));
+  //     const idList = testList.map(item => item.testId);
+  //     await set(ref(database, `users/${user.uid}`), JSON.stringify([...idList, quiz.testId]));
+  //     setCurrentTestId(quiz.testId);
+  //     setTestList([quiz, ...testList]);
+  //   }
+  //   setIsLoadCurrenTest(false)
+  //   console.log("Data loaded! )");
+  // }
+  //
+  // const deleteTest = async (testId: string) => {
+  //   const IdsArray = testList.map(quiz => quiz.testId);
+  //   let index = IdsArray.indexOf(testId);
+  //   if (index !== -1) {
+  //     IdsArray.splice(index, 1);
+  //     const newTestList = [...testList];
+  //     newTestList.splice(index, 1);
+  //     setTestList(newTestList);
+  //     setCurrentTestId(null);
+  //   }
+  //   if (user) {
+  //     const promise1 = set(ref(database, `tests/${testId}`), null);
+  //     const promise2 = set(ref(database, `users/${user.uid}`), JSON.stringify(IdsArray));
+  //     Promise.all([promise1, promise2])
+  //       .then(() => {
+  //         QuizStorageManager.removeRecentStat(testId);
+  //         console.log("Данные успешно изменены!")
+  //       })
+  //       .catch((error) => {
+  //         console.log("Ошибка удаления: ", error);
+  //       })
+  //   }
+  // }
 
   return (
     <>
@@ -184,7 +139,10 @@ export const PageMain: React.FC = () => {
         </>
         {
           (user && isLoadCurrenTest) ?
-            <QuizLoader onQuizLoad={saveQuiz} userUID={user.uid}/> : null
+            <QuizLoader
+              // onQuizLoad={saveQuiz}
+              userUID={user.uid}
+            /> : null
         }
         {
           (currentTestId && !isLoadCurrenTest) ?
@@ -198,8 +156,9 @@ export const PageMain: React.FC = () => {
         user ?
           <TestList
             testList={testList}
-            deleteTest={deleteTest}
-            loadingMyTests={loadingMyTests}
+            userUID={user.uid}
+            // deleteTest={deleteTest}
+            // loadingMyTests={loadingMyTests}
           />
           :
           null

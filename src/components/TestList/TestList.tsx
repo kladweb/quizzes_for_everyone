@@ -3,16 +3,17 @@ import {type Quiz} from "../../types/Quiz";
 import {Statistics} from "../Statistics/Statistics";
 import {Loader} from "../Loader/Loader";
 import "./testList.css";
+import {deleteUserQuiz, useIsLoading} from "../../store/useMyQuizzesStore";
 
 interface ITestListProps {
   testList: Quiz[],
-  deleteTest: (testId: string) => void,
-  loadingMyTests: boolean,
+  userUID: string
 }
 
-export const TestList: React.FC<ITestListProps> = ({testList, deleteTest, loadingMyTests}) => {
+export const TestList: React.FC<ITestListProps> = ({testList, userUID}) => {
   const [isOpenStatistics, setIsOpenStatistics] = useState<boolean>(false);
   const [currentTestId, setCurrentTestId] = useState<string | null>(null);
+  const loadingMyTests = useIsLoading();
 
   const openStatistic = (testId: string) => {
     if (currentTestId !== testId) {
@@ -29,7 +30,7 @@ export const TestList: React.FC<ITestListProps> = ({testList, deleteTest, loadin
         <div className='test-content'>
           <p className='test-name'>{i + 1}) {quiz.title}</p>
           <div className='test-buttons-block'>
-            <button className='button-test' onClick={() => deleteTest(quiz.testId)}>Удалить</button>
+            <button className='button-test' onClick={() => deleteUserQuiz(quiz.testId, userUID)}>Удалить</button>
             <button className='button-test' onClick={() => openStatistic(quiz.testId)}>Статистика</button>
             <a className="link-open-test" href={`${window.location.href}tests/${quiz.testId}`} target="_blank">
               <span>Открыть</span>

@@ -43,12 +43,21 @@ export const QuizStorageManager = {
     }
   },
 
-  async removeUserQuiz(testId: string, userUid: string): Promise<void> {
+  async saveQuizToStorage(quiz: Quiz, userUid: string, IdsList: string[]): Promise<void> {
+    try {
+      const promiseTests = set(ref(database, `tests/${quiz.testId}/test`), JSON.stringify(quiz));
+      const promiseUserList = set(ref(database, `users/${userUid}`), JSON.stringify([...IdsList, quiz.testId]));
+      await Promise.all([promiseTests, promiseUserList]);
+    } catch (error) {
+      console.error(error);
+    }
+  },
+
+  async removeUserQuiz(testId: string, userUid: string, IdsList: string[]): Promise<void> {
     try {
       const promiseTests = set(ref(database, `tests/${testId}`), null);
-      const promiseUserList = set(ref(database, `users/${userUid}`), JSON.stringify(IdsArray));
+      const promiseUserList = set(ref(database, `users/${userUid}`), JSON.stringify(IdsList));
       await Promise.all([promiseTests, promiseUserList]);
-      return Promise.resolve(promiseUserList);
     } catch (error) {
       console.error(error);
     }

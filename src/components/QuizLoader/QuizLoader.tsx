@@ -1,9 +1,10 @@
-import React, { useState } from "react";
-import { nanoid } from "nanoid";
-import { Quiz } from "../../types/Quiz";
+import React, {useState} from "react";
+import {nanoid} from "nanoid";
+import {Quiz} from "../../types/Quiz";
 import "./quizLoader.css";
+import {saveUserQuiz} from "../../store/useMyQuizzesStore";
 
-export const QuizLoader: React.FC<{ onQuizLoad: (quiz: Quiz) => void, userUID: string }> = ({onQuizLoad, userUID}) => {
+export const QuizLoader: React.FC<{ userUID: string }> = ({userUID}) => {
   const [error, setError] = useState<string>('');
   const [copied, setCopied] = useState(false);
 
@@ -82,7 +83,7 @@ export const QuizLoader: React.FC<{ onQuizLoad: (quiz: Quiz) => void, userUID: s
           });
         });
 
-        onQuizLoad(quiz);
+        saveUserQuiz(quiz, userUID);
       } catch (err) {
         setError(`Error loading quiz: ${(err as Error).message}`);
         console.error(err);
