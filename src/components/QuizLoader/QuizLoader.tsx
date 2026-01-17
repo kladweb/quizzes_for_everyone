@@ -135,7 +135,6 @@ export const QuizLoader: React.FC<IQuizLoaderProps> =
         {error && (
           <p className='text-error'>{error}</p>
         )}
-
         <div className='json-example-container'>
           <div className='json-example-field'>
             <h3>Образец промпта для AI:</h3>
