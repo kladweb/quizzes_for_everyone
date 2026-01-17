@@ -1,7 +1,8 @@
 import { Route, Routes } from "react-router-dom";
-// import { PageTests } from "../pages/PageTests";
-import { PageMain } from "../pages/PageMain/PageMain";
+import { PageMyQuizzes } from "../pages/PageMyQuizzes/PageMyQuizzes";
 import { PageQuiz } from "../pages/PageQuiz/PageQuiz";
+import {PageMain} from "../pages/PageMain/PageMain";
+import {PageCreateQuiz} from "../pages/PageCreateQuiz/PageCreateQuiz";
 
 
 export const PagesRouter = () => {
@@ -9,8 +10,9 @@ export const PagesRouter = () => {
     <main className="main">
       <Routes>
         <Route path="/" element={<PageMain/>}/>
-        {/*<Route path="/tests" element={<PageTests/>}/>*/}
-        <Route path="/tests/:testid" element={<PageQuiz/>}/>
+        <Route path="/createquiz" element={<PageCreateQuiz/>}/>
+        <Route path="/myquizzes" element={<PageMyQuizzes/>}/>
+        <Route path="/quizzes/:testid" element={<PageQuiz/>}/>
       </Routes>
     </main>
   )

@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import "./linkQuiz.css";
 
 export const LinkQuiz: React.FC<{ testId: string }> = ({testId}) => {
   const [copied, setCopied] = useState(false);
-  const currentLink = `${window.location.href}tests/${testId}`;
+  const currentLink = `${window.location.origin}/quizzes/${testId}`;
+  // const currentLink = `quizzes/${testId}`;
 
   const handleCopy = async () => {
     try {

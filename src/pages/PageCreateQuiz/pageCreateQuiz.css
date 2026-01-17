@@ -1,0 +1,19 @@
+.creating-container {
+  max-width: 1200px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 10px auto;
+  padding: 10px 20px;
+  text-align: center;
+  border: 2px dashed var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-bg-card);
+  transition: background-color ease 0.25s;
+}
+
+@media (max-width: 1260px) {
+  .creating-container {
+    margin: 10px;
+  }
+}

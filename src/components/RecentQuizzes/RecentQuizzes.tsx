@@ -69,7 +69,7 @@ export const RecentQuizzes: React.FC<IRecentQuizzes> = ({currentTestId}) => {
           {/*<button className='button-recent' onClick={() => openRecentQuiz(recentQuiz.testId)}>*/}
           {/*  Открыть тест*/}
           {/*</button>*/}
-          <NavLink className="link-open-test" to={`/tests/${recentQuiz.testId}`} target='_blank'>
+          <NavLink className="link-open-test" to={`/quizzes/${recentQuiz.testId}`} target='_blank'>
             <span>Открыть</span>
           </NavLink>
           <button className='button-test' onClick={() => deleteRecentQuiz(recentQuiz.testId)}>
