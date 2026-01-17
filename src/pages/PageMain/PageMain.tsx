@@ -1,14 +1,14 @@
-import React, {useEffect, useState} from "react";
-import {child, get, ref, set} from "firebase/database";
-import {GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut} from "firebase/auth";
-import {auth, database} from "../../firebase/firebase";
-import {QuizLoader} from "../../components/QuizLoader/QuizLoader";
-import {Quiz} from "../../types/Quiz";
-import {LinkQuiz} from "../../components/LinkQuiz/LinkQuiz";
-import {TestList} from "../../components/TestList/TestList";
-import {QuizStorageManager} from "../../utils/QuizStorageManager";
+import React, { useEffect, useState } from "react";
+import { child, get, ref, set } from "firebase/database";
+import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from "firebase/auth";
+import { auth, database } from "../../firebase/firebase";
+import { QuizLoader } from "../../components/QuizLoader/QuizLoader";
+import { Quiz } from "../../types/Quiz";
+import { LinkQuiz } from "../../components/LinkQuiz/LinkQuiz";
+import { TestList } from "../../components/TestList/TestList";
+import { QuizStorageManager } from "../../utils/QuizStorageManager";
 import "./pageMain.css";
-import {loadUserQuizzes, useIsLoading, useMyQuizzes} from "../../store/useMyQuizzesStore";
+import { loadUserQuizzes, useIsLoading, useMyQuizzes } from "../../store/useMyQuizzesStore";
 
 interface IUser {
   uid: string;
@@ -20,9 +20,9 @@ export const PageMain: React.FC = () => {
   const [user, setUser] = useState<IUser | null>(null);
   const [isNotice, setIsNotice] = useState(true);
   const [currentTestId, setCurrentTestId] = useState<string | null>(null);
+  const [isCreatingNewTest, setIsCreatingNewTest] = useState(false);
   // const [testList, setTestList] = useState<Quiz[]>([]);
   // const [loadingMyTests, setLoadingMyTests] = useState(false);
-  const [isLoadCurrenTest, setIsLoadCurrenTest] = useState(false);
   const testList = useMyQuizzes();
   const loadingMyTests = useIsLoading();
 
@@ -54,7 +54,8 @@ export const PageMain: React.FC = () => {
   const createTest = () => {
     console.log('Creating test...');
     if (user) {
-      setIsLoadCurrenTest(true);
+      setCurrentTestId(null);
+      setIsCreatingNewTest(true);
     } else {
       setIsNotice(false);
       setTimeout(() => setIsNotice(true), 2000);
@@ -138,14 +139,17 @@ export const PageMain: React.FC = () => {
           </div>
         </>
         {
-          (user && isLoadCurrenTest) ?
+          (user && isCreatingNewTest) ?
             <QuizLoader
               // onQuizLoad={saveQuiz}
               userUID={user.uid}
-            /> : null
+              setCurrentTestId={setCurrentTestId}
+              setIsCreatingNewTest={setIsCreatingNewTest}
+            /> :
+            null
         }
         {
-          (currentTestId && !isLoadCurrenTest) ?
+          (currentTestId) ?
             <LinkQuiz
               testId={currentTestId}
             /> :

@@ -1,6 +1,6 @@
-import {create, type StateCreator} from "zustand";
-import type {Quiz} from "../types/Quiz";
-import {QuizStorageManager} from "../utils/QuizStorageManager";
+import { create, type StateCreator } from "zustand";
+import type { Quiz } from "../types/Quiz";
+import { QuizStorageManager } from "../utils/QuizStorageManager";
 
 interface IInitialState {
   myQuizzes: Quiz[],
@@ -40,18 +40,19 @@ const myQuizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
   },
   saveUserQuiz: async (quiz: Quiz, userUid: string) => {
     const testListPrev = get().myQuizzes;
+    const IdsList = testListPrev.map(myQuiz => myQuiz.testId);
+    if (IdsList.includes(quiz.testId)) {
+      return;
+    }
     const testListNext = [quiz, ...testListPrev];
-    const IdsList = testListNext.map(quiz => quiz.testId);
+    IdsList.push(quiz.testId);
     set(() => ({myQuizzes: testListNext}));
     try {
-      // set(() => ({isLoading: true}));
       await QuizStorageManager.saveQuizToStorage(quiz, userUid, IdsList);
       set(() => ({errorLoading: ""}));
     } catch (error) {
       set(() => ({myQuizzes: testListPrev}));
       set(() => ({errorLoading: "Ошибка сохранения теста!"}));
-    } finally {
-      // set(() => ({isLoading: false}));
     }
   },
   deleteUserQuiz: async (testId: string, userUid: string) => {
@@ -60,14 +61,11 @@ const myQuizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
     const IdsList = testListNext.map(quiz => quiz.testId);
     set(() => ({myQuizzes: testListNext}));
     try {
-      // set(() => ({isLoading: true}));
       await QuizStorageManager.removeUserQuiz(testId, userUid, IdsList);
       set(() => ({errorLoading: ""}));
     } catch (error) {
       set(() => ({myQuizzes: testListPrev}));
       set(() => ({errorLoading: "Ошибка удаления!"}));
-    } finally {
-      // set(() => ({isLoading: false}));
     }
   }
 })

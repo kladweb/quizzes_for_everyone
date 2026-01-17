@@ -1,6 +1,6 @@
-import {child, get, ref, set} from "firebase/database";
-import type {IStatistics, Quiz} from "../types/Quiz";
-import {database} from "../firebase/firebase";
+import { child, get, ref, set } from "firebase/database";
+import type { IStatistics, Quiz } from "../types/Quiz";
+import { database } from "../firebase/firebase";
 
 interface QuizAnswer {
   questionId: string;
@@ -46,7 +46,7 @@ export const QuizStorageManager = {
   async saveQuizToStorage(quiz: Quiz, userUid: string, IdsList: string[]): Promise<void> {
     try {
       const promiseTests = set(ref(database, `tests/${quiz.testId}/test`), JSON.stringify(quiz));
-      const promiseUserList = set(ref(database, `users/${userUid}`), JSON.stringify([...IdsList, quiz.testId]));
+      const promiseUserList = set(ref(database, `users/${userUid}`), JSON.stringify(IdsList));
       await Promise.all([promiseTests, promiseUserList]);
     } catch (error) {
       console.error(error);
