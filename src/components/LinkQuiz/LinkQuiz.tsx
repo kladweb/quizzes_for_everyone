@@ -4,7 +4,6 @@ import "./linkQuiz.css";
 export const LinkQuiz: React.FC<{ testId: string }> = ({testId}) => {
   const [copied, setCopied] = useState(false);
   const currentLink = `${window.location.href}tests/${testId}`;
-  // console.log(window.location.href);
 
   const handleCopy = async () => {
     try {

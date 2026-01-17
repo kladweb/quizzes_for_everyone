@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from "firebase/auth";
-import { auth } from "../../firebase/firebase";
-import { QuizLoader } from "../../components/QuizLoader/QuizLoader";
-import { LinkQuiz } from "../../components/LinkQuiz/LinkQuiz";
-import { TestList } from "../../components/TestList/TestList";
-import { loadUserQuizzes, useMyQuizzes } from "../../store/useMyQuizzesStore";
+import React, {useEffect, useState} from "react";
+import {GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut} from "firebase/auth";
+import {auth} from "../../firebase/firebase";
+import {QuizLoader} from "../../components/QuizLoader/QuizLoader";
+import {LinkQuiz} from "../../components/LinkQuiz/LinkQuiz";
+import {TestList} from "../../components/TestList/TestList";
+import {setUser, useUser} from "../../store/useUserStore";
+import {loadUserQuizzes, useMyQuizzes} from "../../store/useMyQuizzesStore";
 import "./pageMain.css";
 
 interface IUser {
@@ -14,10 +15,11 @@ interface IUser {
 
 export const PageMain: React.FC = () => {
   const provider = new GoogleAuthProvider();
-  const [user, setUser] = useState<IUser | null>(null);
   const [isNotice, setIsNotice] = useState(true);
   const [currentTestId, setCurrentTestId] = useState<string | null>(null);
   const [isCreatingNewTest, setIsCreatingNewTest] = useState(false);
+
+  const user = useUser();
   const testList = useMyQuizzes();
 
   const initUser = () => {
@@ -35,11 +37,9 @@ export const PageMain: React.FC = () => {
   useEffect(
     () => {
       if (user) {
-        // getQuizzes(user.uid);
         loadUserQuizzes(user.uid);
       }
       initUser();
-      // loadTests();
       console.log('init');
     }, [user?.uid]);
 

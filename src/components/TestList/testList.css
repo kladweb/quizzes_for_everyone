@@ -27,7 +27,7 @@
   margin: 0;
   padding: 5px;
   color: var(--color-success);
-  font-weight: bold;
+  font-weight: 500;
 }
 
 .test-buttons-block {

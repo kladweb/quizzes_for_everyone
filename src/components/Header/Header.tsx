@@ -6,7 +6,6 @@ export const Header: React.FC = () => {
 
   return (
     <header className="header-container">
-      {/*<ThemeToggle/>*/}
       <ThemeSwitch/>
     </header>
   );
