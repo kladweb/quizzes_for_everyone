@@ -2,12 +2,20 @@ import React, { useState } from "react";
 import { nanoid } from "nanoid";
 import { Quiz } from "../../types/Quiz";
 import "./quizLoader.css";
+import { saveUserQuiz } from "../../store/useMyQuizzesStore";
 
-export const QuizLoader: React.FC<{ onQuizLoad: (quiz: Quiz) => void, userUID: string }> = ({onQuizLoad, userUID}) => {
-  const [error, setError] = useState<string>('');
-  const [copied, setCopied] = useState(false);
+interface IQuizLoaderProps {
+  userUID: string,
+  setCurrentTestId: (testId: string) => void
+  setIsCreatingNewTest: (isCreatingNewTest: boolean) => void
+}
 
-  const sampleJSON = `
+export const QuizLoader: React.FC<IQuizLoaderProps> =
+  ({userUID, setCurrentTestId, setIsCreatingNewTest}) => {
+    const [error, setError] = useState<string>('');
+    const [copied, setCopied] = useState(false);
+
+    const sampleJSON = `
 Сделай (придумай) тест по [описание теста/тема/примеру: пример теста]
 состоящий из [кол-во вопросов] вопросов. 
 В каждом вопросе должно быть три варианта ответов, 
@@ -45,94 +53,100 @@ export const QuizLoader: React.FC<{ onQuizLoad: (quiz: Quiz) => void, userUID: s
   ]
 }`;
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      if (!file) return;
 
-    setError('');
-    const reader = new FileReader();
+      setError('');
+      const reader = new FileReader();
 
-    reader.onload = (e) => {
-      try {
-        const content = e.target?.result as string;
-        const quiz = JSON.parse(content) as Quiz;
-        quiz.testId = nanoid(12);
-        quiz.createdBy = userUID;
-        quiz.createdAt = Date.now();
-        quiz.modifiedAt = Date.now();
+      reader.onload = (e) => {
+        try {
+          const content = e.target?.result as string;
+          const quiz = JSON.parse(content) as Quiz;
+          quiz.testId = nanoid(12);
+          quiz.createdBy = userUID;
+          quiz.createdAt = Date.now();
+          quiz.modifiedAt = Date.now();
 
-        // Validation
-        if (!quiz.title || !quiz.questions || !Array.isArray(quiz.questions)) {
-          throw new Error('Неверный формат файла. Выберите, пожалуйста, другой файл.');
-        }
-
-        // Validate each question has the new structure
-        quiz.questions.forEach((q, idx) => {
-          if (!q.id) throw new Error(`Question ${idx + 1} missing id`);
-          if (!q.options || !Array.isArray(q.options)) {
-            throw new Error(`Question ${idx + 1} missing options array`);
+          // Validation
+          if (!quiz.title || !quiz.questions || !Array.isArray(quiz.questions)) {
+            throw new Error('Неверный формат файла. Выберите, пожалуйста, другой файл.');
           }
-          if (!q.correctAnswers || !Array.isArray(q.correctAnswers)) {
-            throw new Error(`Question ${idx + 1} missing correctAnswers array`);
-          }
-          q.options.forEach((opt, optIdx) => {
-            if (!opt.id || !opt.text) {
-              throw new Error(`Question ${idx + 1}, option ${optIdx + 1} missing id or text`);
+
+          // Validate each question has the new structure
+          quiz.questions.forEach((q, idx) => {
+            if (!q.id) throw new Error(`Question ${idx + 1} missing id`);
+            if (!q.options || !Array.isArray(q.options)) {
+              throw new Error(`Question ${idx + 1} missing options array`);
             }
+            if (!q.correctAnswers || !Array.isArray(q.correctAnswers)) {
+              throw new Error(`Question ${idx + 1} missing correctAnswers array`);
+            }
+            q.options.forEach((opt, optIdx) => {
+              if (!opt.id || !opt.text) {
+                throw new Error(`Question ${idx + 1}, option ${optIdx + 1} missing id or text`);
+              }
+            });
           });
-        });
 
-        onQuizLoad(quiz);
+          saveUserQuiz(quiz, userUID)
+            .then(() => {
+              setCurrentTestId(quiz.testId);
+              setIsCreatingNewTest(false);
+            })
+            .catch((error) => {
+              console.error(error);
+            })
+        } catch (err) {
+          setError(`Error loading quiz: ${(err as Error).message}`);
+          console.error(err);
+        }
+      };
+
+      reader.onerror = () => {
+        setError('Error reading file.');
+      };
+
+      reader.readAsText(file);
+    };
+
+    const handleCopyJSON = async () => {
+      try {
+        await navigator.clipboard.writeText(sampleJSON);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
       } catch (err) {
-        setError(`Error loading quiz: ${(err as Error).message}`);
-        console.error(err);
+        console.error('Failed to copy:', err);
       }
     };
 
-    reader.onerror = () => {
-      setError('Error reading file.');
-    };
+    return (
+      <div className='loaderBlock'>
+        <h1 className='loader-head'>Создайте новый тест</h1>
+        <p className='loader-dsc'>Загрузите тест из JSON файла</p>
+        <input
+          className='input-loader'
+          type="file"
+          accept=".json"
+          onChange={handleFileChange}
+        />
 
-    reader.readAsText(file);
-  };
-
-  const handleCopyJSON = async () => {
-    try {
-      await navigator.clipboard.writeText(sampleJSON);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error('Failed to copy:', err);
-    }
-  };
-
-  return (
-    <div className='loaderBlock'>
-      <h1 className='loader-head'>Создайте новый тест</h1>
-      <p className='loader-dsc'>Загрузите тест из JSON файла</p>
-      <input
-        className='input-loader'
-        type="file"
-        accept=".json"
-        onChange={handleFileChange}
-      />
-
-      {error && (
-        <p className='text-error'>{error}</p>
-      )}
-
-      <div className='json-example-container'>
-        <div className='json-example-field'>
-          <h3>Образец промпта для AI:</h3>
-          <button
-            className={`btn btn-copy${copied ? " btn-copy--copied" : ""}`}
-            onClick={handleCopyJSON}
-          >
-            {copied ? 'Скопировано!' : 'Копировать в буфер'}
-          </button>
+        {error && (
+          <p className='text-error'>{error}</p>
+        )}
+        <div className='json-example-container'>
+          <div className='json-example-field'>
+            <h3>Образец промпта для AI:</h3>
+            <button
+              className={`btn btn-copy${copied ? " btn-copy--copied" : ""}`}
+              onClick={handleCopyJSON}
+            >
+              {copied ? 'Скопировано!' : 'Копировать в буфер'}
+            </button>
+          </div>
+          <pre className='json-example-content'>{sampleJSON}</pre>
         </div>
-        <pre className='json-example-content'>{sampleJSON}</pre>
       </div>
-    </div>
-  );
-};
+    );
+  };
