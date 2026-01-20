@@ -37,4 +37,11 @@
     transform: scale(1.02, 1.02);
     box-shadow: var(--color-secondary) 0 0 20px 1px;
   }
+
+  &:active {
+    border: 2px dashed var(--color-border);
+    box-shadow: none;
+    transform: none;
+    transition: all 0.1s ease-out;
+  }
 }
