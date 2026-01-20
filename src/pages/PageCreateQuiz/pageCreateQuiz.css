@@ -6,10 +6,17 @@
   margin: 10px auto;
   padding: 10px 20px;
   text-align: center;
-  border: 2px dashed var(--color-border);
-  border-radius: 12px;
-  background-color: var(--color-bg-card);
+  /*border: 2px dashed var(--color-border);*/
+  /*border-radius: 12px;*/
+  /*background-color: var(--color-bg-card);*/
   transition: background-color ease 0.25s;
+}
+
+.creating-head {
+  width: 100%;
+  margin-bottom: 3rem;
+  font-size: 2.5rem;
+  color: var(--color-primary);
 }
 
 @media (max-width: 1260px) {

@@ -1,0 +1,40 @@
+.card-way-container {
+  width: 30%;
+  margin: 2em 1em;
+  display: flex;
+  flex-direction: column;
+  color: var(--color-success);
+  background-color: var(--color-bg-card);
+  border: 2px dashed var(--color-border);
+  border-radius: 12px;
+  text-wrap: balance;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+
+  h2 {
+    margin: 0.5em;
+    font-weight: 700;
+  }
+
+  h3 {
+    margin: 0.2em 0;
+    color: var(--color-text-primary);
+  }
+
+  ul {
+    margin: 0.3em 0 1em;
+    color: var(--color-text-secondary);
+    text-align: left;
+  }
+
+  li {
+    margin: 0.2em 0;
+  }
+
+  &:hover {
+    border-color: var(--color-secondary);
+    border-style: dotted;
+    transform: scale(1.02, 1.02);
+    box-shadow: var(--color-secondary) 0 0 20px 1px;
+  }
+}

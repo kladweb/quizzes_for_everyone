@@ -11,6 +11,9 @@ export const PagesRouter = () => {
       <Routes>
         <Route path="/" element={<PageMain/>}/>
         <Route path="/createquiz" element={<PageCreateQuiz/>}/>
+        <Route path="/createquiz/json" element={<PageCreateQuiz/>}/>
+        <Route path="/createquiz/manual" element={<PageCreateQuiz/>}/>
+        <Route path="/createquiz/ai" element={<PageCreateQuiz/>}/>
         <Route path="/myquizzes" element={<PageMyQuizzes/>}/>
         <Route path="/quizzes/:testid" element={<PageQuiz/>}/>
       </Routes>
