@@ -32,7 +32,7 @@ export const TestList: React.FC<ITestListProps> = ({testList, userUID}) => {
           <div className='test-buttons-block'>
             <button className='button-test' onClick={() => deleteUserQuiz(quiz.testId, userUID)}>Удалить</button>
             <button className='button-test' onClick={() => openStatistic(quiz.testId)}>Статистика</button>
-            <a className="link-open-test" href={`quizzes/${quiz.testId}`} target="_blank">
+            <a className="link-open-test" href={`/quizzes/${quiz.testId}`} target="_blank">
               <span>Открыть</span>
             </a>
           </div>

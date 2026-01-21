@@ -76,7 +76,7 @@ export const PageQuiz = () => {
               (quiz) ? <QuizComponent quiz={quiz} onReset={handleReset} saveStatistic={saveStatistic}/> :
                 <div className='loader-container'>
                   {
-                    isPageEmpty ? <PageEmpty/> : <Loader/>
+                    isPageEmpty ? <PageEmpty emptyReason="quizDeleted"/> : <Loader/>
                   }
                 </div>
             }

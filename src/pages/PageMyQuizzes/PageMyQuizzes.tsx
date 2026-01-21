@@ -20,7 +20,6 @@ export const PageMyQuizzes: React.FC = () => {
       }
     }, [user?.uid]);
 
-
   const createTest = () => {
     console.log('Creating test...');
     if (user) {
@@ -35,18 +34,11 @@ export const PageMyQuizzes: React.FC = () => {
   return (
     <>
       <div className='tests-container'>
-        {
-          (user) ?
-            <button className='btn button-login' onClick={logoutGoogle}>LOGOUT</button> :
-            <button className='btn button-login ' onClick={loginGoogle}>GOOGLE LOGIN</button>
-        }
-        <>
-          <button className='btn button-create' onClick={createTest}>Создать новый тест</button>
-          <div className={`noticeBlock${(isNotice ? " close" : "")}`}>
-            <p className='noticeText'>Сначала нужно войти в систему!</p>
-            <p className='noticeText'>Нажните кнопку GOOGLE LOGIN!</p>
-          </div>
-        </>
+        <button className='btn button-create' onClick={createTest}>Создать новый тест</button>
+        <div className={`noticeBlock${(isNotice ? " close" : "")}`}>
+          <p className='noticeText'>Сначала нужно войти в систему!</p>
+          <p className='noticeText'>Нажните кнопку GOOGLE LOGIN!</p>
+        </div>
         {
           (user && isCreatingNewTest) ?
             <QuizLoader
