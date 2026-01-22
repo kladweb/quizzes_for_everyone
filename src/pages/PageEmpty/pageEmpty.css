@@ -10,3 +10,20 @@
 .text-page-empty {
   white-space: pre-line;
 }
+
+.button-to-main {
+  margin: 30px auto;
+  padding: 8px 16px;
+  font-size: 14px;
+  color: var(--color-text-contrast);
+  background-color: var(--color-primary);
+  border-radius: 6px;
+
+  &:hover {
+    background-color: var(--color-secondary);
+  }
+
+  &:active {
+    background-color: var(--color-tertiary);
+  }
+}

@@ -5,6 +5,7 @@ import {PageMain} from "../pages/PageMain/PageMain";
 import {PageCreateQuiz} from "../pages/PageCreateQuiz/PageCreateQuiz";
 import {PageEmpty} from "../pages/PageEmpty/PageEmpty";
 import React from "react";
+import {PageCreateQuizJson} from "../pages/PageCreateQuizJson";
 
 
 export const PagesRouter = () => {
@@ -13,7 +14,7 @@ export const PagesRouter = () => {
       <Routes>
         <Route path="/" element={<PageMain/>}/>
         <Route path="/createquiz" element={<PageCreateQuiz/>}/>
-        <Route path="/createquiz/json" element={<PageMyQuizzes/>}/>
+        <Route path="/createquiz/json" element={<PageCreateQuizJson/>}/>
         <Route path="/createquiz/manual" element={<PageEmpty emptyReason="pageDevelopment"/>}/>
         <Route path="/createquiz/ai" element={<PageEmpty emptyReason="pageDevelopment"/>}/>
         <Route path="/myquizzes" element={<PageMyQuizzes/>}/>

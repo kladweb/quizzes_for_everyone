@@ -40,7 +40,7 @@ input[type="file"] {
 }
 
 .btn {
-  display: block;
+  /*display: block;*/
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;

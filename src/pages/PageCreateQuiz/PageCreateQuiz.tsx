@@ -1,16 +1,23 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import {CreateQuizWay} from "../../components/CreateQuizWay/CreateQuizWay";
 import {type IWayCardsData, wayCardsData} from "../../components/CreateQuizWay/wayCardsData";
+import {useUser} from "../../store/useUserStore";
 import "./pageCreateQuiz.css";
 
 export const PageCreateQuiz = () => {
   const navigate = useNavigate();
+  const user = useUser();
   const handlerCreateWay = (e: React.MouseEvent<HTMLElement>) => {
-    // navigate(`/tests/${testId}`);
     navigate(`/createquiz/${e.currentTarget.id}`);
     console.log(e.currentTarget.id);
   }
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/");
+    }
+  }, [user]);
 
   return (
     <div className='creating-container'>

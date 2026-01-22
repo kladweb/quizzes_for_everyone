@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {QuizLoader} from "../../components/QuizLoader/QuizLoader";
 import {LinkQuiz} from "../../components/LinkQuiz/LinkQuiz";
 import {TestList} from "../../components/TestList/TestList";
-import {loginGoogle, logoutGoogle, initUser, useUser} from "../../store/useUserStore";
+import {useUser} from "../../store/useUserStore";
 import {loadUserQuizzes, useMyQuizzes} from "../../store/useMyQuizzesStore";
 import "./PageMyQuizzes.css";
 

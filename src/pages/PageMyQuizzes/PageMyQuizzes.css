@@ -17,9 +17,12 @@
 
 .noticeBlock {
   transition: all 0.3s ease;
+  text-wrap: balance;
+
 
   & .noticeText {
-    color: var(--color-error);
+    font-size: 1.5em;
+    color: var(--color-text-primary);
   }
 }
 

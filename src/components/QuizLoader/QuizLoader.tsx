@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { nanoid } from "nanoid";
-import { Quiz } from "../../types/Quiz";
+import React, {useState} from "react";
+import {nanoid} from "nanoid";
+import {Quiz} from "../../types/Quiz";
+import {saveUserQuiz} from "../../store/useMyQuizzesStore";
 import "./quizLoader.css";
-import { saveUserQuiz } from "../../store/useMyQuizzesStore";
 
 interface IQuizLoaderProps {
   userUID: string,
@@ -123,18 +123,8 @@ export const QuizLoader: React.FC<IQuizLoaderProps> =
 
     return (
       <div className='loaderBlock'>
-        <h1 className='loader-head'>Создайте новый тест</h1>
-        <p className='loader-dsc'>Загрузите тест из JSON файла</p>
-        <input
-          className='input-loader'
-          type="file"
-          accept=".json"
-          onChange={handleFileChange}
-        />
-
-        {error && (
-          <p className='text-error'>{error}</p>
-        )}
+        <h1 className='loader-head'>Создаём новый тест</h1>
+        <p className='loader-dsc'>Сначала создайте JSON файл при помощи любого ИИ</p>
         <div className='json-example-container'>
           <div className='json-example-field'>
             <h3>Образец промпта для AI:</h3>
@@ -146,6 +136,18 @@ export const QuizLoader: React.FC<IQuizLoaderProps> =
             </button>
           </div>
           <pre className='json-example-content'>{sampleJSON}</pre>
+        </div>
+        <p className='loader-dsc'>Укажите путь к JSON файлу для загрузки</p>
+        <div className='input-loader-block'>
+          <input
+            className='input-loader'
+            type="file"
+            accept=".json"
+            onChange={handleFileChange}
+          />
+          {error && (
+            <p className='text-error'>{error}</p>
+          )}
         </div>
       </div>
     );
