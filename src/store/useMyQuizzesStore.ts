@@ -1,6 +1,6 @@
 import { create, type StateCreator } from "zustand";
-import type { Quiz } from "../types/Quiz";
 import { QuizStorageManager } from "../utils/QuizStorageManager";
+import type { Quiz } from "../types/Quiz";
 
 interface IInitialState {
   myQuizzes: Quiz[],

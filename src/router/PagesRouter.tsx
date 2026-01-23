@@ -5,7 +5,7 @@ import {PageMain} from "../pages/PageMain/PageMain";
 import {PageCreateQuiz} from "../pages/PageCreateQuiz/PageCreateQuiz";
 import {PageEmpty} from "../pages/PageEmpty/PageEmpty";
 import React from "react";
-import {PageCreateQuizJson} from "../pages/PageCreateQuizJson";
+import {PageCreateQuizJson} from "../pages/PageCreateQuizJson/PageCreateQuizJson";
 
 
 export const PagesRouter = () => {

@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import {nanoid} from "nanoid";
-import {Quiz} from "../../types/Quiz";
+import type {Quiz} from "../../types/Quiz";
+import { useSetQuizDraft } from "../../store/useCurrentCreatingQuiz";
 import {saveUserQuiz} from "../../store/useMyQuizzesStore";
 import "./quizLoader.css";
 
@@ -90,14 +91,17 @@ export const QuizLoader: React.FC<IQuizLoaderProps> =
             });
           });
 
-          saveUserQuiz(quiz, userUID)
-            .then(() => {
-              setCurrentTestId(quiz.testId);
-              setIsCreatingNewTest(false);
-            })
-            .catch((error) => {
-              console.error(error);
-            })
+          useSetQuizDraft(quiz);
+
+          // saveUserQuiz(quiz, userUID)
+          //   .then(() => {
+          //     setCurrentTestId(quiz.testId);
+          //     setIsCreatingNewTest(false);
+          //   })
+          //   .catch((error) => {
+          //     console.error(error);
+          //   })
+
         } catch (err) {
           setError(`Error loading quiz: ${(err as Error).message}`);
           console.error(err);
