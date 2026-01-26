@@ -13,10 +13,10 @@
     color: var(--color-text-secondary)
   }
 
-  input {
+  input, select {
     width: 100%;
     max-width: 15em;
-    margin-left: 1em;
+    margin: 0 1em 0.7em;
     padding: 6px 8px;
     font-size: 1em;
     border: 2px solid var(--color-border);
@@ -42,5 +42,15 @@
   input::-webkit-calendar-picker-indicator {
     display: none;
     opacity: 0;
+  }
+}
+
+.extra-info-input {
+  display: inline-block;
+
+  input {
+    margin: 0.5em 0.5em 0.5em 3em;
+    width: min-content;
+    vertical-align: middle;
   }
 }

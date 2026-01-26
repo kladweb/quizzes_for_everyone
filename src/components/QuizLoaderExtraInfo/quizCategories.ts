@@ -37,3 +37,5 @@ export const QUIZ_CATEGORIES = [
   "автомобили",
   "космос"
 ];
+
+export const QUIZ_LANGUAGES = ["русский", "english"]

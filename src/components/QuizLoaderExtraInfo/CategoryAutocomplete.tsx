@@ -1,5 +1,5 @@
 import React from "react";
-import { QUIZ_CATEGORIES } from "./quizCategories";
+import {QUIZ_CATEGORIES} from "./quizCategories";
 
 interface IPropsCategoryAutocomplete {
   value: string;
@@ -36,12 +36,7 @@ export const CategoryAutocomplete: React.FC<IPropsCategoryAutocomplete> = ({valu
       {open && filtered.length > 0 && (
         <ul className="autocomplete-list">
           {filtered.map((cat) => (
-            <li
-              key={cat}
-              onMouseDown={() => handleSelect(cat)}
-            >
-              {cat}
-            </li>
+            <li key={cat} onMouseDown={() => handleSelect(cat)}>{cat}</li>
           ))}
         </ul>
       )}
