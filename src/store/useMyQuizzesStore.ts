@@ -1,6 +1,6 @@
-import { create, type StateCreator } from "zustand";
-import { QuizStorageManager } from "../utils/QuizStorageManager";
-import type { Quiz } from "../types/Quiz";
+import {create, type StateCreator} from "zustand";
+import {QuizStorageManager} from "../utils/QuizStorageManager";
+import type {Quiz} from "../types/Quiz";
 
 interface IInitialState {
   myQuizzes: Quiz[],
@@ -32,7 +32,8 @@ const myQuizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
       set(() => ({myQuizzes: quizzes}));
       set(() => ({errorLoading: ""}));
     } catch (error) {
-      set(() => ({myQuizzes: []}));
+      // set(() => ({myQuizzes: []}));
+      console.log(error);
       set(() => ({errorLoading: "Ошибка загрузки данных!"}));
     } finally {
       set(() => ({isLoading: false}));
@@ -40,6 +41,9 @@ const myQuizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
   },
   saveUserQuiz: async (quiz: Quiz, userUid: string) => {
     const testListPrev = get().myQuizzes;
+    if (!testListPrev) {
+      return;
+    }
     const IdsList = testListPrev.map(myQuiz => myQuiz.testId);
     if (IdsList.includes(quiz.testId)) {
       return;
@@ -57,6 +61,9 @@ const myQuizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
   },
   deleteUserQuiz: async (testId: string, userUid: string) => {
     const testListPrev = get().myQuizzes;
+    if (!testListPrev) {
+      return;
+    }
     const testListNext = testListPrev.filter((quiz: Quiz) => quiz.testId !== testId);
     const IdsList = testListNext.map(quiz => quiz.testId);
     set(() => ({myQuizzes: testListNext}));

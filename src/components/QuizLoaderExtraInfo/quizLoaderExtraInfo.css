@@ -54,3 +54,16 @@
     vertical-align: middle;
   }
 }
+
+.btn-save {
+  display: block;
+}
+
+.warning-save {
+  color: var(--color-warning);
+
+  span {
+    display: inline;
+    color: var(--color-text-primary);
+  }
+}

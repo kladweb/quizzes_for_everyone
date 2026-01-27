@@ -18,7 +18,9 @@ export interface Quiz {
   createdAt: number;
   modifiedAt?: number;
   category?: string;
-  lang: string;
+  categoryDraft?: string;
+  lang?: string;
+  access: "public" | "private";
   description?: string;
   questions: Question[];
 }
