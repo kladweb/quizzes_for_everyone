@@ -21,7 +21,7 @@ export const PageCreateQuiz = () => {
 
   return (
     <div className='creating-container'>
-      <h1 className="creating-head">Создайте свой тест<br/>любым из способов</h1>
+      <h2 className="creating-head">Создайте свой тест<br/>любым из способов</h2>
       {
         wayCardsData.map((card: IWayCardsData) =>
           <CreateQuizWay

@@ -139,7 +139,7 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
   return (
     <div className='quizContainer'>
       <div className='quizHeadBlock'>
-        <h1 className='quizHead'>{quiz.title}</h1>
+        <h2 className='quizHead'>{quiz.title}</h2>
         <p>{quiz.description}</p>
 
         {!isSubmitted && (

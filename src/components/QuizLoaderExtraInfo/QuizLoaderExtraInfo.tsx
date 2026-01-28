@@ -34,7 +34,7 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
       await saveUserQuiz(quizDraft, userUID)
         .then(() => {
           setIsCreatingNewTest(false);
-          navigate(`/myquizzes`);
+          // navigate(`/myquizzes`);
         })
         .catch((error) => {
           console.error(error);

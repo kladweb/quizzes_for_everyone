@@ -5,6 +5,7 @@ import {useQuizComplete, useQuizDraft} from "../../store/useCurrentCreatingQuiz"
 import "./pageCreateQuizJson.css";
 import {QuizLoaderExtraInfo} from "../../components/QuizLoaderExtraInfo/QuizLoaderExtraInfo";
 import {Loader} from "../../components/Loader/Loader";
+import {LinkQuiz} from "../../components/LinkQuiz/LinkQuiz";
 
 export const PageCreateQuizJson = () => {
   const user = useUser();
@@ -27,19 +28,23 @@ export const PageCreateQuizJson = () => {
       {
         (user && quizDraft) &&
         <>
-          <h1 className="test-load-info">
+          <h2 className="test-load-info">
             Тест
             <br/>
-            <span>{` "${quizDraft.title}" `}</span>
+            <span>{`"${quizDraft.title}"`}</span>
             <br/>
             создан!
-          </h1>
+          </h2>
           <QuizLoaderExtraInfo userUID={user.uid} setIsCreatingNewTest={setIsCreatingNewTest}/>
         </>
       }
       {
         isCreatingNewTest &&
         <Loader/>
+      }
+      {
+        (user && quizComplete && quizComplete) &&
+        <LinkQuiz testId={quizComplete.testId}/>
       }
     </div>
   )

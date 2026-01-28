@@ -127,7 +127,7 @@ export const QuizLoader: React.FC<IQuizLoaderProps> =
 
     return (
       <div className='loaderBlock'>
-        <h1 className='loader-head'>Создаём новый тест</h1>
+        <h2 className='loader-head'>Создаём новый тест</h2>
         <p className='loader-dsc'>Сначала создайте JSON файл при помощи любого ИИ</p>
         <div className='json-example-container'>
           <div className='json-example-field'>

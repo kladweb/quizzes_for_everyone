@@ -1,10 +1,10 @@
+import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { PageMyQuizzes } from "../pages/PageMyQuizzes/PageMyQuizzes";
 import { PageQuiz } from "../pages/PageQuiz/PageQuiz";
 import {PageMain} from "../pages/PageMain/PageMain";
 import {PageCreateQuiz} from "../pages/PageCreateQuiz/PageCreateQuiz";
 import {PageEmpty} from "../pages/PageEmpty/PageEmpty";
-import React from "react";
 import {PageCreateQuizJson} from "../pages/PageCreateQuizJson/PageCreateQuizJson";
 
 
