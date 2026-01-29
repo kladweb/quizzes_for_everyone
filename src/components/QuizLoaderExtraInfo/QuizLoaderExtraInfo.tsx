@@ -1,8 +1,7 @@
-import React, {useState} from "react";
-import {useNavigate} from "react-router-dom";
-import {QUIZ_CATEGORIES, QUIZ_LANGUAGES} from "./quizCategories";
-import {useQuizDraft, useSetQuizComplete} from "../../store/useCurrentCreatingQuiz";
-import {saveUserQuiz} from "../../store/useMyQuizzesStore";
+import React, { useState } from "react";
+import { QUIZ_CATEGORIES, QUIZ_LANGUAGES } from "./quizCategories";
+import { useClearCurrentQuiz, useQuizDraft, useSetQuizComplete } from "../../store/useCurrentCreatingQuiz";
+import { saveUserQuiz } from "../../store/useMyQuizzesStore";
 import "./quizLoaderExtraInfo.css"
 
 interface IQuizLoaderExtraInfo {
@@ -11,13 +10,28 @@ interface IQuizLoaderExtraInfo {
 }
 
 export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, setIsCreatingNewTest}) => {
-  const navigate = useNavigate();
+  const catTitles = {
+    category: "Тематика, которой посвящен тест",
+    language: "Язык, на котором написаны вопросы теста",
+    access: "Будет ли Ваш тест виден в общем списке тестов или только в Вашем"
+  }
+
   const quizDraft = useQuizDraft();
-  const [quizCategory, setQuizCategory] = useState('');
-  const [quizLanguage, setQuizLanguage] = useState('русский');
-  const [quizAccess, setQuizAccess] = useState<"public" | "private">('public');
+  const [quizCategory, setQuizCategory] = useState("");
+  const [quizLanguage, setQuizLanguage] = useState("русский");
+  const [quizAccess, setQuizAccess] = useState<"public" | "private">("public");
+  const [isValidate, setValidate] = useState(true);
 
   const saveCurrentTest = async () => {
+    if (!quizCategory) {
+      setValidate(false);
+      setTimeout(() => {
+        setValidate(true);
+      }, 2000);
+      return;
+    } else {
+      setValidate(true);
+    }
     if (quizDraft) {
       if (!QUIZ_CATEGORIES.includes(quizCategory)) {
         quizDraft.category = "разное";
@@ -29,24 +43,21 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
       quizDraft.lang = quizLanguage;
       quizDraft.access = quizAccess;
       useSetQuizComplete(quizDraft);
-      // console.log(quizDraft);
       setIsCreatingNewTest(true);
       await saveUserQuiz(quizDraft, userUID)
         .then(() => {
           setIsCreatingNewTest(false);
-          // navigate(`/myquizzes`);
         })
         .catch((error) => {
           console.error(error);
         })
-
     }
   }
 
   return (
     <div className='extra-info-block'>
       <p>Для сохранения теста заполните оставшиеся поля:</p>
-      <span>Категория теста: </span>
+      <span title={catTitles.category}>Категория теста: </span>
       <input
         name='categories'
         list='categories'
@@ -60,13 +71,16 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
           QUIZ_CATEGORIES.map((item, i) => <option key={i} value={item}/>)
         }
       </datalist>
-      <span>Язык теста: </span>
+      {
+        !isValidate && <p className='text-save-error'>Поле не может быть пустым!</p>
+      }
+      <span title={catTitles.language}>Язык теста: </span>
       <select name="select" onChange={(e) => setQuizLanguage(e.target.value)}>
         {
           QUIZ_LANGUAGES.map((item, i) => <option key={i} value={item}>{item}</option>)
         }
       </select>
-      <span>Доступность теста: </span>
+      <span title={catTitles.access}>Доступность теста: </span>
       <div className="extra-info-input">
         <input type="radio" name="access" id="public" defaultChecked onChange={(e) => setQuizAccess("public")}/>
         <label htmlFor="public">public</label>

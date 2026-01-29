@@ -1,5 +1,6 @@
 .card-way-container {
   width: 30%;
+  min-width: 20rem;
   margin: 2em 1em;
   display: flex;
   flex-direction: column;

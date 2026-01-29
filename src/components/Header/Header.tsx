@@ -9,7 +9,6 @@ export const Header: React.FC = () => {
   const user = useUser();
   console.log(location.pathname);
 
-
   useEffect(
     () => {
       console.log("INIT...");
@@ -21,7 +20,7 @@ export const Header: React.FC = () => {
 
   return (
     <header className="header-container">
-      <NavLink className='link-logo' to={'/createquiz'}>
+      <NavLink className='link-logo' to={'/'}>
         <img className="logo-image" src="../../../public/images/Logo_v3.png" alt="logo"/>
         <h1>ANY QUIZ</h1>
       </NavLink>

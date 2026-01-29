@@ -10,6 +10,7 @@ interface IInitialState {
 interface IActions {
   setQuizDraft: (draft: Quiz) => void,
   setQuizComplete: (draft: Quiz) => void,
+  clearCurrentQuiz: () => void,
 }
 
 interface IQuizzesState extends IInitialState, IActions {
@@ -29,6 +30,10 @@ const currentQuizStore: StateCreator<IQuizzesState> = (set, get) => ({
   setQuizComplete: (quiz) => {
     set(() => ({currentQuizComplete: quiz}));
     set(() => ({currentQuizDraft: null}));
+  },
+  clearCurrentQuiz: () => {
+    set(() => ({currentQuizComplete: null}));
+    set(() => ({currentQuizDraft: null}));
   }
 });
 
@@ -39,3 +44,4 @@ export const useQuizComplete = () => useCurrentQuizStore((state) => state.curren
 
 export const useSetQuizDraft = (quiz: Quiz) => useCurrentQuizStore.getState().setQuizDraft(quiz);
 export const useSetQuizComplete = (quiz: Quiz) => useCurrentQuizStore.getState().setQuizComplete(quiz);
+export const useClearCurrentQuiz = () => useCurrentQuizStore.getState().clearCurrentQuiz();

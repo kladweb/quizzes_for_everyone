@@ -32,6 +32,13 @@
     }
   }
 
+  .text-save-error {
+    margin: -0.8em 0 1em;
+    padding: 0;
+    text-align: left;
+    color: var(--color-error);
+  }
+
   input[list] {
     appearance: none;
     -webkit-appearance: none;
