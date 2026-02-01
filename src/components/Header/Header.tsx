@@ -1,17 +1,17 @@
 import React, {useEffect} from "react";
-import {NavLink} from "react-router-dom";
+import {NavLink, useMatch} from "react-router-dom";
 import ThemeSwitch from "../ThemeSwitch/ThemeSwitch";
 import {initUser, loginGoogle, logoutGoogle, useUser} from "../../store/useUserStore";
 import {loadUserQuizzes} from "../../store/useMyQuizzesStore";
 import "./header.css"
 
 export const Header: React.FC = () => {
+  const match = useMatch("/quizzes/:testid");
   const user = useUser();
-  console.log(location.pathname);
 
   useEffect(
     () => {
-      console.log("INIT...");
+      // console.log("INIT...");
       initUser();
       if (user) {
         loadUserQuizzes(user.uid);
@@ -25,10 +25,26 @@ export const Header: React.FC = () => {
         <h1>ANY QUIZ</h1>
       </NavLink>
       <div>
+        <nav className="navbar">
+          <NavLink className='link-nav' to={'/allquizzes'}>
+            <span>ALL QUIZZES</span>
+          </NavLink>
+          {
+            user &&
+            <NavLink className='link-nav' to={'/myquizzes'}>
+              <span>MY QUIZZES</span>
+            </NavLink>
+          }
+        </nav>
         {
-          (user) ?
-            <button className='btn button-login' onClick={logoutGoogle}>LOGOUT</button> :
-            <button className='btn button-login ' onClick={loginGoogle}>GOOGLE LOGIN</button>
+          !match &&
+          <>
+            {
+              user ?
+                <button className='btn button-login' onClick={logoutGoogle}>LOGOUT</button> :
+                <button className='btn button-login ' onClick={loginGoogle}>GOOGLE LOGIN</button>
+            }
+          </>
         }
         <ThemeSwitch/>
       </div>

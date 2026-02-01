@@ -40,9 +40,27 @@
   }
 }
 
-
 .logo-image {
   width: 4rem;
   margin: 0 0.5rem 0.2rem;
 }
 
+.navbar {
+  display: inline-block;
+}
+
+.link-nav {
+  margin: 0 0.5rem;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-secondary);
+  vertical-align: middle;
+  transition: text-shadow 0.3s;
+
+  &:hover {
+    /*-webkit-text-stroke: 1px 1px 1px var(--color-success);*/
+    /*text-stroke: 1px 1px 1px var(--color-success);*/
+    text-shadow: 0 0 3px var(--color-success);
+  }
+}
