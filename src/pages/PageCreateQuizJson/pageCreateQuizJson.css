@@ -1,0 +1,7 @@
+.test-load-info {
+  font-weight: 500;
+
+  span {
+    color: var(--color-success);
+  }
+}

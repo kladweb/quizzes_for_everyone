@@ -1,6 +1,7 @@
 .link-head {
   margin: 1rem;
   font-size: 1.5rem;
+  font-weight: 500;
   color: var(--color-text-secondary);
 }
 
@@ -8,6 +9,15 @@
   margin: 1rem;
   font-size: 1.5rem;
   color: var(--color-warning);
+
+  &:hover {
+    text-shadow: 0 0 2px var(--color-success);
+  }
+}
+
+.link-body {
+  display: block;
+  text-decoration: none;
 }
 
 .btn-link-copy {
@@ -50,4 +60,8 @@
   &:hover {
     opacity: 0.8;
   }
+}
+
+.link-info {
+  color: var(--color-text-secondary);
 }
