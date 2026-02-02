@@ -21,7 +21,7 @@ export const Header: React.FC = () => {
   return (
     <header className="header-container">
       <NavLink className='link-logo' to={'/'}>
-        <img className="logo-image" src="../../../public/images/Logo_v3.png" alt="logo"/>
+        <img className="logo-image" src="/images/Logo_v3.png" alt="logo"/>
         <h1>ANY QUIZ</h1>
       </NavLink>
       <div>
