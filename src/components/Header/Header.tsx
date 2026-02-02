@@ -6,7 +6,7 @@ import {loadUserQuizzes} from "../../store/useMyQuizzesStore";
 import "./header.css"
 
 export const Header: React.FC = () => {
-  const match = useMatch("/quizzes/:testid");
+  const isQuizPage = useMatch("/quizzes/:testid");
   const user = useUser();
 
   useEffect(
@@ -37,7 +37,7 @@ export const Header: React.FC = () => {
           }
         </nav>
         {
-          !match &&
+          !isQuizPage &&
           <>
             {
               user ?

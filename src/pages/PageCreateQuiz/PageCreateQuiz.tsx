@@ -13,11 +13,11 @@ export const PageCreateQuiz = () => {
     console.log(e.currentTarget.id);
   }
 
-  useEffect(() => {
-    if (!user) {
-      navigate("/");
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (!user) {
+  //     navigate("/");
+  //   }
+  // }, [user]);
 
   return (
     <div className='creating-container'>

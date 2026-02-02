@@ -7,6 +7,7 @@ export const PageMain = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log("Page Main");
     if (user) {
       navigate("/createquiz");
     }

@@ -16,11 +16,11 @@ export const PageCreateQuizJson = () => {
   const [currentTestId, setCurrentTestId] = useState<string | null>(null);
   const [isCreatingNewTest, setIsCreatingNewTest] = useState(false);
 
-  useEffect(() => {
-    if (!user) {
-      navigate("/");
-    }
-  }, [user?.uid])
+  // useEffect(() => {
+  //   if (!user) {
+  //     navigate("/");
+  //   }
+  // }, [user?.uid])
 
   return (
     <div className='tests-container'>
