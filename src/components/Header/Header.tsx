@@ -19,6 +19,7 @@ export const Header: React.FC = () => {
       }
     }, [user?.uid]);
 
+  console.log(isAuthLoading);
   return (
     <header className="header-container">
       <NavLink className='link-logo' to={'/'}>
