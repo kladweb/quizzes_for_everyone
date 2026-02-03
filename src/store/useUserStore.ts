@@ -30,22 +30,16 @@ const userStore: StateCreator<IUserState> = (set) => ({
   ...initialState,
   initUser: () => {
     set(() => ({isAuthLoading: true}));
-    try {
-      onAuthStateChanged(auth, (getUser) => {
-        if (getUser) {
-          const user: IUser = {
-            uid: getUser.uid,
-            email: getUser.email,
-          };
-          set(() => ({user}));
-        }
-      });
-    } catch (error) {
-      console.log(error);
-    } finally {
+    onAuthStateChanged(auth, (getUser) => {
+      if (getUser) {
+        const user: IUser = {
+          uid: getUser.uid,
+          email: getUser.email,
+        };
+        set(() => ({user}));
+      }
       set(() => ({isAuthLoading: false}));
-    }
-
+    });
   },
   loginGoogle: () => {
     set(() => ({isAuthLoading: true}));
