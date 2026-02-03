@@ -1,13 +1,14 @@
-import React, {useEffect} from "react";
-import {NavLink, useMatch} from "react-router-dom";
+import React, { useEffect } from "react";
+import { NavLink, useMatch } from "react-router-dom";
 import ThemeSwitch from "../ThemeSwitch/ThemeSwitch";
-import {initUser, loginGoogle, logoutGoogle, useUser} from "../../store/useUserStore";
-import {loadUserQuizzes} from "../../store/useMyQuizzesStore";
+import { initUser, loginGoogle, logoutGoogle, useIsAuthLoading, useUser } from "../../store/useUserStore";
+import { loadUserQuizzes } from "../../store/useMyQuizzesStore";
 import "./header.css"
 
 export const Header: React.FC = () => {
   const isQuizPage = useMatch("/quizzes/:testid");
   const user = useUser();
+  const isAuthLoading = useIsAuthLoading();
 
   useEffect(
     () => {
@@ -42,7 +43,9 @@ export const Header: React.FC = () => {
             {
               user ?
                 <button className='btn button-login' onClick={logoutGoogle}>LOGOUT</button> :
-                <button className='btn button-login ' onClick={loginGoogle}>GOOGLE LOGIN</button>
+                <button className='btn button-login ' onClick={loginGoogle} disabled={isAuthLoading}>
+                  {isAuthLoading ? "GOOGLE IN..." : "GOOGLE LOGIN"}
+                </button>
             }
           </>
         }

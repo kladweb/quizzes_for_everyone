@@ -38,6 +38,10 @@
   &:active {
     background-color: var(--color-tertiary);
   }
+
+  &:disabled {
+    background-color: var(--color-disabled);
+  }
 }
 
 .logo-image {

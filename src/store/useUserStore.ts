@@ -1,6 +1,6 @@
-import {create, type StateCreator} from "zustand";
-import {GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut} from "firebase/auth";
-import {auth} from "../firebase/firebase";
+import { create, type StateCreator } from "zustand";
+import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from "firebase/auth";
+import { auth } from "../firebase/firebase";
 
 interface IUser {
   uid: string;
@@ -9,10 +9,10 @@ interface IUser {
 
 interface IInitialState {
   user: IUser | null;
+  isAuthLoading: boolean;
 }
 
 interface IActions {
-  setUser: (user: IUser | null) => void;
   initUser: () => void;
   loginGoogle: () => void;
   logoutGoogle: () => void;
@@ -22,26 +22,33 @@ interface IUserState extends IInitialState, IActions {
 }
 
 const initialState: IInitialState = {
-  user: null
+  user: null,
+  isAuthLoading: true
 }
 
 const userStore: StateCreator<IUserState> = (set) => ({
   ...initialState,
-  setUser: (user: IUser | null) => {
-    set(() => ({user: user}));
-  },
   initUser: () => {
-    onAuthStateChanged(auth, (getUser) => {
-      if (getUser) {
-        const user: IUser = {
-          uid: getUser.uid,
-          email: getUser.email,
-        };
-        set(() => ({user: user}));
-      }
-    });
+    set(() => ({isAuthLoading: true}));
+    try {
+      onAuthStateChanged(auth, (getUser) => {
+        if (getUser) {
+          const user: IUser = {
+            uid: getUser.uid,
+            email: getUser.email,
+          };
+          set(() => ({user}));
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      set(() => ({isAuthLoading: false}));
+    }
+
   },
   loginGoogle: () => {
+    set(() => ({isAuthLoading: true}));
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
       .then((result) => {
@@ -59,7 +66,7 @@ const userStore: StateCreator<IUserState> = (set) => ({
   logoutGoogle: () => {
     signOut(auth).then(() => {
       console.log('Sign-out successful', auth.currentUser);
-      setUser(null);
+      set(() => ({user: null, isAuthLoading: false}));
     }).catch((error) => {
       console.log('Sign-out error', error);
     });
@@ -68,9 +75,7 @@ const userStore: StateCreator<IUserState> = (set) => ({
 
 const useUserStore = create<IUserState>()(userStore);
 export const useUser = () => useUserStore((state => state.user));
-export const setUser = (user: IUser | null) => useUserStore.getState().setUser(user);
+export const useIsAuthLoading = () => useUserStore((state => state.isAuthLoading));
 export const initUser = () => useUserStore.getState().initUser();
 export const loginGoogle = () => useUserStore.getState().loginGoogle();
 export const logoutGoogle = () => useUserStore.getState().logoutGoogle();
-
-
