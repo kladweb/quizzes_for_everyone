@@ -49,6 +49,6 @@ input[type="file"] {
 
 .loader-container {
   width: 100%;
-  height: calc(100dvh - 120px);
+  height: calc(100dvh - 10em);
   text-align: center;
 }
