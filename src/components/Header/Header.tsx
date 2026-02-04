@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { NavLink, useMatch } from "react-router-dom";
 import ThemeSwitch from "../ThemeSwitch/ThemeSwitch";
 import { initUser, loginGoogle, logoutGoogle, useIsAuthLoading, useUser } from "../../store/useUserStore";
-import { loadUserQuizzes } from "../../store/useMyQuizzesStore";
+import { loadAllQuizzes, loadUserQuizzes } from "../../store/useQuizzesStore";
 import "./header.css"
 
 export const Header: React.FC = () => {
@@ -12,8 +12,12 @@ export const Header: React.FC = () => {
 
   useEffect(
     () => {
-      // console.log("INIT...");
       initUser();
+      loadAllQuizzes();
+    }, []);
+
+  useEffect(
+    () => {
       if (user) {
         loadUserQuizzes(user.uid);
       }

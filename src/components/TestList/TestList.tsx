@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {type Quiz} from "../../types/Quiz";
 import {Statistics} from "../Statistics/Statistics";
 import {Loader} from "../Loader/Loader";
-import {deleteUserQuiz, useIsLoading} from "../../store/useMyQuizzesStore";
+import {deleteUserQuiz, useIsLoading} from "../../store/useQuizzesStore";
 import "./testList.css";
 
 interface ITestListProps {

@@ -1,16 +1,17 @@
-import React, {useState} from "react";
-import {useNavigate} from "react-router-dom";
-import {QuizLoader} from "../../components/QuizLoader/QuizLoader";
-import {LinkQuiz} from "../../components/LinkQuiz/LinkQuiz";
-import {TestList} from "../../components/TestList/TestList";
-import {useUser} from "../../store/useUserStore";
-import {useMyQuizzes} from "../../store/useMyQuizzesStore";
-import {useClearCurrentQuiz} from "../../store/useCurrentCreatingQuiz";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { QuizLoader } from "../../components/QuizLoader/QuizLoader";
+import { LinkQuiz } from "../../components/LinkQuiz/LinkQuiz";
+import { TestList } from "../../components/TestList/TestList";
+import { useUser } from "../../store/useUserStore";
+import { useAllQuizzes, useMyQuizzes } from "../../store/useQuizzesStore";
+import { useClearCurrentQuiz } from "../../store/useCurrentCreatingQuiz";
 import "./PageMyQuizzes.css";
 
 export const PageMyQuizzes: React.FC = () => {
   const user = useUser();
   const testList = useMyQuizzes();
+  const allQuizzes = useAllQuizzes();
   const navigate = useNavigate();
   const [isNotice, setIsNotice] = useState(true);
   const [currentTestId, setCurrentTestId] = useState<string | null>(null);
@@ -21,6 +22,7 @@ export const PageMyQuizzes: React.FC = () => {
     navigate("/createquiz");
   }
 
+  console.log(allQuizzes);
   return (
     <>
       <div className='tests-container'>

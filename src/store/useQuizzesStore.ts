@@ -1,14 +1,17 @@
-import {create, type StateCreator} from "zustand";
-import {QuizStorageManager} from "../utils/QuizStorageManager";
-import type {Quiz} from "../types/Quiz";
+import { create, type StateCreator } from "zustand";
+import { QuizStorageManager } from "../utils/QuizStorageManager";
+import type { Quiz } from "../types/Quiz";
 
 interface IInitialState {
+  allQuizzes: Quiz[];
   myQuizzes: Quiz[],
   isLoading: boolean,
+  isAllLoaded: boolean,
   errorLoading: string
 }
 
 interface IActions {
+  loadAllQuizzes: () => void;
   loadUserQuizzes: (userUid: string) => void;
   saveUserQuiz: (quiz: Quiz, userUid: string) => Promise<void>;
   deleteUserQuiz: (testId: string, userUid: string) => Promise<void>;
@@ -18,13 +21,30 @@ interface IQuizzesState extends IInitialState, IActions {
 }
 
 const initialState: IInitialState = {
+  allQuizzes: [],
   myQuizzes: [],
   isLoading: false,
+  isAllLoaded: false,
   errorLoading: ""
 }
 
-const myQuizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
+const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
   ...initialState,
+  loadAllQuizzes: async () => {
+    try {
+      set(() => ({isLoading: true}));
+      const quizzes = await QuizStorageManager.fetchAllQuizzes();
+      set(() => ({allQuizzes: quizzes}));
+      set(() => ({errorLoading: ""}));
+      set(() => ({isAllLoaded: true}));
+    } catch (error) {
+      // set(() => ({myQuizzes: []}));
+      console.log(error);
+      set(() => ({errorLoading: "Ошибка загрузки данных!"}));
+    } finally {
+      set(() => ({isLoading: false}));
+    }
+  },
   loadUserQuizzes: async (userUid) => {
     try {
       set(() => ({isLoading: true}));
@@ -39,6 +59,20 @@ const myQuizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
       set(() => ({isLoading: false}));
     }
   },
+  // loadUserQuizzes: async (userUid) => {
+  //   try {
+  //     set(() => ({isLoading: true}));
+  //     const quizzes = await QuizStorageManager.fetchUserQuizzes(userUid);
+  //     set(() => ({myQuizzes: quizzes}));
+  //     set(() => ({errorLoading: ""}));
+  //   } catch (error) {
+  //     // set(() => ({myQuizzes: []}));
+  //     console.log(error);
+  //     set(() => ({errorLoading: "Ошибка загрузки данных!"}));
+  //   } finally {
+  //     set(() => ({isLoading: false}));
+  //   }
+  // },
   saveUserQuiz: async (quiz: Quiz, userUid: string) => {
     const testListPrev = get().myQuizzes;
     if (!testListPrev) {
@@ -77,14 +111,17 @@ const myQuizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
   }
 })
 
-const useMyQuizzesStore = create<IQuizzesState>()(myQuizzesStore);
+const useQuizzesStore = create<IQuizzesState>()(quizzesStore);
 
-export const useMyQuizzes = () => useMyQuizzesStore((state) => state.myQuizzes);
-export const useIsLoading = () => useMyQuizzesStore((state) => state.isLoading);
-export const useErrorLoading = () => useMyQuizzesStore((state) => state.errorLoading);
+export const useAllQuizzes = () => useQuizzesStore((state) => state.allQuizzes);
+export const useMyQuizzes = () => useQuizzesStore((state) => state.myQuizzes);
+export const useIsLoading = () => useQuizzesStore((state) => state.isLoading);
+export const useIsAllLoaded = () => useQuizzesStore((state) => state.isAllLoaded);
+export const useErrorLoading = () => useQuizzesStore((state) => state.errorLoading);
+export const loadAllQuizzes = () => useQuizzesStore.getState().loadAllQuizzes();
 export const loadUserQuizzes = (userUid: string) =>
-  useMyQuizzesStore.getState().loadUserQuizzes(userUid);
+  useQuizzesStore.getState().loadUserQuizzes(userUid);
 export const saveUserQuiz = (quiz: Quiz, userUid: string) =>
-  useMyQuizzesStore.getState().saveUserQuiz(quiz, userUid);
+  useQuizzesStore.getState().saveUserQuiz(quiz, userUid);
 export const deleteUserQuiz = (testId: string, userUid: string) =>
-  useMyQuizzesStore.getState().deleteUserQuiz(testId, userUid);
+  useQuizzesStore.getState().deleteUserQuiz(testId, userUid);

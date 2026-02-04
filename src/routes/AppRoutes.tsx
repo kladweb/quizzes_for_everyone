@@ -1,13 +1,13 @@
 import React from "react";
-import {Route, Routes} from "react-router-dom";
-import {PageMyQuizzes} from "../pages/PageMyQuizzes/PageMyQuizzes";
-import {PageQuiz} from "../pages/PageQuiz/PageQuiz";
-import {PageMain} from "../pages/PageMain/PageMain";
-import {PageCreateQuiz} from "../pages/PageCreateQuiz/PageCreateQuiz";
-import {PageEmpty} from "../pages/PageEmpty/PageEmpty";
-import {PageCreateQuizJson} from "../pages/PageCreateQuizJson/PageCreateQuizJson";
-import {MainLayout} from "../layouts/MainLayout";
-import {ProtectedRoute} from "./ProtectedRoute";
+import { Route, Routes } from "react-router-dom";
+import { MainLayout } from "../layouts/MainLayout";
+import { ProtectedRoute } from "./ProtectedRoute";
+import { PageMyQuizzes } from "../pages/PageMyQuizzes/PageMyQuizzes";
+import { PageQuiz } from "../pages/PageQuiz/PageQuiz";
+import { PageMain } from "../pages/PageMain/PageMain";
+import { PageCreateQuiz } from "../pages/PageCreateQuiz/PageCreateQuiz";
+import { PageEmpty } from "../pages/PageEmpty/PageEmpty";
+import { PageCreateQuizJson } from "../pages/PageCreateQuizJson/PageCreateQuizJson";
 
 export const AppRoutes = () => {
   return (

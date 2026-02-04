@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {nanoid} from "nanoid";
 import type {Quiz} from "../../types/Quiz";
 import { useSetQuizDraft } from "../../store/useCurrentCreatingQuiz";
-import {saveUserQuiz} from "../../store/useMyQuizzesStore";
+import {saveUserQuiz} from "../../store/useQuizzesStore";
 import "./quizLoader.css";
 
 interface IQuizLoaderProps {

@@ -20,6 +20,22 @@ interface QuizAnswer {
 // }
 
 export const QuizStorageManager = {
+  async fetchAllQuizzes(): Promise<Quiz[]> {
+    const dbRef = ref(database);
+    try {
+      const snapshot = await get(child(dbRef, `tests`))
+      if (!snapshot.exists()) {
+        throw new Error('No such quiz found!');
+      }
+      const quizzesAll = snapshot.val();
+      const quizzes: Quiz[] = Object.values(quizzesAll).map((quiz: any) => JSON.parse(quiz.test));
+      return quizzes;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  },
+
   async fetchUserQuizzes(userUid: string): Promise<Quiz[]> {
     const dbRef = ref(database);
     try {
