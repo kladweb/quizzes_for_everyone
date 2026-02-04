@@ -1,17 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { QuizLoader } from "../../components/QuizLoader/QuizLoader";
 import { LinkQuiz } from "../../components/LinkQuiz/LinkQuiz";
 import { TestList } from "../../components/TestList/TestList";
 import { useUser } from "../../store/useUserStore";
-import { useAllQuizzes, useMyQuizzes } from "../../store/useQuizzesStore";
+import { loadUserQuizzes, useIsMyLoaded, useMyQuizzes } from "../../store/useQuizzesStore";
 import { useClearCurrentQuiz } from "../../store/useCurrentCreatingQuiz";
 import "./PageMyQuizzes.css";
 
 export const PageMyQuizzes: React.FC = () => {
   const user = useUser();
   const testList = useMyQuizzes();
-  const allQuizzes = useAllQuizzes();
+  const isMyLoaded = useIsMyLoaded();
   const navigate = useNavigate();
   const [isNotice, setIsNotice] = useState(true);
   const [currentTestId, setCurrentTestId] = useState<string | null>(null);
@@ -22,7 +22,18 @@ export const PageMyQuizzes: React.FC = () => {
     navigate("/createquiz");
   }
 
-  console.log(allQuizzes);
+  useEffect(
+    () => {
+      if (isMyLoaded) {
+        console.log("User data already loaded");
+        return;
+      }
+      if (user) {
+        console.log('loadUserQuizzes');
+        loadUserQuizzes(user.uid);
+      }
+    }, []);
+
   return (
     <>
       <div className='tests-container'>

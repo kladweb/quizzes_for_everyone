@@ -8,6 +8,7 @@ import { PageMain } from "../pages/PageMain/PageMain";
 import { PageCreateQuiz } from "../pages/PageCreateQuiz/PageCreateQuiz";
 import { PageEmpty } from "../pages/PageEmpty/PageEmpty";
 import { PageCreateQuizJson } from "../pages/PageCreateQuizJson/PageCreateQuizJson";
+import { PageAllQuizzes } from "../pages/PageAllQuizzes/PageAllQuizzes";
 
 export const AppRoutes = () => {
   return (
@@ -23,7 +24,7 @@ export const AppRoutes = () => {
           <Route path="/myquizzes" element={<PageMyQuizzes/>}/>
         </Route>
 
-        <Route path="/allquizzes" element={<PageEmpty emptyReason="pageDevelopment"/>}/>
+        <Route path="/allquizzes" element={<PageAllQuizzes/>}/>
         <Route path="/quizzes/:testid" element={<PageQuiz/>}/>
       </Route>
     </Routes>

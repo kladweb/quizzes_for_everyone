@@ -7,6 +7,7 @@ interface IInitialState {
   myQuizzes: Quiz[],
   isLoading: boolean,
   isAllLoaded: boolean,
+  isMyLoaded: boolean,
   errorLoading: string
 }
 
@@ -25,6 +26,7 @@ const initialState: IInitialState = {
   myQuizzes: [],
   isLoading: false,
   isAllLoaded: false,
+  isMyLoaded: false,
   errorLoading: ""
 }
 
@@ -35,8 +37,8 @@ const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
       set(() => ({isLoading: true}));
       const quizzes = await QuizStorageManager.fetchAllQuizzes();
       set(() => ({allQuizzes: quizzes}));
-      set(() => ({errorLoading: ""}));
       set(() => ({isAllLoaded: true}));
+      set(() => ({errorLoading: ""}));
     } catch (error) {
       // set(() => ({myQuizzes: []}));
       console.log(error);
@@ -50,6 +52,7 @@ const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
       set(() => ({isLoading: true}));
       const quizzes = await QuizStorageManager.fetchUserQuizzes(userUid);
       set(() => ({myQuizzes: quizzes}));
+      set(() => ({isMyLoaded: true}));
       set(() => ({errorLoading: ""}));
     } catch (error) {
       // set(() => ({myQuizzes: []}));
@@ -117,6 +120,7 @@ export const useAllQuizzes = () => useQuizzesStore((state) => state.allQuizzes);
 export const useMyQuizzes = () => useQuizzesStore((state) => state.myQuizzes);
 export const useIsLoading = () => useQuizzesStore((state) => state.isLoading);
 export const useIsAllLoaded = () => useQuizzesStore((state) => state.isAllLoaded);
+export const useIsMyLoaded = () => useQuizzesStore((state) => state.isMyLoaded);
 export const useErrorLoading = () => useQuizzesStore((state) => state.errorLoading);
 export const loadAllQuizzes = () => useQuizzesStore.getState().loadAllQuizzes();
 export const loadUserQuizzes = (userUid: string) =>
