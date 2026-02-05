@@ -27,7 +27,7 @@ export const QuizCard: React.FC<ITestCardProps> = ({quiz, openStatistic, dateFor
               <td>{quiz.category}</td>
             </tr>
             <tr>
-              <td>Язык:</td>
+              <td>Язык вопросов:</td>
               <td>{quiz.lang}</td>
             </tr>
             <tr>

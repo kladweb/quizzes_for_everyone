@@ -35,6 +35,8 @@ interface IAnswer {
 
 export interface IStatistics {
   testId: string;
+  statId: string;
+  userUid?: string | null;
   title: string;
   userName: string;
   startedAt: number;
