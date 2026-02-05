@@ -29,6 +29,19 @@ export const QuizStorageManager = {
       }
       const quizzesAll = snapshot.val();
       const quizzes: Quiz[] = Object.values(quizzesAll).map((quiz: any) => JSON.parse(quiz.test));
+      // const quizzes: any = Object.values(quizzesAll);
+      // console.log(quizzes);
+      // quizzes.forEach((quiz: any) => {
+      //   quiz.test = JSON.parse(quiz.test);
+      //   if (quiz.statistics) {
+      //     Object.keys(quiz.statistics).forEach(id => {
+      //       quiz.statistics[id] = JSON.parse(quiz.statistics[id]);
+      //     })
+      //   } else {
+      //     quiz.statistics = null;
+      //   }
+      // });
+      // console.log(quizzes);
       return quizzes;
     } catch (error) {
       console.error(error);

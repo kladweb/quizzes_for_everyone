@@ -1,10 +1,16 @@
-import { useEffect } from "react";
-import { loadAllQuizzes, useAllQuizzes, useIsAllLoaded } from "../../store/useQuizzesStore";
-import { TestsList } from "../../components/TestsList/TestsList";
+import React, { useEffect } from "react";
+import { loadAllQuizzes, useAllQuizzes, useIsAllLoaded, useIsLoading } from "../../store/useQuizzesStore";
+import "./pageAllQuizzes.css";
+import { Loader } from "../../components/Loader/Loader";
+import type { Quiz } from "../../types/Quiz";
+import { QuizCard } from "../../components/TestsList/QuizCard";
 
 export const PageAllQuizzes = () => {
   const isAllLoaded = useIsAllLoaded();
   const testsList = useAllQuizzes();
+  const isLoading = useIsLoading();
+  const locale = navigator.languages?.[0] || navigator.language;
+  const formatter = new Intl.DateTimeFormat(locale);
 
   useEffect(
     () => {
@@ -19,8 +25,21 @@ export const PageAllQuizzes = () => {
 
   return (
     <div className='tests-container'>
-      <h2 className="test-list-name">ТЕСТЫ</h2>
-      <TestsList testsList={testsList}/>
+      <h2 className="test-list-name">СПИСОК ОБЩЕДОСТУПНЫХ ТЕСТОВ</h2>
+      <div className='test-list-block'>
+        {
+          (isLoading) ? <Loader/> :
+            <>
+              {testsList.map((quiz: Quiz) => (
+                <QuizCard
+                  key={quiz.testId}
+                  quiz={quiz}
+                  dateFormatter={formatter}
+                />)
+              )}
+            </>
+        }
+      </div>
     </div>
   )
 }

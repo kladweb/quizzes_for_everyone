@@ -4,22 +4,34 @@ import { QuizLoader } from "../../components/QuizLoader/QuizLoader";
 import { LinkQuiz } from "../../components/LinkQuiz/LinkQuiz";
 import { TestList } from "../../components/TestList/TestList";
 import { useUser } from "../../store/useUserStore";
-import { loadUserQuizzes, useIsMyLoaded, useMyQuizzes } from "../../store/useQuizzesStore";
+import { loadUserQuizzes, useAllQuizzes, useIsLoading, useIsMyLoaded, useMyQuizzes } from "../../store/useQuizzesStore";
 import { useClearCurrentQuiz } from "../../store/useCurrentCreatingQuiz";
 import "./PageMyQuizzes.css";
+import { Loader } from "../../components/Loader/Loader";
+import type { Quiz } from "../../types/Quiz";
+import { QuizCard } from "../../components/TestsList/QuizCard";
 
 export const PageMyQuizzes: React.FC = () => {
   const user = useUser();
-  const testList = useMyQuizzes();
   const isMyLoaded = useIsMyLoaded();
+  const isLoading = useIsLoading();
+  const testsList = useMyQuizzes();
   const navigate = useNavigate();
-  const [isNotice, setIsNotice] = useState(true);
-  const [currentTestId, setCurrentTestId] = useState<string | null>(null);
-  const [isCreatingNewTest, setIsCreatingNewTest] = useState(false);
+  const locale = navigator.languages?.[0] || navigator.language;
+  const formatter = new Intl.DateTimeFormat(locale);
+  const [quizIdStatistics, setQuizIdStatistics] = useState<string | null>(null);
 
   const createQuiz = () => {
     useClearCurrentQuiz();
     navigate("/createquiz");
+  }
+
+  const openStatistic = (testId: string) => {
+    if (quizIdStatistics !== testId) {
+      setQuizIdStatistics(testId);
+    } else {
+      setQuizIdStatistics(null);
+    }
   }
 
   useEffect(
@@ -38,26 +50,24 @@ export const PageMyQuizzes: React.FC = () => {
     <>
       <div className='tests-container'>
         <button className='btn button-create' onClick={createQuiz}>Создать новый тест</button>
-        <div className={`noticeBlock${(isNotice ? " close" : "")}`}>
-          <p className='noticeText'>Сначала нужно войти в систему!</p>
-          <p className='noticeText'>Нажните кнопку GOOGLE LOGIN!</p>
+        <h2 className="test-list-name">МОИ ТЕСТЫ</h2>
+        <div className='test-list-block'>
+          {
+            (isLoading) ? <Loader/> :
+              <>
+                {testsList.map((quiz: Quiz) => (
+                  <QuizCard
+                    key={quiz.testId}
+                    quiz={quiz}
+                    openStatistic={openStatistic}
+                    dateFormatter={formatter}
+                    userUID={user?.uid}
+                  />)
+                )}
+              </>
+          }
         </div>
-        {
-          (user && isCreatingNewTest) ?
-            <QuizLoader
-              userUID={user.uid}
-              setCurrentTestId={setCurrentTestId}
-              setIsCreatingNewTest={setIsCreatingNewTest}
-            /> :
-            null
-        }
-        {
-          currentTestId ? <LinkQuiz testId={currentTestId}/> : null
-        }
       </div>
-      {
-        user ? <TestList testList={testList} userUID={user.uid}/> : null
-      }
     </>
   );
 };

@@ -6,7 +6,7 @@
 
 .test-item {
   display: flex;
-  padding: 0;
+  padding: 0 0.5em;
   margin: 6px 0;
   width: 80%;
   align-self: start;
@@ -15,19 +15,59 @@
   background-color: var(--color-bg-contrast);
   border: 1px solid var(--color-success-border);
   border-radius: 6px;
+
+  table {
+    font-size: 0.8em;
+    border-spacing: 0;
+    overflow: hidden;
+    line-height: 1.2em;
+
+    tr {
+      text-align: left;
+
+      td:first-child {
+        padding-left: 0.3em;
+      }
+
+      td:not(:first-child) {
+        color: var(--color-success);
+      }
+    }
+  }
 }
 
 .test-content {
   width: 100%;
 }
 
+.quiz-table-info {
+  width: 45%;
+
+  td:first-child {
+    width: 6em;
+  }
+}
+
+
+.quiz-control-block {
+  width: 55%;
+
+  table {
+
+    td:first-child {
+      width: 8em;
+      padding-left: 0.3em;
+    }
+  }
+}
+
 .test-name {
   display: inline-block;
   width: 100%;
   margin: 0;
-  padding: 5px 0;
+  padding: 0.5em 0;
   font-size: 1em;
-  color: var(--color-primary);
+  color: var(--color-secondary);
   font-weight: 500;
 }
 
@@ -58,12 +98,12 @@
   font-size: 0.8rem;
   font-weight: 500;
   text-decoration: none;
-  color: var(--color-primary);
+  color: var(--color-quaternary);
   line-height: 1.6rem;
   transition: all 0.3s ease;
 
   &:hover {
-    color: var(--color-quaternary);
+    text-shadow: 0 0 5px var(--color-success);
   }
 }
 

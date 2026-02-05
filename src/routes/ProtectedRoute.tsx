@@ -7,9 +7,9 @@ export const ProtectedRoute = () => {
   const user = useUser();
   const isAuthLoading = useIsAuthLoading();
 
-  if (isAuthLoading) {
-    return <div className='loader-container'><Loader/></div>
-  }
+  // if (isAuthLoading) {
+  //   return <div className='loader-container'><Loader/></div>
+  // }
 
   if (!user) {
     return <Navigate to="/" replace/>;

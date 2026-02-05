@@ -98,14 +98,17 @@ const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
   },
   deleteUserQuiz: async (testId: string, userUid: string) => {
     const testListPrev = get().myQuizzes;
+    console.log(testListPrev.length);
     if (!testListPrev) {
       return;
     }
     const testListNext = testListPrev.filter((quiz: Quiz) => quiz.testId !== testId);
+    console.log(testListNext.length);
     const IdsList = testListNext.map(quiz => quiz.testId);
+    console.log(IdsList);
     set(() => ({myQuizzes: testListNext}));
     try {
-      await QuizStorageManager.removeUserQuiz(testId, userUid, IdsList);
+      // await QuizStorageManager.removeUserQuiz(testId, userUid, IdsList);
       set(() => ({errorLoading: ""}));
     } catch (error) {
       set(() => ({myQuizzes: testListPrev}));
