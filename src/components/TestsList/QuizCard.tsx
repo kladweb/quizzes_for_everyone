@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState, memo } from "react";
 import { Quiz } from "../../types/Quiz";
 import { deleteUserQuiz } from "../../store/useQuizzesStore";
+import { handleCopy } from "../../utils/quizUtils";
+import { Statistics } from "../Statistics/Statistics";
 import "./quizCard.css"
 
 interface ITestCardProps {
@@ -8,66 +10,95 @@ interface ITestCardProps {
   dateFormatter: Intl.DateTimeFormat;
   openStatistic?: (testId: string) => void;
   userUID?: string;
+  isShowStatistics?: boolean;
 }
 
-export const QuizCard: React.FC<ITestCardProps> = ({quiz, openStatistic, dateFormatter, userUID}) => {
+export const QuizCard: React.FC<ITestCardProps> = memo(
+  ({quiz, openStatistic, dateFormatter, userUID, isShowStatistics}) => {
+    const currentLink = `${window.location.origin}/quizzes/${quiz.testId}`;
+    const [copied, setCopied] = useState(false);
 
-  // console.log(quiz)
-
-  return (
-    <div className='test-item' key={quiz.testId}>
-      <div className='test-content'>
-        <h3 className='test-name'>{quiz.title}</h3>
-      </div>
-      <div className="quiz-table-info">
-        <table>
-          <tbody>
-            <tr>
-              <td>Категория:</td>
-              <td>{quiz.category}</td>
-            </tr>
-            <tr>
-              <td>Язык вопросов:</td>
-              <td>{quiz.lang}</td>
-            </tr>
-            <tr>
-              <td>Создан:</td>
-              <td>{dateFormatter.format(quiz.createdAt)}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div className='quiz-control-block'>
-        <table>
-          <tbody>
-            <tr>
-              <td>Пройден:</td>
-              <td>{quiz.category}</td>
-            </tr>
-            <tr>
-              <td>Ваш результат:</td>
-              <td>{dateFormatter.format(quiz.createdAt)}</td>
-            </tr>
-          </tbody>
-        </table>
-        {openStatistic &&
-          <button className='button-test' onClick={() => openStatistic(quiz.testId)}>Статистика</button>
-        }
+    return (
+      <div className='test-item' key={quiz.testId}>
+        <div className='test-content'>
+          <h3 className='test-name'>{quiz.title}</h3>
+        </div>
+        <div className="quiz-container-info">
+          <div className="info-item">Категория: <span>{quiz.category}</span></div>
+          <div className="info-item">Язык вопросов: <span>{quiz.lang}</span></div>
+          <div className="quiz-feedback-info" title="Скольким людям тест понравился">
+            <div className="button-like" role="button">
+              <img className="img-like" src="/images/Like-quiz.png" alt="like"/>
+              <span>15</span>
+            </div>
+            <div className="button-like" title="Сколько раз тест пройден">
+              <img className="img-like" src="/images/Arrow-quiz.png" alt="like"/>
+              <span>15</span>
+            </div>
+          </div>
+          <div className="info-item">Создан: <span>{dateFormatter.format(quiz.createdAt)}</span></div>
+        </div>
+        <div>
+        </div>
+        {/*<div className='quiz-control-block'>*/}
+        {/*<table>*/}
+        {/*  <tbody>*/}
+        {/*    <tr>*/}
+        {/*      <td>Пройден:</td>*/}
+        {/*      <td>{quiz.category}</td>*/}
+        {/*    </tr>*/}
+        {/*    <tr>*/}
+        {/*      <td>Ваш результат:</td>*/}
+        {/*      <td>{dateFormatter.format(quiz.createdAt)}</td>*/}
+        {/*    </tr>*/}
+        {/*  </tbody>*/}
+        {/*</table>*/}
+        {/*{openStatistic &&*/}
+        {/*  <button className='button-test' onClick={() => openStatistic(quiz.testId)}>Статистика</button>*/}
+        {/*}*/}
+        {/*{*/}
+        {/*  userUID &&*/}
+        {/*  <>*/}
+        {/*    <button className='button-test' onClick={() => {*/}
+        {/*    }}>Редактировать*/}
+        {/*    </button>*/}
+        {/*    <button className='button-test' onClick={() => deleteUserQuiz(quiz.testId, userUID)}>Удалить</button>*/}
+        {/*  </>*/}
+        {/*}*/}
+        {/*</div>*/}
         {
-          userUID &&
-          <>
+          openStatistic &&
+          <div className='test-buttons-block'>
+            <button className='button-test' onClick={() => openStatistic(quiz.testId)}>Статистика</button>
             <button className='button-test' onClick={() => {
             }}>Редактировать
             </button>
-            <button className='button-test' onClick={() => deleteUserQuiz(quiz.testId, userUID)}>Удалить</button>
-          </>
+            {
+              userUID &&
+              <button className='button-test' onClick={() => deleteUserQuiz(quiz.testId, userUID)}>Удалить</button>
+            }
+          </div>
+        }
+        <div className='test-buttons-block'>
+          <button
+            className={`btn quiz-link-copy ${copied ? " quiz-link-copy--copied" : ""}`}
+            onClick={() => handleCopy(currentLink, setCopied)}
+          >
+            {copied ? 'Скопировано!' : 'Копировать ссылку'}
+          </button>
+          <a className="link-open-test" href={`/quizzes/${quiz.testId}`} target="_blank">
+            <span>Открыть</span>
+          </a>
+        </div>
+        {
+          isShowStatistics && <Statistics testId={quiz.testId}/>
         }
       </div>
-      <div className='test-buttons-block'>
-        <a className="link-open-test" href={`/quizzes/${quiz.testId}`} target="_blank">
-          <span>Открыть</span>
-        </a>
-      </div>
-    </div>
-  )
-}
+    )
+  }, (oldProps: ITestCardProps, nextProps: ITestCardProps) => {
+    return (
+      oldProps.quiz === nextProps.quiz &&
+      oldProps.userUID === nextProps.userUID &&
+      oldProps.isShowStatistics === nextProps.isShowStatistics
+    )
+  });

@@ -15,50 +15,6 @@
   background-color: var(--color-bg-contrast);
   border: 1px solid var(--color-success-border);
   border-radius: 6px;
-
-  table {
-    font-size: 0.8em;
-    border-spacing: 0;
-    overflow: hidden;
-    line-height: 1.2em;
-
-    tr {
-      text-align: left;
-
-      td:first-child {
-        padding-left: 0.3em;
-      }
-
-      td:not(:first-child) {
-        color: var(--color-success);
-      }
-    }
-  }
-}
-
-.test-content {
-  width: 100%;
-}
-
-.quiz-table-info {
-  width: 45%;
-
-  td:first-child {
-    width: 6em;
-  }
-}
-
-
-.quiz-control-block {
-  width: 55%;
-
-  table {
-
-    td:first-child {
-      width: 8em;
-      padding-left: 0.3em;
-    }
-  }
 }
 
 .test-name {
@@ -71,8 +27,58 @@
   font-weight: 500;
 }
 
+.quiz-container-info {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.1em 1em;
+
+  span {
+    color: var(--color-success);
+  }
+}
+
+.info-item {
+  box-sizing: border-box;
+  width: 48%;
+  text-align: left;
+}
+
+.quiz-feedback-info {
+  /*width: 100%;*/
+  display: flex;
+  justify-content: left;
+}
+
+.button-like {
+  /*margin: 0.4em 1.5em 0 0;*/
+  margin-right: 1em;
+
+  span {
+    display: inline-block;
+    margin-left: 0.3em;
+    vertical-align: middle;
+    font-size: 1.2em;
+    font-weight: 500;
+  }
+
+}
+
+.img-like {
+  width: 1.5em;
+  vertical-align: middle;
+}
+
+
+.quiz-control-block {
+  width: 55%;
+}
+
 .test-buttons-block {
-  display: inline-block;
+  width: 100%;
+  display: block;
+  /*margin: 0.2em 0;*/
 }
 
 .button-test {
@@ -92,10 +98,25 @@
   }
 }
 
+.quiz-link-copy {
+  border: none;
+  background: none;
+  color: var(--color-primary);
+
+  &:hover {
+    text-shadow: 0 0 5px var(--color-success);
+  }
+}
+
+.quiz-link-copy--copied {
+  color: var(--color-success);
+}
+
 .link-open-test {
-  margin: 0.2rem;
+  display: inline-block;
+  margin:  0 0.5em 0.5em;
   padding: 0;
-  font-size: 0.8rem;
+  font-size: 1em;
   font-weight: 500;
   text-decoration: none;
   color: var(--color-quaternary);

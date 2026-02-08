@@ -49,6 +49,44 @@ export interface IStatistics {
   answers: IAnswer[];
 }
 
+interface IFirestoreDataOld {
+  tests: {
+    [testId: string]: {
+      statistics: {
+        [statId: string]: string;  //IStatistics
+      }
+      test: string;  //Quiz
+    }
+  }
+  users: {
+    [userId: string]: string;
+  }
+}
+
+interface IFirestoreData {
+  tests: {
+    [testId: string]: {
+      statistics: {
+        [statId: string]: string;  //IStatistics
+      }[]
+      test: {
+        title: string;
+        createdBy: string;
+        createdAt: number;
+        modifiedAt: number;
+        category: string;
+        lang: string;
+        access: "public" | "private";
+        questions: string;  //Question[]
+      }[]
+    }
+  }[]
+  users: {
+    [userId: string]: { [testId: string]: true }[]
+  }[]
+}
+
+
 // export interface IQuizStorage {
 //   testId: string;
 //   title: string;

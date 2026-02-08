@@ -10,6 +10,7 @@ import "./PageMyQuizzes.css";
 import { Loader } from "../../components/Loader/Loader";
 import type { Quiz } from "../../types/Quiz";
 import { QuizCard } from "../../components/TestsList/QuizCard";
+import { Statistics } from "../../components/Statistics/Statistics";
 
 export const PageMyQuizzes: React.FC = () => {
   const user = useUser();
@@ -62,6 +63,7 @@ export const PageMyQuizzes: React.FC = () => {
                     openStatistic={openStatistic}
                     dateFormatter={formatter}
                     userUID={user?.uid}
+                    isShowStatistics={!!quizIdStatistics && quizIdStatistics === quiz.testId}
                   />)
                 )}
               </>
