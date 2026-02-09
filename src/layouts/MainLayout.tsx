@@ -4,6 +4,7 @@ import { Footer } from "../components/Footer/Footer";
 import { useIsAuthLoading } from "../store/useUserStore";
 import { Loader } from "../components/Loader/Loader";
 import React from "react";
+import { ModalConfirm } from "../components/ModalConfirm/ModalConfirm";
 
 export const MainLayout = () => {
   const isAuthLoading = useIsAuthLoading();

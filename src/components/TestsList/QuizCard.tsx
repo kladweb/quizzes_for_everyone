@@ -1,7 +1,7 @@
 import React, { useState, memo } from "react";
 import { Quiz } from "../../types/Quiz";
 import { deleteUserQuiz } from "../../store/useQuizzesStore";
-import { handleCopy } from "../../utils/quizUtils";
+import { handleCopy, handlerDeleteQuiz } from "../../utils/quizUtils";
 import { Statistics } from "../Statistics/Statistics";
 import "./quizCard.css"
 
@@ -11,10 +11,11 @@ interface ITestCardProps {
   openStatistic?: (testId: string) => void;
   userUID?: string;
   isShowStatistics?: boolean;
+  handlerDeleteQuiz: (testId: string, userUID: string) => void;
 }
 
 export const QuizCard: React.FC<ITestCardProps> = memo(
-  ({quiz, openStatistic, dateFormatter, userUID, isShowStatistics}) => {
+  ({quiz, openStatistic, dateFormatter, userUID, isShowStatistics, handlerDeleteQuiz}) => {
     const currentLink = `${window.location.origin}/quizzes/${quiz.testId}`;
     const [copied, setCopied] = useState(false);
 
@@ -40,32 +41,6 @@ export const QuizCard: React.FC<ITestCardProps> = memo(
         </div>
         <div>
         </div>
-        {/*<div className='quiz-control-block'>*/}
-        {/*<table>*/}
-        {/*  <tbody>*/}
-        {/*    <tr>*/}
-        {/*      <td>Пройден:</td>*/}
-        {/*      <td>{quiz.category}</td>*/}
-        {/*    </tr>*/}
-        {/*    <tr>*/}
-        {/*      <td>Ваш результат:</td>*/}
-        {/*      <td>{dateFormatter.format(quiz.createdAt)}</td>*/}
-        {/*    </tr>*/}
-        {/*  </tbody>*/}
-        {/*</table>*/}
-        {/*{openStatistic &&*/}
-        {/*  <button className='button-test' onClick={() => openStatistic(quiz.testId)}>Статистика</button>*/}
-        {/*}*/}
-        {/*{*/}
-        {/*  userUID &&*/}
-        {/*  <>*/}
-        {/*    <button className='button-test' onClick={() => {*/}
-        {/*    }}>Редактировать*/}
-        {/*    </button>*/}
-        {/*    <button className='button-test' onClick={() => deleteUserQuiz(quiz.testId, userUID)}>Удалить</button>*/}
-        {/*  </>*/}
-        {/*}*/}
-        {/*</div>*/}
         {
           openStatistic &&
           <div className='test-buttons-block'>
@@ -75,7 +50,11 @@ export const QuizCard: React.FC<ITestCardProps> = memo(
             </button>
             {
               userUID &&
-              <button className='button-test' onClick={() => deleteUserQuiz(quiz.testId, userUID)}>Удалить</button>
+              // <button className='button-test' onClick={() => deleteUserQuiz(quiz.testId, userUID)}>Удалить</button>
+              <button className='button-test'
+                      onClick={() => handlerDeleteQuiz(quiz.testId, userUID)}>
+                Удалить
+              </button>
             }
           </div>
         }

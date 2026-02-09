@@ -7,3 +7,9 @@ export const handleCopy = async (currentLink: string, setCopied: (copied: boolea
     console.error('Failed to copy:', err);
   }
 };
+
+export const handlerDeleteQuiz = (
+  testId: string,
+  userUID: string,
+  setIsModalConfirmOpen: (isModalConfirmOpen: boolean) => void) => {
+}

@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { QuizLoader } from "../../components/QuizLoader/QuizLoader";
-import { LinkQuiz } from "../../components/LinkQuiz/LinkQuiz";
-import { TestList } from "../../components/TestList/TestList";
 import { useUser } from "../../store/useUserStore";
-import { loadUserQuizzes, useAllQuizzes, useIsLoading, useIsMyLoaded, useMyQuizzes } from "../../store/useQuizzesStore";
+import { loadUserQuizzes, useIsLoading, useIsMyLoaded, useMyQuizzes } from "../../store/useQuizzesStore";
 import { useClearCurrentQuiz } from "../../store/useCurrentCreatingQuiz";
-import "./PageMyQuizzes.css";
 import { Loader } from "../../components/Loader/Loader";
 import type { Quiz } from "../../types/Quiz";
 import { QuizCard } from "../../components/TestsList/QuizCard";
-import { Statistics } from "../../components/Statistics/Statistics";
+import { ModalConfirm } from "../../components/ModalConfirm/ModalConfirm";
+import "./PageMyQuizzes.css";
 
 export const PageMyQuizzes: React.FC = () => {
   const user = useUser();
@@ -21,6 +18,7 @@ export const PageMyQuizzes: React.FC = () => {
   const locale = navigator.languages?.[0] || navigator.language;
   const formatter = new Intl.DateTimeFormat(locale);
   const [quizIdStatistics, setQuizIdStatistics] = useState<string | null>(null);
+  const [isModalConfirmOpen, setIsModalConfirmOpen] = useState<boolean>(false);
 
   const createQuiz = () => {
     useClearCurrentQuiz();
@@ -33,6 +31,11 @@ export const PageMyQuizzes: React.FC = () => {
     } else {
       setQuizIdStatistics(null);
     }
+  }
+
+  const handlerDeleteQuiz = (testId: string, userUID: string) => {
+    setIsModalConfirmOpen(true);
+
   }
 
   useEffect(
@@ -64,12 +67,18 @@ export const PageMyQuizzes: React.FC = () => {
                     dateFormatter={formatter}
                     userUID={user?.uid}
                     isShowStatistics={!!quizIdStatistics && quizIdStatistics === quiz.testId}
+                    handlerDeleteQuiz={handlerDeleteQuiz}
                   />)
                 )}
               </>
           }
         </div>
       </div>
+      <ModalConfirm
+        isModalConfirmOpen={isModalConfirmOpen}
+        // modalQuestion={`Вы действительно хотите удалить тест<br/>${quiz.id}?`}
+        setIsModalConfirmOpen={setIsModalConfirmOpen}
+      />
     </>
   );
 };
