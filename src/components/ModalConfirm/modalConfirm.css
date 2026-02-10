@@ -15,9 +15,9 @@
 
 .modal-content {
   position: fixed;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
+  /*display: flex;*/
+  /*justify-content: space-between;*/
+  /*flex-direction: column;*/
   width: 42rem;
   /*height: 20rem;*/
   background-color: var(--color-bg-card);
@@ -26,18 +26,18 @@
   transform: translate(-50%, -50%);
   text-align: center;
   z-index: 5;
-  border-radius: 2rem;
+  border-radius: 0.5em;
   border: 2px solid var(--color-err-shadow);
   box-shadow: 1px 1px 20px var(--color-err-shadow);
 
   h2 {
-    font-size: 1.2em;
+    font-size: 1.1em;
+    font-weight: 500;
     color: var(--color-tertiary);
+    white-space: pre-line;
   }
 }
 
 .btn-modal {
-  display: block;
-  margin: 0 auto;
-  width: fit-content;
+  margin: 0 1em 1em;
 }

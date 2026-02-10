@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../store/useUserStore";
-import { loadUserQuizzes, useIsLoading, useIsMyLoaded, useMyQuizzes } from "../../store/useQuizzesStore";
+import {
+  deleteUserQuiz,
+  loadUserQuizzes,
+  useIsLoading,
+  useIsMyLoaded,
+  useMyQuizzes
+} from "../../store/useQuizzesStore";
 import { useClearCurrentQuiz } from "../../store/useCurrentCreatingQuiz";
 import { Loader } from "../../components/Loader/Loader";
 import type { Quiz } from "../../types/Quiz";
@@ -19,6 +25,7 @@ export const PageMyQuizzes: React.FC = () => {
   const formatter = new Intl.DateTimeFormat(locale);
   const [quizIdStatistics, setQuizIdStatistics] = useState<string | null>(null);
   const [isModalConfirmOpen, setIsModalConfirmOpen] = useState<boolean>(false);
+  const [quizToDelete, setQuizToDelete] = useState<Quiz | null>(null);
 
   const createQuiz = () => {
     useClearCurrentQuiz();
@@ -33,9 +40,19 @@ export const PageMyQuizzes: React.FC = () => {
     }
   }
 
-  const handlerDeleteQuiz = (testId: string, userUID: string) => {
+  const handlerDeleteQuiz = (quiz: Quiz) => {
+    setQuizToDelete(quiz);
     setIsModalConfirmOpen(true);
+  }
 
+  const handlerConfirmDelete = async (testId: string, toDeleteQuiz: boolean) => {
+    if (!user || !testId) {
+      return;
+    }
+    if (toDeleteQuiz) {
+      await deleteUserQuiz(testId, user.uid);
+    }
+    setIsModalConfirmOpen(false);
   }
 
   useEffect(
@@ -74,11 +91,15 @@ export const PageMyQuizzes: React.FC = () => {
           }
         </div>
       </div>
-      <ModalConfirm
-        isModalConfirmOpen={isModalConfirmOpen}
-        // modalQuestion={`Вы действительно хотите удалить тест<br/>${quiz.id}?`}
-        setIsModalConfirmOpen={setIsModalConfirmOpen}
-      />
+      {
+        quizToDelete &&
+        <ModalConfirm
+          isModalConfirmOpen={isModalConfirmOpen}
+          quizToDelete={quizToDelete}
+          modalQuestion={`Вы действительно хотите удалить тест\n"${quizToDelete.title}"\nбез возможности восстановления?`}
+          handlerConfirmDelete={handlerConfirmDelete}
+        />
+      }
     </>
   );
 };

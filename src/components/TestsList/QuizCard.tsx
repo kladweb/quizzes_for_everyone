@@ -11,7 +11,7 @@ interface ITestCardProps {
   openStatistic?: (testId: string) => void;
   userUID?: string;
   isShowStatistics?: boolean;
-  handlerDeleteQuiz: (testId: string, userUID: string) => void;
+  handlerDeleteQuiz?: (quiz: Quiz) => void;
 }
 
 export const QuizCard: React.FC<ITestCardProps> = memo(
@@ -49,10 +49,10 @@ export const QuizCard: React.FC<ITestCardProps> = memo(
             }}>Редактировать
             </button>
             {
-              userUID &&
+              (userUID && handlerDeleteQuiz) &&
               // <button className='button-test' onClick={() => deleteUserQuiz(quiz.testId, userUID)}>Удалить</button>
               <button className='button-test'
-                      onClick={() => handlerDeleteQuiz(quiz.testId, userUID)}>
+                      onClick={() => handlerDeleteQuiz(quiz)}>
                 Удалить
               </button>
             }
