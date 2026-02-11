@@ -18,8 +18,11 @@ export const ModalConfirm: React.FC<IModalConfirmProps> = (
   }) => {
 
   return (
-    <div className={`modal-confirm ${isModalConfirmOpen ? 'is-active' : ''}`}>
-      <div className="modal-content">
+    <div
+      className={`modal-confirm ${isModalConfirmOpen ? 'is-active' : ''}`}
+      onClick={() => handlerConfirmDelete(quizToDelete.testId, false)}
+    >
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <h2>{modalQuestion}</h2>
         <button className="btn btn-modal" onClick={() => handlerConfirmDelete(quizToDelete.testId, false)}>НЕТ</button>
         <button className="btn btn-modal" onClick={() => handlerConfirmDelete(quizToDelete.testId, true)}>ДА</button>
