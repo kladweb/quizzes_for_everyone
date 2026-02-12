@@ -36,7 +36,9 @@ const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
     try {
       set(() => ({isLoading: true}));
       const quizzes = await QuizStorageManager.fetchAllQuizzes();
-      set(() => ({allQuizzes: quizzes}));
+      // console.log(quizzes);
+      const quizzesPublic = quizzes.filter(quiz => quiz.access !== "private");
+      set(() => ({allQuizzes: quizzesPublic}));
       set(() => ({isAllLoaded: true}));
       set(() => ({errorLoading: ""}));
     } catch (error) {

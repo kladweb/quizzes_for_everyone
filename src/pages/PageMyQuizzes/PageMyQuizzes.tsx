@@ -45,12 +45,12 @@ export const PageMyQuizzes: React.FC = () => {
     setIsModalConfirmOpen(true);
   }
 
-  const handlerConfirmDelete = async (testId: string, toDeleteQuiz: boolean) => {
-    if (!user || !testId) {
+  const handlerConfirmDelete = async (toDelete: boolean) => {
+    if (!user || !quizToDelete?.testId) {
       return;
     }
-    if (toDeleteQuiz) {
-      await deleteUserQuiz(testId, user.uid);
+    if (toDelete) {
+      await deleteUserQuiz(quizToDelete?.testId, user.uid);
     }
     setIsModalConfirmOpen(false);
   }
@@ -95,7 +95,6 @@ export const PageMyQuizzes: React.FC = () => {
         quizToDelete &&
         <ModalConfirm
           isModalConfirmOpen={isModalConfirmOpen}
-          quizToDelete={quizToDelete}
           modalQuestion={`Вы действительно хотите удалить тест\n"${quizToDelete.title}"\nбез возможности восстановления?`}
           handlerConfirmDelete={handlerConfirmDelete}
         />

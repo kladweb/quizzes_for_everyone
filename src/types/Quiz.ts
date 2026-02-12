@@ -68,7 +68,7 @@ interface IFirestoreData {
     [testId: string]: {
       statistics: {
         [statId: string]: string;  //IStatistics
-      }[]
+      }[];
       test: {
         title: string;
         createdBy: string;
@@ -77,6 +77,8 @@ interface IFirestoreData {
         category: string;
         lang: string;
         access: "public" | "private";
+        likesCount: number;
+        executionCount: number;
         questions: string;  //Question[]
       }[]
     }
