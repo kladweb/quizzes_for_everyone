@@ -77,7 +77,7 @@ interface IFirestoreData {
         category: string;
         lang: string;
         access: "public" | "private";
-        likesCount: number;
+        likeUsers: string[];
         executionCount: number;
         questions: string;  //Question[]
       }[]
@@ -87,7 +87,6 @@ interface IFirestoreData {
     [userId: string]: { [testId: string]: true }[]
   }[]
 }
-
 
 // export interface IQuizStorage {
 //   testId: string;
