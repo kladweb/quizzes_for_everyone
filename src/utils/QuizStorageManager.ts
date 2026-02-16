@@ -1,6 +1,7 @@
 import { child, get, ref, set } from "firebase/database";
 import type { IStatistics, Quiz } from "../types/Quiz";
 import { database } from "../firebase/firebase";
+import { useNavigate } from "react-router-dom";
 
 interface QuizAnswer {
   questionId: string;

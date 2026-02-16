@@ -1,13 +1,27 @@
-import { Outlet } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 import { Header } from "../components/Header/Header";
 import { Footer } from "../components/Footer/Footer";
-import { useIsAuthLoading } from "../store/useUserStore";
+import { loginGoogle, useIsAuthLoading } from "../store/useUserStore";
 import { Loader } from "../components/Loader/Loader";
-import React from "react";
-import { ModalConfirm } from "../components/ModalConfirm/ModalConfirm";
+import { useErrorLoading } from "../store/useQuizzesStore";
 
 export const MainLayout = () => {
   const isAuthLoading = useIsAuthLoading();
+  const navigate = useNavigate();
+  const errorLoading = useErrorLoading();
+  useEffect(
+    () => {
+      console.log(errorLoading);
+      if (errorLoading !== "") {
+        navigate("/service");
+      } else {
+        if (location.pathname === "/service") {
+          navigate("/");
+        }
+      }
+    }, [errorLoading]
+  );
 
   return (
     <>

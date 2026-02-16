@@ -26,6 +26,7 @@ export const AppRoutes = () => {
 
         <Route path="/allquizzes" element={<PageAllQuizzes/>}/>
         <Route path="/quizzes/:testid" element={<PageQuiz/>}/>
+        <Route path="/service" element={<PageEmpty emptyReason="serviceWork"/>}/>
       </Route>
     </Routes>
   )
