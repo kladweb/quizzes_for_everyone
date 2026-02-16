@@ -1,9 +1,9 @@
-import React, {useState} from "react";
-import {type Quiz} from "../../types/Quiz";
-import {Statistics} from "../Statistics/Statistics";
-import {Loader} from "../Loader/Loader";
+import React, { useState } from "react";
+import { type Quiz } from "../../types/Quiz";
+import { Statistics } from "../Statistics/Statistics";
+import { Loader } from "../Loader/Loader";
+import { deleteUserQuiz, useIsLoading } from "../../store/useQuizzesStore";
 import "./testList.css";
-import {deleteUserQuiz, useIsLoading} from "../../store/useMyQuizzesStore";
 
 interface ITestListProps {
   testList: Quiz[],
@@ -51,7 +51,7 @@ export const TestList: React.FC<ITestListProps> = ({testList, userUID}) => {
 
   return (
     <div className='tests-container'>
-      <h3 className="test-list-name">МОИ ТЕСТЫ:</h3>
+      <h2 className="test-list-name">МОИ ТЕСТЫ:</h2>
       <div className='test-list-block'>
         {
           (loadingMyTests) ? <Loader/> :

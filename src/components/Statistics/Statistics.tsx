@@ -40,7 +40,7 @@ export const Statistics: React.FC<{ testId: string }> = ({testId}) => {
   }, []);
 
   return (
-    <>
+    <div className="statistics-block">
       {
         (statistics) ?
           <>
@@ -60,6 +60,6 @@ export const Statistics: React.FC<{ testId: string }> = ({testId}) => {
             <p>Информация отсутствует. <span>Тест ещё никто не проходил.</span></p>
           </div>
       }
-    </>
+    </div>
   )
 }

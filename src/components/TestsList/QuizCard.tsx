@@ -1,0 +1,83 @@
+import React, { useState, memo } from "react";
+import { Quiz } from "../../types/Quiz";
+import { deleteUserQuiz } from "../../store/useQuizzesStore";
+import { handleCopy, handlerDeleteQuiz } from "../../utils/quizUtils";
+import { Statistics } from "../Statistics/Statistics";
+import "./quizCard.css"
+
+interface ITestCardProps {
+  quiz: Quiz;
+  dateFormatter: Intl.DateTimeFormat;
+  openStatistic?: (testId: string) => void;
+  userUID?: string;
+  isShowStatistics?: boolean;
+  handlerDeleteQuiz?: (quiz: Quiz) => void;
+}
+
+export const QuizCard: React.FC<ITestCardProps> = memo(
+  ({quiz, openStatistic, dateFormatter, userUID, isShowStatistics, handlerDeleteQuiz}) => {
+    const currentLink = `${window.location.origin}/quizzes/${quiz.testId}`;
+    const [copied, setCopied] = useState(false);
+
+    return (
+      <div className='test-item' key={quiz.testId}>
+        <div className='test-content'>
+          <h3 className='test-name'>{quiz.title}</h3>
+        </div>
+        <div className="quiz-container-info">
+          <div className="info-item">Категория: <span>{quiz.category}</span></div>
+          <div className="info-item">Язык вопросов: <span>{quiz.lang}</span></div>
+          <div className="quiz-feedback-info" title="Скольким людям тест понравился">
+            <div className="button-like" role="button">
+              <img className="img-like" src="/images/Like-quiz.png" alt="like"/>
+              <span>15</span>
+            </div>
+            <div className="button-like" title="Сколько раз тест пройден">
+              <img className="img-like" src="/images/Arrow-quiz.png" alt="like"/>
+              <span>15</span>
+            </div>
+          </div>
+          <div className="info-item">Создан: <span>{dateFormatter.format(quiz.createdAt)}</span></div>
+        </div>
+        <div>
+        </div>
+        {
+          openStatistic &&
+          <div className='test-buttons-block'>
+            <button className='button-test' onClick={() => openStatistic(quiz.testId)}>Статистика</button>
+            <button className='button-test' onClick={() => {
+            }}>Редактировать
+            </button>
+            {
+              (userUID && handlerDeleteQuiz) &&
+              // <button className='button-test' onClick={() => deleteUserQuiz(quiz.testId, userUID)}>Удалить</button>
+              <button className='button-test'
+                      onClick={() => handlerDeleteQuiz(quiz)}>
+                Удалить
+              </button>
+            }
+          </div>
+        }
+        <div className='test-buttons-block'>
+          <button
+            className={`btn quiz-link-copy ${copied ? " quiz-link-copy--copied" : ""}`}
+            onClick={() => handleCopy(currentLink, setCopied)}
+          >
+            {copied ? 'Скопировано!' : 'Копировать ссылку'}
+          </button>
+          <a className="link-open-test" href={`/quizzes/${quiz.testId}`} target="_blank">
+            <span>Открыть</span>
+          </a>
+        </div>
+        {
+          isShowStatistics && <Statistics testId={quiz.testId}/>
+        }
+      </div>
+    )
+  }, (oldProps: ITestCardProps, nextProps: ITestCardProps) => {
+    return (
+      oldProps.quiz === nextProps.quiz &&
+      oldProps.userUID === nextProps.userUID &&
+      oldProps.isShowStatistics === nextProps.isShowStatistics
+    )
+  });

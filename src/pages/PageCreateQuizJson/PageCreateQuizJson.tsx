@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
-import {QuizLoader} from "../../components/QuizLoader/QuizLoader";
-import {QuizLoaderExtraInfo} from "../../components/QuizLoaderExtraInfo/QuizLoaderExtraInfo";
-import {Loader} from "../../components/Loader/Loader";
-import {LinkQuiz} from "../../components/LinkQuiz/LinkQuiz";
-import {useQuizComplete, useQuizDraft} from "../../store/useCurrentCreatingQuiz";
-import {useUser} from "../../store/useUserStore";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { QuizLoader } from "../../components/QuizLoader/QuizLoader";
+import { QuizLoaderExtraInfo } from "../../components/QuizLoaderExtraInfo/QuizLoaderExtraInfo";
+import { Loader } from "../../components/Loader/Loader";
+import { LinkQuiz } from "../../components/LinkQuiz/LinkQuiz";
+import { useQuizComplete, useQuizDraft } from "../../store/useCurrentCreatingQuiz";
+import { useUser } from "../../store/useUserStore";
 import "./pageCreateQuizJson.css";
 
 export const PageCreateQuizJson = () => {
@@ -16,11 +16,9 @@ export const PageCreateQuizJson = () => {
   const [currentTestId, setCurrentTestId] = useState<string | null>(null);
   const [isCreatingNewTest, setIsCreatingNewTest] = useState(false);
 
-  // useEffect(() => {
-  //   if (!user) {
-  //     navigate("/");
-  //   }
-  // }, [user?.uid])
+  useEffect(() => {
+    navigate("/service");
+  }, [])
 
   return (
     <div className='tests-container'>

@@ -1,13 +1,14 @@
 import React from "react";
-import {Route, Routes} from "react-router-dom";
-import {PageMyQuizzes} from "../pages/PageMyQuizzes/PageMyQuizzes";
-import {PageQuiz} from "../pages/PageQuiz/PageQuiz";
-import {PageMain} from "../pages/PageMain/PageMain";
-import {PageCreateQuiz} from "../pages/PageCreateQuiz/PageCreateQuiz";
-import {PageEmpty} from "../pages/PageEmpty/PageEmpty";
-import {PageCreateQuizJson} from "../pages/PageCreateQuizJson/PageCreateQuizJson";
-import {MainLayout} from "../layouts/MainLayout";
-import {ProtectedRoute} from "./ProtectedRoute";
+import { Route, Routes } from "react-router-dom";
+import { MainLayout } from "../layouts/MainLayout";
+import { ProtectedRoute } from "./ProtectedRoute";
+import { PageMyQuizzes } from "../pages/PageMyQuizzes/PageMyQuizzes";
+import { PageQuiz } from "../pages/PageQuiz/PageQuiz";
+import { PageMain } from "../pages/PageMain/PageMain";
+import { PageCreateQuiz } from "../pages/PageCreateQuiz/PageCreateQuiz";
+import { PageEmpty } from "../pages/PageEmpty/PageEmpty";
+import { PageCreateQuizJson } from "../pages/PageCreateQuizJson/PageCreateQuizJson";
+import { PageAllQuizzes } from "../pages/PageAllQuizzes/PageAllQuizzes";
 
 export const AppRoutes = () => {
   return (
@@ -23,8 +24,9 @@ export const AppRoutes = () => {
           <Route path="/myquizzes" element={<PageMyQuizzes/>}/>
         </Route>
 
-        <Route path="/allquizzes" element={<PageEmpty emptyReason="pageDevelopment"/>}/>
+        <Route path="/allquizzes" element={<PageAllQuizzes/>}/>
         <Route path="/quizzes/:testid" element={<PageQuiz/>}/>
+        <Route path="/service" element={<PageEmpty emptyReason="serviceWork"/>}/>
       </Route>
     </Routes>
   )

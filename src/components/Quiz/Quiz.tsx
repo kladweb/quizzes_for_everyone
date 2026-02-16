@@ -1,8 +1,10 @@
-import React, {useEffect, useState} from "react";
-import type {IStatistics, Question, Quiz} from "../../types/Quiz";
-import {QuestionComponent} from "../Question/Question";
-import {QuizStorageManager} from "../../utils/QuizStorageManager";
-import {QuizResultView} from "../QuizResultView/QuizResultView";
+import React, { useEffect, useState } from "react";
+import { nanoid } from "nanoid";
+import type { IStatistics, Question, Quiz } from "../../types/Quiz";
+import { QuestionComponent } from "../Question/Question";
+import { QuizStorageManager } from "../../utils/QuizStorageManager";
+import { QuizResultView } from "../QuizResultView/QuizResultView";
+import { useUser } from "../../store/useUserStore";
 import "./quiz.css";
 
 interface IQuizProps {
@@ -12,6 +14,8 @@ interface IQuizProps {
 }
 
 export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatistic}) => {
+  const user = useUser();
+  const statId = nanoid(15);
   const [currentStatistics, setCurrentStatistics] = useState<IStatistics | null>(null);
   const [shuffledQuestions] = useState<Question[]>(() => {
     // First, shuffle options within each question
@@ -80,8 +84,11 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
     const scorePercentage = Math.round((totalScore / maxScore) * 100);
     const correctCount = shuffledQuestions.filter((_, index) => isQuestionCorrect(index)).length;
     const incorrectCount = shuffledQuestions.length - correctCount;
+
     const statistics: IStatistics = {
       testId: quiz.testId,
+      statId: statId,
+      userUid: user ? user.uid : null,
       title: quiz.title,
       userName: userName.trim(),
       startedAt: startTime,
@@ -119,18 +126,22 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
 
   useEffect(() => {
     const startStatistics: IStatistics = {
-      testId: quiz.testId,
-      title: quiz.title,
-      userName: userName.trim(),
-      startedAt: startTime,
-      finishedAt: 0,
-      incorrectCount: 0,
-      score: 0,
-      totalScore: 0,
-      maxScore: 0,
-      correctCount: 0,
-      answers: [],
-    };
+        testId: quiz.testId,
+        statId: statId,
+        userUid: null,
+        title:
+        quiz.title,
+        userName: userName.trim(),
+        startedAt: startTime,
+        finishedAt: 0,
+        incorrectCount: 0,
+        score: 0,
+        totalScore: 0,
+        maxScore: 0,
+        correctCount: 0,
+        answers: [],
+      }
+    ;
     // console.log("statistics 02: ", startStatistics);
     QuizStorageManager.saveRecentStat(startStatistics);
 

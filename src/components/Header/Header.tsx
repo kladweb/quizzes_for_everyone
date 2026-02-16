@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { NavLink, useMatch } from "react-router-dom";
 import ThemeSwitch from "../ThemeSwitch/ThemeSwitch";
-import { initUser, loginGoogle, logoutGoogle, useIsAuthLoading, useUser } from "../../store/useUserStore";
-import { loadUserQuizzes } from "../../store/useMyQuizzesStore";
+import { loginGoogle, logoutGoogle, useIsAuthLoading, useUser } from "../../store/useUserStore";
 import "./header.css"
 
 export const Header: React.FC = () => {
@@ -10,16 +9,6 @@ export const Header: React.FC = () => {
   const user = useUser();
   const isAuthLoading = useIsAuthLoading();
 
-  useEffect(
-    () => {
-      // console.log("INIT...");
-      initUser();
-      if (user) {
-        loadUserQuizzes(user.uid);
-      }
-    }, [user?.uid]);
-
-  console.log(isAuthLoading);
   return (
     <header className="header-container">
       <NavLink className='link-logo' to={'/'}>

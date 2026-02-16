@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { QUIZ_CATEGORIES, QUIZ_LANGUAGES } from "./quizCategories";
 import { useClearCurrentQuiz, useQuizDraft, useSetQuizComplete } from "../../store/useCurrentCreatingQuiz";
-import { saveUserQuiz } from "../../store/useMyQuizzesStore";
+import { saveUserQuiz } from "../../store/useQuizzesStore";
 import "./quizLoaderExtraInfo.css"
 
 interface IQuizLoaderExtraInfo {
