@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { Header } from "../components/Header/Header";
 import { Footer } from "../components/Footer/Footer";
-import { loginGoogle, useIsAuthLoading } from "../store/useUserStore";
+import { useIsAuthLoading } from "../store/useUserStore";
 import { Loader } from "../components/Loader/Loader";
 import { useErrorLoading } from "../store/useQuizzesStore";
 
@@ -10,6 +10,7 @@ export const MainLayout = () => {
   const isAuthLoading = useIsAuthLoading();
   const navigate = useNavigate();
   const errorLoading = useErrorLoading();
+
   useEffect(
     () => {
       console.log(errorLoading);
@@ -20,8 +21,7 @@ export const MainLayout = () => {
           navigate("/");
         }
       }
-    }, [errorLoading]
-  );
+    }, [errorLoading]);
 
   return (
     <>

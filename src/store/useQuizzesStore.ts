@@ -35,12 +35,12 @@ const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
   loadAllQuizzes: async () => {
     try {
       set(() => ({isLoading: true}));
+      set(() => ({errorLoading: ""}));
       const quizzes = await QuizStorageManager.fetchAllQuizzes();
       // console.log(quizzes);
       const quizzesPublic = quizzes.filter(quiz => quiz.access !== "private");
       set(() => ({allQuizzes: quizzesPublic}));
       set(() => ({isAllLoaded: true}));
-      set(() => ({errorLoading: ""}));
     } catch (error) {
       // set(() => ({myQuizzes: []}));
       console.log(error);
@@ -52,10 +52,10 @@ const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
   loadUserQuizzes: async (userUid) => {
     try {
       set(() => ({isLoading: true}));
+      set(() => ({errorLoading: ""}));
       const quizzes = await QuizStorageManager.fetchUserQuizzes(userUid);
       set(() => ({myQuizzes: quizzes}));
       set(() => ({isMyLoaded: true}));
-      set(() => ({errorLoading: ""}));
     } catch (error) {
       // set(() => ({myQuizzes: []}));
       console.log(error);
@@ -92,7 +92,7 @@ const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
     set(() => ({myQuizzes: testListNext}));
     try {
       await QuizStorageManager.saveQuizToStorage(quiz, userUid, IdsList);
-      set(() => ({errorLoading: ""}));
+      // set(() => ({errorLoading: ""}));
     } catch (error) {
       set(() => ({myQuizzes: testListPrev}));
       set(() => ({errorLoading: "Ошибка сохранения теста!"}));
@@ -111,7 +111,7 @@ const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
     set(() => ({myQuizzes: testListNext}));
     try {
       await QuizStorageManager.removeUserQuiz(testId, userUid, IdsList);
-      set(() => ({errorLoading: ""}));
+      // set(() => ({errorLoading: ""}));
     } catch (error) {
       set(() => ({myQuizzes: testListPrev}));
       set(() => ({errorLoading: "Ошибка удаления!"}));
