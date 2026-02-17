@@ -10,7 +10,7 @@ import {
 } from "../../store/useQuizzesStore";
 import { useClearCurrentQuiz } from "../../store/useCurrentCreatingQuiz";
 import { Loader } from "../../components/Loader/Loader";
-import type { Quiz } from "../../types/Quiz";
+import { IFirestoreQuiz } from "../../types/Quiz";
 import { QuizCard } from "../../components/TestsList/QuizCard";
 import { ModalConfirm } from "../../components/ModalConfirm/ModalConfirm";
 import "./PageMyQuizzes.css";
@@ -25,7 +25,7 @@ export const PageMyQuizzes: React.FC = () => {
   const formatter = new Intl.DateTimeFormat(locale);
   const [quizIdStatistics, setQuizIdStatistics] = useState<string | null>(null);
   const [isModalConfirmOpen, setIsModalConfirmOpen] = useState<boolean>(false);
-  const [quizToDelete, setQuizToDelete] = useState<Quiz | null>(null);
+  const [quizToDelete, setQuizToDelete] = useState<IFirestoreQuiz | null>(null);
 
   const createQuiz = () => {
     useClearCurrentQuiz();
@@ -40,17 +40,17 @@ export const PageMyQuizzes: React.FC = () => {
     }
   }
 
-  const handlerDeleteQuiz = (quiz: Quiz) => {
+  const handlerDeleteQuiz = (quiz: IFirestoreQuiz) => {
     setQuizToDelete(quiz);
     setIsModalConfirmOpen(true);
   }
 
   const handlerConfirmDelete = async (toDelete: boolean) => {
-    if (!user || !quizToDelete?.testId) {
+    if (!user || !quizToDelete?.test.testId) {
       return;
     }
     if (toDelete) {
-      await deleteUserQuiz(quizToDelete?.testId, user.uid);
+      await deleteUserQuiz(quizToDelete?.test.testId, user.uid);
     }
     setIsModalConfirmOpen(false);
   }
@@ -76,14 +76,14 @@ export const PageMyQuizzes: React.FC = () => {
           {
             (isLoading) ? <Loader/> :
               <>
-                {testsList.map((quiz: Quiz) => (
+                {testsList.map((quiz: IFirestoreQuiz) => (
                   <QuizCard
-                    key={quiz.testId}
-                    quiz={quiz}
+                    key={quiz.test.testId}
+                    quiz={quiz.test}
                     openStatistic={openStatistic}
                     dateFormatter={formatter}
                     userUID={user?.uid}
-                    isShowStatistics={!!quizIdStatistics && quizIdStatistics === quiz.testId}
+                    isShowStatistics={!!quizIdStatistics && quizIdStatistics === quiz.test.testId}
                     handlerDeleteQuiz={handlerDeleteQuiz}
                   />)
                 )}
@@ -95,7 +95,7 @@ export const PageMyQuizzes: React.FC = () => {
         quizToDelete &&
         <ModalConfirm
           isModalConfirmOpen={isModalConfirmOpen}
-          modalQuestion={`Вы действительно хотите удалить тест\n"${quizToDelete.title}"\nбез возможности восстановления?`}
+          modalQuestion={`Вы действительно хотите удалить тест\n"${quizToDelete.test.title}"\nбез возможности восстановления?`}
           handlerConfirmDelete={handlerConfirmDelete}
         />
       }
