@@ -1,5 +1,5 @@
 import { child, get, ref, set } from "firebase/database";
-import type { IStatistics, Quiz } from "../types/Quiz";
+import { IFirestoreQuiz, IStatistics, Quiz } from "../types/Quiz";
 import { database } from "../firebase/firebase";
 import { useNavigate } from "react-router-dom";
 
@@ -21,7 +21,7 @@ interface QuizAnswer {
 // }
 
 export const QuizStorageManager = {
-  async fetchAllQuizzes(): Promise<Quiz[]> {
+  async fetchAllQuizzes(): Promise<IFirestoreQuiz[]> {
     const dbRef = ref(database);
     try {
       const snapshot = await get(child(dbRef, `tests`))
@@ -29,20 +29,21 @@ export const QuizStorageManager = {
         throw new Error('No such quiz found!');
       }
       const quizzesAll = snapshot.val();
-      const quizzes: Quiz[] = Object.values(quizzesAll).map((quiz: any) => JSON.parse(quiz.test));
-      // const quizzes: any = Object.values(quizzesAll);
-      // console.log(quizzes);
-      // quizzes.forEach((quiz: any) => {
-      //   quiz.test = JSON.parse(quiz.test);
-      //   if (quiz.statistics) {
-      //     Object.keys(quiz.statistics).forEach(id => {
-      //       quiz.statistics[id] = JSON.parse(quiz.statistics[id]);
-      //     })
-      //   } else {
-      //     quiz.statistics = null;
-      //   }
-      // });
-      // console.log(quizzes);
+      console.log(quizzesAll);
+      const quizzes: IFirestoreQuiz[] = Object.values(quizzesAll)
+        .map((quiz: any) => {
+          quiz.test.questions = JSON.parse(quiz.test.questions);
+          if (quiz.statistics) {
+            Object.keys(quiz.statistics).forEach((item) => {
+              quiz.statistics[item] = JSON.parse(quiz.statistics[item]);
+            });
+          } else {
+            quiz.statistics = {}
+          }
+          return quiz;
+        });
+
+      console.log(quizzes);
       return quizzes;
     } catch (error) {
       console.error(error);
@@ -50,22 +51,34 @@ export const QuizStorageManager = {
     }
   },
 
-  async fetchUserQuizzes(userUid: string): Promise<Quiz[]> {
+  async fetchUserQuizzes(userUid: string): Promise<IFirestoreQuiz[]> {
     const dbRef = ref(database);
     try {
       const snapshot = await get(child(dbRef, `users/${userUid}`));
       if (!snapshot.exists()) {
         throw new Error('No such quiz found!');
       }
-      const quizIds: string[] = JSON.parse(snapshot.val());
+      const quizIdsObj = snapshot.val();
+      const quizIds: string[] = Object.keys(quizIdsObj);
       const quizzesRaw = await Promise.all(
-        quizIds.map(id =>
-          get(child(dbRef, `tests/${id}/test`)).then(s => s.val())
-        )
-      );
-      const quizzes: Quiz[] = quizzesRaw
-        .map(item => JSON.parse(item))
+        quizIds.map(id => get(child(dbRef, `tests/${id}`)).then(s => s.val())));
+      // const quizzes: Quiz[] = quizzesRaw
+      //   .map(item => JSON.parse(item))
+      //   .sort((a, b) => b.createdAt - a.createdAt);
+      const quizzes = Object.values(quizzesRaw)
+        .map((quiz: any) => {
+          quiz.test.questions = JSON.parse(quiz.test.questions);
+          if (quiz.statistics) {
+            Object.keys(quiz.statistics).forEach((item) => {
+              quiz.statistics[item] = JSON.parse(quiz.statistics[item]);
+            });
+          } else {
+            quiz.statistics = {}
+          }
+          return quiz;
+        })
         .sort((a, b) => b.createdAt - a.createdAt);
+      console.log(quizzes);
       return quizzes;
     } catch (error) {
       console.error(error);

@@ -11,19 +11,19 @@ export interface Question {
   explanation: string;
 }
 
-export interface Quiz {
-  testId: string;
-  createdBy: string;
-  title: string;
-  createdAt: number;
-  modifiedAt?: number;
-  category?: string;
-  categoryDraft?: string;
-  lang?: string;
-  access: "public" | "private";
-  description?: string;
-  questions: Question[];
-}
+// export interface Quiz {
+//   testId: string;
+//   createdBy: string;
+//   title: string;
+//   createdAt: number;
+//   modifiedAt?: number;
+//   category?: string;
+//   categoryDraft?: string;
+//   lang?: string;
+//   access: "public" | "private";
+//   description?: string;
+//   questions: Question[];
+// }
 
 interface IAnswer {
   questionId: string;
@@ -63,11 +63,30 @@ interface IFirestoreDataOld {
   }
 }
 
+export interface IFirestoreQuiz {
+  statistics: {
+    [statId: string]: IStatistics[]
+  }[],
+  test: {
+    title: string;
+    testId: string;
+    createdBy: string;
+    createdAt: number;
+    modifiedAt: number;
+    category: string;
+    lang: string;
+    access: "public" | "private";
+    likeUsers: string[];
+    executionCount: number;
+    questions: Question[]
+  }
+}
+
 interface IFirestoreData {
   tests: {
     [testId: string]: {
       statistics: {
-        [statId: string]: string;  //IStatistics
+        [statId: string]: IStatistics[]
       }[];
       test: {
         title: string;
@@ -79,7 +98,7 @@ interface IFirestoreData {
         access: "public" | "private";
         likeUsers: string[];
         executionCount: number;
-        questions: string;  //Question[]
+        questions: Question[]
       }[]
     }
   }[]
