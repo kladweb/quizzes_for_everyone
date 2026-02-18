@@ -11,19 +11,18 @@ export interface Question {
   explanation: string;
 }
 
-// export interface Quiz {
-//   testId: string;
-//   createdBy: string;
-//   title: string;
-//   createdAt: number;
-//   modifiedAt?: number;
-//   category?: string;
-//   categoryDraft?: string;
-//   lang?: string;
-//   access: "public" | "private";
-//   description?: string;
-//   questions: Question[];
-// }
+export interface IQuizMeta {
+  testId: string;
+  createdBy: string;
+  title: string;
+  createdAt: number;
+  modifiedAt?: number;
+  category?: string;
+  categoryDraft?: string;
+  lang?: string;
+  access: "public" | "private";
+  description?: string;
+}
 
 interface IAnswer {
   questionId: string;
@@ -49,62 +48,31 @@ export interface IStatistics {
   answers: IAnswer[];
 }
 
-interface IFirestoreDataOld {
-  tests: {
-    [testId: string]: {
-      statistics: {
-        [statId: string]: string;  //IStatistics
-      }
-      test: string;  //Quiz
-    }
-  }
-  users: {
-    [userId: string]: string;
-  }
-}
-
-export interface IFirestoreQuiz {
-  statistics: {
-    [statId: string]: IStatistics[]
-  }[],
-  test: {
-    title: string;
-    testId: string;
-    createdBy: string;
-    createdAt: number;
-    modifiedAt: number;
-    category: string;
-    lang: string;
-    access: "public" | "private";
-    likeUsers: string[];
-    executionCount: number;
-    questions: Question[]
-  }
-}
-
 interface IFirestoreData {
-  tests: {
+  quizzesMeta: {
     [testId: string]: {
-      statistics: {
-        [statId: string]: IStatistics[]
-      }[];
-      test: {
-        title: string;
-        createdBy: string;
-        createdAt: number;
-        modifiedAt: number;
-        category: string;
-        lang: string;
-        access: "public" | "private";
-        likeUsers: string[];
-        executionCount: number;
-        questions: Question[]
-      }[]
+      title: string;
+      createdBy: string;
+      createdAt: number;
+      modifiedAt: number;
+      category: string;
+      lang: string;
+      access: "public" | "private";
+      likeUsers: string[];
+      executionCount: number;
     }
-  }[]
+  },
+  questions: {
+    [testId: string]: string; //Question[]
+  },
+  statistics: {
+    [statId: string]: string //IStatistics;
+  },
   users: {
-    [userId: string]: { [testId: string]: true }[]
-  }[]
+    [userId: string]: {
+      [testId: string]: true;
+    }
+  }
 }
 
 // export interface IQuizStorage {

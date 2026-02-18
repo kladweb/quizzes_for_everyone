@@ -1,5 +1,5 @@
 import { child, get, ref, set } from "firebase/database";
-import { IFirestoreQuiz, IStatistics, Quiz } from "../types/Quiz";
+import { IQuizMeta, IStatistics } from "../types/Quiz";
 import { database } from "../firebase/firebase";
 import { useNavigate } from "react-router-dom";
 
@@ -21,37 +21,22 @@ interface QuizAnswer {
 // }
 
 export const QuizStorageManager = {
-  async fetchAllQuizzes(): Promise<IFirestoreQuiz[]> {
+  async fetchAllQuizzes(): Promise<IQuizMeta[]> {
     const dbRef = ref(database);
     try {
-      const snapshot = await get(child(dbRef, `tests`))
+      const snapshot = await get(child(dbRef, `quizzesMeta`));
       if (!snapshot.exists()) {
         throw new Error('No such quiz found!');
       }
-      const quizzesAll = snapshot.val();
-      console.log(quizzesAll);
-      const quizzes: IFirestoreQuiz[] = Object.values(quizzesAll)
-        .map((quiz: any) => {
-          quiz.test.questions = JSON.parse(quiz.test.questions);
-          if (quiz.statistics) {
-            Object.keys(quiz.statistics).forEach((item) => {
-              quiz.statistics[item] = JSON.parse(quiz.statistics[item]);
-            });
-          } else {
-            quiz.statistics = {}
-          }
-          return quiz;
-        });
-
-      console.log(quizzes);
-      return quizzes;
+      const quizzesMetaData = snapshot.val();
+      return Object.values(quizzesMetaData);
     } catch (error) {
       console.error(error);
       throw error;
     }
   },
 
-  async fetchUserQuizzes(userUid: string): Promise<IFirestoreQuiz[]> {
+  async fetchUserQuizzes(userUid: string): Promise<IQuizMeta[]> {
     const dbRef = ref(database);
     try {
       const snapshot = await get(child(dbRef, `users/${userUid}`));
