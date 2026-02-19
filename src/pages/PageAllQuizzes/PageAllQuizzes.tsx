@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { loadAllQuizzes, useAllQuizzes, useIsAllLoaded, useIsLoading } from "../../store/useQuizzesStore";
 import "./pageAllQuizzes.css";
 import { Loader } from "../../components/Loader/Loader";
-import type { IFirestoreQuiz } from "../../types/Quiz";
+import type { IQuizMeta } from "../../types/Quiz";
 import { QuizCard } from "../../components/TestsList/QuizCard";
 
 export const PageAllQuizzes = () => {
@@ -30,10 +30,10 @@ export const PageAllQuizzes = () => {
         {
           (isLoading) ? <Loader/> :
             <>
-              {testsList.map((quiz: IFirestoreQuiz) => (
+              {testsList.map((quiz: IQuizMeta) => (
                 <QuizCard
-                  key={quiz.test.testId}
-                  quiz={quiz.test}
+                  key={quiz.testId}
+                  quiz={quiz}
                   dateFormatter={formatter}
                 />)
               )}

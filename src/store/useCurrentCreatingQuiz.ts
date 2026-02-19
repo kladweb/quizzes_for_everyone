@@ -1,15 +1,15 @@
 import { create, type StateCreator } from "zustand";
 import { QuizStorageManager } from "../utils/QuizStorageManager";
-import type { Quiz } from "../types/Quiz";
+import type { IQuizMeta } from "../types/Quiz";
 
 interface IInitialState {
-  currentQuizDraft: Quiz | null,
-  currentQuizComplete: Quiz | null
+  currentQuizDraft: IQuizMeta | null,
+  currentQuizComplete: IQuizMeta | null
 }
 
 interface IActions {
-  setQuizDraft: (draft: Quiz) => void,
-  setQuizComplete: (draft: Quiz) => void,
+  setQuizDraft: (draft: IQuizMeta) => void,
+  setQuizComplete: (draft: IQuizMeta) => void,
   clearCurrentQuiz: () => void,
 }
 
@@ -42,6 +42,6 @@ const useCurrentQuizStore = create<IQuizzesState>()(currentQuizStore);
 export const useQuizDraft = () => useCurrentQuizStore((state) => state.currentQuizDraft);
 export const useQuizComplete = () => useCurrentQuizStore((state) => state.currentQuizComplete);
 
-export const useSetQuizDraft = (quiz: Quiz) => useCurrentQuizStore.getState().setQuizDraft(quiz);
-export const useSetQuizComplete = (quiz: Quiz) => useCurrentQuizStore.getState().setQuizComplete(quiz);
+export const useSetQuizDraft = (quiz: IQuizMeta) => useCurrentQuizStore.getState().setQuizDraft(quiz);
+export const useSetQuizComplete = (quiz: IQuizMeta) => useCurrentQuizStore.getState().setQuizComplete(quiz);
 export const useClearCurrentQuiz = () => useCurrentQuizStore.getState().clearCurrentQuiz();

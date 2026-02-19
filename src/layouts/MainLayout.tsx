@@ -13,7 +13,6 @@ export const MainLayout = () => {
 
   useEffect(
     () => {
-      console.log(errorLoading);
       if (errorLoading !== "") {
         navigate("/service");
       } else {

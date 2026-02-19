@@ -1,20 +1,21 @@
-import {useNavigate, useParams} from "react-router-dom";
-import React, {useEffect, useState} from "react";
-import {child, get, ref, set} from "firebase/database";
-import {QuizComponent} from "../../components/Quiz/Quiz";
-import {database} from "../../firebase/firebase";
-import type {IStatistics, Quiz} from "../../types/Quiz";
-import {QuizStorageManager} from "../../utils/QuizStorageManager";
-import {QuizResultView} from "../../components/QuizResultView/QuizResultView";
-import {Loader} from "../../components/Loader/Loader";
-import {PageEmpty} from "../PageEmpty/PageEmpty";
+import { useNavigate, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { child, get, ref, set } from "firebase/database";
+import { QuizComponent } from "../../components/Quiz/Quiz";
+import { database } from "../../firebase/firebase";
+import type { IStatistics, IQuizMeta, Question } from "../../types/Quiz";
+import { QuizStorageManager } from "../../utils/QuizStorageManager";
+import { QuizResultView } from "../../components/QuizResultView/QuizResultView";
+import { Loader } from "../../components/Loader/Loader";
+import { PageEmpty } from "../PageEmpty/PageEmpty";
 
 export const PageQuiz = () => {
   const navigate = useNavigate();
   const params = useParams();
   const testId = params.testid;
   // const [isLoaded, setIsLoaded] = useState(false);
-  const [quiz, setQuiz] = useState<Quiz | null>(null);
+  const [quiz, setQuiz] = useState<IQuizMeta | null>(null);
+  const [questions, setQuestions] = useState<Question[] | null>(null);
   const [savedResultStorage, setSavedResultStorage] = useState<IStatistics | null>(null);
   const [isPageEmpty, setIsPageEmpty] = useState(false);
 
@@ -40,31 +41,35 @@ export const PageQuiz = () => {
   }
 
   useEffect(() => {
-    if (testId) {
-      const existingStat = QuizStorageManager.getRecentStatTestId(testId);
-      if (existingStat && existingStat.finishedAt) {
-        setSavedResultStorage(existingStat);
-      }
-    }
-    if (quiz) {
+    if (!testId) {
       return;
     }
-    const dbRef = ref(database);
-    get(child(dbRef, `tests/${testId}/test`)).then((snapshot) => {
-      console.log("Загружаем данные");
-      if (snapshot.exists()) {
-        const dataString = snapshot.val();
-        let quiz = JSON.parse(dataString);
-        // console.log("DATA: ", quiz);
-        setQuiz(quiz);
-        // QuizStorageManager.saveRecentQuiz(recentQuiz);
-      } else {
-        console.log("No data available");
-        setIsPageEmpty(true)
-      }
-    }).catch((error) => {
-      console.error(error);
-    });
+    const existingStat = QuizStorageManager.getRecentStatTestId(testId);
+    if (existingStat && existingStat.finishedAt) {
+      setSavedResultStorage(existingStat);
+      // if (quiz) {
+      //   return;
+      // }
+    }
+    if (!quiz) {
+      QuizStorageManager.fetchCurrentQuiz(testId)
+        .then(quiz => {
+          setQuiz(quiz);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+
+    if (!questions) {
+      QuizStorageManager.fetchQuestions(testId)
+        .then(questions => {
+          setQuestions(questions);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
   }, []);
 
   return (
@@ -73,7 +78,8 @@ export const PageQuiz = () => {
         (savedResultStorage) ? <QuizResultView result={savedResultStorage} onReset={handleReset}/> :
           <>
             {
-              (quiz) ? <QuizComponent quiz={quiz} onReset={handleReset} saveStatistic={saveStatistic}/> :
+              (quiz && questions) ? <QuizComponent quiz={quiz} questions={questions} onReset={handleReset}
+                                                   saveStatistic={saveStatistic}/> :
                 <div className='loader-container'>
                   {
                     isPageEmpty ? <PageEmpty emptyReason="quizDeleted"/> : <Loader/>

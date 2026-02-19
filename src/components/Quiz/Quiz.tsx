@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { nanoid } from "nanoid";
-import type { IStatistics, Question, Quiz } from "../../types/Quiz";
+import type { IStatistics, Question, IQuizMeta } from "../../types/Quiz";
 import { QuestionComponent } from "../Question/Question";
 import { QuizStorageManager } from "../../utils/QuizStorageManager";
 import { QuizResultView } from "../QuizResultView/QuizResultView";
@@ -8,18 +8,19 @@ import { useUser } from "../../store/useUserStore";
 import "./quiz.css";
 
 interface IQuizProps {
-  quiz: Quiz;
+  quiz: IQuizMeta;
+  questions: Question[];
   onReset: () => void;
   saveStatistic: (statistics: IStatistics) => void;
 }
 
-export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatistic}) => {
+export const QuizComponent: React.FC<IQuizProps> = ({quiz, questions, onReset, saveStatistic}) => {
   const user = useUser();
   const statId = nanoid(15);
   const [currentStatistics, setCurrentStatistics] = useState<IStatistics | null>(null);
   const [shuffledQuestions] = useState<Question[]>(() => {
     // First, shuffle options within each question
-    const questionsWithShuffledOptions = quiz.questions.map(q => {
+    const questionsWithShuffledOptions = questions.map(q => {
       const shuffledOptions = [...q.options];
       // Fisher-Yates shuffle for options
       for (let i = shuffledOptions.length - 1; i > 0; i--) {
@@ -31,6 +32,7 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, onReset, saveStatisti
         options: shuffledOptions
       };
     });
+
 
     // Then shuffle the questions themselves
     const shuffledQuestions = [...questionsWithShuffledOptions];

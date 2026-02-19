@@ -22,6 +22,10 @@ export interface IQuizMeta {
   lang?: string;
   access: "public" | "private";
   description?: string;
+  executionCount: number;
+  likeUsers: {
+    [userId: string]: boolean;
+  }
 }
 
 interface IAnswer {

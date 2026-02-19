@@ -1,5 +1,5 @@
 import { child, get, ref, set } from "firebase/database";
-import { IQuizMeta, IStatistics } from "../types/Quiz";
+import { IQuizMeta, IStatistics, Question } from "../types/Quiz";
 import { database } from "../firebase/firebase";
 import { useNavigate } from "react-router-dom";
 
@@ -29,7 +29,9 @@ export const QuizStorageManager = {
         throw new Error('No such quiz found!');
       }
       const quizzesMetaData = snapshot.val();
-      return Object.values(quizzesMetaData);
+      const quizzesAll: IQuizMeta[] = Object.values(quizzesMetaData);
+      quizzesAll.sort((a, b) => b.createdAt - a.createdAt);
+      return quizzesAll;
     } catch (error) {
       console.error(error);
       throw error;
@@ -45,51 +47,63 @@ export const QuizStorageManager = {
       }
       const quizIdsObj = snapshot.val();
       const quizIds: string[] = Object.keys(quizIdsObj);
-      const quizzesRaw = await Promise.all(
-        quizIds.map(id => get(child(dbRef, `tests/${id}`)).then(s => s.val())));
-      // const quizzes: Quiz[] = quizzesRaw
-      //   .map(item => JSON.parse(item))
-      //   .sort((a, b) => b.createdAt - a.createdAt);
-      const quizzes = Object.values(quizzesRaw)
-        .map((quiz: any) => {
-          quiz.test.questions = JSON.parse(quiz.test.questions);
-          if (quiz.statistics) {
-            Object.keys(quiz.statistics).forEach((item) => {
-              quiz.statistics[item] = JSON.parse(quiz.statistics[item]);
-            });
-          } else {
-            quiz.statistics = {}
-          }
-          return quiz;
-        })
-        .sort((a, b) => b.createdAt - a.createdAt);
-      console.log(quizzes);
-      return quizzes;
+      const quizzesRaw: IQuizMeta[] = await Promise.all(
+        quizIds.map(id => get(child(dbRef, `quizzesMeta/${id}`)).then(s => s.val())));
+      quizzesRaw.sort((a, b) => b.createdAt - a.createdAt);
+      return quizzesRaw;
     } catch (error) {
       console.error(error);
       throw error;
     }
   },
 
-  async saveQuizToStorage(quiz: Quiz, userUid: string, IdsList: string[]): Promise<void> {
+  async fetchCurrentQuiz(quizId: string): Promise<IQuizMeta> {
+    const dbRef = ref(database);
     try {
-      const promiseTests = set(ref(database, `tests/${quiz.testId}/test`), JSON.stringify(quiz));
-      const promiseUserList = set(ref(database, `users/${userUid}`), JSON.stringify(IdsList));
-      await Promise.all([promiseTests, promiseUserList]);
+      const snapshot = await get(child(dbRef, `quizzesMeta/${quizId}`));
+      if (!snapshot.exists()) {
+        throw new Error('No such quiz found!');
+      }
+      return snapshot.val();
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  },
+
+  async fetchQuestions(quizId: string): Promise<Question[]> {
+    const dbRef = ref(database);
+    try {
+      const snapshot = await get(child(dbRef, `questions/${quizId}`));
+      if (!snapshot.exists()) {
+        throw new Error('No such quiz found!');
+      }
+      return JSON.parse(snapshot.val());
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  },
+
+  async saveQuizMetaToFirebase(quizMeta: IQuizMeta, userUid: string): Promise<void> {
+    try {
+      const promiseMeta = set(ref(database, `quizzesMeta/${quizMeta.testId}`), quizMeta);
+      const promiseUserList = set(ref(database, `users/${userUid}/${quizMeta.testId}`), true);
+      await Promise.all([promiseMeta, promiseUserList]);
     } catch (error) {
       console.error(error);
     }
   },
 
-  async removeUserQuiz(testId: string, userUid: string, IdsList: string[]): Promise<void> {
+  async removeUserQuiz(testId: string, userUid: string): Promise<void> {
     try {
-      const promiseTests = set(ref(database, `tests/${testId}`), null);
-      const promiseUserList = set(ref(database, `users/${userUid}`), JSON.stringify(IdsList));
-      await Promise.all([promiseTests, promiseUserList]);
+      const promiseMeta = set(ref(database, `quizzesMeta/${testId}`), null);
+      const promiseQuestions = set(ref(database, `quizzesMeta/${testId}`), null);
+      const promiseUserList = set(ref(database, `users/${userUid}/${testId}`), null);
+      await Promise.all([promiseMeta, promiseQuestions, promiseUserList]);
     } catch (error) {
       console.error(error);
     }
-
   },
 
   // Save quiz result

@@ -1,17 +1,17 @@
 import React, { useState, memo } from "react";
-import { Quiz } from "../../types/Quiz";
+import { IQuizMeta } from "../../types/Quiz";
 import { deleteUserQuiz } from "../../store/useQuizzesStore";
 import { handleCopy, handlerDeleteQuiz } from "../../utils/quizUtils";
 import { Statistics } from "../Statistics/Statistics";
 import "./quizCard.css"
 
 interface ITestCardProps {
-  quiz: Quiz;
+  quiz: IQuizMeta;
   dateFormatter: Intl.DateTimeFormat;
   openStatistic?: (testId: string) => void;
   userUID?: string;
   isShowStatistics?: boolean;
-  handlerDeleteQuiz?: (quiz: Quiz) => void;
+  handlerDeleteQuiz?: (quiz: IQuizMeta) => void;
 }
 
 export const QuizCard: React.FC<ITestCardProps> = memo(
@@ -30,11 +30,11 @@ export const QuizCard: React.FC<ITestCardProps> = memo(
           <div className="quiz-feedback-info" title="Скольким людям тест понравился">
             <div className="button-like" role="button">
               <img className="img-like" src="/images/Like-quiz.png" alt="like"/>
-              <span>15</span>
+              <span>{Object.keys(quiz.likeUsers).length}</span>
             </div>
             <div className="button-like" title="Сколько раз тест пройден">
               <img className="img-like" src="/images/Arrow-quiz.png" alt="like"/>
-              <span>15</span>
+              <span>{quiz.executionCount}</span>
             </div>
           </div>
           <div className="info-item">Создан: <span>{dateFormatter.format(quiz.createdAt)}</span></div>
