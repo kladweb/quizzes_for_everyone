@@ -85,11 +85,13 @@ export const QuizStorageManager = {
     }
   },
 
-  async saveQuizMetaToFirebase(quizMeta: IQuizMeta, userUid: string): Promise<void> {
+  async saveQuizMetaToFirebase(quizMeta: IQuizMeta, questions: Question[], userUid: string): Promise<void> {
     try {
       const promiseMeta = set(ref(database, `quizzesMeta/${quizMeta.testId}`), quizMeta);
+      // const promiseQuestions = set(ref(database, `questions/${quizMeta.testId}`), JSON.stringify(questions, null, 2));
+      const promiseQuestions = set(ref(database, `questions/${quizMeta.testId}`), JSON.stringify(questions, null, 2));
       const promiseUserList = set(ref(database, `users/${userUid}/${quizMeta.testId}`), true);
-      await Promise.all([promiseMeta, promiseUserList]);
+      await Promise.all([promiseMeta, promiseQuestions, promiseUserList]);
     } catch (error) {
       console.error(error);
     }

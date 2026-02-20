@@ -80,24 +80,28 @@ const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
   // },
   saveUserQuiz: async (quiz: IQuizMeta, userUid: string) => {
     const testListPrev = get().myQuizzes;
-    if (!testListPrev) {
-      return;
-    }
+
     // const IdsList = testListPrev.map(myQuiz => myQuiz.testId);
     // if (IdsList.includes(quiz.testId)) {
     //   return;
     // }
-    const testListNext = [quiz, ...testListPrev];
+    const questions = quiz.questions ? quiz.questions : [];
+    delete (quiz.questions);
+
+    if (testListPrev) {
+      const testListNext = [quiz, ...testListPrev];
+      set(() => ({myQuizzes: testListNext}));
+    }
     // IdsList.push(quiz.test.testId);
-    set(() => ({myQuizzes: testListNext}));
     try {
-      await QuizStorageManager.saveQuizMetaToFirebase(quiz, userUid);
+      await QuizStorageManager.saveQuizMetaToFirebase(quiz, questions, userUid);
       // set(() => ({errorLoading: ""}));
     } catch (error) {
       set(() => ({myQuizzes: testListPrev}));
       set(() => ({errorLoading: "Ошибка сохранения теста!"}));
     }
   },
+
   deleteUserQuiz: async (testId: string, userUid: string) => {
     const testListPrev = get().myQuizzes;
     // console.log(testListPrev.length);

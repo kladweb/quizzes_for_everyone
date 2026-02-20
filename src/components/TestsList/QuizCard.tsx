@@ -18,6 +18,7 @@ export const QuizCard: React.FC<ITestCardProps> = memo(
   ({quiz, openStatistic, dateFormatter, userUID, isShowStatistics, handlerDeleteQuiz}) => {
     const currentLink = `${window.location.origin}/quizzes/${quiz.testId}`;
     const [copied, setCopied] = useState(false);
+    const likesCount = quiz.likeUsers ? Object.keys(quiz.likeUsers).length : 0;
 
     return (
       <div className='test-item' key={quiz.testId}>
@@ -30,7 +31,7 @@ export const QuizCard: React.FC<ITestCardProps> = memo(
           <div className="quiz-feedback-info" title="Скольким людям тест понравился">
             <div className="button-like" role="button">
               <img className="img-like" src="/images/Like-quiz.png" alt="like"/>
-              <span>{Object.keys(quiz.likeUsers).length}</span>
+              <span>{likesCount}</span>
             </div>
             <div className="button-like" title="Сколько раз тест пройден">
               <img className="img-like" src="/images/Arrow-quiz.png" alt="like"/>

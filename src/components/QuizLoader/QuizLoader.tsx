@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { nanoid } from "nanoid";
-import type { Quiz } from "../../types/Quiz";
+import type { IQuizMeta } from "../../types/Quiz";
 import { useSetQuizDraft } from "../../store/useCurrentCreatingQuiz";
-import { saveUserQuiz } from "../../store/useQuizzesStore";
 import "./quizLoader.css";
 
 interface IQuizLoaderProps {
@@ -64,7 +63,7 @@ export const QuizLoader: React.FC<IQuizLoaderProps> =
       reader.onload = (e) => {
         try {
           const content = e.target?.result as string;
-          const quiz = JSON.parse(content) as Quiz;
+          const quiz: IQuizMeta = JSON.parse(content);
           quiz.testId = nanoid(12);
           quiz.createdBy = userUID;
           quiz.createdAt = Date.now();

@@ -26,6 +26,7 @@ export interface IQuizMeta {
   likeUsers: {
     [userId: string]: boolean;
   }
+  questions?: Question[];
 }
 
 interface IAnswer {

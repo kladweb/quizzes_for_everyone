@@ -16,9 +16,9 @@ export const PageCreateQuizJson = () => {
   const [currentTestId, setCurrentTestId] = useState<string | null>(null);
   const [isCreatingNewTest, setIsCreatingNewTest] = useState(false);
 
-  useEffect(() => {
-    navigate("/service");
-  }, [])
+  // useEffect(() => {
+  //   navigate("/service");
+  // }, [])
 
   return (
     <div className='tests-container'>
