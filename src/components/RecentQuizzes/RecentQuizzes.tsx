@@ -14,8 +14,6 @@ export const RecentQuizzes: React.FC<IRecentQuizzes> = ({currentTestId}) => {
   const params: Readonly<Params<string>> = useParams();
   const testId: string | undefined = params.testid;
 
-  console.log(params.testid);
-
   // const openRecentQuiz = (testId: string) => {
   //   console.log("testId: ", testId);
   //   navigate(`/tests/${testId}`);

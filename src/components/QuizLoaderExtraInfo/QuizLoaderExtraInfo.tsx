@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { QUIZ_CATEGORIES, QUIZ_LANGUAGES } from "./quizCategories";
-import { useClearCurrentQuiz, useQuizDraft, useSetQuizComplete } from "../../store/useCurrentCreatingQuiz";
+import { useQuizDraft, useSetQuizComplete } from "../../store/useCurrentCreatingQuiz";
 import { saveUserQuiz } from "../../store/useQuizzesStore";
 import "./quizLoaderExtraInfo.css"
 
@@ -36,12 +36,13 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
       if (!QUIZ_CATEGORIES.includes(quizCategory)) {
         quizDraft.category = "разное";
         quizDraft.categoryDraft = quizCategory;
-        // setQuizCategory("разное");
       } else {
         quizDraft.category = quizCategory;
       }
       quizDraft.lang = quizLanguage;
       quizDraft.access = quizAccess;
+      quizDraft.likeUsers = {};
+      quizDraft.executionCount = 0;
       useSetQuizComplete(quizDraft);
       setIsCreatingNewTest(true);
       await saveUserQuiz(quizDraft, userUID)

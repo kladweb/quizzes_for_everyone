@@ -7,7 +7,6 @@ export const LinkQuiz: React.FC<{ testId: string }> = ({testId}) => {
   const quizComplete = useQuizComplete();
   const [copied, setCopied] = useState(false);
   const currentLink = `${window.location.origin}/quizzes/${testId}`;
-  // const currentLink = `quizzes/${testId}`;
 
   const handleCopy = async () => {
     try {

@@ -1,5 +1,5 @@
 import { child, get, ref, set } from "firebase/database";
-import { IFirestoreQuiz, IStatistics, Quiz } from "../types/Quiz";
+import { IQuizMeta, IStatistics, Question } from "../types/Quiz";
 import { database } from "../firebase/firebase";
 import { useNavigate } from "react-router-dom";
 
@@ -21,37 +21,24 @@ interface QuizAnswer {
 // }
 
 export const QuizStorageManager = {
-  async fetchAllQuizzes(): Promise<IFirestoreQuiz[]> {
+  async fetchAllQuizzes(): Promise<IQuizMeta[]> {
     const dbRef = ref(database);
     try {
-      const snapshot = await get(child(dbRef, `tests`))
+      const snapshot = await get(child(dbRef, `quizzesMeta`));
       if (!snapshot.exists()) {
         throw new Error('No such quiz found!');
       }
-      const quizzesAll = snapshot.val();
-      console.log(quizzesAll);
-      const quizzes: IFirestoreQuiz[] = Object.values(quizzesAll)
-        .map((quiz: any) => {
-          quiz.test.questions = JSON.parse(quiz.test.questions);
-          if (quiz.statistics) {
-            Object.keys(quiz.statistics).forEach((item) => {
-              quiz.statistics[item] = JSON.parse(quiz.statistics[item]);
-            });
-          } else {
-            quiz.statistics = {}
-          }
-          return quiz;
-        });
-
-      console.log(quizzes);
-      return quizzes;
+      const quizzesMetaData = snapshot.val();
+      const quizzesAll: IQuizMeta[] = Object.values(quizzesMetaData);
+      quizzesAll.sort((a, b) => b.createdAt - a.createdAt);
+      return quizzesAll;
     } catch (error) {
       console.error(error);
       throw error;
     }
   },
 
-  async fetchUserQuizzes(userUid: string): Promise<IFirestoreQuiz[]> {
+  async fetchUserQuizzes(userUid: string): Promise<IQuizMeta[]> {
     const dbRef = ref(database);
     try {
       const snapshot = await get(child(dbRef, `users/${userUid}`));
@@ -60,51 +47,65 @@ export const QuizStorageManager = {
       }
       const quizIdsObj = snapshot.val();
       const quizIds: string[] = Object.keys(quizIdsObj);
-      const quizzesRaw = await Promise.all(
-        quizIds.map(id => get(child(dbRef, `tests/${id}`)).then(s => s.val())));
-      // const quizzes: Quiz[] = quizzesRaw
-      //   .map(item => JSON.parse(item))
-      //   .sort((a, b) => b.createdAt - a.createdAt);
-      const quizzes = Object.values(quizzesRaw)
-        .map((quiz: any) => {
-          quiz.test.questions = JSON.parse(quiz.test.questions);
-          if (quiz.statistics) {
-            Object.keys(quiz.statistics).forEach((item) => {
-              quiz.statistics[item] = JSON.parse(quiz.statistics[item]);
-            });
-          } else {
-            quiz.statistics = {}
-          }
-          return quiz;
-        })
-        .sort((a, b) => b.createdAt - a.createdAt);
-      console.log(quizzes);
-      return quizzes;
+      const quizzesRaw: IQuizMeta[] = await Promise.all(
+        quizIds.map(id => get(child(dbRef, `quizzesMeta/${id}`)).then(s => s.val())));
+      quizzesRaw.sort((a, b) => b.createdAt - a.createdAt);
+      return quizzesRaw;
     } catch (error) {
       console.error(error);
       throw error;
     }
   },
 
-  async saveQuizToStorage(quiz: Quiz, userUid: string, IdsList: string[]): Promise<void> {
+  async fetchCurrentQuiz(quizId: string): Promise<IQuizMeta> {
+    const dbRef = ref(database);
     try {
-      const promiseTests = set(ref(database, `tests/${quiz.testId}/test`), JSON.stringify(quiz));
-      const promiseUserList = set(ref(database, `users/${userUid}`), JSON.stringify(IdsList));
-      await Promise.all([promiseTests, promiseUserList]);
+      const snapshot = await get(child(dbRef, `quizzesMeta/${quizId}`));
+      if (!snapshot.exists()) {
+        throw new Error('No such quiz found!');
+      }
+      return snapshot.val();
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  },
+
+  async fetchQuestions(quizId: string): Promise<Question[]> {
+    const dbRef = ref(database);
+    try {
+      const snapshot = await get(child(dbRef, `questions/${quizId}`));
+      if (!snapshot.exists()) {
+        throw new Error('No such quiz found!');
+      }
+      return JSON.parse(snapshot.val());
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  },
+
+  async saveQuizMetaToFirebase(quizMeta: IQuizMeta, questions: Question[], userUid: string): Promise<void> {
+    try {
+      const promiseMeta = set(ref(database, `quizzesMeta/${quizMeta.testId}`), quizMeta);
+      // const promiseQuestions = set(ref(database, `questions/${quizMeta.testId}`), JSON.stringify(questions, null, 2));
+      const promiseQuestions = set(ref(database, `questions/${quizMeta.testId}`), JSON.stringify(questions, null, 2));
+      const promiseUserList = set(ref(database, `users/${userUid}/${quizMeta.testId}`), true);
+      await Promise.all([promiseMeta, promiseQuestions, promiseUserList]);
     } catch (error) {
       console.error(error);
     }
   },
 
-  async removeUserQuiz(testId: string, userUid: string, IdsList: string[]): Promise<void> {
+  async removeUserQuiz(testId: string, userUid: string): Promise<void> {
     try {
-      const promiseTests = set(ref(database, `tests/${testId}`), null);
-      const promiseUserList = set(ref(database, `users/${userUid}`), JSON.stringify(IdsList));
-      await Promise.all([promiseTests, promiseUserList]);
+      const promiseMeta = set(ref(database, `quizzesMeta/${testId}`), null);
+      const promiseQuestions = set(ref(database, `quizzesMeta/${testId}`), null);
+      const promiseUserList = set(ref(database, `users/${userUid}/${testId}`), null);
+      await Promise.all([promiseMeta, promiseQuestions, promiseUserList]);
     } catch (error) {
       console.error(error);
     }
-
   },
 
   // Save quiz result
@@ -151,16 +152,24 @@ export const QuizStorageManager = {
     const recentStatistic: IStatistics[] | null = this.getRecentAllStat();
     let isCurrentExists = false;
     if (recentStatistic && recentStatistic.length > 0) {
-      recentStatistic.forEach((statistic: IStatistics, i) => {
+      const currentDate = Number(new Date());
+      const recentStatisticClear = recentStatistic.filter((stat: IStatistics) => {
+        if ((currentDate - stat.finishedAt) > 2592000000) {
+          return false;
+        }
+        return this.fetchCurrentQuiz(stat.testId);
+      });
+
+      recentStatisticClear.forEach((statistic: IStatistics, i) => {
         if (statistic.testId === statisticInfo.testId) {
           recentStatistic[i] = statisticInfo;
           isCurrentExists = true;
         }
       });
       if (isCurrentExists) {
-        currentStatistic = [...recentStatistic];
+        currentStatistic = [...recentStatisticClear];
       } else {
-        currentStatistic = [statisticInfo, ...recentStatistic];
+        currentStatistic = [statisticInfo, ...recentStatisticClear];
       }
     }
     try {
