@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import { type Quiz } from "../../types/Quiz";
+import { type IQuizMeta } from "../../types/Quiz";
 import { Statistics } from "../Statistics/Statistics";
 import { Loader } from "../Loader/Loader";
 import { deleteUserQuiz, useIsLoading } from "../../store/useQuizzesStore";
 import "./testList.css";
+import { NavLink } from "react-router-dom";
 
 interface ITestListProps {
-  testList: Quiz[],
+  testList: IQuizMeta[],
   userUID: string
 }
 
@@ -32,9 +33,9 @@ export const TestList: React.FC<ITestListProps> = ({testList, userUID}) => {
           <div className='test-buttons-block'>
             <button className='button-test' onClick={() => deleteUserQuiz(quiz.testId, userUID)}>Удалить</button>
             <button className='button-test' onClick={() => openStatistic(quiz.testId)}>Статистика</button>
-            <a className="link-open-test" href={`/quizzes/${quiz.testId}`} target="_blank">
+            <NavLink className="link-open-test" to={`/quizzes/${quiz.testId}`}>
               <span>Открыть</span>
-            </a>
+            </NavLink>
           </div>
         </div>
         {

@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from "react";
-import {NavLink, useNavigate, useParams, type Params} from "react-router-dom";
-import {QuizStorageManager} from "../../utils/QuizStorageManager";
-import type {IStatistics} from "../../types/Quiz";
+import React, { useEffect, useState } from "react";
+import { NavLink, useNavigate, useParams, type Params } from "react-router-dom";
+import { QuizStorageManager } from "../../utils/QuizStorageManager";
+import type { IStatistics } from "../../types/Quiz";
 import "./recentQuizzes.css";
 
 interface IRecentQuizzes {
@@ -67,7 +67,7 @@ export const RecentQuizzes: React.FC<IRecentQuizzes> = ({currentTestId}) => {
           {/*<button className='button-recent' onClick={() => openRecentQuiz(recentQuiz.testId)}>*/}
           {/*  Открыть тест*/}
           {/*</button>*/}
-          <NavLink className="link-open-test" to={`/quizzes/${recentQuiz.testId}`} target='_blank'>
+          <NavLink className="link-open-test" to={`/quizzes/${recentQuiz.testId}`}>
             <span>Открыть</span>
           </NavLink>
           <button className='button-test' onClick={() => deleteRecentQuiz(recentQuiz.testId)}>

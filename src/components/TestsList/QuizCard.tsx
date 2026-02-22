@@ -4,6 +4,7 @@ import { deleteUserQuiz } from "../../store/useQuizzesStore";
 import { handleCopy, handlerDeleteQuiz } from "../../utils/quizUtils";
 import { Statistics } from "../Statistics/Statistics";
 import "./quizCard.css"
+import { NavLink } from "react-router-dom";
 
 interface ITestCardProps {
   quiz: IQuizMeta;
@@ -66,9 +67,9 @@ export const QuizCard: React.FC<ITestCardProps> = memo(
           >
             {copied ? 'Скопировано!' : 'Копировать ссылку'}
           </button>
-          <a className="link-open-test" href={`/quizzes/${quiz.testId}`} target="_blank">
+          <NavLink className="link-open-test" to={`/quizzes/${quiz.testId}`}>
             <span>Открыть</span>
-          </a>
+          </NavLink>
         </div>
         {
           isShowStatistics && <Statistics testId={quiz.testId}/>
