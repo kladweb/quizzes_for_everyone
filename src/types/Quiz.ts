@@ -23,7 +23,10 @@ export interface IQuizMeta {
   access: "public" | "private";
   description?: string;
   executionCount: number;
-  likeUsers: {
+  likeUsers?: {
+    [userId: string]: boolean;
+  };
+  dislikeUsers?: {
     [userId: string]: boolean;
   }
   questions?: Question[];

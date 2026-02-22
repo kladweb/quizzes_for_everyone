@@ -80,6 +80,7 @@ const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
   // },
   saveUserQuiz: async (quiz: IQuizMeta, userUid: string) => {
     const testListPrev = get().myQuizzes;
+    const allTestListPrev = get().allQuizzes;
 
     // const IdsList = testListPrev.map(myQuiz => myQuiz.testId);
     // if (IdsList.includes(quiz.testId)) {
@@ -92,32 +93,50 @@ const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
       const testListNext = [quiz, ...testListPrev];
       set(() => ({myQuizzes: testListNext}));
     }
+
+    if (allTestListPrev) {
+      const allTestListNext = [quiz, ...allTestListPrev];
+      set(() => ({allQuizzes: allTestListNext}));
+    }
     // IdsList.push(quiz.test.testId);
     try {
       await QuizStorageManager.saveQuizMetaToFirebase(quiz, questions, userUid);
       // set(() => ({errorLoading: ""}));
     } catch (error) {
       set(() => ({myQuizzes: testListPrev}));
+      if (allTestListPrev) {
+        set(() => ({allQuizzes: allTestListPrev}));
+      }
       set(() => ({errorLoading: "Ошибка сохранения теста!"}));
     }
   },
 
   deleteUserQuiz: async (testId: string, userUid: string) => {
     const testListPrev = get().myQuizzes;
+    const allTestListPrev = get().allQuizzes;
     // console.log(testListPrev.length);
     if (!testListPrev) {
       return;
     }
     const testListNext = testListPrev.filter((quiz: IQuizMeta) => quiz.testId !== testId);
+    set(() => ({myQuizzes: testListNext}));
+
+    let allTestListNext: IQuizMeta[];
+    if (allTestListPrev) {
+      allTestListNext = allTestListPrev.filter((quiz: IQuizMeta) => quiz.testId !== testId);
+      set(() => ({allQuizzes: allTestListNext}));
+    }
     // console.log(testListNext.length);
     // const IdsList = testListNext.map(quiz => quiz.testId);
     // console.log(IdsList);
-    set(() => ({myQuizzes: testListNext}));
     try {
       await QuizStorageManager.removeUserQuiz(testId, userUid);
       // set(() => ({errorLoading: ""}));
     } catch (error) {
       set(() => ({myQuizzes: testListPrev}));
+      if (allTestListPrev) {
+        set(() => ({allQuizzes: allTestListPrev}));
+      }
       set(() => ({errorLoading: "Ошибка удаления!"}));
     }
   }

@@ -27,7 +27,7 @@ export const PageQuiz = () => {
       if (resultStorage) {
         console.log("Получили данные из localStorage: ", resultStorage);
         resultStorage.finishedAt = 0;
-        console.log("statistics 03: ", resultStorage);
+        // console.log("statistics 03: ", resultStorage);
         await QuizStorageManager.saveRecentStat(resultStorage);
       }
     }
@@ -36,8 +36,8 @@ export const PageQuiz = () => {
   };
 
   const saveStatistic = async (statistics: IStatistics) => {
-    console.log("saveStatistic", statistics);
-    await set(ref(database, `tests/${testId}/statistics/${statistics.finishedAt}`), JSON.stringify(statistics));
+    // console.log("saveStatistic", statistics);
+    await set(ref(database, `statistics/${testId}/${statistics.statId}`), JSON.stringify(statistics));
   }
 
   useEffect(() => {

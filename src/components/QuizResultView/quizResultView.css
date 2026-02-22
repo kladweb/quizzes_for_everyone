@@ -52,3 +52,49 @@
 .result-button:hover {
   background-color: var(--color-secondary);
 }
+
+.like-card {
+  margin-top: 10px;
+  padding: 20px;
+  background-color: var(--color-success-bg-light);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.quiz-rate {
+  margin: 0 0 1em;
+  font-size: 1.2em;
+  font-weight: 400;
+  color: var(--color-quaternary);
+}
+
+.btn-like {
+  margin: 0 1em;
+  border-radius: 0.7em;
+  border-color: var(--color-quaternary);
+  cursor: pointer;
+
+  &:active {
+    .img-btn-like {
+      transform: translate(0.08em, 0.08em);
+    }
+
+    .img-dislike {
+      transform: translate(0.08em, 0.08em) rotate(180deg);
+    }
+  }
+}
+
+.img-btn-like {
+  width: 2.5em;
+  vertical-align: middle;
+}
+
+.img-dislike {
+  transform: rotate(180deg);
+}
+
+.thanks-like {
+  margin: 0;
+  color: var(--color-success);
+}

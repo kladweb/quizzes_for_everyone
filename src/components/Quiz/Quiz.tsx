@@ -6,6 +6,8 @@ import { QuizStorageManager } from "../../utils/QuizStorageManager";
 import { QuizResultView } from "../QuizResultView/QuizResultView";
 import { useUser } from "../../store/useUserStore";
 import "./quiz.css";
+import { ref, set } from "firebase/database";
+import { database } from "../../firebase/firebase";
 
 interface IQuizProps {
   quiz: IQuizMeta;
@@ -114,8 +116,10 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, questions, onReset, s
     setCurrentStatistics(statistics);
     // console.log(JSON.stringify(statistics, null, 2));
     saveStatistic(statistics);
-    console.log("statistics 01: ", statistics);
+    // console.log("statistics 01: ", statistics);
     QuizStorageManager.saveRecentStat(statistics);
+    quiz.executionCount++
+    set(ref(database, `quizzesMeta/${quiz.testId}/executionCount`), quiz.executionCount);
   };
 
   const allAnswered = selectedAnswers.every(answer => answer.length > 0);

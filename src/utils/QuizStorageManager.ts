@@ -152,16 +152,24 @@ export const QuizStorageManager = {
     const recentStatistic: IStatistics[] | null = this.getRecentAllStat();
     let isCurrentExists = false;
     if (recentStatistic && recentStatistic.length > 0) {
-      recentStatistic.forEach((statistic: IStatistics, i) => {
+      const currentDate = Number(new Date());
+      const recentStatisticClear = recentStatistic.filter((stat: IStatistics) => {
+        if ((currentDate - stat.finishedAt) > 2592000000) {
+          return false;
+        }
+        return this.fetchCurrentQuiz(stat.testId);
+      });
+
+      recentStatisticClear.forEach((statistic: IStatistics, i) => {
         if (statistic.testId === statisticInfo.testId) {
           recentStatistic[i] = statisticInfo;
           isCurrentExists = true;
         }
       });
       if (isCurrentExists) {
-        currentStatistic = [...recentStatistic];
+        currentStatistic = [...recentStatisticClear];
       } else {
-        currentStatistic = [statisticInfo, ...recentStatistic];
+        currentStatistic = [statisticInfo, ...recentStatisticClear];
       }
     }
     try {
