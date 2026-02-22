@@ -28,7 +28,7 @@ export const LinkQuiz: React.FC<{ testId: string }> = ({testId}) => {
         успешно сохранён!
       </h2>
       <h4 className='link-head'>Ваша ссылка на страницу с тестом:</h4>
-      <a className='link-body' href={currentLink} target="_blank">{currentLink}</a>
+      <NavLink className='link-body' to={currentLink}>{currentLink}</NavLink>
       <button
         className={`btn btn-link-copy ${copied ? " btn-link-copy--copied" : ""}`}
         onClick={handleCopy}

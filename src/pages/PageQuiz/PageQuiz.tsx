@@ -19,16 +19,17 @@ export const PageQuiz = () => {
   const [savedResultStorage, setSavedResultStorage] = useState<IStatistics | null>(null);
   const [isPageEmpty, setIsPageEmpty] = useState(false);
 
-  const handleReset = async () => {
+  const handleReset = () => {
     // QuizStorageManager.clearResult();
+
     console.log(testId)
     if (testId) {
-      const resultStorage = await QuizStorageManager.getRecentStatTestId(testId);
+      const resultStorage = QuizStorageManager.getRecentStatTestId(testId);
       if (resultStorage) {
         console.log("Получили данные из localStorage: ", resultStorage);
         resultStorage.finishedAt = 0;
         // console.log("statistics 03: ", resultStorage);
-        await QuizStorageManager.saveRecentStat(resultStorage);
+        QuizStorageManager.saveRecentStat(resultStorage);
       }
     }
     setSavedResultStorage(null);
@@ -41,6 +42,7 @@ export const PageQuiz = () => {
   }
 
   useEffect(() => {
+    console.log(testId);
     if (!testId) {
       return;
     }
@@ -51,6 +53,7 @@ export const PageQuiz = () => {
       //   return;
       // }
     }
+    console.log(quiz);
     if (!quiz) {
       QuizStorageManager.fetchCurrentQuiz(testId)
         .then(quiz => {

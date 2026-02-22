@@ -126,8 +126,18 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, questions, onReset, s
   const canSubmit = allAnswered && userName.trim().length > 0;
 
   const handleReset = () => {
+    setIsSubmitted(false);
+    setCurrentStatistics(null);
+    setSelectedAnswers(new Array(shuffledQuestions.length).fill(null).map(() => []));
     onReset();
-    setTimeout(() => location.reload(), 0);
+    setTimeout(() => {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+      });
+    }, 100);
+    // setTimeout(() => location.reload(), 0);
   }
 
   useEffect(() => {
