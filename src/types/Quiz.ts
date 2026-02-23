@@ -32,6 +32,10 @@ export interface IQuizMeta {
   questions?: Question[];
 }
 
+export interface IQuizzes {
+  [testId: string]: IQuizMeta
+}
+
 interface IAnswer {
   questionId: string;
   isCorrect: boolean;

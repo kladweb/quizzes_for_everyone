@@ -1,5 +1,5 @@
 import React, { useState, memo, useEffect } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { IQuizMeta } from "../../types/Quiz";
 import { handleCopy, toggleLike } from "../../utils/quizUtils";
 import { Statistics } from "../Statistics/Statistics";
@@ -19,7 +19,6 @@ export const QuizCard: React.FC<ITestCardProps> = memo(
     const currentLink = `${window.location.origin}/quizzes/${quiz.testId}`;
     const [copied, setCopied] = useState(false);
     const [likesCount, setLikesCount] = useState<number>(quiz.likeUsers ? Object.keys(quiz.likeUsers).length : 0);
-    console.log(quiz.likeUsers);
     const [isLiked, setIsLiked] = useState(false);
 
     useEffect(() => {
@@ -75,9 +74,9 @@ export const QuizCard: React.FC<ITestCardProps> = memo(
           >
             {copied ? 'Скопировано!' : 'Копировать ссылку'}
           </button>
-          <Link className="link-open-test" to={`/quizzes/${quiz.testId}`}>
+          <NavLink className="link-open-test" to={`/quizzes/${quiz.testId}`}>
             <span>Открыть</span>
-          </Link>
+          </NavLink>
         </div>
         {
           isShowStatistics && <Statistics testId={quiz.testId}/>
@@ -87,7 +86,6 @@ export const QuizCard: React.FC<ITestCardProps> = memo(
   }, (oldProps: ITestCardProps, nextProps: ITestCardProps) => {
     return (
       oldProps.quiz === nextProps.quiz &&
-      // oldProps.quiz.likeUsers?.userUID === nextProps.quiz.likeUsers?.userUID &&
       oldProps.userUID === nextProps.userUID &&
       oldProps.isShowStatistics === nextProps.isShowStatistics
     )

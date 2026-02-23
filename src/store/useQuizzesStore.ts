@@ -1,18 +1,20 @@
 import { create, type StateCreator } from "zustand";
 import { QuizStorageManager } from "../utils/QuizStorageManager";
-import { IQuizMeta } from "../types/Quiz";
+import { IQuizMeta, IQuizzes } from "../types/Quiz";
 
 interface IInitialState {
-  allQuizzes: IQuizMeta[];
-  myQuizzes: IQuizMeta[],
+  allQuizzes: IQuizzes | null;
+  myQuizzesIds: string[],
   isLoading: boolean,
   isAllLoaded: boolean,
-  isMyLoaded: boolean,
+  isMyIdsLoaded: boolean,
+  isMyQuizzesLoaded: boolean,
   errorLoading: string
 }
 
 interface IActions {
   loadAllQuizzes: () => void;
+  loadUserQuizIds: (userUid: string) => void;
   loadUserQuizzes: (userUid: string) => void;
   saveUserQuiz: (quiz: IQuizMeta, userUid: string) => Promise<void>;
   deleteUserQuiz: (testId: string, userUid: string) => Promise<void>;
@@ -22,11 +24,12 @@ interface IQuizzesState extends IInitialState, IActions {
 }
 
 const initialState: IInitialState = {
-  allQuizzes: [],
-  myQuizzes: [],
+  allQuizzes: null,
+  myQuizzesIds: [],
   isLoading: false,
   isAllLoaded: false,
-  isMyLoaded: false,
+  isMyIdsLoaded: false,
+  isMyQuizzesLoaded: false,
   errorLoading: ""
 }
 
@@ -36,11 +39,23 @@ const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
     try {
       set(() => ({isLoading: true}));
       set(() => ({errorLoading: ""}));
-      const quizzes = await QuizStorageManager.fetchAllQuizzes();
-      // console.log(quizzes);
-      const quizzesPublic = quizzes.filter(quiz => quiz.access !== "private");
-      set(() => ({allQuizzes: quizzesPublic}));
+      const quizzes: IQuizzes = await QuizStorageManager.fetchAllQuizzes();
+      // const quizzesPublic = quizzes.filter(quiz => quiz.access !== "private");
+      set(() => ({allQuizzes: quizzes}));
       set(() => ({isAllLoaded: true}));
+    } catch (error) {
+      console.log(error);
+      set(() => ({errorLoading: "Ошибка загрузки данных!"}));
+    } finally {
+      set(() => ({isLoading: false}));
+    }
+  },
+  loadUserQuizIds: async (userUid) => {
+    try {
+      set(() => ({isLoading: true}));
+      set(() => ({errorLoading: ""}));
+      const quizzesIds = await QuizStorageManager.fetchUserQuizIds(userUid);
+      set(() => ({myQuizzesIds: quizzesIds, isMyIdsLoaded: true}));
     } catch (error) {
       // set(() => ({myQuizzes: []}));
       console.log(error);
@@ -50,12 +65,16 @@ const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
     }
   },
   loadUserQuizzes: async (userUid) => {
+    const userQuizzesIds = get().myQuizzesIds;
+    const isMyIdsLoaded = get().isMyIdsLoaded;
+    if (!isMyIdsLoaded) {
+      return;
+    }
     try {
-      set(() => ({isLoading: true}));
-      set(() => ({errorLoading: ""}));
-      const quizzes = await QuizStorageManager.fetchUserQuizzes(userUid);
-      set(() => ({myQuizzes: quizzes}));
-      set(() => ({isMyLoaded: true}));
+      set(() => ({isLoading: true, errorLoading: ""}));
+      const userQuizzes = await QuizStorageManager.fetchUserQuizzes(userUid, userQuizzesIds);
+
+      set(() => ({allQuizzes: userQuizzes, isMyQuizzesLoaded: true}));
     } catch (error) {
       // set(() => ({myQuizzes: []}));
       console.log(error);
@@ -64,46 +83,29 @@ const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
       set(() => ({isLoading: false}));
     }
   },
-  // loadUserQuizzes: async (userUid) => {
-  //   try {
-  //     set(() => ({isLoading: true}));
-  //     const quizzes = await QuizStorageManager.fetchUserQuizzes(userUid);
-  //     set(() => ({myQuizzes: quizzes}));
-  //     set(() => ({errorLoading: ""}));
-  //   } catch (error) {
-  //     // set(() => ({myQuizzes: []}));
-  //     console.log(error);
-  //     set(() => ({errorLoading: "Ошибка загрузки данных!"}));
-  //   } finally {
-  //     set(() => ({isLoading: false}));
-  //   }
-  // },
   saveUserQuiz: async (quiz: IQuizMeta, userUid: string) => {
-    const testListPrev = get().myQuizzes;
-    const allTestListPrev = get().allQuizzes;
-
-    // const IdsList = testListPrev.map(myQuiz => myQuiz.testId);
-    // if (IdsList.includes(quiz.testId)) {
-    //   return;
-    // }
+    const quizIdsListPrev: string[] = get().myQuizzesIds;
+    const allTestListPrev: IQuizzes | null = get().allQuizzes;
     const questions = quiz.questions ? quiz.questions : [];
     delete (quiz.questions);
 
-    if (testListPrev) {
-      const testListNext = [quiz, ...testListPrev];
-      set(() => ({myQuizzes: testListNext}));
+    if (quizIdsListPrev) {
+      const quizIdsListNext = [quiz.testId, ...quizIdsListPrev];
+      set(() => ({myQuizzesIds: quizIdsListNext}));
     }
 
+    let allTestListNext: IQuizzes;
     if (allTestListPrev) {
-      const allTestListNext = [quiz, ...allTestListPrev];
-      set(() => ({allQuizzes: allTestListNext}));
+      allTestListNext = {quiz, ...allTestListPrev};
+    } else {
+      allTestListNext = {quiz}
     }
-    // IdsList.push(quiz.test.testId);
+    set(() => ({allQuizzes: allTestListNext}));
     try {
       await QuizStorageManager.saveQuizMetaToFirebase(quiz, questions, userUid);
       // set(() => ({errorLoading: ""}));
     } catch (error) {
-      set(() => ({myQuizzes: testListPrev}));
+      set(() => ({myQuizzesIds: quizIdsListPrev}));
       if (allTestListPrev) {
         set(() => ({allQuizzes: allTestListPrev}));
       }
@@ -112,45 +114,68 @@ const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
   },
 
   deleteUserQuiz: async (testId: string, userUid: string) => {
-    const testListPrev = get().myQuizzes;
+    const quizIdsListPrev = get().myQuizzesIds;
     const allTestListPrev = get().allQuizzes;
-    // console.log(testListPrev.length);
-    if (!testListPrev) {
-      return;
+    if (quizIdsListPrev) {
+      const quizIdsNew = quizIdsListPrev.filter(quizId => quizId !== testId);
+      set(() => ({myQuizzesIds: quizIdsNew}));
     }
-    const testListNext = testListPrev.filter((quiz: IQuizMeta) => quiz.testId !== testId);
-    set(() => ({myQuizzes: testListNext}));
-
-    let allTestListNext: IQuizMeta[];
     if (allTestListPrev) {
-      allTestListNext = allTestListPrev.filter((quiz: IQuizMeta) => quiz.testId !== testId);
+      const allTestListNext = {...allTestListPrev};
+      delete (allTestListNext[testId]);
       set(() => ({allQuizzes: allTestListNext}));
     }
-    // console.log(testListNext.length);
-    // const IdsList = testListNext.map(quiz => quiz.testId);
-    // console.log(IdsList);
     try {
       await QuizStorageManager.removeUserQuiz(testId, userUid);
-      // set(() => ({errorLoading: ""}));
+      set(() => ({errorLoading: ""}));
     } catch (error) {
-      set(() => ({myQuizzes: testListPrev}));
+      set(() => ({errorLoading: "Ошибка удаления!"}));
+      if (quizIdsListPrev) {
+        set(() => ({myQuizzesIds: quizIdsListPrev}));
+      }
       if (allTestListPrev) {
         set(() => ({allQuizzes: allTestListPrev}));
       }
-      set(() => ({errorLoading: "Ошибка удаления!"}));
     }
+
+
+    // console.log(testListPrev.length);
+    // if (!quizIdsListPrev) {
+    //   return;
+    // }
+    // const testListNext = testListPrev.filter((quiz: IQuizMeta) => quiz.testId !== testId);
+    // set(() => ({myQuizzes: testListNext}));
+    //
+    // let allTestListNext: IQuizMeta[];
+    // if (allTestListPrev) {
+    //   allTestListNext = allTestListPrev.filter((quiz: IQuizMeta) => quiz.testId !== testId);
+    //   set(() => ({allQuizzes: allTestListNext}));
+    // }
+    // try {
+    //   await QuizStorageManager.removeUserQuiz(testId, userUid);
+    //   // set(() => ({errorLoading: ""}));
+    // } catch (error) {
+    //   set(() => ({myQuizzes: testListPrev}));
+    //   if (allTestListPrev) {
+    //     set(() => ({allQuizzes: allTestListPrev}));
+    //   }
+    //   set(() => ({errorLoading: "Ошибка удаления!"}));
+    // }
   }
 })
 
 const useQuizzesStore = create<IQuizzesState>()(quizzesStore);
 
 export const useAllQuizzes = () => useQuizzesStore((state) => state.allQuizzes);
-export const useMyQuizzes = () => useQuizzesStore((state) => state.myQuizzes);
+export const useMyQuizzesIds = () => useQuizzesStore((state) => state.myQuizzesIds);
 export const useIsLoading = () => useQuizzesStore((state) => state.isLoading);
 export const useIsAllLoaded = () => useQuizzesStore((state) => state.isAllLoaded);
-export const useIsMyLoaded = () => useQuizzesStore((state) => state.isMyLoaded);
+export const useIsMyIdsLoaded = () => useQuizzesStore((state) => state.isMyIdsLoaded);
+export const useIsMyQuizzesLoaded = () => useQuizzesStore((state) => state.isMyQuizzesLoaded);
 export const useErrorLoading = () => useQuizzesStore((state) => state.errorLoading);
 export const loadAllQuizzes = () => useQuizzesStore.getState().loadAllQuizzes();
+export const loadUserQuizIds = (userUid: string) =>
+  useQuizzesStore.getState().loadUserQuizIds(userUid);
 export const loadUserQuizzes = (userUid: string) =>
   useQuizzesStore.getState().loadUserQuizzes(userUid);
 export const saveUserQuiz = (quiz: IQuizMeta, userUid: string) =>
