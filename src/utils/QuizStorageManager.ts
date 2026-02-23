@@ -1,5 +1,5 @@
 import { child, get, ref, set } from "firebase/database";
-import { IQuizMeta, IStatistics, Question } from "../types/Quiz";
+import { IQuizMeta, IQuizzes, IStatistics, Question } from "../types/Quiz";
 import { database } from "../firebase/firebase";
 import { useNavigate } from "react-router-dom";
 
@@ -21,24 +21,24 @@ interface QuizAnswer {
 // }
 
 export const QuizStorageManager = {
-  async fetchAllQuizzes(): Promise<IQuizMeta[]> {
+  async fetchAllQuizzes(): Promise<IQuizzes> {
     const dbRef = ref(database);
     try {
       const snapshot = await get(child(dbRef, `quizzesMeta`));
       if (!snapshot.exists()) {
         throw new Error('No such quiz found!');
       }
-      const quizzesMetaData = snapshot.val();
-      const quizzesAll: IQuizMeta[] = Object.values(quizzesMetaData);
-      quizzesAll.sort((a, b) => b.createdAt - a.createdAt);
-      return quizzesAll;
+      return snapshot.val();
+      // const quizzesAll: IQuizMeta[] = Object.values(quizzesMetaData);
+      // quizzesAll.sort((a, b) => b.createdAt - a.createdAt);
+      // return quizzesAll;
     } catch (error) {
       console.error(error);
       throw error;
     }
   },
 
-  async fetchUserQuizzes(userUid: string): Promise<IQuizMeta[]> {
+  async fetchUserQuizIds(userUid: string): Promise<string[]> {
     const dbRef = ref(database);
     try {
       const snapshot = await get(child(dbRef, `users/${userUid}`));
@@ -46,10 +46,22 @@ export const QuizStorageManager = {
         throw new Error('No such quiz found!');
       }
       const quizIdsObj = snapshot.val();
-      const quizIds: string[] = Object.keys(quizIdsObj);
-      const quizzesRaw: IQuizMeta[] = await Promise.all(
-        quizIds.map(id => get(child(dbRef, `quizzesMeta/${id}`)).then(s => s.val())));
-      quizzesRaw.sort((a, b) => b.createdAt - a.createdAt);
+      return Object.keys(quizIdsObj);
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  },
+
+  async fetchUserQuizzes(userUid: string, myQuizzesIds: string[]): Promise<IQuizzes> {
+    const dbRef = ref(database);
+    try {
+      const quizzesArr: IQuizMeta[] = await Promise.all(
+        myQuizzesIds.map(id => get(child(dbRef, `quizzesMeta/${id}`)).then(s => s.val())));
+      const quizzesRaw: IQuizzes = {};
+      quizzesArr.forEach((quiz: IQuizMeta) => {
+        quizzesRaw[quiz.testId] = quiz;
+      });
       return quizzesRaw;
     } catch (error) {
       console.error(error);
@@ -100,7 +112,7 @@ export const QuizStorageManager = {
   async removeUserQuiz(testId: string, userUid: string): Promise<void> {
     try {
       const promiseMeta = set(ref(database, `quizzesMeta/${testId}`), null);
-      const promiseQuestions = set(ref(database, `quizzesMeta/${testId}`), null);
+      const promiseQuestions = set(ref(database, `questions/${testId}`), null);
       const promiseUserList = set(ref(database, `users/${userUid}/${testId}`), null);
       await Promise.all([promiseMeta, promiseQuestions, promiseUserList]);
     } catch (error) {

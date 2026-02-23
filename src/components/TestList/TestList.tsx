@@ -3,8 +3,8 @@ import { type IQuizMeta } from "../../types/Quiz";
 import { Statistics } from "../Statistics/Statistics";
 import { Loader } from "../Loader/Loader";
 import { deleteUserQuiz, useIsLoading } from "../../store/useQuizzesStore";
-import "./testList.css";
 import { NavLink } from "react-router-dom";
+import "./testList.css";
 
 interface ITestListProps {
   testList: IQuizMeta[],

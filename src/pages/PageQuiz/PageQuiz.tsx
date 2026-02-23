@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { child, get, ref, set } from "firebase/database";
-import { QuizComponent } from "../../components/Quiz/Quiz";
+import { QuizComponent } from "../../components/QuizComponent/QuizComponent";
 import { database } from "../../firebase/firebase";
 import type { IStatistics, IQuizMeta, Question } from "../../types/Quiz";
 import { QuizStorageManager } from "../../utils/QuizStorageManager";

@@ -5,6 +5,7 @@ import { Footer } from "../components/Footer/Footer";
 import { useIsAuthLoading } from "../store/useUserStore";
 import { Loader } from "../components/Loader/Loader";
 import { useErrorLoading } from "../store/useQuizzesStore";
+import { ToastNotice } from "../components/ToastNotice/ToastNotice";
 
 export const MainLayout = () => {
   const isAuthLoading = useIsAuthLoading();
@@ -30,6 +31,7 @@ export const MainLayout = () => {
           <div className='loader-container'><Loader/></div> :
           <Outlet/>
         }
+        <ToastNotice/>
       </main>
       <Footer/>
     </>

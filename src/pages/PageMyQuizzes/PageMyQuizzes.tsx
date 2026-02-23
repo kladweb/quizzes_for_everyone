@@ -2,30 +2,40 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../store/useUserStore";
 import {
-  deleteUserQuiz,
-  loadUserQuizzes,
-  useIsLoading,
-  useIsMyLoaded,
-  useMyQuizzes
+  deleteUserQuiz, loadUserQuizIds, loadUserQuizzes, useAllQuizzes, useIsAllLoaded, useIsLoading, useIsMyIdsLoaded,
+  useIsMyQuizzesLoaded, useMyQuizzesIds
 } from "../../store/useQuizzesStore";
 import { useClearCurrentQuiz } from "../../store/useCurrentCreatingQuiz";
 import { Loader } from "../../components/Loader/Loader";
-import { IQuizMeta } from "../../types/Quiz";
+import { IQuizMeta, IQuizzes } from "../../types/Quiz";
 import { QuizCard } from "../../components/TestsList/QuizCard";
 import { ModalConfirm } from "../../components/ModalConfirm/ModalConfirm";
 import "./PageMyQuizzes.css";
 
 export const PageMyQuizzes: React.FC = () => {
-  const user = useUser();
-  const isMyLoaded = useIsMyLoaded();
-  const isLoading = useIsLoading();
-  const testsList = useMyQuizzes();
   const navigate = useNavigate();
+  const user = useUser();
+  const isMyIdsLoaded = useIsMyIdsLoaded();
+  const isMyQuizzesLoaded = useIsMyQuizzesLoaded();
+  const isAllLoaded = useIsAllLoaded();
+  const isLoading = useIsLoading();
+  const userQuizzesIds = useMyQuizzesIds();
+  const testsListObj: IQuizzes | null = useAllQuizzes();
+  const testList: IQuizMeta[] = [];
+  // const testList: IQuizMeta[] = Object.values(testsListObj ? testsListObj : {});
+  // testList.sort((a, b) => b.createdAt - a.createdAt);
   const locale = navigator.languages?.[0] || navigator.language;
   const formatter = new Intl.DateTimeFormat(locale);
   const [quizIdStatistics, setQuizIdStatistics] = useState<string | null>(null);
   const [isModalConfirmOpen, setIsModalConfirmOpen] = useState<boolean>(false);
   const [quizToDelete, setQuizToDelete] = useState<IQuizMeta | null>(null);
+
+  for (let key in testsListObj) {
+    if (userQuizzesIds.includes(key)) {
+      testList.push(testsListObj[key]);
+    }
+  }
+  testList.sort((a, b) => b.createdAt - a.createdAt);
 
   const createQuiz = () => {
     useClearCurrentQuiz();
@@ -57,15 +67,28 @@ export const PageMyQuizzes: React.FC = () => {
 
   useEffect(
     () => {
-      if (isMyLoaded) {
+      if (!isMyIdsLoaded && user?.uid) {
+        loadUserQuizIds(user.uid)
+      }
+
+      if (isAllLoaded || isMyQuizzesLoaded) {
         console.log("User data already loaded");
         return;
       }
+
       if (user) {
         console.log('loadUserQuizzes');
         loadUserQuizzes(user.uid);
       }
-    }, []);
+      // if (isMyLoaded) {
+      //   console.log("User data already loaded");
+      //   return;
+      // }
+      // if (user) {
+      //   console.log('loadUserQuizzes');
+      //   loadUserQuizzes(user.uid);
+      // }
+    }, [isMyIdsLoaded]);
 
   return (
     <>
@@ -76,7 +99,7 @@ export const PageMyQuizzes: React.FC = () => {
           {
             (isLoading) ? <Loader/> :
               <>
-                {testsList.map((quiz: IQuizMeta) => (
+                {testList.map((quiz: IQuizMeta) => (
                   <QuizCard
                     key={quiz.testId}
                     quiz={quiz}

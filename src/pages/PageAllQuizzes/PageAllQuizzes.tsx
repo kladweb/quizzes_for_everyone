@@ -1,14 +1,18 @@
 import React, { useEffect } from "react";
 import { loadAllQuizzes, useAllQuizzes, useIsAllLoaded, useIsLoading } from "../../store/useQuizzesStore";
-import "./pageAllQuizzes.css";
 import { Loader } from "../../components/Loader/Loader";
-import type { IQuizMeta } from "../../types/Quiz";
+import type { IQuizMeta, IQuizzes } from "../../types/Quiz";
 import { QuizCard } from "../../components/TestsList/QuizCard";
+import { useUser } from "../../store/useUserStore";
+import "./pageAllQuizzes.css";
 
 export const PageAllQuizzes = () => {
   const isAllLoaded = useIsAllLoaded();
-  const testsList = useAllQuizzes();
+  const testsListObj: IQuizzes | null = useAllQuizzes();
+  const testList: IQuizMeta[] = Object.values(testsListObj ? testsListObj : {});
+  testList.sort((a, b) => b.createdAt - a.createdAt);
   const isLoading = useIsLoading();
+  const user = useUser();
   const locale = navigator.languages?.[0] || navigator.language;
   const formatter = new Intl.DateTimeFormat(locale);
 
@@ -30,10 +34,11 @@ export const PageAllQuizzes = () => {
         {
           (isLoading) ? <Loader/> :
             <>
-              {testsList.map((quiz: IQuizMeta) => (
+              {testList.map((quiz: IQuizMeta) => (
                 <QuizCard
                   key={quiz.testId}
                   quiz={quiz}
+                  userUID={user?.uid}
                   dateFormatter={formatter}
                 />)
               )}
