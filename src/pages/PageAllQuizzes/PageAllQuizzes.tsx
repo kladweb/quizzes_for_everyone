@@ -4,11 +4,13 @@ import "./pageAllQuizzes.css";
 import { Loader } from "../../components/Loader/Loader";
 import type { IQuizMeta } from "../../types/Quiz";
 import { QuizCard } from "../../components/TestsList/QuizCard";
+import { useUser } from "../../store/useUserStore";
 
 export const PageAllQuizzes = () => {
   const isAllLoaded = useIsAllLoaded();
   const testsList = useAllQuizzes();
   const isLoading = useIsLoading();
+  const user = useUser();
   const locale = navigator.languages?.[0] || navigator.language;
   const formatter = new Intl.DateTimeFormat(locale);
 
@@ -34,6 +36,7 @@ export const PageAllQuizzes = () => {
                 <QuizCard
                   key={quiz.testId}
                   quiz={quiz}
+                  userUID={user?.uid}
                   dateFormatter={formatter}
                 />)
               )}

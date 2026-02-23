@@ -30,8 +30,9 @@
   --color-success-border: #66bb6a;
   --color-success-shadow: rgba(76, 175, 80, 0.4);
 
-  --color-error: #f44336;
-  --color-error-bg: #C62828;
+  --color-error: #C62828;
+  --color-error-msg: #7F1D1D;
+  --color-error-bg: #fdc6c6;
 
   --color-warning: #F59E0B;
   --color-warning-bg: #FFF8E1;
@@ -66,6 +67,7 @@
   --color-success-bg-light: #064E3B;
 
   --color-error: #F87171;
+  --color-error-msg: #fdc6c6;
   --color-error-bg: #7F1D1D;
 }
 

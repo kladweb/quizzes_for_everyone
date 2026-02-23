@@ -1,10 +1,9 @@
-import React, { useState, memo } from "react";
+import React, { useState, memo, useEffect } from "react";
+import { Link, NavLink } from "react-router-dom";
 import { IQuizMeta } from "../../types/Quiz";
-import { deleteUserQuiz } from "../../store/useQuizzesStore";
-import { handleCopy, handlerDeleteQuiz } from "../../utils/quizUtils";
+import { handleCopy, toggleLike } from "../../utils/quizUtils";
 import { Statistics } from "../Statistics/Statistics";
 import "./quizCard.css"
-import { NavLink } from "react-router-dom";
 
 interface ITestCardProps {
   quiz: IQuizMeta;
@@ -19,7 +18,15 @@ export const QuizCard: React.FC<ITestCardProps> = memo(
   ({quiz, openStatistic, dateFormatter, userUID, isShowStatistics, handlerDeleteQuiz}) => {
     const currentLink = `${window.location.origin}/quizzes/${quiz.testId}`;
     const [copied, setCopied] = useState(false);
-    const likesCount = quiz.likeUsers ? Object.keys(quiz.likeUsers).length : 0;
+    const [likesCount, setLikesCount] = useState<number>(quiz.likeUsers ? Object.keys(quiz.likeUsers).length : 0);
+    console.log(quiz.likeUsers);
+    const [isLiked, setIsLiked] = useState(false);
+
+    useEffect(() => {
+      if (userUID && quiz.likeUsers) {
+        setIsLiked(Object.keys(quiz.likeUsers).includes(userUID))
+      }
+    }, [likesCount]);
 
     return (
       <div className='test-item' key={quiz.testId}>
@@ -30,11 +37,12 @@ export const QuizCard: React.FC<ITestCardProps> = memo(
           <div className="info-item">Категория: <span>{quiz.category}</span></div>
           <div className="info-item">Язык вопросов: <span>{quiz.lang}</span></div>
           <div className="quiz-feedback-info" title="Скольким людям тест понравился">
-            <div className="button-like" role="button">
+            <div className={`action-info btn-like-act${isLiked ? " isLiked" : ""}`} role="button"
+                 onClick={() => toggleLike(quiz, userUID, setLikesCount)}>
               <img className="img-like" src="/images/Like-quiz.png" alt="like"/>
               <span>{likesCount}</span>
             </div>
-            <div className="button-like" title="Сколько раз тест пройден">
+            <div className="action-info" title="Сколько раз тест пройден">
               <img className="img-like" src="/images/Arrow-quiz.png" alt="like"/>
               <span>{quiz.executionCount}</span>
             </div>
@@ -67,9 +75,9 @@ export const QuizCard: React.FC<ITestCardProps> = memo(
           >
             {copied ? 'Скопировано!' : 'Копировать ссылку'}
           </button>
-          <NavLink className="link-open-test" to={`/quizzes/${quiz.testId}`}>
+          <Link className="link-open-test" to={`/quizzes/${quiz.testId}`}>
             <span>Открыть</span>
-          </NavLink>
+          </Link>
         </div>
         {
           isShowStatistics && <Statistics testId={quiz.testId}/>
@@ -79,6 +87,7 @@ export const QuizCard: React.FC<ITestCardProps> = memo(
   }, (oldProps: ITestCardProps, nextProps: ITestCardProps) => {
     return (
       oldProps.quiz === nextProps.quiz &&
+      // oldProps.quiz.likeUsers?.userUID === nextProps.quiz.likeUsers?.userUID &&
       oldProps.userUID === nextProps.userUID &&
       oldProps.isShowStatistics === nextProps.isShowStatistics
     )

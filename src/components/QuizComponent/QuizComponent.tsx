@@ -5,7 +5,7 @@ import { QuestionComponent } from "../Question/Question";
 import { QuizStorageManager } from "../../utils/QuizStorageManager";
 import { QuizResultView } from "../QuizResultView/QuizResultView";
 import { useUser } from "../../store/useUserStore";
-import "./quiz.css";
+import "./quizComponent.css";
 import { ref, set } from "firebase/database";
 import { database } from "../../firebase/firebase";
 
