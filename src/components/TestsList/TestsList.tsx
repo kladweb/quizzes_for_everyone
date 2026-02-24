@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import type { Quiz } from "../../types/Quiz";
 import { QuizCard } from "./QuizCard";
 import { useIsLoading } from "../../store/useQuizzesStore";
 import { Loader } from "../Loader/Loader";
 import { useUser } from "../../store/useUserStore";
+import { IQuizMeta } from "../../types/Quiz";
 
 interface ITestsListProps {
-  testsList: Quiz[],
+  testsList: IQuizMeta[],
 }
 
 export const TestsList: React.FC<ITestsListProps> = ({testsList}) => {
@@ -29,7 +29,7 @@ export const TestsList: React.FC<ITestsListProps> = ({testsList}) => {
       {
         (isLoading) ? <Loader/> :
           <>
-            {testsList.map((quiz: Quiz) => (
+            {testsList.map((quiz: IQuizMeta) => (
               <QuizCard
                 key={quiz.testId}
                 quiz={quiz}

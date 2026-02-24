@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../store/useUserStore";
 import {
-  deleteUserQuiz, loadUserQuizIds, loadUserQuizzes, useAllQuizzes, useIsAllLoaded, useIsLoading, useIsMyIdsLoaded,
+  deleteUserQuiz, loadUserIds, loadUserQuizzes, useAllQuizzes, useIsAllLoaded, useIsLoading, useIsMyIdsLoaded,
   useIsMyQuizzesLoaded, useMyQuizzesIds
 } from "../../store/useQuizzesStore";
 import { useClearCurrentQuiz } from "../../store/useCurrentCreatingQuiz";
@@ -68,7 +68,7 @@ export const PageMyQuizzes: React.FC = () => {
   useEffect(
     () => {
       if (!isMyIdsLoaded && user?.uid) {
-        loadUserQuizIds(user.uid)
+        loadUserIds(user.uid)
       }
 
       if (isAllLoaded || isMyQuizzesLoaded) {
