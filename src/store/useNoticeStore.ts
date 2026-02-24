@@ -1,10 +1,12 @@
 import { create, type StateCreator } from "zustand";
 import { nanoid } from "nanoid";
 
+type ITypes = "info" | "error";
+
 export type Toast = {
   id: string;
   message: string;
-  type: "info" | "error";
+  type: ITypes;
 }
 
 interface IInitialState {
@@ -12,8 +14,7 @@ interface IInitialState {
 }
 
 interface IActions {
-  showToastInfo: (message: string) => void,
-  showToastError: (message: string) => void,
+  showToast: (message: string, type: ITypes) => void,
 }
 
 interface INoticeState extends IInitialState, IActions {
@@ -25,14 +26,14 @@ const initialState: IInitialState = {
 
 const noticeStore: StateCreator<INoticeState> = (set, get) => ({
   ...initialState,
-  showToastInfo: (message: string) => {
+  showToast: (message: string, type: ITypes = "info") => {
     const toastsOld: Toast[] = get().toasts;
     const toast: Toast = {
       id: "msg" + nanoid(5),
       message: message,
-      type: "info"
+      type: type
     }
-    if ((toastsOld.length === 0) || toastsOld[toastsOld.length-1].message !== message) {
+    if ((toastsOld.length === 0) || toastsOld[toastsOld.length - 1].message !== message) {
       set(() => ({toasts: [...toastsOld, toast]}));
       setTimeout(() => {
         const toasts: Toast[] = get().toasts;
@@ -41,24 +42,9 @@ const noticeStore: StateCreator<INoticeState> = (set, get) => ({
       }, 3500);
     }
   },
-  showToastError: (message: string) => {
-    const toastsOld: Toast[] = get().toasts;
-    const toast: Toast = {
-      id: "msg" + nanoid(5),
-      message: message,
-      type: "error"
-    }
-    set(() => ({toasts: [...toastsOld, toast]}));
-    setTimeout(() => {
-      const toasts: Toast[] = get().toasts;
-      toasts.shift();
-      set(() => ({toasts: [...toasts]}));
-    }, 3500);
-  },
 });
 
 const useNoticeStore = create<INoticeState>()(noticeStore);
 
 export const useNotice = () => useNoticeStore((state) => state.toasts);
-export const useShowToastInfo = (message: string) => useNoticeStore.getState().showToastInfo(message);
-export const useShowToastError = (message: string) => useNoticeStore.getState().showToastError(message);
+export const showToast = (message: string, type: ITypes) => useNoticeStore.getState().showToast(message, type);
