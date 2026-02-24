@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { ref, set } from "firebase/database";
 import { nanoid } from "nanoid";
 import type { IStatistics, Question, IQuizMeta } from "../../types/Quiz";
 import { QuestionComponent } from "../Question/Question";
 import { QuizStorageManager } from "../../utils/QuizStorageManager";
 import { QuizResultView } from "../QuizResultView/QuizResultView";
 import { useUser } from "../../store/useUserStore";
-import "./quizComponent.css";
-import { ref, set } from "firebase/database";
 import { database } from "../../firebase/firebase";
+import "./quizComponent.css";
+import { updateQuiz } from "../../store/useQuizzesStore";
 
 interface IQuizProps {
   quiz: IQuizMeta;
@@ -119,6 +120,7 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, questions, onReset, s
     // console.log("statistics 01: ", statistics);
     QuizStorageManager.saveRecentStat(statistics);
     quiz.executionCount++
+    updateQuiz(quiz);
     set(ref(database, `quizzesMeta/${quiz.testId}/executionCount`), quiz.executionCount);
   };
 

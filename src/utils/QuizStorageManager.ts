@@ -97,7 +97,7 @@ export const QuizStorageManager = {
     }
   },
 
-  async saveQuizMetaToFirebase(quizMeta: IQuizMeta, questions: Question[], userUid: string): Promise<void> {
+  async saveQuizToFirebase(quizMeta: IQuizMeta, questions: Question[], userUid: string): Promise<void> {
     try {
       const promiseMeta = set(ref(database, `quizzesMeta/${quizMeta.testId}`), quizMeta);
       // const promiseQuestions = set(ref(database, `questions/${quizMeta.testId}`), JSON.stringify(questions, null, 2));
