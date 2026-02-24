@@ -56,7 +56,7 @@ export const Statistics: React.FC<{ testId: string }> = ({testId}) => {
           </>
           :
           <div className="stat-card">
-            <p>Информация отсутствует. <span>Тест ещё никто не проходил.</span></p>
+            <p>Информация отсутствует. <span>Возможно, история очищена.</span></p>
           </div>
       }
     </div>

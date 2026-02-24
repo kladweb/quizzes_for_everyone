@@ -32,12 +32,14 @@ const noticeStore: StateCreator<INoticeState> = (set, get) => ({
       message: message,
       type: "info"
     }
-    set(() => ({toasts: [...toastsOld, toast]}));
-    setTimeout(() => {
-      const toasts: Toast[] = get().toasts;
-      toasts.shift();
-      set(() => ({toasts: [...toasts]}));
-    }, 2000);
+    if ((toastsOld.length === 0) || toastsOld[toastsOld.length-1].message !== message) {
+      set(() => ({toasts: [...toastsOld, toast]}));
+      setTimeout(() => {
+        const toasts: Toast[] = get().toasts;
+        toasts.shift();
+        set(() => ({toasts: [...toasts]}));
+      }, 3500);
+    }
   },
   showToastError: (message: string) => {
     const toastsOld: Toast[] = get().toasts;

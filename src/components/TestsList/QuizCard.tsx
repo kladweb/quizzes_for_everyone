@@ -4,6 +4,7 @@ import { IQuizMeta } from "../../types/Quiz";
 import { handleCopy, toggleLike } from "../../utils/quizUtils";
 import { Statistics } from "../Statistics/Statistics";
 import "./quizCard.css"
+import { useShowToastError, useShowToastInfo } from "../../store/useNoticeStore";
 
 interface ITestCardProps {
   quiz: IQuizMeta;
@@ -38,7 +39,7 @@ export const QuizCard: React.FC<ITestCardProps> = memo(
           <div className="quiz-feedback-info" title="Скольким людям тест понравился">
             <div className={`action-info btn-like-act${isLiked ? " isLiked" : ""}`} role="button"
                  onClick={() => toggleLike(quiz, userUID, setLikesCount)}>
-              <img className="img-like" src="/images/Like-quiz.png" alt="like"/>
+              <img className={`img-like${isLiked ? " img-liked" : " img-noliked"}`} src="/images/Like-quiz.png" alt="like"/>
               <span>{likesCount}</span>
             </div>
             <div className="action-info" title="Сколько раз тест пройден">
@@ -54,7 +55,7 @@ export const QuizCard: React.FC<ITestCardProps> = memo(
           openStatistic &&
           <div className='test-buttons-block'>
             <button className='button-test' onClick={() => openStatistic(quiz.testId)}>Статистика</button>
-            <button className='button-test' onClick={() => {
+            <button className='button-test' onClick={() => {useShowToastInfo("Эта возможность пока не реализована.");
             }}>Редактировать
             </button>
             {

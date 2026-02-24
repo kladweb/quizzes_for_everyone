@@ -80,6 +80,13 @@
   vertical-align: middle;
 }
 
+.img-noliked {
+  filter: grayscale(75%);
+}
+
+.img-liked {
+  filter: none;
+}
 
 .quiz-control-block {
   width: 55%;
