@@ -21,8 +21,8 @@ export const ModalConfirm: React.FC<IModalConfirmProps> = (
     >
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <h2>{modalQuestion}</h2>
-        <button className="btn btn-modal" onClick={() => handlerConfirmDelete(false)}>НЕТ</button>
         <button className="btn btn-modal" onClick={() => handlerConfirmDelete(true)}>ДА</button>
+        <button className="btn btn-modal" onClick={() => handlerConfirmDelete(false)}>НЕТ</button>
       </div>
     </div>
   )
