@@ -73,22 +73,24 @@ export const PageQuiz = () => {
     }
   }, [testId]);
 
+  if (savedResultStorage) {
+    return <QuizResultView result={savedResultStorage} onReset={handleReset}/>;
+  }
+
+  if (!quiz || !questions) {
+    return (
+      <div className="loader-container">
+        {isPageEmpty ? <PageEmpty emptyReason="quizDeleted"/> : <Loader/>}
+      </div>
+    );
+  }
+
   return (
-    <>
-      {
-        (savedResultStorage) ? <QuizResultView result={savedResultStorage} onReset={handleReset}/> :
-          <>
-            {
-              (quiz && questions) ? <QuizComponent quiz={quiz} questions={questions} onReset={handleReset}
-                                                   saveStatistic={saveStatistic}/> :
-                <div className='loader-container'>
-                  {
-                    isPageEmpty ? <PageEmpty emptyReason="quizDeleted"/> : <Loader/>
-                  }
-                </div>
-            }
-          </>
-      }
-    </>
-  )
+      <QuizComponent
+        quiz={quiz}
+        questions={questions}
+        onReset={handleReset}
+        saveStatistic={saveStatistic}
+      />
+  );
 }
