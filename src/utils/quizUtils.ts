@@ -1,5 +1,5 @@
-import { useNotice, useShowToastError, useShowToastInfo } from "../store/useNoticeStore";
-import { child, get, ref, set } from "firebase/database";
+import { showToast } from "../store/useNoticeStore";
+import { ref, set } from "firebase/database";
 import { database } from "../firebase/firebase";
 import { IQuizMeta } from "../types/Quiz";
 
@@ -21,7 +21,7 @@ export const handlerDeleteQuiz = (
 
 export const toggleLike = async (quiz: IQuizMeta, userUID: string | undefined, setLikesCount: (likesCount: number) => void) => {
   if (!userUID) {
-    useShowToastError("Нужно залогиниться или пройти тест !");
+    showToast("Нужно залогиниться или пройти тест !", "error");
     return;
   }
   const likeUsers: { [userUID: string]: boolean } = quiz.likeUsers ? quiz.likeUsers : {};
