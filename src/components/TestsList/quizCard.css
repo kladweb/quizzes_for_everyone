@@ -42,17 +42,16 @@
 .info-item {
   box-sizing: border-box;
   width: 48%;
+  font-size: 0.85em;
   text-align: left;
 }
 
 .quiz-feedback-info {
-  /*width: 100%;*/
   display: flex;
   justify-content: left;
 }
 
 .action-info {
-  /*margin: 0.4em 1.5em 0 0;*/
   margin-right: 1em;
 
   span {
@@ -95,7 +94,6 @@
 .test-buttons-block {
   width: 100%;
   display: block;
-  /*margin: 0.2em 0;*/
 }
 
 .button-test {

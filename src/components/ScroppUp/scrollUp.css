@@ -1,0 +1,25 @@
+.scroll-div {
+  position: fixed;
+  display: block;
+  bottom: 7rem;
+  right: 1rem;
+  font-family: "Material Icons", fantasy;
+  color: rgba(234, 234, 234, 0.7);
+  background-color: #939999;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: transform 0.5s ease-in-out, opacity 0.2s ease-in-out;
+  transform: translateX(0);
+  /*transform: ${props => `translateX(${(props.$toShow ? "0" : "300%")})`};*/
+}
+
+.to-show {
+  transform: translateX(300%);
+}
+
+.scroll-icon {
+  display: block;
+  font-size: 1.5rem;
+  padding: 0 0.7rem 0.5rem;
+}

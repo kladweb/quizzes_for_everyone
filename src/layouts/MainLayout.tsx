@@ -6,6 +6,7 @@ import { useIsAuthLoading } from "../store/useUserStore";
 import { Loader } from "../components/Loader/Loader";
 import { useErrorLoading } from "../store/useQuizzesStore";
 import { ToastNotice } from "../components/ToastNotice/ToastNotice";
+import { ScrollUp } from "../components/ScroppUp/ScrollUp";
 
 export const MainLayout = () => {
   const isAuthLoading = useIsAuthLoading();
@@ -32,6 +33,7 @@ export const MainLayout = () => {
           <Outlet/>
         }
         <ToastNotice/>
+        <ScrollUp/>
       </main>
       <Footer/>
     </>
