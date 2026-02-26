@@ -15,7 +15,7 @@ export const PageMain = () => {
 
   return (
     <div className='tests-container'>
-      <div className={'noticeBlock'}>
+      <div className='noticeBlock'>
         <p className='noticeText'>Войдите в систему, чтобы начать создавать свои тесты...</p>
       </div>
       <button className='btn button-login ' onClick={loginGoogle} disabled={isAuthLoading}>

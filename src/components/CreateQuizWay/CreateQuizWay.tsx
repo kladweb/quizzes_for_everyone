@@ -12,8 +12,8 @@ export const CreateQuizWay: React.FC<ICreateQuizWayProps> = ({card, handlerCreat
 
   return (
     <div className='card-way-container' id={card.id} onClick={handlerCreateWay}>
-      <h2>{card.head}</h2>
-      <h3>Особенности метода:</h3>
+      <h3>{card.head}</h3>
+      <h4>Особенности метода:</h4>
       <ul>
         {
           features.map((feature, i) => <li key={i}>{feature}</li>)

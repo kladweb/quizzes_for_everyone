@@ -12,13 +12,15 @@
   cursor: pointer;
   transition: all 0.3s ease-in-out;
 
-  h2 {
+  h3 {
     margin: 0.5em;
+    font-size: 1.5em;
     font-weight: 700;
   }
 
-  h3 {
+  h4 {
     margin: 0.2em 0;
+    font-size: 1.2em;
     color: var(--color-text-primary);
   }
 
@@ -44,5 +46,21 @@
     box-shadow: none;
     transform: none;
     transition: all 0.1s ease-out;
+  }
+}
+
+@media (max-width: 460px) {
+  .card-way-container {
+    margin: 0.7em 0;
+    min-width: 100%;
+    font-size: 0.9rem;
+  }
+
+  h2 {
+    margin: 0;
+  }
+
+  h3 {
+    margin: 0.5em 0;
   }
 }

@@ -53,3 +53,17 @@ input[type="file"] {
   height: calc(100dvh - 10em);
   text-align: center;
 }
+
+@media (max-width: 660px) {
+  .main {
+    margin: 0;
+  }
+
+  .tests-container {
+    margin: 0.8em 1em;
+  }
+
+  .noticeText {
+    font-size: 1.2rem;
+  }
+}
