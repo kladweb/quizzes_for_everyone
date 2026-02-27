@@ -20,10 +20,11 @@
   text-wrap: balance;
 
 
-  & .noticeText {
-    font-size: 1.5em;
-    color: var(--color-text-primary);
-  }
+}
+
+.noticeText {
+  font-size: 1.5em;
+  color: var(--color-text-primary);
 }
 
 .close {

@@ -15,31 +15,33 @@ export const Header: React.FC = () => {
         <img className="logo-image" src="/images/Logo_v3.png" alt="logo"/>
         <h1>ANY QUIZ</h1>
       </NavLink>
-      <div>
+      <div className="nav-container">
         <nav className="navbar">
           <NavLink className='link-nav' to={'/allquizzes'}>
-            <span>ALL QUIZZES</span>
+            <span>ALL QUIZZES</span>
           </NavLink>
           {
             user &&
             <NavLink className='link-nav' to={'/myquizzes'}>
-              <span>MY QUIZZES</span>
+              <span>MY QUIZZES</span>
             </NavLink>
           }
         </nav>
-        {
-          !isQuizPage &&
-          <>
-            {
-              user ?
-                <button className='btn button-login' onClick={logoutGoogle}>LOGOUT</button> :
-                <button className='btn button-login ' onClick={loginGoogle} disabled={isAuthLoading}>
-                  {isAuthLoading ? "GOOGLE IN..." : "GOOGLE LOGIN"}
-                </button>
-            }
-          </>
-        }
-        <ThemeSwitch/>
+        <div className="login-theme">
+          {
+            !isQuizPage &&
+            <>
+              {
+                user ?
+                  <button className='btn button-login' onClick={logoutGoogle}>LOGOUT</button> :
+                  <button className='btn button-login ' onClick={loginGoogle} disabled={isAuthLoading}>
+                    {isAuthLoading ? "GOOGLE IN..." : "GOOGLE LOGIN"}
+                  </button>
+              }
+            </>
+          }
+          <ThemeSwitch/>
+        </div>
       </div>
     </header>
   );

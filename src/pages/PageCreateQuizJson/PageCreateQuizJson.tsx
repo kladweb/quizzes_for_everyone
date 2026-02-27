@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import { QuizLoader } from "../../components/QuizLoader/QuizLoader";
 import { QuizLoaderExtraInfo } from "../../components/QuizLoaderExtraInfo/QuizLoaderExtraInfo";
 import { Loader } from "../../components/Loader/Loader";
@@ -12,13 +11,8 @@ export const PageCreateQuizJson = () => {
   const user = useUser();
   const quizDraft = useQuizDraft();
   const quizComplete = useQuizComplete();
-  const navigate = useNavigate();
   const [currentTestId, setCurrentTestId] = useState<string | null>(null);
   const [isCreatingNewTest, setIsCreatingNewTest] = useState(false);
-
-  // useEffect(() => {
-  //   navigate("/service");
-  // }, [])
 
   return (
     <div className='tests-container'>

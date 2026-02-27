@@ -50,6 +50,7 @@
 }
 
 .navbar {
+  margin-top: 0.3em;
   display: inline-block;
 }
 
@@ -66,5 +67,32 @@
     /*-webkit-text-stroke: 1px 1px 1px var(--color-success);*/
     /*text-stroke: 1px 1px 1px var(--color-success);*/
     text-shadow: 0 0 3px var(--color-success);
+  }
+}
+
+.login-theme {
+  display: inline-block;
+  /*margin: 0;*/
+}
+
+@media (max-width: 680px) {
+  .link-logo {
+    h1 {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: right;
+    align-items: center;
+  }
+
+  .link-nav {
+    display: inline-block;
+    margin: 0.4em 0.5em;
   }
 }
