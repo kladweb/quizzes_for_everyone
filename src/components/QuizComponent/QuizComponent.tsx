@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ref, set } from "firebase/database";
+import { child, get, ref, set } from "firebase/database";
 import { nanoid } from "nanoid";
 import type { IStatistics, Question, IQuizMeta } from "../../types/Quiz";
 import { QuestionComponent } from "../Question/Question";
@@ -78,7 +78,7 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, questions, onReset, s
     return calculateQuestionScore(questionIndex) === 1;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setIsSubmitted(true);
     const finishTime = Date.now();
     // Calculate total score with partial credit
@@ -119,9 +119,20 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, questions, onReset, s
     saveStatistic(statistics);
     // console.log("statistics 01: ", statistics);
     QuizStorageManager.saveRecentStat(statistics);
-    quiz.executionCount++
+    const dbRef = ref(database);
+    const snapshot = await get(child(dbRef, `quizzesMeta/${quiz.testId}/executionCount`));
+    let quizExecutionCount: number;
+    if (snapshot.exists()) {
+      quizExecutionCount = snapshot.val();
+      console.log("A:", quiz.executionCount);
+    } else {
+      quizExecutionCount = quiz.executionCount;
+      console.log("B:", quiz.executionCount);
+    }
+    quizExecutionCount++;
+    quiz.executionCount = quizExecutionCount;
     updateQuiz(quiz);
-    set(ref(database, `quizzesMeta/${quiz.testId}/executionCount`), quiz.executionCount);
+    await set(ref(database, `quizzesMeta/${quiz.testId}/executionCount`), quizExecutionCount);
   };
 
   const allAnswered = selectedAnswers.every(answer => answer.length > 0);
