@@ -1,22 +1,24 @@
 .quizContainer {
-  max-width: 600px;
+  max-width: 42rem;
   margin: 0 auto;
-  padding: 20px;
+  padding: 20px 0;
 }
 
-.quizHeadBlock {
+.quiz-head-block {
   text-align: center;
-  margin-bottom: 30px;
+  margin: 0 1.875em;
+}
 
-  h2 {
-    margin-bottom: 10px;
-    color: var(--color-text-primary);
-  }
+.quiz-head {
+  margin-bottom: 0.6em;
+  font-size: 1.5em;
+  /*text-wrap: balance;*/
+  color: var(--color-text-primary);
+}
 
-  p {
-    font-size: 16px;
-    color: var(--color-text-secondary);
-  }
+.quiz-descr {
+  font-size: 1em;
+  color: var(--color-text-secondary);
 }
 
 .quizHeadBody {
@@ -24,9 +26,10 @@
 
   input {
     width: 100%;
-    max-width: 300px;
+    box-sizing: border-box;
+    max-width: 19em;
     padding: 10px 15px;
-    font-size: 16px;
+    font-size: 1em;
     border: 2px solid var(--color-border);
     border-radius: 6px;
     outline: none;
@@ -64,17 +67,18 @@
 
 .submitBlock {
   text-align: center;
-  margin-top: 30px;
+  margin: 1.875em 1em 0;
 
   .warningInfo {
     margin-top: 10px;
     color: var(--color-error);
-    font-size: 14px;
+    font-size: 0.9em;
+    text-wrap: balance;
   }
 }
 
 .submitSettings {
-  margin-bottom: 20px;
+  margin: 1.125em;
 
   label {
     display: inline-flex;
@@ -94,7 +98,7 @@
 
 .quizSubmitButton {
   padding: 15px 40px;
-  font-size: 18px;
+  font-size: 1.1em;
   font-weight: bold;
   color: var(--color-text-contrast);
   background-color: var(--color-disabled);
@@ -110,5 +114,20 @@
 
   &:hover {
     background-color: var(--color-secondary);
+  }
+}
+
+@media (max-width: 480px) {
+  .quiz-head-block {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .quizContainer {
+    font-size: 0.9rem;
+  }
+  .quiz-head-block {
+    margin: 0 1em;
   }
 }

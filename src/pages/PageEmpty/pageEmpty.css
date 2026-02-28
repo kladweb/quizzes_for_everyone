@@ -1,6 +1,7 @@
 .page-empty-container {
-  font-size: 1.5em;
   position: absolute;
+  width: 95%;
+  font-size: 1.5em;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -9,6 +10,7 @@
 
 .text-page-empty {
   white-space: pre-line;
+  text-wrap: balance;
 }
 
 .button-to-main {
@@ -25,5 +27,11 @@
 
   &:active {
     background-color: var(--color-tertiary);
+  }
+}
+
+@media (max-width: 460px) {
+  .text-page-empty {
+    font-size: 0.8em;
   }
 }

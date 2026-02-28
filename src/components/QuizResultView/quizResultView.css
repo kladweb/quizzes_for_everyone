@@ -1,12 +1,13 @@
 .result-wrapper {
   max-width: 600px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 1.125em;
 }
 
 .result-card {
-  margin-top: 30px;
-  padding: 20px;
+  max-width: 600px;
+  margin: 10px auto;
+  padding: 10px 20px;
   background-color: var(--color-success-bg-light);
   border-radius: 8px;
   text-align: center;
@@ -14,33 +15,33 @@
 
 .result-title {
   color: var(--color-success);
-  margin-bottom: 15px;
+  margin-bottom: 1em;
 }
 
 .result-subtitle {
   color: var(--color-success);
-  margin-bottom: 15px;
+  margin-bottom: 1em;
 }
 
 .result-text {
-  font-size: 18px;
-  margin-bottom: 10px;
+  font-size: 1.1em;
+  margin-bottom: 0.625em;
 }
 
 .result-text--total {
-  margin-bottom: 20px;
+  margin-bottom: 1.25em;
 }
 
 .result-percent {
-  font-size: 20px;
+  font-size: 1.25em;
   font-weight: bold;
   color: var(--color-success);
 }
 
 .result-button {
-  margin-top: 20px;
-  padding: 12px 24px;
-  font-size: 16px;
+  margin-top: 1.25em;
+  padding: 0.75em 1.5em;
+  font-size: 1em;
   color: var(--color-text-contrast);
   background-color: var(--color-primary);
   border: none;
@@ -54,8 +55,8 @@
 }
 
 .like-card {
-  margin-top: 10px;
-  padding: 20px;
+  margin-top: 0.625em;
+  padding: 1.25em;
   background-color: var(--color-success-bg-light);
   border-radius: 8px;
   text-align: center;
@@ -97,4 +98,15 @@
 .thanks-like {
   margin: 0;
   color: var(--color-success);
+}
+
+@media (max-width: 660px) {
+  .result-card {
+    margin: 0.8em 1em;
+    font-size: 0.8rem;
+  }
+
+  .result-wrapper {
+    padding: 0.5em;
+  }
 }

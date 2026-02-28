@@ -36,3 +36,13 @@
   opacity: 1;
   transform: translateX(0);
 }
+
+@media (max-width: 400px) {
+  #toast-container {
+    max-width: 14em;
+  }
+
+  .toast {
+    font-size: 0.9em;
+  }
+}

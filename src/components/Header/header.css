@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 0 1.5rem 0 var(--color-disabled);
+  box-shadow: 0 0 1.5em 0 var(--color-disabled);
 }
 
 .link-logo {
@@ -16,7 +16,7 @@
   h1 {
     display: block;
     margin: 0;
-    font-size: 2.5rem;
+    font-size: 2.5em;
     font-weight: 800;
     color: var(--color-secondary);
   }
@@ -25,7 +25,7 @@
 .button-login {
   margin: 6px 0;
   padding: 8px 16px;
-  font-size: 14px;
+  font-size: 0.85em;
   color: var(--color-text-contrast);
   background-color: var(--color-warning);
   border-radius: 6px;
@@ -45,7 +45,7 @@
 }
 
 .logo-image {
-  width: 4rem;
+  width: 4em;
   margin: 0 0.5rem 0.2rem;
 }
 
@@ -57,7 +57,7 @@
 .link-nav {
   margin: 0 0.5rem;
   text-decoration: none;
-  font-size: 1rem;
+  font-size: 1em;
   font-weight: 500;
   color: var(--color-secondary);
   vertical-align: middle;
@@ -84,6 +84,9 @@
 }
 
 @media (max-width: 480px) {
+  .header-container {
+    font-size: 0.8rem;
+  }
   .nav-container {
     display: flex;
     flex-wrap: wrap;
