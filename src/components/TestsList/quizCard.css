@@ -100,7 +100,7 @@
   display: inline-block;
   height: 1.2rem;
   margin: 4px;
-  font-size: 0.7rem;
+  font-size: 0.7em;
   color: var(--color-primary);
   background-Color: var(--color-bg-card);
   border: solid 1px var(--color-primary);
@@ -135,7 +135,7 @@
   font-weight: 500;
   text-decoration: none;
   color: var(--color-quaternary);
-  line-height: 1.6rem;
+  line-height: 1.6em;
   transition: all 0.3s ease;
 
   &:hover {
@@ -154,4 +154,22 @@
   width: 100%;
   margin: 0.2rem;
   color: var(--color-text-secondary);
+}
+
+@media (max-width: 580px) {
+  .test-item {
+    width: 100%;
+  }
+}
+
+@media (max-width: 496px) {
+  .info-item {
+    width: 45%;
+  }
+}
+
+@media (max-width: 400px) {
+.test-item {
+  font-size: 0.9rem;
+}
 }

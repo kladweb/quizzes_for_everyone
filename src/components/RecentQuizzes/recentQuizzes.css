@@ -37,8 +37,9 @@
 
 .recent-info {
   width: 100%;
-  margin: 0.1rem 0.3rem;
-  font-size: 0.9rem;
+  box-sizing: border-box;
+  margin: 0.1rem auto;
+  font-size: 0.9em;
   font-style: inherit;
 
   span {
@@ -57,12 +58,24 @@
 
 .button-recent {
   display: inline-block;
-  height: 1.2rem;
+  height: 1.2em;
   margin: 4px;
-  font-size: 0.7rem;
+  font-size: 0.7em;
 }
 
 .recent-warning {
-  font-size: 0.7rem;
+  font-size: 0.7em;
   color: var(--color-error);
+}
+
+@media (max-width: 470px) {
+  .recent-test-block {
+    width: 100%;
+  }
+}
+
+@media (max-width: 400px) {
+  .tests-container {
+    font-size: 0.9rem;
+  }
 }

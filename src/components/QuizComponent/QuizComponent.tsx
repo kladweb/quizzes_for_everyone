@@ -178,9 +178,9 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, questions, onReset, s
 
   return (
     <div className='quizContainer'>
-      <div className='quizHeadBlock'>
-        <h2 className='quizHead'>{quiz.title}</h2>
-        <p>{quiz.description}</p>
+      <div className='quiz-head-block'>
+        <h2 className='quiz-head'>{quiz.title}</h2>
+        <p className="quiz-descr">{quiz.description}</p>
 
         {!isSubmitted && (
           <div className='quizHeadBody'>
