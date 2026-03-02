@@ -1,5 +1,5 @@
 import React, { useState, memo, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { IQuizMeta } from "../../types/Quiz";
 import { handleCopy, toggleLike } from "../../utils/quizUtils";
 import { Statistics } from "../Statistics/Statistics";
@@ -17,6 +17,7 @@ interface ITestCardProps {
 
 export const QuizCard: React.FC<ITestCardProps> = memo(
   ({quiz, openStatistic, dateFormatter, userUID, isShowStatistics, handlerDeleteQuiz}) => {
+    const navigate = useNavigate();
     const currentLink = `${window.location.origin}/quizzes/${quiz.testId}`;
     const [copied, setCopied] = useState(false);
     const [likesCount, setLikesCount] = useState<number>(quiz.likeUsers ? Object.keys(quiz.likeUsers).length : 0);
@@ -57,7 +58,8 @@ export const QuizCard: React.FC<ITestCardProps> = memo(
           <div className='test-buttons-block'>
             <button className='button-test' onClick={() => openStatistic(quiz.testId)}>Статистика</button>
             <button className='button-test' onClick={() => {
-              showToast("Эта возможность пока не реализована.", "info");
+              navigate(`/createquiz/manual/${quiz.testId}`);
+              // showToast("Эта возможность пока не реализована.", "info");
             }}>Редактировать
             </button>
             {
