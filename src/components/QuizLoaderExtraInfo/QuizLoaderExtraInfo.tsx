@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { QUIZ_CATEGORIES, QUIZ_LANGUAGES } from "./quizCategories";
-import { useQuizDraft, useSetQuizComplete } from "../../store/useCurrentCreatingQuiz";
+import {
+  useQuizDraft,
+  setQuizComplete,
+  useIsValidate,
+  type ValidateFieldType, setIsValidate
+} from "../../store/useCurrentCreatingQuiz";
 import { saveUserQuiz } from "../../store/useQuizzesStore";
 import "./quizLoaderExtraInfo.css"
 
@@ -20,17 +25,22 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
   const [quizCategory, setQuizCategory] = useState("");
   const [quizLanguage, setQuizLanguage] = useState("русский");
   const [quizAccess, setQuizAccess] = useState<"public" | "private">("public");
-  const [isValidate, setValidate] = useState(true);
+  // const [isValidate, setValidate] = useState(true);
+  const isValidate: ValidateFieldType = useIsValidate();
+  const isValidateCat: boolean = isValidate.category;
 
   const saveCurrentTest = async () => {
+    if (!quizDraft?.title) {
+      setIsValidate("title", false);
+    }
     if (!quizCategory) {
-      setValidate(false);
-      setTimeout(() => {
-        setValidate(true);
-      }, 2000);
+      setIsValidate("category", false);
+      // setTimeout(() => {
+      //   setValidate(true);
+      // }, 2000);
       return;
     } else {
-      setValidate(true);
+      setIsValidate("category", true);
     }
     if (quizDraft) {
       if (!QUIZ_CATEGORIES.includes(quizCategory)) {
@@ -43,7 +53,7 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
       quizDraft.access = quizAccess;
       quizDraft.likeUsers = {};
       quizDraft.executionCount = 0;
-      useSetQuizComplete(quizDraft);
+      setQuizComplete(quizDraft);
       setIsCreatingNewTest(true);
       await saveUserQuiz(quizDraft, userUID)
         .then(() => {
@@ -57,7 +67,7 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
 
   return (
     <div className='extra-info-block'>
-      <p>Для сохранения теста заполните оставшиеся поля:</p>
+      <p>Для сохранения теста заполните дополнительные поля:</p>
       <span title={catTitles.category}>Категория теста: </span>
       <input
         name='categories'
@@ -65,7 +75,12 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
         type='text'
         placeholder="например: химия"
         value={quizCategory}
-        onChange={(e) => setQuizCategory(e.target.value)}
+        onChange={(e) => {
+          if (e.target.value) {
+            setIsValidate("category", true);
+          }
+          setQuizCategory(e.target.value)
+        }}
       />
       <datalist id="categories">
         {
@@ -73,7 +88,7 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
         }
       </datalist>
       {
-        !isValidate && <p className='text-save-error'>Поле не может быть пустым!</p>
+        !isValidateCat && <p className='text-save-error'>Поле не может быть пустым!</p>
       }
       <span title={catTitles.language}>Язык теста: </span>
       <select name="select" onChange={(e) => setQuizLanguage(e.target.value)}>
@@ -100,7 +115,13 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
           </p>
         </>
       }
-      <button className='btn button-create btn-save' onClick={saveCurrentTest}>СОХРАНИТЬ ТЕСТ</button>
+      <button
+        className='btn button-create btn-save'
+        disabled={(!isValidate.category || !isValidate.title)}
+        onClick={saveCurrentTest}
+      >
+        СОХРАНИТЬ ТЕСТ
+      </button>
     </div>
   )
 }

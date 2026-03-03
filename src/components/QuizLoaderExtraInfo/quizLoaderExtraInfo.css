@@ -64,6 +64,11 @@
 
 .btn-save {
   display: block;
+
+  &:disabled, &:disabled:hover {
+    background-color: var(--color-disabled);
+    cursor: not-allowed;
+  }
 }
 
 .warning-save {

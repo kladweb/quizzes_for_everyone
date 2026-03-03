@@ -15,8 +15,8 @@ export interface IQuizMeta {
   testId: string;
   createdBy: string;
   title: string;
-  createdAt: Date;
-  modifiedAt?: Date;
+  createdAt: number;
+  modifiedAt?: number;
   category?: string;
   categoryDraft?: string;
   lang?: string;

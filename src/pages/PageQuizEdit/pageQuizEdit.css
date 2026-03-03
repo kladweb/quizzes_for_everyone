@@ -2,12 +2,12 @@
   width: 100%;
   text-align: center;
   background-color: var(--color-bg-page);
-  border: none;
+  border: 2px dashed var(--color-border);
   outline: none;
   resize: none;
 
   &:focus, &:focus-visible {
-    border: 2px dashed var(--color-border);
+    border: 2px dashed var(--color-warning);
   }
 }
 
@@ -22,4 +22,15 @@
 .edit-descr {
   font-size: 1em;
   color: var(--color-text-secondary);
+}
+
+.no-validate {
+  border: 2px dashed var(--color-error);
+}
+
+.title-error {
+  margin: -0.8em 0 1em;
+  padding: 0;
+  text-align: left;
+  color: var(--color-error);
 }

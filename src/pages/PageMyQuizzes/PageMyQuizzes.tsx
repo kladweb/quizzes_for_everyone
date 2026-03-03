@@ -5,7 +5,7 @@ import {
   deleteUserQuiz, loadUserIds, loadUserQuizzes, useAllQuizzes, useIsAllLoaded, useIsLoading, useIsMyIdsLoaded,
   useIsMyQuizzesLoaded, useMyQuizzesIds
 } from "../../store/useQuizzesStore";
-import { useClearCurrentQuiz } from "../../store/useCurrentCreatingQuiz";
+import { clearCurrentQuiz } from "../../store/useCurrentCreatingQuiz";
 import { Loader } from "../../components/Loader/Loader";
 import { IQuizMeta, IQuizzes } from "../../types/Quiz";
 import { QuizCard } from "../../components/TestsList/QuizCard";
@@ -38,7 +38,7 @@ export const PageMyQuizzes: React.FC = () => {
   testList.sort((a, b) => b.createdAt - a.createdAt);
 
   const createQuiz = () => {
-    useClearCurrentQuiz();
+    clearCurrentQuiz();
     navigate("/createquiz");
   }
 
@@ -67,27 +67,17 @@ export const PageMyQuizzes: React.FC = () => {
 
   useEffect(
     () => {
-      if (!isMyIdsLoaded && user?.uid) {
-        loadUserIds(user.uid)
-      }
-
       if (isAllLoaded || isMyQuizzesLoaded) {
         console.log("User data already loaded");
         return;
       }
-
-      if (user) {
+      if (!isMyIdsLoaded && user?.uid) {
+        loadUserIds(user.uid)
+      }
+      if (isMyIdsLoaded && user?.uid) {
         console.log('loadUserQuizzes');
         loadUserQuizzes(user.uid);
       }
-      // if (isMyLoaded) {
-      //   console.log("User data already loaded");
-      //   return;
-      // }
-      // if (user) {
-      //   console.log('loadUserQuizzes');
-      //   loadUserQuizzes(user.uid);
-      // }
     }, [isMyIdsLoaded]);
 
   return (

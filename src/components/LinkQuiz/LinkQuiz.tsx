@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { useClearCurrentQuiz, useQuizComplete } from "../../store/useCurrentCreatingQuiz";
+import { clearCurrentQuiz, useQuizComplete } from "../../store/useCurrentCreatingQuiz";
 import "./linkQuiz.css";
 
 export const LinkQuiz: React.FC<{ testId: string }> = ({testId}) => {
@@ -39,7 +39,7 @@ export const LinkQuiz: React.FC<{ testId: string }> = ({testId}) => {
       <p className="link-info">Или скопируйте ссылку в буфер для того чтобы ею поделиться.</p>
       <NavLink className='link-body' to={'/myquizzes'}>Перейти к моим тестам</NavLink>
       <NavLink className='link-body' to={'/createquiz'}>Вернутся на главную страницу</NavLink>
-      <button className="btn btn-link-copy" onClick={useClearCurrentQuiz}>Создать ещё один тест</button>
+      <button className="btn btn-link-copy" onClick={clearCurrentQuiz}>Создать ещё один тест</button>
     </div>
   )
 }

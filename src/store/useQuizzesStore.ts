@@ -97,10 +97,11 @@ const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
 
     let allTestListNext: IQuizzes;
     if (allTestListPrev) {
-      allTestListNext = {quiz, ...allTestListPrev};
+      allTestListNext = {[quiz.testId]: quiz, ...allTestListPrev};
     } else {
-      allTestListNext = {quiz}
+      allTestListNext = {[quiz.testId]: quiz}
     }
+    console.log(allTestListNext);
     set(() => ({allQuizzes: allTestListNext}));
     try {
       await QuizStorageManager.saveQuizToFirebase(quiz, questions, userUid);
@@ -111,6 +112,7 @@ const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
         set(() => ({allQuizzes: allTestListPrev}));
       }
       set(() => ({errorLoading: "Ошибка сохранения теста!"}));
+      console.log("Ошибка сохранения теста!");
     }
   },
 
