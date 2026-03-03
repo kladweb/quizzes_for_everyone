@@ -1,0 +1,25 @@
+.quiz-edit {
+  width: 100%;
+  text-align: center;
+  background-color: var(--color-bg-page);
+  border: none;
+  outline: none;
+  resize: none;
+
+  &:focus, &:focus-visible {
+    border: 2px dashed var(--color-border);
+  }
+}
+
+.edit-head {
+  margin-bottom: 0.6em;
+  font-size: 1.5em;
+  font-weight: bold;
+  /*text-wrap: balance;*/
+  color: var(--color-text-primary);
+}
+
+.edit-descr {
+  font-size: 1em;
+  color: var(--color-text-secondary);
+}

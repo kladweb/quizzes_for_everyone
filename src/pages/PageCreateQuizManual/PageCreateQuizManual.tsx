@@ -10,14 +10,14 @@ export const PageCreateQuizManual = () => {
   const params = useParams();
   const [testId, setTestId] = useState<string | undefined>(params.testid);
 
-  console.log(params);
-  console.log(testId)
+  // console.log(params);
+  // console.log(testId)
 
   useEffect(() => {
-    console.log("A");
+    // console.log("A");
     if (!testId) {
       setTestId(nanoid(12));
-      console.log("B");
+      // console.log("B");
     }
   }, [testId]);
 
