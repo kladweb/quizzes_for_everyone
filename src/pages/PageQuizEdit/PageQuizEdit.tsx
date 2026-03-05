@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import type { IQuizMeta, IQuizzes, Question } from "../../types/Quiz";
-import { useAllQuizzes, useIsAllLoaded } from "../../store/useQuizzesStore";
+import { useAllQuizzes } from "../../store/useQuizzesStore";
 import { useUser } from "../../store/useUserStore";
-import "./pageQuizEdit.css";
 import { QuizLoaderExtraInfo } from "../../components/QuizLoaderExtraInfo/QuizLoaderExtraInfo";
+import "./pageQuizEdit.css";
 import {
   clearCurrentQuiz,
   setIsValidate,
@@ -14,16 +14,15 @@ import {
 } from "../../store/useCurrentCreatingQuiz";
 import { QuizStorageManager } from "../../utils/QuizStorageManager";
 import { showToast } from "../../store/useNoticeStore";
+import { QuestionEdit } from "../../components/QuestionEdit/QuestionEdit";
 
 export const PageQuizEdit = () => {
   const params = useParams();
   const testId = params.testid;
   const user = useUser();
-  const isAllLoaded = useIsAllLoaded();
   const quizzesAll: IQuizzes | null = useAllQuizzes();
   const [isCreatingNewTest, setIsCreatingNewTest] = useState(false);
   const quiz = useQuizDraft();
-  // const [isEditValidate, setIsEditValidate] = useState(true);
   const isEditValidate: boolean = useIsValidate().title;
 
 
@@ -46,56 +45,61 @@ export const PageQuizEdit = () => {
     }
   };
 
-  const loadQuizAndQuestions = async () => {
-    if (testId) {
-      const quizPromise = await Promise.all([QuizStorageManager.fetchCurrentQuiz(testId), QuizStorageManager.fetchQuestions(testId)]);
-      const quiz = quizPromise[0];
-      const questions = quizPromise[1];
-      if (quiz && questions) {
-        quiz.questions = quizPromise[1];
-      } else {
-        return;
-      }
-      return quiz;
-    }
-  }
-
   useEffect(() => {
-    if (testId && isAllLoaded && quizzesAll) {
-      if (testId in quizzesAll) {
-        setQuizDraft(quizzesAll[testId]);
-        return;
+    if (quiz) {
+      return;
+    }
+    if (testId) {
+      if (quizzesAll && (testId in quizzesAll)) {
+        const quizCurrent = quizzesAll[testId];
+        if (!quizCurrent.questions) {
+          QuizStorageManager.fetchQuestions(quizCurrent.testId)
+            .then((data) => {
+              quizCurrent.questions = data;
+              setQuizDraft(quizCurrent);
+              return;
+            })
+            .catch((err) => {
+              showToast(err, "error");
+            });
+        } else {
+          setQuizDraft(quizCurrent);
+          return;
+        }
+      } else {
+        QuizStorageManager.loadQuizAndQuestions(testId)
+          .then((quiz: IQuizMeta | undefined) => {
+            // console.log(quiz);
+            if (quiz) {
+              setQuizDraft(quiz);
+              return;
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+            showToast("Ошибка загрузки данных!", "error");
+          });
+        const quizTemplate: IQuizMeta = {
+          testId: testId,
+          createdBy: user?.uid ? user.uid : "",
+          title: "",
+          createdAt: Date.now(),
+          access: "public",
+          executionCount: 0,
+          likeUsers: {},
+          dislikeUsers: {},
+          questions: []
+        }
+        setQuizDraft(quizTemplate);
       }
     }
-    if (testId && !quiz) {
-      loadQuizAndQuestions()
-        .then((quiz: IQuizMeta | undefined) => {
-          // console.log(quiz);
-          if (quiz) {
-            setQuizDraft(quiz);
-            return;
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          showToast("Ошибка загрузки данных!", "error");
-        });
-      const quizTemplate: IQuizMeta = {
-        testId: testId,
-        createdBy: user?.uid ? user.uid : "",
-        title: "",
-        createdAt: Date.now(),
-        access: "public",
-        executionCount: 0,
-        likeUsers: {},
-        dislikeUsers: {}
-      }
-      setQuizDraft(quizTemplate);
-    }
+
     return () => {
       clearCurrentQuiz();
     }
-  }, [testId, isAllLoaded, user]);
+  }, []);
+
+  console.log(quiz);
 
   return (
     <div className='quizContainer'>
@@ -127,6 +131,17 @@ export const PageQuizEdit = () => {
               onChange={(e) => handleChange("description", e.target.value)}
               onKeyDown={handleKeyDown}
             />
+            {
+              quiz.questions &&
+              <>
+                {
+                  quiz.questions.map((question: Question) => (
+                      <QuestionEdit key={question.id} question={question} handleKeyDown={handleKeyDown}/>
+                    )
+                  )
+                }
+              </>
+            }
             <QuizLoaderExtraInfo userUID={user.uid} setIsCreatingNewTest={setIsCreatingNewTest}/>
           </>
         }

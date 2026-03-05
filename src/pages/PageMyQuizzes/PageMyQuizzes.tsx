@@ -67,7 +67,7 @@ export const PageMyQuizzes: React.FC = () => {
 
   useEffect(
     () => {
-      if (isAllLoaded || isMyQuizzesLoaded) {
+      if (isAllLoaded && isMyQuizzesLoaded) {
         console.log("User data already loaded");
         return;
       }
