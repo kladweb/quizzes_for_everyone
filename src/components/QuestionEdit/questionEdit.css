@@ -1,0 +1,72 @@
+.options-edit {
+  display: flex;
+  /*flex-direction: column;*/
+  flex-wrap: wrap;
+  gap: 0.5em;
+  font-size: 0.9em;
+}
+
+.question-edit {
+  border: none;
+  outline: none;
+  resize: none;
+  font-weight: bold;
+
+  &:focus, &:focus-visible {
+    border: 2px dashed var(--color-warning);
+  }
+}
+
+.name-question-edit {
+  width: 100%;
+  margin-bottom: 1em;
+  font-size: 1.2em;
+  color: var(--color-text-secondary);
+  background-color: var(--color-bg-card);
+}
+
+.option-edit {
+  display: inline-block;
+  width: 85%;
+  padding: 0.75em 1.125em;
+  font-size: 1em;
+  color: var(--color-text-primary);
+  background-color: var(--color-text-contrast);
+  border: 2px solid var(--color-border);
+  border-radius: 6px;
+  text-align: left;
+}
+
+.add-option {
+  /*width: 7em;*/
+  /*margin: 1em auto 0;*/
+  /*padding: 0.4em;*/
+}
+
+.btn-delete-container {
+  width: 5%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-option-delete {
+  font-size: 1.5em;
+  color: var(--color-text-primary);
+  padding: 0 0.3em 0.1em;
+  line-height: 0.8em;
+  vertical-align: middle;
+  display: inline-block;
+  border: 1px solid var(--color-error);
+  outline: none;
+  background-color: var(--color-bg-card);
+  border-radius: 50%;
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 0 0 0.2em 0 var(--color-error);
+  }
+  &:active {
+    box-shadow: 0 0 0.2em 0 var(--color-bg-page);
+  }
+}

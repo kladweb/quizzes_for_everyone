@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import type { IQuizMeta, IQuizzes, Question } from "../../types/Quiz";
-import { useAllQuizzes } from "../../store/useQuizzesStore";
+import type { IQuizMeta, IQuizzes, Option, Question } from "../../types/Quiz";
+import { updateQuiz, useAllQuizzes } from "../../store/useQuizzesStore";
 import { useUser } from "../../store/useUserStore";
 import { QuizLoaderExtraInfo } from "../../components/QuizLoaderExtraInfo/QuizLoaderExtraInfo";
 import "./pageQuizEdit.css";
@@ -15,6 +15,8 @@ import {
 import { QuizStorageManager } from "../../utils/QuizStorageManager";
 import { showToast } from "../../store/useNoticeStore";
 import { QuestionEdit } from "../../components/QuestionEdit/QuestionEdit";
+
+const optionsVar = ["a", "b", "c", "d", "e", "f"];
 
 export const PageQuizEdit = () => {
   const params = useParams();
@@ -44,6 +46,32 @@ export const PageQuizEdit = () => {
       setIsValidate("title", true);
     }
   };
+
+  const addOption = (question: Question) => {
+    const optionName = optionsVar[question.options.length];
+    if (quiz) {
+      const newQuiz = {...quiz};
+      newQuiz.questions?.forEach((quest) => {
+        if (quest.id === question.id) {
+          quest.options.push(
+            {
+              id: `${question.id}_${optionName}`,
+              text: ""
+            }
+          );
+        }
+      })
+      setQuizDraft(newQuiz);
+    }
+  }
+
+  const deleteOption = (question: Question, option: Option) => {
+    if (quiz) {
+      question.options.splice(question.options.indexOf(option), 1);
+      const newQuiz = {...quiz};
+      setQuizDraft(newQuiz);
+    }
+  }
 
   useEffect(() => {
     if (quiz) {
@@ -136,7 +164,13 @@ export const PageQuizEdit = () => {
               <>
                 {
                   quiz.questions.map((question: Question) => (
-                      <QuestionEdit key={question.id} question={question} handleKeyDown={handleKeyDown}/>
+                      <QuestionEdit
+                        key={question.id}
+                        question={question}
+                        handleKeyDown={handleKeyDown}
+                        addOption={addOption}
+                        deleteOption={deleteOption}
+                      />
                     )
                   )
                 }
