@@ -79,3 +79,7 @@
     color: var(--color-text-primary);
   }
 }
+
+.submit-error-info {
+  color: var(--color-error);
+}

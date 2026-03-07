@@ -1,24 +1,24 @@
 import { create, type StateCreator } from "zustand";
 import type { IQuizMeta } from "../types/Quiz";
 
-export type ValidateFieldType = {
-  title: boolean,
-  category: boolean,
-}
-
 type FieldType = "title" | "category";
 
 interface IInitialState {
   currentQuizDraft: IQuizMeta | null,
   currentQuizComplete: IQuizMeta | null,
-  isValidate: ValidateFieldType
+  formError: {
+    [key: string]: boolean;
+  }
 }
 
 interface IActions {
   setQuizDraft: (draft: IQuizMeta) => void,
   setQuizComplete: (draft: IQuizMeta) => void,
   clearCurrentQuiz: () => void,
-  setIsValidate: (field: FieldType, isCurrValidate: boolean) => void,
+  validateField: (name: string, value: string) => void,
+  resetFormError: () => void,
+
+  // setIsValidate: (field: FieldType, isCurrValidate: boolean) => void,
 }
 
 interface IQuizzesState extends IInitialState, IActions {
@@ -27,10 +27,7 @@ interface IQuizzesState extends IInitialState, IActions {
 const initialState: IInitialState = {
   currentQuizDraft: null,
   currentQuizComplete: null,
-  isValidate: {
-    title: true,
-    category: true,
-  }
+  formError: {},
 }
 
 const currentQuizStore: StateCreator<IQuizzesState> = (set, get) => ({
@@ -47,8 +44,15 @@ const currentQuizStore: StateCreator<IQuizzesState> = (set, get) => ({
     set(() => ({currentQuizComplete: null}));
     set(() => ({currentQuizDraft: null}));
   },
-  setIsValidate: (field: FieldType, isCurrValidate: boolean) => {
-    set((prev) => ({isValidate: {...prev.isValidate, [field]: isCurrValidate}}))
+  validateField: (name: string, value: string) => {
+    if (!value.trim()) {
+      set(prev => ({formError: {...prev.formError, [name]: true}}));
+    } else {
+      set(prev => ({formError: {...prev.formError, [name]: false}}));
+    }
+  },
+  resetFormError: () => {
+    set(() => ({formError: {}}));
   }
 });
 
@@ -56,9 +60,10 @@ const useCurrentQuizStore = create<IQuizzesState>()(currentQuizStore);
 
 export const useQuizDraft = () => useCurrentQuizStore((state) => state.currentQuizDraft);
 export const useQuizComplete = () => useCurrentQuizStore((state) => state.currentQuizComplete);
-export const useIsValidate = () => useCurrentQuizStore((state) => state.isValidate);
+export const useFormError = () => useCurrentQuizStore((state) => state.formError);
 
 export const setQuizDraft = (quiz: IQuizMeta) => useCurrentQuizStore.getState().setQuizDraft(quiz);
 export const setQuizComplete = (quiz: IQuizMeta) => useCurrentQuizStore.getState().setQuizComplete(quiz);
 export const clearCurrentQuiz = () => useCurrentQuizStore.getState().clearCurrentQuiz();
-export const setIsValidate = (field: FieldType, isCurrValidate: boolean) => useCurrentQuizStore.getState().setIsValidate(field, isCurrValidate);
+export const validateField = (name: string, value: string) => useCurrentQuizStore.getState().validateField(name, value);
+export const resetFormError = () => useCurrentQuizStore.getState().resetFormError();
