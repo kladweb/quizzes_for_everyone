@@ -87,6 +87,18 @@ interface IFirestoreData {
   }
 }
 
+export enum ToastType {
+  INFO = "info",
+  ERROR = "error",
+  WARNING = "warning",
+}
+
+export type Toast = {
+  id: string;
+  message: string;
+  type: ToastType;
+};
+
 // export interface IQuizStorage {
 //   testId: string;
 //   title: string;

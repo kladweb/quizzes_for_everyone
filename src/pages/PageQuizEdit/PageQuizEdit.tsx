@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import type { IQuizMeta, IQuizzes, Option, Question } from "../../types/Quiz";
-import { updateQuiz, useAllQuizzes } from "../../store/useQuizzesStore";
+import { IQuizMeta, IQuizzes, Option, Question, ToastType } from "../../types/Quiz";
+import { setIsLoading, useAllQuizzes, useIsLoading } from "../../store/useQuizzesStore";
 import { useUser } from "../../store/useUserStore";
 import { QuizLoaderExtraInfo } from "../../components/QuizLoaderExtraInfo/QuizLoaderExtraInfo";
 import "./pageQuizEdit.css";
 import {
   clearCurrentQuiz,
-  validateField,
-  useFormError,
   setQuizDraft,
-  useQuizDraft
+  useFormError,
+  useQuizDraft,
+  validateField
 } from "../../store/useCurrentCreatingQuiz";
 import { QuizStorageManager } from "../../utils/QuizStorageManager";
 import { showToast } from "../../store/useNoticeStore";
@@ -28,6 +28,7 @@ export const PageQuizEdit = () => {
   const [isCreatingNewTest, setIsCreatingNewTest] = useState(false);
   const quiz = useQuizDraft();
   const isFormValid = Object.values(formError).every(e => !e);
+  const isLoading = useIsLoading();
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
@@ -135,6 +136,33 @@ export const PageQuizEdit = () => {
     setQuizDraft(newQuiz);
   };
 
+  const handleCorrectCheck = (e: React.ChangeEvent<HTMLInputElement>, option: Option, question: Question) => {
+    console.log(e.target.checked);
+    if (!quiz) return;
+    const correctAnswers: string[] = [...question.correctAnswers];
+    if (e.target.checked) {
+      correctAnswers.push(option.id);
+    } else {
+      if (correctAnswers.length <= 1) {
+        showToast("Должен быть хотя бы один правильный вариант!", ToastType.WARNING)
+        return;
+      }
+      let index = correctAnswers.indexOf(option.id);
+      if (index !== -1) {
+        correctAnswers.splice(index, 1);
+      }
+    }
+    const newQuiz = {
+      ...quiz,
+      questions: quiz.questions?.map(q =>
+        q.id === question.id
+          ? {...q, correctAnswers: correctAnswers}
+          : q
+      )
+    };
+    setQuizDraft(newQuiz);
+  }
+
   // const handleOptionEdit = (option: Option, value: string) => {
   //   if (quiz) {
   //     option.text = value;
@@ -171,13 +199,14 @@ export const PageQuizEdit = () => {
               return;
             })
             .catch((err) => {
-              showToast(err, "error");
+              showToast(err, ToastType.ERROR);
             });
         } else {
           setQuizDraft(quizCurrent);
           return;
         }
       } else {
+        setIsLoading(true);
         QuizStorageManager.loadQuizAndQuestions(testId)
           .then((quiz: IQuizMeta | undefined) => {
             // console.log(quiz);
@@ -188,8 +217,11 @@ export const PageQuizEdit = () => {
           })
           .catch((error) => {
             console.log(error);
-            showToast("Ошибка загрузки данных!", "error");
-          });
+            showToast("Ошибка загрузки данных!", ToastType.ERROR);
+          })
+          .finally(() => {
+            setIsLoading(false);
+          })
         const quizTemplate: IQuizMeta = {
           testId: testId,
           createdBy: user?.uid ? user.uid : "",
@@ -210,11 +242,11 @@ export const PageQuizEdit = () => {
   }, []);
 
   return (
-    <div className='quizContainer'>
-      <div className='quiz-head-block'>
-        {
-          (quiz && user) ?
-            <>
+    <>
+      {
+        (quiz && user && !isLoading) ?
+          <div className='quizContainer'>
+            <div className='quiz-head-block'>
               <input
                 className='quiz-edit edit-head'
                 name="title"
@@ -252,6 +284,7 @@ export const PageQuizEdit = () => {
                           handleQuestionEdit={handleQuestionEdit}
                           handleOptionEdit={handleOptionEdit}
                           handleKeyDown={handleKeyDown}
+                          handleCorrectCheck={handleCorrectCheck}
                           addOption={addOption}
                           deleteOption={deleteOption}
                         />
@@ -261,10 +294,11 @@ export const PageQuizEdit = () => {
                 </>
               }
               <QuizLoaderExtraInfo userUID={user.uid} setIsCreatingNewTest={setIsCreatingNewTest}/>
-            </> :
-            <Loader/>
-        }
-      </div>
-    </div>
+            </div>
+          </div>
+          :
+          <div className='loader-container'><Loader/></div>
+      }
+    </>
   )
 }

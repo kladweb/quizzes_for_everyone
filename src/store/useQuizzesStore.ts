@@ -20,6 +20,7 @@ interface IActions {
   saveUserQuiz: (quiz: IQuizMeta, userUid: string) => Promise<void>;
   deleteUserQuiz: (testId: string, userUid: string) => Promise<void>;
   updateQuiz: (quiz: IQuizMeta) => void;
+  setIsLoading: (isLoading: boolean) => void;
 }
 
 interface IQuizzesState extends IInitialState, IActions {
@@ -170,6 +171,9 @@ const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
       testList[quiz.testId] = quiz;
       set(() => ({allQuizzes: testList}));
     }
+  },
+  setIsLoading: (isLoading: boolean) => {
+    set(() => ({isLoading: isLoading}));
   }
 })
 
@@ -193,3 +197,5 @@ export const deleteUserQuiz = (testId: string, userUid: string) =>
   useQuizzesStore.getState().deleteUserQuiz(testId, userUid);
 export const updateQuiz = (quiz: IQuizMeta,) =>
   useQuizzesStore.getState().updateQuiz(quiz);
+export const setIsLoading = (isLoading: boolean,) =>
+  useQuizzesStore.getState().setIsLoading(isLoading);

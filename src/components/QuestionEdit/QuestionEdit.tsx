@@ -8,30 +8,16 @@ interface IQuestionEditProps {
   handleQuestionEdit: (question: Question, value: string) => void;
   handleOptionEdit: (option: Option, value: string) => void;
   handleKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+  handleCorrectCheck: (event: React.ChangeEvent<HTMLInputElement>, option: Option, question: Question) => void;
   addOption: (question: Question) => void;
   deleteOption: (question: Question) => void;
 }
 
 export const QuestionEdit: React.FC<IQuestionEditProps> = (
-  {question, handleQuestionEdit, handleOptionEdit, handleKeyDown, addOption, deleteOption}) => {
+  {question, handleQuestionEdit, handleOptionEdit, handleKeyDown, handleCorrectCheck, addOption, deleteOption}) => {
   const formError = useFormError();
   const MAX_OPTIONS = 6;
-  const [correctChecked, setCorrectChecked] = React.useState(question.correctAnswers.length);
 
-  const handleCorrectCheck = (e: React.ChangeEvent<HTMLInputElement>, option: Option) => {
-    console.log(e.target.checked);
-    if (e.target.checked) {
-      question.correctAnswers.push(option.id);
-    } else {
-      let index = question.correctAnswers.indexOf(option.id);
-      if (index !== -1) {
-        question.correctAnswers.splice(index, 1);
-      }
-    }
-    setCorrectChecked(question.correctAnswers.length);
-    console.log(question.correctAnswers);
-
-  }
   // console.log(question.options);
   // console.log(question)
   // console.log(formError);
@@ -67,7 +53,7 @@ export const QuestionEdit: React.FC<IQuestionEditProps> = (
                 name={option.id}
                 type="checkbox"
                 title="Верный/невеный ответ"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleCorrectCheck(e, option)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleCorrectCheck(e, option, question)}
                 checked={question.correctAnswers.includes(option.id)}
               />
             </div>

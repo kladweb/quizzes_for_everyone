@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
+import type { Toast } from "../../types/Quiz";
+import { useNotice } from "../../store/useNoticeStore";
 import "./toastNotice.css";
-import { useNotice, type Toast } from "../../store/useNoticeStore";
 
 interface IToastProps {
   toast: Toast;

@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { QUIZ_CATEGORIES, QUIZ_LANGUAGES } from "./quizCategories";
 import {
-  useQuizDraft,
+  resetFormError,
   setQuizComplete,
+  useFormError,
+  useQuizDraft,
   validateField,
-  useFormError, resetFormError,
 } from "../../store/useCurrentCreatingQuiz";
 import { saveUserQuiz } from "../../store/useQuizzesStore";
 import "./quizLoaderExtraInfo.css"
-import { type Question } from "../../types/Quiz";
+import { type Question, ToastType } from "../../types/Quiz";
 import { useNavigate } from "react-router-dom";
 import { showToast } from "../../store/useNoticeStore";
 
@@ -35,7 +36,6 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
     () => Object.values(formError).every(e => !e),
     [formError]
   );
-  console.log("A: ", isFormValid);
 
   const validateForm = () => {
     if (!quizDraft) return false;
@@ -81,13 +81,13 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
       await saveUserQuiz(quizDraft, userUID);
       resetFormError();
       setIsCreatingNewTest(false);
-      showToast("Тест успешно сохранён!", "info");
+      showToast("Тест успешно сохранён!", ToastType.INFO);
       setTimeout(() => {
         navigate("/myquizzes");
       }, 3500);
     } catch (error) {
       console.error(error);
-      showToast("Ошибка сохранения теста!", "error");
+      showToast("Ошибка сохранения теста!", ToastType.ERROR);
     }
   }
 

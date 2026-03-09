@@ -1,7 +1,7 @@
 import { showToast } from "../store/useNoticeStore";
 import { ref, set } from "firebase/database";
 import { database } from "../firebase/firebase";
-import { IQuizMeta } from "../types/Quiz";
+import { type IQuizMeta, ToastType } from "../types/Quiz";
 
 export const handleCopy = async (currentLink: string, setCopied: (copied: boolean) => void) => {
   try {
@@ -21,7 +21,7 @@ export const handlerDeleteQuiz = (
 
 export const toggleLike = async (quiz: IQuizMeta, userUID: string | undefined, setLikesCount: (likesCount: number) => void) => {
   if (!userUID) {
-    showToast("Нужно залогиниться или пройти тест !", "error");
+    showToast("Нужно залогиниться или пройти тест !", ToastType.ERROR);
     return;
   }
   const likeUsers: { [userUID: string]: boolean } = quiz.likeUsers ? quiz.likeUsers : {};

@@ -1,6 +1,6 @@
-import React, { useState, memo, useEffect } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { IQuizMeta } from "../../types/Quiz";
+import { IQuizMeta, ToastType } from "../../types/Quiz";
 import { handleCopy, toggleLike } from "../../utils/quizUtils";
 import { Statistics } from "../Statistics/Statistics";
 import { showToast } from "../../store/useNoticeStore";
@@ -59,7 +59,7 @@ export const QuizCard: React.FC<ITestCardProps> = memo(
             <button className='button-test' onClick={() => openStatistic(quiz.testId)}>Статистика</button>
             <button className='button-test' onClick={() => {
               navigate(`/createquiz/manual/${quiz.testId}`);
-              // showToast("Эта возможность пока не реализована.", "info");
+              // showToast("Эта возможность пока не реализована.", ToastType.WARNING);
             }}>Редактировать
             </button>
             {
