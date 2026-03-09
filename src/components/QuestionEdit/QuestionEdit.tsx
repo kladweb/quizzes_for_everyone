@@ -14,12 +14,27 @@ interface IQuestionEditProps {
 
 export const QuestionEdit: React.FC<IQuestionEditProps> = (
   {question, handleQuestionEdit, handleOptionEdit, handleKeyDown, addOption, deleteOption}) => {
-
   const formError = useFormError();
   const MAX_OPTIONS = 6;
+  const [correctChecked, setCorrectChecked] = React.useState(question.correctAnswers.length);
+
+  const handleCorrectCheck = (e: React.ChangeEvent<HTMLInputElement>, option: Option) => {
+    console.log(e.target.checked);
+    if (e.target.checked) {
+      question.correctAnswers.push(option.id);
+    } else {
+      let index = question.correctAnswers.indexOf(option.id);
+      if (index !== -1) {
+        question.correctAnswers.splice(index, 1);
+      }
+    }
+    setCorrectChecked(question.correctAnswers.length);
+    console.log(question.correctAnswers);
+
+  }
   // console.log(question.options);
   // console.log(question)
-  console.log(formError);
+  // console.log(formError);
   return (
     <div className='questionsContainer'>
       <input
@@ -36,18 +51,26 @@ export const QuestionEdit: React.FC<IQuestionEditProps> = (
       <div className='options-edit'>
         {
           question.options.map((option: Option, index: number) => (
-            <input
-              key={option.id}
-              className={`question-edit option-edit${formError[option.id] ? " no-validate" : ""}`}
-              name={option.id}
-              type="text"
-              value={option.text}
-              // placeholder={question.question ? "" : "вариант ответа"}
-              required
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleOptionEdit(option, e.target.value)}
-              onKeyDown={handleKeyDown}
-            />
-
+            <div key={option.id} className="option-inbut-block">
+              <input
+                className={`question-edit option-edit${formError[option.id] ? " no-validate" : ""}`}
+                name={option.id}
+                type="text"
+                value={option.text}
+                // placeholder={question.question ? "" : "вариант ответа"}
+                required
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleOptionEdit(option, e.target.value)}
+                onKeyDown={handleKeyDown}
+              />
+              <input
+                className="option-correct"
+                name={option.id}
+                type="checkbox"
+                title="Верный/невеный ответ"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleCorrectCheck(e, option)}
+                checked={question.correctAnswers.includes(option.id)}
+              />
+            </div>
           ))
         }
         <div className="add-option-container">
