@@ -30,6 +30,18 @@ export const PageQuizEdit = () => {
   const isFormValid = Object.values(formError).every(e => !e);
   const isLoading = useIsLoading();
 
+  const getQuestionTemplate = (questionNumber: number = 0) => {
+    const questionId: string = questionNumber ? "q" + questionNumber : "q1";
+    const newQuestion: Question = {
+      id: questionId,
+      question: "",
+      options: [{id: questionId + "_a", text: ""}, {id: questionId + "_b", text: ""}],
+      correctAnswers: [questionId + "_a"],
+      explanation: ""
+    }
+    return newQuestion;
+  }
+
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       event.preventDefault();
@@ -137,7 +149,6 @@ export const PageQuizEdit = () => {
   };
 
   const handleCorrectCheck = (e: React.ChangeEvent<HTMLInputElement>, option: Option, question: Question) => {
-    console.log(e.target.checked);
     if (!quiz) return;
     const correctAnswers: string[] = [...question.correctAnswers];
     if (e.target.checked) {
@@ -179,6 +190,17 @@ export const PageQuizEdit = () => {
   //     setQuizDraft(newQuiz);
   //   }
   // }
+
+  const addQuestion = () => {
+    console.log('addQuestion');
+    if (!quiz) return;
+    const questions = quiz.questions ? quiz.questions : [];
+    const newQuiz = {
+      ...quiz,
+      questions: [...questions, getQuestionTemplate(quiz.questions?.length)],
+    };
+    setQuizDraft(newQuiz);
+  }
 
   useEffect(() => {
     if (quiz) {
@@ -231,8 +253,9 @@ export const PageQuizEdit = () => {
           executionCount: 0,
           likeUsers: {},
           dislikeUsers: {},
-          questions: []
+          questions: [getQuestionTemplate()],
         }
+        console.log(quizTemplate);
         setQuizDraft(quizTemplate);
       }
     }
@@ -293,6 +316,7 @@ export const PageQuizEdit = () => {
                   }
                 </>
               }
+              <button className="btn button-create add-question" onClick={addQuestion}>Добавить вопрос</button>
               <QuizLoaderExtraInfo userUID={user.uid} setIsCreatingNewTest={setIsCreatingNewTest}/>
             </div>
           </div>

@@ -34,3 +34,14 @@
   text-align: left;
   color: var(--color-error);
 }
+
+.add-question {
+  margin: 0;
+  padding: 0.2em 0.5em;
+  background-color: var(--color-success);
+
+  &:hover {
+    background-color: var(--color-success);
+    box-shadow: 0 0 5px var(--color-success);
+  }
+}

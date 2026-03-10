@@ -8,7 +8,7 @@ export interface Question {
   question: string;
   options: Option[];
   correctAnswers: string[];
-  explanation: string;
+  explanation?: string;
 }
 
 export interface IQuizMeta {
