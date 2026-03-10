@@ -6,9 +6,9 @@ import { useUser } from "../../store/useUserStore";
 import { QuizLoaderExtraInfo } from "../../components/QuizLoaderExtraInfo/QuizLoaderExtraInfo";
 import "./pageQuizEdit.css";
 import {
-  clearCurrentQuiz,
+  clearCurrentQuiz, resetFormError,
   setQuizDraft,
-  useFormError,
+  useFormError, useQuizComplete,
   useQuizDraft,
   validateField
 } from "../../store/useCurrentCreatingQuiz";
@@ -16,6 +16,7 @@ import { QuizStorageManager } from "../../utils/QuizStorageManager";
 import { showToast } from "../../store/useNoticeStore";
 import { QuestionEdit } from "../../components/QuestionEdit/QuestionEdit";
 import { Loader } from "../../components/Loader/Loader";
+import { LinkQuiz } from "../../components/LinkQuiz/LinkQuiz";
 
 const optionsVar = ["a", "b", "c", "d", "e", "f"];
 
@@ -27,6 +28,7 @@ export const PageQuizEdit = () => {
   const quizzesAll: IQuizzes | null = useAllQuizzes();
   const [isCreatingNewTest, setIsCreatingNewTest] = useState(false);
   const quiz = useQuizDraft();
+  const quizComplete = useQuizComplete();
   const isFormValid = Object.values(formError).every(e => !e);
   const isLoading = useIsLoading();
 
@@ -102,8 +104,28 @@ export const PageQuizEdit = () => {
       validateField(question.options[question.options.length - 1].id, "ok");
       question.options.pop();
       const newQuiz = {...quiz};
+      resetFormError();
       setQuizDraft(newQuiz);
     }
+  }
+
+  const deleteQuestion = (question: Question) => {
+    if (!quiz || !quiz.questions) return;
+    const questions: Question[] = [...quiz.questions];
+    const lastQuestion = questions[questions.length - 1];
+    questions.forEach((q: Question, i: number) => {
+      if (q.id === question.id) {
+        lastQuestion.id = question.id;
+        questions.splice(i, 1, lastQuestion);
+      }
+    });
+    questions.pop();
+    const newQuiz = {
+      ...quiz,
+      questions: questions
+    };
+    resetFormError();
+    setQuizDraft(newQuiz);
   }
 
   const handleQuestionEdit = (question: Question, value: string) => {
@@ -174,31 +196,16 @@ export const PageQuizEdit = () => {
     setQuizDraft(newQuiz);
   }
 
-  // const handleOptionEdit = (option: Option, value: string) => {
-  //   if (quiz) {
-  //     option.text = value;
-  //     const newQuiz = {...quiz};
-  //     validateField(option.id, value);
-  //     setQuizDraft(newQuiz);
-  //   }
-  // }
-
-  // const deleteOption = (question: Question, option: Option) => {
-  //   if (quiz) {
-  //     question.options.splice(question.options.indexOf(option), 1);
-  //     const newQuiz = {...quiz};
-  //     setQuizDraft(newQuiz);
-  //   }
-  // }
-
   const addQuestion = () => {
     console.log('addQuestion');
     if (!quiz) return;
     const questions = quiz.questions ? quiz.questions : [];
     const newQuiz = {
       ...quiz,
-      questions: [...questions, getQuestionTemplate(quiz.questions?.length)],
+      questions: [...questions, getQuestionTemplate(quiz.questions ? quiz.questions.length + 1 : 0)],
     };
+    console.log(newQuiz);
+    resetFormError();
     setQuizDraft(newQuiz);
   }
 
@@ -264,10 +271,11 @@ export const PageQuizEdit = () => {
     }
   }, []);
 
+  console.log(formError);
   return (
     <>
       {
-        (quiz && user && !isLoading) ?
+        (quiz && user) ?
           <div className='quizContainer'>
             <div className='quiz-head-block'>
               <input
@@ -310,6 +318,8 @@ export const PageQuizEdit = () => {
                           handleCorrectCheck={handleCorrectCheck}
                           addOption={addOption}
                           deleteOption={deleteOption}
+                          deleteQuestion={deleteQuestion}
+                          isOnlyOneQuestion={quiz.questions ? quiz.questions.length > 1 : false}
                         />
                       )
                     )
@@ -321,7 +331,14 @@ export const PageQuizEdit = () => {
             </div>
           </div>
           :
-          <div className='loader-container'><Loader/></div>
+          <>
+            {
+              (quizComplete) &&
+              <div className="tests-container">
+                <LinkQuiz testId={quizComplete.testId}/>
+              </div>
+            }
+          </>
       }
     </>
   )

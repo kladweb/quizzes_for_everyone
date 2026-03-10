@@ -82,9 +82,9 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
       resetFormError();
       setIsCreatingNewTest(false);
       showToast("Тест успешно сохранён!", ToastType.INFO);
-      setTimeout(() => {
-        navigate("/myquizzes");
-      }, 3500);
+      // setTimeout(() => {
+      //   navigate("/myquizzes");
+      // }, 3500);
     } catch (error) {
       console.error(error);
       showToast("Ошибка сохранения теста!", ToastType.ERROR);

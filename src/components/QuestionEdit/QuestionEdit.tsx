@@ -11,10 +11,22 @@ interface IQuestionEditProps {
   handleCorrectCheck: (event: React.ChangeEvent<HTMLInputElement>, option: Option, question: Question) => void;
   addOption: (question: Question) => void;
   deleteOption: (question: Question) => void;
+  deleteQuestion: (question: Question) => void;
+  isOnlyOneQuestion: boolean;
 }
 
 export const QuestionEdit: React.FC<IQuestionEditProps> = (
-  {question, handleQuestionEdit, handleOptionEdit, handleKeyDown, handleCorrectCheck, addOption, deleteOption}) => {
+  {
+    question,
+    handleQuestionEdit,
+    handleOptionEdit,
+    handleKeyDown,
+    handleCorrectCheck,
+    addOption,
+    deleteOption,
+    deleteQuestion,
+    isOnlyOneQuestion
+  }) => {
   const formError = useFormError();
   const MAX_OPTIONS = 6;
 
@@ -74,6 +86,13 @@ export const QuestionEdit: React.FC<IQuestionEditProps> = (
               addOption(question)
             }}>
               +
+            </button>
+          }
+          {
+            isOnlyOneQuestion &&
+            <button className="btn button-create del-question" onClick={() => {
+              deleteQuestion(question)
+            }}>Удалить вопрос
             </button>
           }
         </div>

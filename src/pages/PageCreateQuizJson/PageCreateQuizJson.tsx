@@ -42,7 +42,7 @@ export const PageCreateQuizJson = () => {
         <Loader/>
       }
       {
-        (user && quizComplete && quizComplete) &&
+        (user && quizComplete) &&
         <LinkQuiz testId={quizComplete.testId}/>
       }
     </div>
