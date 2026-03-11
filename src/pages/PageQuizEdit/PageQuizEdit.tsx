@@ -209,6 +209,19 @@ export const PageQuizEdit = () => {
     setQuizDraft(newQuiz);
   }
 
+  const explanationEdit = (question: Question, value: string) => {
+    if (!quiz) return;
+    const newQuiz = {
+      ...quiz,
+      questions: quiz.questions?.map(q =>
+        q.id === question.id
+          ? {...q, explanation: value}
+          : q
+      )
+    };
+    setQuizDraft(newQuiz);
+  }
+
   useEffect(() => {
     if (quiz) {
       return;
@@ -286,7 +299,7 @@ export const PageQuizEdit = () => {
                 title="Название теста"
                 placeholder={quiz?.title ? "" : "Название теста"}
                 required
-                onChange={(e) => handleChange("title", e.target.value)}
+                onChange={(e) => handleChange("title", e.target.value.trim())}
                 // onChange={handleChange}
                 onKeyDown={handleKeyDown}
               />
@@ -300,7 +313,7 @@ export const PageQuizEdit = () => {
                 value={quiz?.description ? quiz.description : ""}
                 title="Краткое описание теста"
                 placeholder={quiz.description ? "" : "Краткое описание теста"}
-                onChange={(e) => handleChange("description", e.target.value)}
+                onChange={(e) => handleChange("description", e.target.value.trim())}
                 // onChange={handleChange}
                 onKeyDown={handleKeyDown}
               />
@@ -319,6 +332,7 @@ export const PageQuizEdit = () => {
                           addOption={addOption}
                           deleteOption={deleteOption}
                           deleteQuestion={deleteQuestion}
+                          explanationEdit={explanationEdit}
                           isOnlyOneQuestion={quiz.questions ? quiz.questions.length > 1 : false}
                         />
                       )

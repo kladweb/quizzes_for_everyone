@@ -7,7 +7,8 @@
 }
 
 .question-edit {
-  border: none;
+  display: inline-block;
+  border: 2px dashed var(--color-border);
   outline: none;
   resize: none;
   font-weight: bold;
@@ -19,7 +20,7 @@
 
 .name-question-edit {
   width: 100%;
-  margin-bottom: 1em;
+  margin: 0.3em 0 1em;
   font-size: 1.2em;
   color: var(--color-text-secondary);
   background-color: var(--color-bg-card);
@@ -43,6 +44,14 @@
 
 .add-option-container {
   width: 100%;
+
+  label {
+    display: block;
+    margin: 0.5em 0 -0.4em 0.5em;
+    padding: 0;
+    text-align: left;
+    color: var(--color-text-secondary);
+  }
 }
 
 .option-correct {
@@ -101,6 +110,17 @@
     background-color: transparent;
     color: var(--color-error);
   }
+}
+
+.question-explanation {
+  margin-top: 0.5em;
+  padding: 0.8em 1.2em;
+  font-size: 0.9em;
+  font-weight: 400;
+}
+
+.option-future {
+  visibility: hidden;
 }
 
 /*.btn-delete-container {*/

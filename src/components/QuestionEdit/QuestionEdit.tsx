@@ -12,6 +12,7 @@ interface IQuestionEditProps {
   addOption: (question: Question) => void;
   deleteOption: (question: Question) => void;
   deleteQuestion: (question: Question) => void;
+  explanationEdit: (question: Question, value: string) => void;
   isOnlyOneQuestion: boolean;
 }
 
@@ -25,6 +26,7 @@ export const QuestionEdit: React.FC<IQuestionEditProps> = (
     addOption,
     deleteOption,
     deleteQuestion,
+    explanationEdit,
     isOnlyOneQuestion
   }) => {
   const formError = useFormError();
@@ -33,17 +35,20 @@ export const QuestionEdit: React.FC<IQuestionEditProps> = (
   // console.log(question.options);
   // console.log(question)
   // console.log(formError);
+  console.log(question.id.substring(1));
   return (
     <div className='questionsContainer'>
       <input
         className={`question-edit name-question-edit${formError[question.id] ? " no-validate" : ""}`}
         name={question.id}
         type="text"
-        value={question.question}
+        // value={question.question}
+        value={`${question.id.substring(1)}) ${question.question}`}
         title="Вопрос теста"
         placeholder={question.question ? "" : "Введите вопрос"}
         required
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleQuestionEdit(question, e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          handleQuestionEdit(question, (e.target.value).split(" ")[1])}
         onKeyDown={handleKeyDown}
       />
       <div className='options-edit'>
@@ -57,7 +62,7 @@ export const QuestionEdit: React.FC<IQuestionEditProps> = (
                 value={option.text}
                 // placeholder={question.question ? "" : "вариант ответа"}
                 required
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleOptionEdit(option, e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleOptionEdit(option, e.target.value.trim())}
                 onKeyDown={handleKeyDown}
               />
               <input
@@ -95,6 +100,22 @@ export const QuestionEdit: React.FC<IQuestionEditProps> = (
             }}>Удалить вопрос
             </button>
           }
+          <label htmlFor="explanation">Объяснение для правильного ответа (можно оставить пустым)</label>
+          <input
+            className="question-edit option-edit question-explanation"
+            name="explanation"
+            type="text"
+            title="Объяснение для правильного ответа"
+            value={question.explanation}
+            // placeholder={question.question ? "" : "вариант ответа"}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => explanationEdit(question, e.target.value.trim())}
+            onKeyDown={handleKeyDown}
+          />
+          <input
+            className="option-correct option-future"
+            name="explanation"
+            type="checkbox"
+          />
         </div>
       </div>
     </div>
