@@ -96,6 +96,7 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
       <p>Для сохранения теста заполните дополнительные поля:</p>
       <span title={catTitles.category}>Категория теста: </span>
       <input
+        className="input-category"
         name='categories'
         list='categories'
         type='text'
@@ -116,7 +117,7 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
         formError.category && <p className='text-save-error'>Поле не может быть пустым!</p>
       }
       <span title={catTitles.language}>Язык теста: </span>
-      <select name="select" onChange={(e) => setQuizLanguage(e.target.value)}>
+      <select className="input-language" name="select" onChange={(e) => setQuizLanguage(e.target.value)}>
         {
           QUIZ_LANGUAGES.map((item, i) => <option key={i} value={item}>{item}</option>)
         }

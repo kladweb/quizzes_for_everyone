@@ -1,7 +1,12 @@
+.questions-edit-container {
+  margin: 1.5em 0;
+}
+
 .options-edit {
   display: flex;
   /*flex-direction: column;*/
   flex-wrap: wrap;
+  justify-content: center;
   gap: 0.5em;
   font-size: 0.9em;
 }
@@ -22,11 +27,12 @@
   width: 100%;
   margin: 0.3em 0 1em;
   font-size: 1.2em;
+  box-sizing: border-box;
   color: var(--color-text-secondary);
   background-color: var(--color-bg-card);
 }
 
-.option-inbut-block {
+.option-input-block {
   display: inline-block;
   width: 100%;
 }
@@ -43,15 +49,27 @@
 }
 
 .add-option-container {
+  /*margin: 0 auto;*/
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
   width: 100%;
 
   label {
+    width: 85%;
     display: block;
-    margin: 0.5em 0 -0.4em 0.5em;
+    margin: 0.5em 0 -0.3em 0.5em;
     padding: 0;
     text-align: left;
+    line-height: 1em;
     color: var(--color-text-secondary);
+    white-space: wrap;
   }
+}
+
+.opt-btns-block {
+  width: 100%;
+  text-align: center;
 }
 
 .option-correct {
@@ -119,35 +137,42 @@
   font-weight: 400;
 }
 
-.option-future {
-  visibility: hidden;
+@media (max-width: 620px) {
+  .option-edit {
+    width: 80%;
+  }
+
+  .option-correct {
+    margin-left: 0.5em;
+    width: 1.2em;
+    height: 1.2em;
+  }
+
+  .add-option-container label {
+    white-space: pre-wrap;
+  }
 }
 
-/*.btn-delete-container {*/
-/*  width: 5%;*/
-/*  display: inline-flex;*/
-/*  justify-content: center;*/
-/*  align-items: center;*/
-/*}*/
+@media (max-width: 400px) {
+  .name-question-edit {
+    margin-top: 0.8em;
+  }
 
-/*.btn-option-delete {*/
-/*  font-size: 1.5em;*/
-/*  color: var(--color-text-primary);*/
-/*  padding: 0 0.3em 0.1em;*/
-/*  line-height: 0.8em;*/
-/*  vertical-align: middle;*/
-/*  display: inline-block;*/
-/*  border: 1px solid var(--color-error);*/
-/*  outline: none;*/
-/*  background-color: var(--color-bg-card);*/
-/*  border-radius: 50%;*/
-/*  cursor: pointer;*/
+  .del-question {
+    font-size: 1em;
+  }
+}
 
-/*  &:hover {*/
-/*    box-shadow: 0 0 0.2em 0 var(--color-error);*/
-/*  }*/
+@media (max-width: 400px) {
+  .name-question-edit {
+    margin-top: 0.8em;
+  }
 
-/*  &:active {*/
-/*    box-shadow: 0 0 0.2em 0 var(--color-bg-page);*/
-/*  }*/
-/*}*/
+  .option-edit {
+    width: 78%;
+  }
+
+  .del-question {
+    font-size: 1em;
+  }
+}

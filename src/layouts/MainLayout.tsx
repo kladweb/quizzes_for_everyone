@@ -12,6 +12,7 @@ export const MainLayout = () => {
   const isAuthLoading = useIsAuthLoading();
   const navigate = useNavigate();
   const errorLoading = useErrorLoading();
+  console.log(errorLoading);
 
   useEffect(
     () => {

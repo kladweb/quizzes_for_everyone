@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { IQuizMeta, IQuizzes, Option, Question, ToastType } from "../../types/Quiz";
-import { setIsLoading, useAllQuizzes, useIsLoading } from "../../store/useQuizzesStore";
+import { deleteUserQuiz, setIsLoading, useAllQuizzes, useIsLoading } from "../../store/useQuizzesStore";
 import { useUser } from "../../store/useUserStore";
 import { QuizLoaderExtraInfo } from "../../components/QuizLoaderExtraInfo/QuizLoaderExtraInfo";
 import "./pageQuizEdit.css";
@@ -15,8 +15,8 @@ import {
 import { QuizStorageManager } from "../../utils/QuizStorageManager";
 import { showToast } from "../../store/useNoticeStore";
 import { QuestionEdit } from "../../components/QuestionEdit/QuestionEdit";
-import { Loader } from "../../components/Loader/Loader";
 import { LinkQuiz } from "../../components/LinkQuiz/LinkQuiz";
+import { ModalConfirm } from "../../components/ModalConfirm/ModalConfirm";
 
 const optionsVar = ["a", "b", "c", "d", "e", "f"];
 
@@ -31,6 +31,8 @@ export const PageQuizEdit = () => {
   const quizComplete = useQuizComplete();
   const isFormValid = Object.values(formError).every(e => !e);
   const isLoading = useIsLoading();
+  const [isModalConfirmOpen, setIsModalConfirmOpen] = useState<boolean>(false);
+  const [questionToDelete, setQuestionToDelete] = useState<Question | null>(null);
 
   const getQuestionTemplate = (questionNumber: number = 0) => {
     const questionId: string = questionNumber ? "q" + questionNumber : "q1";
@@ -81,24 +83,6 @@ export const PageQuizEdit = () => {
     setQuizDraft(newQuiz);
   };
 
-  // const addOption = (question: Question) => {
-  //   const optionName = optionsVar[question.options.length];
-  //   if (quiz) {
-  //     const newQuiz = {...quiz};
-  //     newQuiz.questions?.forEach((quest) => {
-  //       if (quest.id === question.id) {
-  //         quest.options.push(
-  //           {
-  //             id: `${question.id}_${optionName}`,
-  //             text: ""
-  //           }
-  //         );
-  //       }
-  //     })
-  //     setQuizDraft(newQuiz);
-  //   }
-  // }
-
   const deleteOption = (question: Question) => {
     if (quiz) {
       validateField(question.options[question.options.length - 1].id, "ok");
@@ -107,6 +91,11 @@ export const PageQuizEdit = () => {
       resetFormError();
       setQuizDraft(newQuiz);
     }
+  }
+
+  const handleDeleteQuestion = (question: Question) => {
+    setIsModalConfirmOpen(true);
+    setQuestionToDelete(question);
   }
 
   const deleteQuestion = (question: Question) => {
@@ -126,6 +115,16 @@ export const PageQuizEdit = () => {
     };
     resetFormError();
     setQuizDraft(newQuiz);
+  }
+
+  const handlerConfirmDelete = (toDelete: boolean) => {
+    if (!user || !questionToDelete) {
+      return;
+    }
+    if (toDelete) {
+      deleteQuestion(questionToDelete);
+    }
+    setIsModalConfirmOpen(false);
   }
 
   const handleQuestionEdit = (question: Question, value: string) => {
@@ -284,7 +283,7 @@ export const PageQuizEdit = () => {
     }
   }, []);
 
-  console.log(formError);
+  // console.log(formError);
   return (
     <>
       {
@@ -331,7 +330,7 @@ export const PageQuizEdit = () => {
                           handleCorrectCheck={handleCorrectCheck}
                           addOption={addOption}
                           deleteOption={deleteOption}
-                          deleteQuestion={deleteQuestion}
+                          handleDeleteQuestion={handleDeleteQuestion}
                           explanationEdit={explanationEdit}
                           isOnlyOneQuestion={quiz.questions ? quiz.questions.length > 1 : false}
                         />
@@ -354,6 +353,11 @@ export const PageQuizEdit = () => {
             }
           </>
       }
+      <ModalConfirm
+        isModalConfirmOpen={isModalConfirmOpen}
+        modalQuestion={`Вы действительно хотите удалить вопрос без возможности восстановления?`}
+        handlerConfirmDelete={handlerConfirmDelete}
+      />
     </>
   )
 }

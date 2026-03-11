@@ -54,13 +54,13 @@
     margin: 0.7em 0;
     min-width: 100%;
     font-size: 0.9rem;
-  }
 
-  h2 {
-    margin: 0;
-  }
+    h2 {
+      margin: 0;
+    }
 
-  h3 {
-    margin: 0.5em 0;
+    h3 {
+      margin: 0.5em 0;
+    }
   }
 }

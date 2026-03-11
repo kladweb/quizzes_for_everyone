@@ -42,7 +42,8 @@ export const QuizStorageManager = {
     try {
       const snapshot = await get(child(dbRef, `users/${userUid}`));
       if (!snapshot.exists()) {
-        throw new Error('No such quiz found!');
+        return [];
+        // throw new Error('No such quiz found!');
       }
       const quizIdsObj = snapshot.val();
       return Object.keys(quizIdsObj);

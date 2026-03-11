@@ -1,6 +1,7 @@
 .quiz-edit {
   width: 100%;
   text-align: center;
+  box-sizing: border-box;
   background-color: var(--color-bg-page);
   border: 2px dashed var(--color-border);
   outline: none;
@@ -36,7 +37,7 @@
 }
 
 .add-question {
-  margin: 0;
+  margin: 0 auto;
   padding: 0.2em 0.5em;
   background-color: var(--color-success);
 

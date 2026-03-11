@@ -11,7 +11,7 @@ interface IQuestionEditProps {
   handleCorrectCheck: (event: React.ChangeEvent<HTMLInputElement>, option: Option, question: Question) => void;
   addOption: (question: Question) => void;
   deleteOption: (question: Question) => void;
-  deleteQuestion: (question: Question) => void;
+  handleDeleteQuestion: (question: Question) => void;
   explanationEdit: (question: Question, value: string) => void;
   isOnlyOneQuestion: boolean;
 }
@@ -25,7 +25,7 @@ export const QuestionEdit: React.FC<IQuestionEditProps> = (
     handleCorrectCheck,
     addOption,
     deleteOption,
-    deleteQuestion,
+    handleDeleteQuestion,
     explanationEdit,
     isOnlyOneQuestion
   }) => {
@@ -35,9 +35,8 @@ export const QuestionEdit: React.FC<IQuestionEditProps> = (
   // console.log(question.options);
   // console.log(question)
   // console.log(formError);
-  console.log(question.id.substring(1));
   return (
-    <div className='questionsContainer'>
+    <div className='questionsContainer questions-edit-container'>
       <input
         className={`question-edit name-question-edit${formError[question.id] ? " no-validate" : ""}`}
         name={question.id}
@@ -54,7 +53,7 @@ export const QuestionEdit: React.FC<IQuestionEditProps> = (
       <div className='options-edit'>
         {
           question.options.map((option: Option, index: number) => (
-            <div key={option.id} className="option-inbut-block">
+            <div key={option.id} className="option-input-block">
               <input
                 className={`question-edit option-edit${formError[option.id] ? " no-validate" : ""}`}
                 name={option.id}
@@ -77,30 +76,32 @@ export const QuestionEdit: React.FC<IQuestionEditProps> = (
           ))
         }
         <div className="add-option-container">
-          {
-            (question.options.length > 2) &&
-            <button className="btn button-create del-option" onClick={() => {
-              deleteOption(question)
-            }}>
-              -
-            </button>
-          }
-          {
-            (question.options.length < MAX_OPTIONS) &&
-            <button className="btn button-create add-option" onClick={() => {
-              addOption(question)
-            }}>
-              +
-            </button>
-          }
+          <div className="opt-btns-block">
+            {
+              (question.options.length > 2) &&
+              <button className="btn button-create del-option" onClick={() => {
+                deleteOption(question)
+              }}>
+                -
+              </button>
+            }
+            {
+              (question.options.length < MAX_OPTIONS) &&
+              <button className="btn button-create add-option" onClick={() => {
+                addOption(question)
+              }}>
+                +
+              </button>
+            }
+          </div>
           {
             isOnlyOneQuestion &&
             <button className="btn button-create del-question" onClick={() => {
-              deleteQuestion(question)
+              handleDeleteQuestion(question)
             }}>Удалить вопрос
             </button>
           }
-          <label htmlFor="explanation">Объяснение для правильного ответа (можно оставить пустым)</label>
+          <label htmlFor="explanation">{"Объяснение для правильного ответа\n(можно оставить пустым)"}</label>
           <input
             className="question-edit option-edit question-explanation"
             name="explanation"
@@ -110,11 +111,6 @@ export const QuestionEdit: React.FC<IQuestionEditProps> = (
             // placeholder={question.question ? "" : "вариант ответа"}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => explanationEdit(question, e.target.value.trim())}
             onKeyDown={handleKeyDown}
-          />
-          <input
-            className="option-correct option-future"
-            name="explanation"
-            type="checkbox"
           />
         </div>
       </div>
