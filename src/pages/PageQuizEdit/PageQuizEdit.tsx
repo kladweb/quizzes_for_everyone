@@ -94,8 +94,23 @@ export const PageQuizEdit = () => {
   }
 
   const handleDeleteQuestion = (question: Question) => {
-    setIsModalConfirmOpen(true);
-    setQuestionToDelete(question);
+    if (!question) return;
+    let isQuestionFields = true;
+    if (question.question || question.explanation) {
+      isQuestionFields = false;
+    } else {
+      question.options.forEach((option) => {
+        if (option.text) {
+          isQuestionFields = false;
+        }
+      });
+    }
+    if (!isQuestionFields) {
+      setIsModalConfirmOpen(true);
+      setQuestionToDelete(question);
+    } else {
+      deleteQuestion(question);
+    }
   }
 
   const deleteQuestion = (question: Question) => {
@@ -140,17 +155,6 @@ export const PageQuizEdit = () => {
     validateField(question.id, value);
     setQuizDraft(newQuiz);
   };
-
-  // const handleQuestionEdit = (question: Question, value: string) => {
-  //   if (quiz) {
-  //     console.log(value);
-  //     question.question = value;
-  //     const newQuestion = {...question};
-  //     const newQuiz = {...quiz};
-  //     validateField(question.id, value);
-  //     setQuizDraft(newQuiz);
-  //   }
-  // }
 
   const handleOptionEdit = (option: Option, value: string) => {
     if (!quiz) return;
@@ -268,6 +272,7 @@ export const PageQuizEdit = () => {
           createdBy: user?.uid ? user.uid : "",
           title: "",
           createdAt: Date.now(),
+          category: "",
           access: "public",
           executionCount: 0,
           likeUsers: {},

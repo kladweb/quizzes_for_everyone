@@ -47,6 +47,8 @@
   border: 2px solid var(--color-border);
   border-radius: 6px;
   outline: none;
+  background-color: var(--color-bg-card);
+  color: var(--color-text-primary);
 
   /*&::placeholder {*/
   /*  font-size: 0.8em;*/
