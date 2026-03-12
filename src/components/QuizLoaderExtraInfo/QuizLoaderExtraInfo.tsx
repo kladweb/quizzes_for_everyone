@@ -141,13 +141,15 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
           </p>
         </>
       }
-      <button
-        className='btn button-create btn-save'
-        disabled={!isFormValid}
-        onClick={saveCurrentTest}
-      >
-        СОХРАНИТЬ ТЕСТ
-      </button>
+      <div className="btn-save-block">
+        <button
+          className='btn button-create btn-save'
+          disabled={!isFormValid}
+          onClick={saveCurrentTest}
+        >
+          СОХРАНИТЬ ТЕСТ
+        </button>
+      </div>
       {
         !isFormValid &&
         <p className='submit-error-info'>Все пустые поля должны быть заполнены!</p>

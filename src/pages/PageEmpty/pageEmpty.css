@@ -1,5 +1,6 @@
 .page-empty-container {
   position: absolute;
+  display: block;
   width: 95%;
   font-size: 1.5em;
   top: 50%;

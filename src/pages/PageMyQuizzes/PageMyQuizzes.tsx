@@ -11,6 +11,7 @@ import { IQuizMeta, IQuizzes } from "../../types/Quiz";
 import { QuizCard } from "../../components/TestsList/QuizCard";
 import { ModalConfirm } from "../../components/ModalConfirm/ModalConfirm";
 import "./PageMyQuizzes.css";
+import { PageEmpty } from "../PageEmpty/PageEmpty";
 
 export const PageMyQuizzes: React.FC = () => {
   const navigate = useNavigate();
@@ -79,6 +80,12 @@ export const PageMyQuizzes: React.FC = () => {
         loadUserQuizzes(user.uid);
       }
     }, [isMyIdsLoaded]);
+
+  if (userQuizzesIds.length === 0) {
+    return (
+      <PageEmpty emptyReason="noCreatedQuizzes"/>
+    )
+  }
 
   return (
     <>

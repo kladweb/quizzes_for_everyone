@@ -1,8 +1,11 @@
 .extra-info-block {
+  display: flex;
+  flex-wrap: wrap;
   margin-top: 20px;
   text-align: left;
 
   p {
+    width: 100%;
     text-align: center;
     margin-bottom: 2em;
   }
@@ -68,6 +71,10 @@
   width: 100%;
 }
 
+.btn-save-block {
+  width: 100%;
+}
+
 .btn-save {
   display: block;
 
@@ -92,6 +99,7 @@
 
 @media (max-width: 460px) {
   .extra-info-block {
+    justify-content: center;
     text-align: center;
 
     p {

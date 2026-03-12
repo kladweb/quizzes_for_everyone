@@ -43,6 +43,8 @@ export const PageQuiz = () => {
         if (quizData && questionData) {
           setQuiz(quizData);
           setQuestions(questionData);
+        } else {
+          setIsPageEmpty(true);
         }
       } catch (error) {
         console.log(error);

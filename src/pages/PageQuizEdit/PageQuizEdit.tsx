@@ -274,7 +274,7 @@ export const PageQuizEdit = () => {
           dislikeUsers: {},
           questions: [getQuestionTemplate()],
         }
-        console.log(quizTemplate);
+        // console.log(quizTemplate);
         setQuizDraft(quizTemplate);
       }
     }
