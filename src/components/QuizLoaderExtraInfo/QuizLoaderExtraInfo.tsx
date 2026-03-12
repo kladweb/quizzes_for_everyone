@@ -59,15 +59,14 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
 
   const saveCurrentTest = async () => {
     if (!quizDraft) return;
-    console.log("B: ", isFormValid);
 
     const valid = validateForm();
     if (!valid) return;
     if (!QUIZ_CATEGORIES.includes(quizCategory)) {
-      quizDraft.category = "";
-      quizDraft.categoryDraft = quizCategory;
+      quizDraft.category = "разное";
+      quizDraft.categoryDraft = quizCategory.trim();
     } else {
-      quizDraft.category = quizCategory;
+      quizDraft.category = quizCategory.trim();
     }
     Object.assign(quizDraft, {
       lang: quizLanguage,
@@ -75,6 +74,21 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
       likeUsers: {},
       executionCount: 0
     });
+    quizDraft.title = quizDraft.title.trim();
+
+    quizDraft.description = quizDraft.description ? quizDraft.description.trim() : "";
+    if (quizDraft.questions) {
+      quizDraft.questions.forEach((question => {
+        question.question = question.question.trim();
+        question.options.forEach((option) => {
+          option.text = option.text.trim();
+        });
+        if (question.explanation) {
+          question.explanation = question.explanation.trim();
+        }
+      }));
+    }
+
     setQuizComplete(quizDraft);
     setIsCreatingNewTest(true);
     try {
