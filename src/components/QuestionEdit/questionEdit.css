@@ -35,6 +35,7 @@
 .option-input-block {
   display: inline-block;
   width: 100%;
+  text-align: left;
 }
 
 .option-edit {
@@ -78,20 +79,23 @@
   width: 1.4em;
   height: 1.4em;
   vertical-align: middle;
-  /*appearance: none;*/
-  /*border: 0.15em solid var(--color-success);*/
+  appearance: none;
+  border: 0.15em solid var(--color-success);
   /*border-radius: 0.15em;*/
+  background-color: var(--color-success);
+  color: #0F172A;
 
-  /*&::before {*/
-  /*  content: "";*/
-  /*  position: absolute;*/
-  /*  width: 1.4em;*/
-  /*  height: 1.4em;*/
-  /*  background-color: var(--color-error-msg);*/
-  /*}*/
+  &:unchecked {
+    /*accent-color: var(--color-success);*/
+  }
 
-  &:checked {
-    background-color: var(--color-success);
+  &:checked::after {
+    content: "✔";
+    color: var(--color-text-contrast);
+    font-size: 1.2em;
+    font-weight: bold;
+    padding: 0.1em;
+    line-height: 1em;
   }
 }
 
@@ -151,6 +155,12 @@
   .add-option-container label {
     white-space: pre-wrap;
   }
+
+  .option-correct {
+    &:checked::after {
+      font-size: 1.1em;
+    }
+  }
 }
 
 @media (max-width: 400px) {
@@ -166,6 +176,7 @@
 @media (max-width: 400px) {
   .name-question-edit {
     margin-top: 0.8em;
+    padding: 0.08em;
   }
 
   .option-edit {
