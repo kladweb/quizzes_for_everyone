@@ -45,7 +45,7 @@ const currentQuizStore: StateCreator<IQuizzesState> = (set, get) => ({
     set(() => ({currentQuizDraft: null}));
   },
   validateField: (name: string, value: string) => {
-    if (!value.trim()) {
+    if (!value) {
       set(prev => ({formError: {...prev.formError, [name]: true}}));
     } else {
       set(prev => ({formError: {...prev.formError, [name]: false}}));

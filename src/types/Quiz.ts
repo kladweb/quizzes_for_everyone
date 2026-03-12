@@ -17,7 +17,7 @@ export interface IQuizMeta {
   title: string;
   createdAt: number;
   modifiedAt?: number;
-  category?: string;
+  category: string;
   categoryDraft?: string;
   lang?: string;
   access: "public" | "private";

@@ -47,7 +47,8 @@ export const QuestionEdit: React.FC<IQuestionEditProps> = (
         placeholder={question.question ? "" : "Введите вопрос"}
         required
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          handleQuestionEdit(question, (e.target.value).split(" ")[1])}
+          handleQuestionEdit(question, (e.target.value).split(") ", 2)[1])}
+        // handleQuestionEdit(question, (e.target.value))}
         onKeyDown={handleKeyDown}
       />
       <div className='options-edit'>
@@ -61,7 +62,7 @@ export const QuestionEdit: React.FC<IQuestionEditProps> = (
                 value={option.text}
                 // placeholder={question.question ? "" : "вариант ответа"}
                 required
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleOptionEdit(option, e.target.value.trim())}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleOptionEdit(option, e.target.value)}
                 onKeyDown={handleKeyDown}
               />
               <input
@@ -109,7 +110,7 @@ export const QuestionEdit: React.FC<IQuestionEditProps> = (
             title="Объяснение для правильного ответа"
             value={question.explanation}
             // placeholder={question.question ? "" : "вариант ответа"}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => explanationEdit(question, e.target.value.trim())}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => explanationEdit(question, e.target.value)}
             onKeyDown={handleKeyDown}
           />
         </div>

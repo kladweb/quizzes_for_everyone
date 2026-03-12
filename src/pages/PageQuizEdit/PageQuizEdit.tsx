@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { IQuizMeta, IQuizzes, Option, Question, ToastType } from "../../types/Quiz";
-import { deleteUserQuiz, setIsLoading, useAllQuizzes, useIsLoading } from "../../store/useQuizzesStore";
+import { setIsLoading, useAllQuizzes, useIsLoading } from "../../store/useQuizzesStore";
 import { useUser } from "../../store/useUserStore";
 import { QuizLoaderExtraInfo } from "../../components/QuizLoaderExtraInfo/QuizLoaderExtraInfo";
-import "./pageQuizEdit.css";
 import {
   clearCurrentQuiz, resetFormError,
   setQuizDraft,
@@ -17,6 +16,7 @@ import { showToast } from "../../store/useNoticeStore";
 import { QuestionEdit } from "../../components/QuestionEdit/QuestionEdit";
 import { LinkQuiz } from "../../components/LinkQuiz/LinkQuiz";
 import { ModalConfirm } from "../../components/ModalConfirm/ModalConfirm";
+import "./pageQuizEdit.css";
 
 const optionsVar = ["a", "b", "c", "d", "e", "f"];
 
@@ -133,7 +133,7 @@ export const PageQuizEdit = () => {
       ...quiz,
       questions: quiz.questions?.map(q =>
         q.id === question.id
-          ? {...q, question: value}
+          ? {...q, question: value ? value : ""}
           : q
       )
     };
@@ -280,6 +280,7 @@ export const PageQuizEdit = () => {
     }
     return () => {
       clearCurrentQuiz();
+      resetFormError();
     }
   }, []);
 
@@ -298,7 +299,7 @@ export const PageQuizEdit = () => {
                 title="Название теста"
                 placeholder={quiz?.title ? "" : "Название теста"}
                 required
-                onChange={(e) => handleChange("title", e.target.value.trim())}
+                onChange={(e) => handleChange("title", e.target.value)}
                 // onChange={handleChange}
                 onKeyDown={handleKeyDown}
               />
@@ -312,7 +313,7 @@ export const PageQuizEdit = () => {
                 value={quiz?.description ? quiz.description : ""}
                 title="Краткое описание теста"
                 placeholder={quiz.description ? "" : "Краткое описание теста"}
-                onChange={(e) => handleChange("description", e.target.value.trim())}
+                onChange={(e) => handleChange("description", e.target.value)}
                 // onChange={handleChange}
                 onKeyDown={handleKeyDown}
               />
