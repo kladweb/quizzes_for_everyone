@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { ref, set } from "firebase/database";
 import { QuizComponent } from "../../components/QuizComponent/QuizComponent";
 import { database } from "../../firebase/firebase";
-import type { IStatistics, IQuizMeta, Question } from "../../types/Quiz";
+import { IStatistics, IQuizMeta, Question, ToastType } from "../../types/Quiz";
 import { QuizStorageManager } from "../../utils/QuizStorageManager";
 import { QuizResultView } from "../../components/QuizResultView/QuizResultView";
 import { Loader } from "../../components/Loader/Loader";
@@ -39,19 +39,23 @@ export const PageQuiz = () => {
   const loadQuizAndQuestions = async () => {
     if (testId) {
       try {
-        const quizPromise = await Promise.all([QuizStorageManager.fetchCurrentQuiz(testId), QuizStorageManager.fetchQuestions(testId)]);
-        setQuiz(quizPromise[0]);
-        setQuestions(quizPromise[1]);
+        const [quizData, questionData] = await Promise.all([QuizStorageManager.fetchCurrentQuiz(testId), QuizStorageManager.fetchQuestions(testId)]);
+        if (quizData && questionData) {
+          setQuiz(quizData);
+          setQuestions(questionData);
+        } else {
+          setIsPageEmpty(true);
+        }
       } catch (error) {
         console.log(error);
-        showToast("Ошибка загрузки данных!", "error");
+        showToast("Ошибка загрузки данных!", ToastType.ERROR);
       }
     }
   }
 
   useEffect(() => {
     if (quiz && quiz.testId === testId) {
-      showToast("Вы уже на странице этого теста!\nТест пройден!", "info");
+      showToast("Вы уже на странице этого теста!\nТест пройден!", ToastType.INFO);
     }
   }, [quizLocation.key]);
 
@@ -86,11 +90,11 @@ export const PageQuiz = () => {
   }
 
   return (
-      <QuizComponent
-        quiz={quiz}
-        questions={questions}
-        onReset={handleReset}
-        saveStatistic={saveStatistic}
-      />
+    <QuizComponent
+      quiz={quiz}
+      questions={questions}
+      onReset={handleReset}
+      saveStatistic={saveStatistic}
+    />
   );
 }

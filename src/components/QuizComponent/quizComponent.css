@@ -119,6 +119,7 @@
 
 @media (max-width: 480px) {
   .quiz-head-block {
+    margin: 0 1em;
     font-size: 0.9rem;
   }
 }
@@ -126,8 +127,5 @@
 @media (max-width: 400px) {
   .quizContainer {
     font-size: 0.9rem;
-  }
-  .quiz-head-block {
-    margin: 0 1em;
   }
 }

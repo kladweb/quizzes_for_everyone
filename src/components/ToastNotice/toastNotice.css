@@ -32,6 +32,11 @@
   background: var(--color-error-bg);
 }
 
+.toast-warning {
+  color: var(--color-warning);
+  background: var(--color-warning-bg);
+}
+
 .toast.show {
   opacity: 1;
   transform: translateX(0);

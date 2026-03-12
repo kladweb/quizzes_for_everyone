@@ -99,7 +99,7 @@ export const QuestionComponent: React.FC<{
           </button>
         ))}
       </div>
-      {isSubmitted && showExplanation && (
+      {isSubmitted && showExplanation && question.explanation && (
         <div className='questionExplain'>
           <strong>Объяснение:</strong> {question.explanation}
         </div>

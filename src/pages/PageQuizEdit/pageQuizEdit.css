@@ -1,0 +1,48 @@
+.quiz-edit {
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box;
+  background-color: var(--color-bg-page);
+  border: 2px dashed var(--color-border);
+  outline: none;
+  resize: none;
+
+  &:focus, &:focus-visible {
+    border: 2px dashed var(--color-warning);
+  }
+}
+
+.edit-head {
+  margin-bottom: 0.6em;
+  font-size: 1.5em;
+  font-weight: bold;
+  /*text-wrap: balance;*/
+  color: var(--color-text-primary);
+}
+
+.edit-descr {
+  font-size: 1em;
+  color: var(--color-text-secondary);
+}
+
+.no-validate {
+  border: 2px dashed var(--color-error);
+}
+
+.title-error {
+  margin: -0.8em 0 1em;
+  padding: 0;
+  text-align: left;
+  color: var(--color-error);
+}
+
+.add-question {
+  margin: 0 auto;
+  padding: 0.2em 0.5em;
+  background-color: var(--color-success);
+
+  &:hover {
+    background-color: var(--color-success);
+    box-shadow: 0 0 5px var(--color-success);
+  }
+}

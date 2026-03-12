@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { nanoid } from "nanoid";
 import type { IQuizMeta } from "../../types/Quiz";
-import { useSetQuizDraft } from "../../store/useCurrentCreatingQuiz";
+import { setQuizDraft } from "../../store/useCurrentCreatingQuiz";
 import "./quizLoader.css";
 
 interface IQuizLoaderProps {
@@ -90,7 +90,7 @@ export const QuizLoader: React.FC<IQuizLoaderProps> =
             });
           });
 
-          useSetQuizDraft(quiz);
+          setQuizDraft(quiz);
 
           // saveUserQuiz(quiz, userUID)
           //   .then(() => {

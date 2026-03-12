@@ -1,71 +1,112 @@
 import React, { useState } from "react";
 import { QUIZ_CATEGORIES, QUIZ_LANGUAGES } from "./quizCategories";
-import { useQuizDraft, useSetQuizComplete } from "../../store/useCurrentCreatingQuiz";
+import {
+  resetFormError,
+  setQuizComplete,
+  useFormError,
+  useQuizDraft,
+  validateField,
+} from "../../store/useCurrentCreatingQuiz";
 import { saveUserQuiz } from "../../store/useQuizzesStore";
 import "./quizLoaderExtraInfo.css"
+import { type Question, ToastType } from "../../types/Quiz";
+import { useNavigate } from "react-router-dom";
+import { showToast } from "../../store/useNoticeStore";
 
 interface IQuizLoaderExtraInfo {
   userUID: string,
   setIsCreatingNewTest: (isCreatingNewTest: boolean) => void
 }
 
-export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, setIsCreatingNewTest}) => {
-  const catTitles = {
-    category: "Тематика, которой посвящен тест",
-    language: "Язык, на котором написаны вопросы теста",
-    access: "Будет ли Ваш тест виден в общем списке тестов или только в Вашем"
-  }
+const catTitles = {
+  category: "Тематика, которой посвящен тест",
+  language: "Язык, на котором написаны вопросы теста",
+  access: "Будет ли Ваш тест виден в общем списке тестов или только в Вашем"
+}
 
+export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, setIsCreatingNewTest}) => {
   const quizDraft = useQuizDraft();
-  const [quizCategory, setQuizCategory] = useState("");
+  const formError = useFormError();
+  const [quizCategory, setQuizCategory] = useState(quizDraft?.category ?? "");
   const [quizLanguage, setQuizLanguage] = useState("русский");
   const [quizAccess, setQuizAccess] = useState<"public" | "private">("public");
-  const [isValidate, setValidate] = useState(true);
+  const navigate = useNavigate();
+  // const isFormValid = Object.values(formError).every(e => !e);
+  const isFormValid = React.useMemo(
+    () => Object.values(formError).every(e => !e),
+    [formError]
+  );
+
+  const validateForm = () => {
+    if (!quizDraft) return false;
+    let valid = true;
+    validateField("title", quizDraft.title);
+    if (!quizDraft.title) valid = false;
+    validateField("category", quizCategory);
+    if (!quizCategory) valid = false;
+    if (quizDraft.questions) {
+      quizDraft?.questions.forEach((question: Question) => {
+        validateField(question.id, question.question);
+        if (!question.question) valid = false;
+        question.options.forEach(option => {
+          validateField(option.id, option.text);
+          if (!option.text) valid = false;
+        })
+      });
+    }
+    return valid;
+  }
 
   const saveCurrentTest = async () => {
-    if (!quizCategory) {
-      setValidate(false);
-      setTimeout(() => {
-        setValidate(true);
-      }, 2000);
-      return;
+    if (!quizDraft) return;
+    console.log("B: ", isFormValid);
+
+    const valid = validateForm();
+    if (!valid) return;
+    if (!QUIZ_CATEGORIES.includes(quizCategory)) {
+      quizDraft.category = "";
+      quizDraft.categoryDraft = quizCategory;
     } else {
-      setValidate(true);
+      quizDraft.category = quizCategory;
     }
-    if (quizDraft) {
-      if (!QUIZ_CATEGORIES.includes(quizCategory)) {
-        quizDraft.category = "разное";
-        quizDraft.categoryDraft = quizCategory;
-      } else {
-        quizDraft.category = quizCategory;
-      }
-      quizDraft.lang = quizLanguage;
-      quizDraft.access = quizAccess;
-      quizDraft.likeUsers = {};
-      quizDraft.executionCount = 0;
-      useSetQuizComplete(quizDraft);
-      setIsCreatingNewTest(true);
-      await saveUserQuiz(quizDraft, userUID)
-        .then(() => {
-          setIsCreatingNewTest(false);
-        })
-        .catch((error) => {
-          console.error(error);
-        })
+    Object.assign(quizDraft, {
+      lang: quizLanguage,
+      access: quizAccess,
+      likeUsers: {},
+      executionCount: 0
+    });
+    setQuizComplete(quizDraft);
+    setIsCreatingNewTest(true);
+    try {
+      await saveUserQuiz(quizDraft, userUID);
+      resetFormError();
+      setIsCreatingNewTest(false);
+      showToast("Тест успешно сохранён!", ToastType.INFO);
+      // setTimeout(() => {
+      //   navigate("/myquizzes");
+      // }, 3500);
+    } catch (error) {
+      console.error(error);
+      showToast("Ошибка сохранения теста!", ToastType.ERROR);
     }
   }
 
   return (
     <div className='extra-info-block'>
-      <p>Для сохранения теста заполните оставшиеся поля:</p>
+      <p>Для сохранения теста заполните дополнительные поля:</p>
       <span title={catTitles.category}>Категория теста: </span>
       <input
+        className="input-category"
         name='categories'
         list='categories'
         type='text'
         placeholder="например: химия"
         value={quizCategory}
-        onChange={(e) => setQuizCategory(e.target.value)}
+        onChange={(e) => {
+          const value = e.target.value;
+          setQuizCategory(value);
+          validateField("category", value);
+        }}
       />
       <datalist id="categories">
         {
@@ -73,10 +114,10 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
         }
       </datalist>
       {
-        !isValidate && <p className='text-save-error'>Поле не может быть пустым!</p>
+        formError.category && <p className='text-save-error'>Поле не может быть пустым!</p>
       }
       <span title={catTitles.language}>Язык теста: </span>
-      <select name="select" onChange={(e) => setQuizLanguage(e.target.value)}>
+      <select className="input-language" name="select" onChange={(e) => setQuizLanguage(e.target.value)}>
         {
           QUIZ_LANGUAGES.map((item, i) => <option key={i} value={item}>{item}</option>)
         }
@@ -100,7 +141,19 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
           </p>
         </>
       }
-      <button className='btn button-create btn-save' onClick={saveCurrentTest}>СОХРАНИТЬ ТЕСТ</button>
+      <div className="btn-save-block">
+        <button
+          className='btn button-create btn-save'
+          disabled={!isFormValid}
+          onClick={saveCurrentTest}
+        >
+          СОХРАНИТЬ ТЕСТ
+        </button>
+      </div>
+      {
+        !isFormValid &&
+        <p className='submit-error-info'>Все пустые поля должны быть заполнены!</p>
+      }
     </div>
   )
 }

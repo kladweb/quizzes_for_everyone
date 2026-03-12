@@ -1,7 +1,6 @@
 import { child, get, ref, set } from "firebase/database";
 import { IQuizMeta, IQuizzes, IStatistics, Question } from "../types/Quiz";
 import { database } from "../firebase/firebase";
-import { useNavigate } from "react-router-dom";
 
 interface QuizAnswer {
   questionId: string;
@@ -43,7 +42,8 @@ export const QuizStorageManager = {
     try {
       const snapshot = await get(child(dbRef, `users/${userUid}`));
       if (!snapshot.exists()) {
-        throw new Error('No such quiz found!');
+        return [];
+        // throw new Error('No such quiz found!');
       }
       const quizIdsObj = snapshot.val();
       return Object.keys(quizIdsObj);
@@ -69,12 +69,13 @@ export const QuizStorageManager = {
     }
   },
 
-  async fetchCurrentQuiz(quizId: string): Promise<IQuizMeta> {
+  async fetchCurrentQuiz(quizId: string): Promise<IQuizMeta | undefined> {
     const dbRef = ref(database);
     try {
       const snapshot = await get(child(dbRef, `quizzesMeta/${quizId}`));
       if (!snapshot.exists()) {
-        throw new Error('No such quiz found!');
+        // throw new Error('No such quiz found!');
+        return;
       }
       return snapshot.val();
     } catch (error) {
@@ -83,17 +84,34 @@ export const QuizStorageManager = {
     }
   },
 
-  async fetchQuestions(quizId: string): Promise<Question[]> {
+  async fetchQuestions(quizId: string): Promise<Question[] | undefined> {
     const dbRef = ref(database);
     try {
       const snapshot = await get(child(dbRef, `questions/${quizId}`));
-      if (!snapshot.exists()) {
-        throw new Error('No such quiz found!');
+      if (!snapshot.exists()
+      ) {
+        // throw new Error('No such quiz found!');
+        return;
       }
       return JSON.parse(snapshot.val());
-    } catch (error) {
+    } catch
+      (error) {
       console.error(error);
       throw error;
+    }
+  },
+
+  async loadQuizAndQuestions(testId: string): Promise<IQuizMeta | undefined> {
+    if (testId) {
+      const quizPromise = await Promise.all([this.fetchCurrentQuiz(testId), this.fetchQuestions(testId)]);
+      const quiz = quizPromise[0];
+      const questions = quizPromise[1];
+      if (quiz && questions) {
+        quiz.questions = quizPromise[1];
+      } else {
+        return;
+      }
+      return quiz;
     }
   },
 
@@ -160,7 +178,9 @@ export const QuizStorageManager = {
 
   saveRecentStat(statisticInfo: IStatistics): void {
     const storageKey = `recentQuizzes`;
-    let currentStatistic: IStatistics[] = [statisticInfo];
+    let currentStatistic
+      :
+      IStatistics[] = [statisticInfo];
     const recentStatistic: IStatistics[] | null = this.getRecentAllStat();
     let isCurrentExists = false;
     if (recentStatistic && recentStatistic.length > 0) {
@@ -191,7 +211,8 @@ export const QuizStorageManager = {
     }
   },
 
-  removeRecentStat(testId: string): IStatistics[] | null {
+  removeRecentStat(testId: string):
+    IStatistics[] | null {
     const storageKey = `recentQuizzes`;
     const recentStatistic: IStatistics[] | null = this.getRecentAllStat();
     let newStatistic: IStatistics[] = [];
@@ -208,7 +229,8 @@ export const QuizStorageManager = {
       console.error('Failed to clear quiz result:', error);
       return null;
     }
-  },
+  }
+  ,
 
   getRecentAllStat(): IStatistics[] | null {
     try {
@@ -220,9 +242,11 @@ export const QuizStorageManager = {
       console.error('Failed to retrieve quiz result:', error);
       return null;
     }
-  },
+  }
+  ,
 
-  getRecentStatTestId(testId: string): IStatistics | null {
+  getRecentStatTestId(testId: string):
+    IStatistics | null {
     try {
       const storageKey = `recentQuizzes`;
       const stored = localStorage.getItem(storageKey);
@@ -239,48 +263,49 @@ export const QuizStorageManager = {
       console.error('Failed to retrieve quiz result:', error);
       return null;
     }
-  },
+  }
+  ,
 
-  // saveRecentQuiz(quizStorage: IQuizStorage): void {
-  //   let quizzes: IQuizStorage[] = [quizStorage];
-  //   const recentQuizzes: IQuizStorage[] | null = this.getRecentQuizzes();
-  //   // console.log('recentQuizzes: ', recentQuizzes);
-  //   // console.log('quizStorage: ', quizStorage);
-  //   let isQuizExists = false;
-  //   if (recentQuizzes && recentQuizzes.length > 0) {
-  //     recentQuizzes.forEach((quiz: IQuizStorage, i) => {
-  //       if (quiz.testId === quizStorage.testId) {
-  //         recentQuizzes[i] = quizStorage;
-  //         isQuizExists = true;
-  //       }
-  //     });
-  //     if (isQuizExists) {
-  //       quizzes = [...recentQuizzes];
-  //     } else {
-  //       quizzes = [quizStorage, ...recentQuizzes];
-  //     }
-  //   }
-  //   try {
-  //     const storageKey = `recentQuizzes`;
-  //     localStorage.setItem(storageKey, JSON.stringify(quizzes));
-  //   } catch (error) {
-  //     console.error('Failed to save recent quiz:', error);
-  //   }
-  // },
+// saveRecentQuiz(quizStorage: IQuizStorage): void {
+//   let quizzes: IQuizStorage[] = [quizStorage];
+//   const recentQuizzes: IQuizStorage[] | null = this.getRecentQuizzes();
+//   // console.log('recentQuizzes: ', recentQuizzes);
+//   // console.log('quizStorage: ', quizStorage);
+//   let isQuizExists = false;
+//   if (recentQuizzes && recentQuizzes.length > 0) {
+//     recentQuizzes.forEach((quiz: IQuizStorage, i) => {
+//       if (quiz.testId === quizStorage.testId) {
+//         recentQuizzes[i] = quizStorage;
+//         isQuizExists = true;
+//       }
+//     });
+//     if (isQuizExists) {
+//       quizzes = [...recentQuizzes];
+//     } else {
+//       quizzes = [quizStorage, ...recentQuizzes];
+//     }
+//   }
+//   try {
+//     const storageKey = `recentQuizzes`;
+//     localStorage.setItem(storageKey, JSON.stringify(quizzes));
+//   } catch (error) {
+//     console.error('Failed to save recent quiz:', error);
+//   }
+// },
 
-  // getRecentQuizzes(): IQuizStorage[] | null {
-  //   try {
-  //     const storageKey = `recentQuizzes`;
-  //     const stored = localStorage.getItem(storageKey);
-  //     if (!stored) return null;
-  //     return JSON.parse(stored);
-  //   } catch (error) {
-  //     console.error('Failed to retrieve quiz result:', error);
-  //     return null;
-  //   }
-  // },
+// getRecentQuizzes(): IQuizStorage[] | null {
+//   try {
+//     const storageKey = `recentQuizzes`;
+//     const stored = localStorage.getItem(storageKey);
+//     if (!stored) return null;
+//     return JSON.parse(stored);
+//   } catch (error) {
+//     console.error('Failed to retrieve quiz result:', error);
+//     return null;
+//   }
+// },
 
-  // Get all completed quiz IDs
+// Get all completed quiz IDs
   getAllCompletedQuizzes(): string[] {
     const quizIds: string[] = [];
     try {

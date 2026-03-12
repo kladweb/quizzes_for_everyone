@@ -3,7 +3,7 @@ import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from
 import { auth } from "../firebase/firebase";
 import { nanoid } from "nanoid";
 
-interface IUser {
+export interface IUser {
   uid: string;
   email: string | null;
 }

@@ -1,4 +1,4 @@
-interface Option {
+export interface Option {
   id: string;
   text: string;
 }
@@ -8,7 +8,7 @@ export interface Question {
   question: string;
   options: Option[];
   correctAnswers: string[];
-  explanation: string;
+  explanation?: string;
 }
 
 export interface IQuizMeta {
@@ -86,6 +86,18 @@ interface IFirestoreData {
     }
   }
 }
+
+export enum ToastType {
+  INFO = "info",
+  ERROR = "error",
+  WARNING = "warning",
+}
+
+export type Toast = {
+  id: string;
+  message: string;
+  type: ToastType;
+};
 
 // export interface IQuizStorage {
 //   testId: string;

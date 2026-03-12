@@ -1,20 +1,13 @@
 import { create, type StateCreator } from "zustand";
 import { nanoid } from "nanoid";
-
-type ITypes = "info" | "error";
-
-export type Toast = {
-  id: string;
-  message: string;
-  type: ITypes;
-}
+import type { Toast, ToastType } from "../types/Quiz";
 
 interface IInitialState {
   toasts: Toast[],
 }
 
 interface IActions {
-  showToast: (message: string, type: ITypes) => void,
+  showToast: (message: string, type: ToastType) => void,
 }
 
 interface INoticeState extends IInitialState, IActions {
@@ -26,7 +19,7 @@ const initialState: IInitialState = {
 
 const noticeStore: StateCreator<INoticeState> = (set, get) => ({
   ...initialState,
-  showToast: (message: string, type: ITypes = "info") => {
+  showToast: (message: string, type: ToastType) => {
     const toastsOld: Toast[] = get().toasts;
     const toast: Toast = {
       id: "msg" + nanoid(5),
@@ -47,4 +40,4 @@ const noticeStore: StateCreator<INoticeState> = (set, get) => ({
 const useNoticeStore = create<INoticeState>()(noticeStore);
 
 export const useNotice = () => useNoticeStore((state) => state.toasts);
-export const showToast = (message: string, type: ITypes) => useNoticeStore.getState().showToast(message, type);
+export const showToast = (message: string, type: ToastType) => useNoticeStore.getState().showToast(message, type);

@@ -1,4 +1,5 @@
 .questionsContainer {
+  position: relative;
   margin: 1.875em 1.25em;
   padding: 1.25em;
   border: 1px solid var(--color-border);
@@ -95,6 +96,7 @@
 @media (max-width: 400px) {
   .questionsContainer {
     margin: 1em;
+    padding: 0.9em;
     font-size: 0.9em;
   }
 }

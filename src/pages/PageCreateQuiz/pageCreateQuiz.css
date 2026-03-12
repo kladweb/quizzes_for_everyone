@@ -18,11 +18,15 @@
 
 @media (max-width: 1260px) {
   .creating-container {
-    margin: 10px;
+    margin: 0.625rem;
   }
 }
 
 @media (max-width: 460px) {
+  .creating-container {
+    margin: 0.2rem;
+  }
+
   .creating-head {
     margin: 0 0 0.5em;
     font-size: 1.6em;

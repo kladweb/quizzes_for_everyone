@@ -1,6 +1,7 @@
 import { create, type StateCreator } from "zustand";
 import { QuizStorageManager } from "../utils/QuizStorageManager";
 import { IQuizMeta, IQuizzes } from "../types/Quiz";
+import { loginGoogle } from "./useUserStore";
 
 interface IInitialState {
   allQuizzes: IQuizzes | null;
@@ -19,6 +20,7 @@ interface IActions {
   saveUserQuiz: (quiz: IQuizMeta, userUid: string) => Promise<void>;
   deleteUserQuiz: (testId: string, userUid: string) => Promise<void>;
   updateQuiz: (quiz: IQuizMeta) => void;
+  setIsLoading: (isLoading: boolean) => void;
 }
 
 interface IQuizzesState extends IInitialState, IActions {
@@ -74,7 +76,6 @@ const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
     try {
       set(() => ({isLoading: true, errorLoading: ""}));
       const userQuizzes = await QuizStorageManager.fetchUserQuizzes(userUid, userQuizzesIds);
-
       set(() => ({allQuizzes: userQuizzes, isMyQuizzesLoaded: true}));
     } catch (error) {
       // set(() => ({myQuizzes: []}));
@@ -97,10 +98,11 @@ const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
 
     let allTestListNext: IQuizzes;
     if (allTestListPrev) {
-      allTestListNext = {quiz, ...allTestListPrev};
+      allTestListNext = {[quiz.testId]: quiz, ...allTestListPrev};
     } else {
-      allTestListNext = {quiz}
+      allTestListNext = {[quiz.testId]: quiz}
     }
+    console.log(allTestListNext);
     set(() => ({allQuizzes: allTestListNext}));
     try {
       await QuizStorageManager.saveQuizToFirebase(quiz, questions, userUid);
@@ -111,6 +113,7 @@ const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
         set(() => ({allQuizzes: allTestListPrev}));
       }
       set(() => ({errorLoading: "Ошибка сохранения теста!"}));
+      console.log("Ошибка сохранения теста!");
     }
   },
 
@@ -168,6 +171,9 @@ const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
       testList[quiz.testId] = quiz;
       set(() => ({allQuizzes: testList}));
     }
+  },
+  setIsLoading: (isLoading: boolean) => {
+    set(() => ({isLoading: isLoading}));
   }
 })
 
@@ -191,3 +197,5 @@ export const deleteUserQuiz = (testId: string, userUid: string) =>
   useQuizzesStore.getState().deleteUserQuiz(testId, userUid);
 export const updateQuiz = (quiz: IQuizMeta,) =>
   useQuizzesStore.getState().updateQuiz(quiz);
+export const setIsLoading = (isLoading: boolean,) =>
+  useQuizzesStore.getState().setIsLoading(isLoading);

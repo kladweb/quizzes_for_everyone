@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./pageEmpty.css"
 
 interface IPageEmptyProps {
-  emptyReason: "quizDeleted" | "notExistPage" | "pageDevelopment" | "serviceWork";
+  emptyReason: "quizDeleted" | "notExistPage" | "pageDevelopment" | "serviceWork" | "noCreatedQuizzes";
 }
 
 export const PageEmpty: React.FC<IPageEmptyProps> = ({emptyReason}) => {
@@ -12,7 +12,8 @@ export const PageEmpty: React.FC<IPageEmptyProps> = ({emptyReason}) => {
     quizDeleted: "Ошибка! Возможно, тест удалён!",
     notExistPage: "Ошибка! Данной страницы не существует!",
     pageDevelopment: "Ошибка! Данная страница ещё в разработке...\nПопробуйте, пожалуйста, позднее!",
-    serviceWork: "Сервисные работы..."
+    serviceWork: "Сервисные работы...",
+    noCreatedQuizzes: "Здесь будет отображаться список созданных Вами тестов.\n\nВы ещё не создали ни одного теста."
   }
 
   const goToMain = () => {
