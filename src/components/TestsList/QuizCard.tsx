@@ -1,9 +1,8 @@
 import React, { memo, useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { IQuizMeta, ToastType } from "../../types/Quiz";
 import { handleCopy, toggleLike } from "../../utils/quizUtils";
 import { Statistics } from "../Statistics/Statistics";
-import { showToast } from "../../store/useNoticeStore";
+import type { IQuizMeta } from "../../types/Quiz";
 import "./quizCard.css"
 
 interface ITestCardProps {
@@ -11,12 +10,13 @@ interface ITestCardProps {
   dateFormatter: Intl.DateTimeFormat;
   openStatistic?: (testId: string) => void;
   userUID?: string;
+  guestUserId: string | null;
   isShowStatistics?: boolean;
   handlerDeleteQuiz?: (quiz: IQuizMeta) => void;
 }
 
 export const QuizCard: React.FC<ITestCardProps> = memo(
-  ({quiz, openStatistic, dateFormatter, userUID, isShowStatistics, handlerDeleteQuiz}) => {
+  ({quiz, openStatistic, dateFormatter, userUID, guestUserId, isShowStatistics, handlerDeleteQuiz}) => {
     const navigate = useNavigate();
     const currentLink = `${window.location.origin}/quizzes/${quiz.testId}`;
     const [copied, setCopied] = useState(false);
@@ -24,8 +24,9 @@ export const QuizCard: React.FC<ITestCardProps> = memo(
     const [isLiked, setIsLiked] = useState(false);
 
     useEffect(() => {
-      if (userUID && quiz.likeUsers) {
-        setIsLiked(Object.keys(quiz.likeUsers).includes(userUID))
+      const userID = userUID ? userUID : (guestUserId ? guestUserId : null);
+      if (userID && quiz.likeUsers) {
+        setIsLiked(Object.keys(quiz.likeUsers).includes(userID))
       }
     }, [likesCount]);
 
@@ -39,7 +40,7 @@ export const QuizCard: React.FC<ITestCardProps> = memo(
           <div className="info-item">Язык вопросов: <span>{quiz.lang}</span></div>
           <div className="quiz-feedback-info" title="Скольким людям тест понравился">
             <div className={`action-info btn-like-act${isLiked ? " isLiked" : ""}`} role="button"
-                 onClick={() => toggleLike(quiz, userUID, setLikesCount)}>
+                 onClick={() => toggleLike(quiz, userUID, guestUserId, setLikesCount)}>
               <img className={`img-like${isLiked ? " img-liked" : " img-noliked"}`} src="/images/Like-quiz.png"
                    alt="like"/>
               <span>{likesCount}</span>

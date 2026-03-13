@@ -3,12 +3,13 @@ import { loadAllQuizzes, useAllQuizzes, useIsAllLoaded, useIsLoading } from "../
 import { Loader } from "../../components/Loader/Loader";
 import type { IQuizMeta, IQuizzes } from "../../types/Quiz";
 import { QuizCard } from "../../components/TestsList/QuizCard";
-import { useUser } from "../../store/useUserStore";
+import { useGuestUserId, useUser } from "../../store/useUserStore";
 import "./pageAllQuizzes.css";
 
 export const PageAllQuizzes = () => {
   const isAllLoaded = useIsAllLoaded();
   const testsListObj: IQuizzes | null = useAllQuizzes();
+  const guestUserId = useGuestUserId();
   const testList: IQuizMeta[] = Object.values(testsListObj ? testsListObj : {})
     .filter(quiz => quiz.access !== "private");
   testList.sort((a, b) => b.createdAt - a.createdAt);
@@ -27,6 +28,8 @@ export const PageAllQuizzes = () => {
       loadAllQuizzes();
     }, []);
 
+  // console.log(user);
+  // console.log(guestUserId);
   return (
     <div className='tests-container'>
       <h2 className="test-list-name">СПИСОК ОБЩЕДОСТУПНЫХ ТЕСТОВ</h2>
@@ -39,6 +42,7 @@ export const PageAllQuizzes = () => {
                   key={quiz.testId}
                   quiz={quiz}
                   userUID={user?.uid}
+                  guestUserId={guestUserId}
                   dateFormatter={formatter}
                 />)
               )}
