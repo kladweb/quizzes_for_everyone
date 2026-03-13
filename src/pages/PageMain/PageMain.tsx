@@ -16,7 +16,7 @@ export const PageMain = () => {
   return (
     <div className='tests-container'>
       <div className='noticeBlock'>
-        <p className='noticeText'>Войдите в систему, чтобы начать создавать свои тесты...</p>
+        <p className='noticeText'>Авторизуйтесь, чтобы начать создавать свои тесты...</p>
       </div>
       <button className='btn button-login ' onClick={loginGoogle} disabled={isAuthLoading}>
         {isAuthLoading ? "GOOGLE IN..." : "GOOGLE LOGIN"}

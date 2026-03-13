@@ -9,7 +9,8 @@ import "./pageAllQuizzes.css";
 export const PageAllQuizzes = () => {
   const isAllLoaded = useIsAllLoaded();
   const testsListObj: IQuizzes | null = useAllQuizzes();
-  const testList: IQuizMeta[] = Object.values(testsListObj ? testsListObj : {});
+  const testList: IQuizMeta[] = Object.values(testsListObj ? testsListObj : {})
+    .filter(quiz => quiz.access !== "private");
   testList.sort((a, b) => b.createdAt - a.createdAt);
   const isLoading = useIsLoading();
   const user = useUser();
@@ -25,7 +26,6 @@ export const PageAllQuizzes = () => {
       console.log('loadAllQuizzes');
       loadAllQuizzes();
     }, []);
-
 
   return (
     <div className='tests-container'>

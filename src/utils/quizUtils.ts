@@ -21,7 +21,7 @@ export const handlerDeleteQuiz = (
 
 export const toggleLike = async (quiz: IQuizMeta, userUID: string | undefined, setLikesCount: (likesCount: number) => void) => {
   if (!userUID) {
-    showToast("Нужно залогиниться или пройти тест !", ToastType.ERROR);
+    showToast("Чтобы поставить оценку, нужно залогиниться или пройти тест.", ToastType.WARNING);
     return;
   }
   const likeUsers: { [userUID: string]: boolean } = quiz.likeUsers ? quiz.likeUsers : {};

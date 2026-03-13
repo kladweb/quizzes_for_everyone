@@ -91,18 +91,17 @@ const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
     const questions = quiz.questions ? quiz.questions : [];
     delete (quiz.questions);
 
-    if (quizIdsListPrev) {
+    if (quizIdsListPrev && !quizIdsListPrev.includes(quiz.testId)) {
       const quizIdsListNext = [quiz.testId, ...quizIdsListPrev];
       set(() => ({myQuizzesIds: quizIdsListNext}));
     }
 
     let allTestListNext: IQuizzes;
     if (allTestListPrev) {
-      allTestListNext = {[quiz.testId]: quiz, ...allTestListPrev};
+      allTestListNext = {...allTestListPrev, [quiz.testId]: quiz};
     } else {
       allTestListNext = {[quiz.testId]: quiz}
     }
-    console.log(allTestListNext);
     set(() => ({allQuizzes: allTestListNext}));
     try {
       await QuizStorageManager.saveQuizToFirebase(quiz, questions, userUid);

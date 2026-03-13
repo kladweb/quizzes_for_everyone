@@ -17,9 +17,10 @@
   font-weight: 500;
   line-height: 1.3em;
   border-radius: 6px;
-  opacity: 0;
-  transform: translateX(100%);
+  /*opacity: 0;*/
+  transform: translateX(calc(100% + 26px));
   transition: all 0.4s ease;
+  box-shadow: 5px 5px 10px var(--notice-shadow);
 }
 
 .toast-info {
@@ -38,7 +39,7 @@
 }
 
 .toast.show {
-  opacity: 1;
+  /*opacity: 1;*/
   transform: translateX(0);
 }
 
