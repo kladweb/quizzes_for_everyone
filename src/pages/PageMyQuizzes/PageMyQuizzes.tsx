@@ -81,7 +81,7 @@ export const PageMyQuizzes: React.FC = () => {
       }
     }, [isMyIdsLoaded]);
 
-  if (userQuizzesIds.length === 0) {
+  if (userQuizzesIds.length === 0 && !isLoading) {
     return (
       <PageEmpty emptyReason="noCreatedQuizzes"/>
     )

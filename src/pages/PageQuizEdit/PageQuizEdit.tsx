@@ -225,64 +225,66 @@ export const PageQuizEdit = () => {
     setQuizDraft(newQuiz);
   }
 
-  useEffect(() => {
-    if (quiz) {
-      return;
+  const loadQuizAsTemplate = (testId: string) => {
+    const quizTemplate: IQuizMeta = {
+      testId: testId,
+      createdBy: user?.uid ? user.uid : "",
+      title: "",
+      createdAt: Date.now(),
+      category: "xxx",
+      lang: "русский",
+      access: "public",
+      executionCount: 0,
+      likeUsers: {},
+      dislikeUsers: {},
+      questions: [getQuestionTemplate()],
     }
-    if (testId) {
-      if (quizzesAll && (testId in quizzesAll)) {
-        const quizCurrent = quizzesAll[testId];
-        if (!quizCurrent.questions) {
-          QuizStorageManager.fetchQuestions(quizCurrent.testId)
-            .then((data) => {
-              const quizWithQuestions = {
-                ...quizCurrent,
-                questions: data
-              };
-              // quizCurrent.questions = data;
-              setQuizDraft(quizWithQuestions);
-              return;
-            })
-            .catch((err) => {
-              showToast(err, ToastType.ERROR);
-            });
-        } else {
-          setQuizDraft(quizCurrent);
-          return;
-        }
+    // console.log(quizTemplate);
+    setQuizDraft(quizTemplate);
+  }
+
+  useEffect(() => {
+    if (quiz || !testId) return;
+
+    if (quizzesAll && testId && (testId in quizzesAll)) {
+      const quizCurrent = quizzesAll[testId];
+      if (!quizCurrent.questions) {
+        QuizStorageManager.fetchQuestions(quizCurrent.testId)
+          .then((data) => {
+            const quizWithQuestions = {
+              ...quizCurrent,
+              questions: data
+            };
+            // quizCurrent.questions = data;
+            setQuizDraft(quizWithQuestions);
+            return;
+          })
+          .catch((err) => {
+            showToast(err, ToastType.ERROR);
+          });
       } else {
-        setIsLoading(true);
-        QuizStorageManager.loadQuizAndQuestions(testId)
-          .then((quiz: IQuizMeta | undefined) => {
-            // console.log(quiz);
-            if (quiz) {
-              setQuizDraft(quiz);
-              return;
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-            showToast("Ошибка загрузки данных!", ToastType.ERROR);
-          })
-          .finally(() => {
-            setIsLoading(false);
-          })
-        const quizTemplate: IQuizMeta = {
-          testId: testId,
-          createdBy: user?.uid ? user.uid : "",
-          title: "",
-          createdAt: Date.now(),
-          category: "",
-          access: "public",
-          executionCount: 0,
-          likeUsers: {},
-          dislikeUsers: {},
-          questions: [getQuestionTemplate()],
-        }
-        // console.log(quizTemplate);
-        setQuizDraft(quizTemplate);
+        setQuizDraft(quizCurrent);
+        return;
       }
     }
+    setIsLoading(true);
+    QuizStorageManager.loadQuizAndQuestions(testId)
+      .then((quiz: IQuizMeta | undefined) => {
+        if (quiz) {
+          setQuizDraft(quiz);
+          return;
+        } else {
+          loadQuizAsTemplate(testId);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        showToast("Ошибка загрузки данных!", ToastType.ERROR);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+
     return () => {
       clearCurrentQuiz();
       resetFormError();

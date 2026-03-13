@@ -5,6 +5,7 @@ type FieldType = "title" | "category";
 
 interface IInitialState {
   currentQuizDraft: IQuizMeta | null,
+  isQuizDraftLoaded: boolean,
   currentQuizComplete: IQuizMeta | null,
   formError: {
     [key: string]: boolean;
@@ -26,6 +27,7 @@ interface IQuizzesState extends IInitialState, IActions {
 
 const initialState: IInitialState = {
   currentQuizDraft: null,
+  isQuizDraftLoaded: false,
   currentQuizComplete: null,
   formError: {},
 }
@@ -33,16 +35,15 @@ const initialState: IInitialState = {
 const currentQuizStore: StateCreator<IQuizzesState> = (set, get) => ({
   ...initialState,
   setQuizDraft: (quiz) => {
-    set(() => ({currentQuizDraft: quiz}));
+    set(() => ({currentQuizDraft: quiz, isQuizDraftLoaded: true}));
     set(() => ({currentQuizComplete: null}));
   },
   setQuizComplete: (quiz) => {
     set(() => ({currentQuizComplete: quiz}));
-    set(() => ({currentQuizDraft: null}));
+    set(() => ({currentQuizDraft: null, isQuizDraftLoaded: false}));
   },
   clearCurrentQuiz: () => {
-    set(() => ({currentQuizComplete: null}));
-    set(() => ({currentQuizDraft: null}));
+    set(() => ({currentQuizComplete: null, isQuizDraftLoaded: false, currentQuizDraft: null}));
   },
   validateField: (name: string, value: string) => {
     if (!value) {
@@ -59,6 +60,7 @@ const currentQuizStore: StateCreator<IQuizzesState> = (set, get) => ({
 const useCurrentQuizStore = create<IQuizzesState>()(currentQuizStore);
 
 export const useQuizDraft = () => useCurrentQuizStore((state) => state.currentQuizDraft);
+export const useIsQuizDraftLoaded = () => useCurrentQuizStore((state) => state.isQuizDraftLoaded);
 export const useQuizComplete = () => useCurrentQuizStore((state) => state.currentQuizComplete);
 export const useFormError = () => useCurrentQuizStore((state) => state.formError);
 

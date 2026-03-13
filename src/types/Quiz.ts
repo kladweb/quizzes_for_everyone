@@ -19,7 +19,7 @@ export interface IQuizMeta {
   modifiedAt?: number;
   category: string;
   categoryDraft?: string;
-  lang?: string;
+  lang: string;   //?
   access: "public" | "private";
   description?: string;
   executionCount: number;

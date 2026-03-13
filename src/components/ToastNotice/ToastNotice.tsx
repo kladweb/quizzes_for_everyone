@@ -13,7 +13,7 @@ const Toast: React.FC<IToastProps> = ({toast}) => {
   useEffect(() => {
     setTimeout(() => {
       setShow("show");
-    }, 50);
+    }, 100);
     setTimeout(() => {
       setShow("");
     }, 3000);

@@ -15,6 +15,7 @@
   --color-disabled: #94A3B8;
   --color-selected-bg: #FFF8E1;
   --color-err-shadow: rgba(244, 67, 54, 0.4);
+  --notice-shadow: #94A3B8;
   /*--color-checkbox: #666;*/
 
   /* ===== Brand ===== */
@@ -54,6 +55,7 @@
   --color-border: #64748B;
   --color-disabled: #64748B;
   --color-selected-bg: #FFF8E1;
+  --notice-shadow:  #000;
   /*--color-checkbox: #666;*/
 
   /* ===== Brand ===== */
