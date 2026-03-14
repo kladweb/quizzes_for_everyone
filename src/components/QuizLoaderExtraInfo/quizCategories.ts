@@ -36,6 +36,7 @@ export const QUIZ_CATEGORIES = [
   "традиции",
   "автомобили",
   "космос"
-];
+].sort((a, b) => a.localeCompare(b, 'ru'));
 
-export const QUIZ_LANGUAGES = ["русский", "english"]
+
+export const QUIZ_LANGUAGES = ["русский", "беларускi", "english", "polski"]

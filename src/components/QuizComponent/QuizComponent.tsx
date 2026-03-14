@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { child, get, ref, set } from "firebase/database";
 import { nanoid } from "nanoid";
-import type { IStatistics, Question, IQuizMeta } from "../../types/Quiz";
-import { QuestionComponent } from "../Question/Question";
-import { QuizStorageManager } from "../../utils/QuizStorageManager";
-import { QuizResultView } from "../QuizResultView/QuizResultView";
-import { useUser } from "../../store/useUserStore";
 import { database } from "../../firebase/firebase";
-import "./quizComponent.css";
+import { QuestionComponent } from "../Question/Question";
+import { QuizResultView } from "../QuizResultView/QuizResultView";
+import { useGuestUserId, useUser } from "../../store/useUserStore";
 import { updateQuiz } from "../../store/useQuizzesStore";
+import { QuizStorageManager } from "../../utils/QuizStorageManager";
+import type { IStatistics, Question, IQuizMeta } from "../../types/Quiz";
+import "./quizComponent.css";
 
 interface IQuizProps {
   quiz: IQuizMeta;
@@ -19,6 +19,7 @@ interface IQuizProps {
 
 export const QuizComponent: React.FC<IQuizProps> = ({quiz, questions, onReset, saveStatistic}) => {
   const user = useUser();
+  const guestUserId = useGuestUserId();
   const statId = nanoid(15);
   const [currentStatistics, setCurrentStatistics] = useState<IStatistics | null>(null);
   const [shuffledQuestions] = useState<Question[]>(() => {
@@ -93,7 +94,7 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, questions, onReset, s
     const statistics: IStatistics = {
       testId: quiz.testId,
       statId: statId,
-      userUid: user ? user.uid : null,
+      userUid: user ? user.uid : guestUserId,
       title: quiz.title,
       userName: userName.trim(),
       startedAt: startTime,
@@ -124,7 +125,6 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, questions, onReset, s
     let quizExecutionCount: number;
     if (snapshot.exists()) {
       quizExecutionCount = snapshot.val();
-      console.log("A:", quiz.executionCount);
     } else {
       quizExecutionCount = quiz.executionCount;
       console.log("B:", quiz.executionCount);

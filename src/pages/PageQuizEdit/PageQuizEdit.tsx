@@ -231,7 +231,7 @@ export const PageQuizEdit = () => {
       createdBy: user?.uid ? user.uid : "",
       title: "",
       createdAt: Date.now(),
-      category: "xxx",
+      category: "",
       lang: "русский",
       access: "public",
       executionCount: 0,

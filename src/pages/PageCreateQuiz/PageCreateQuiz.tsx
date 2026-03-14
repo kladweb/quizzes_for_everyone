@@ -1,8 +1,8 @@
-import React, {useEffect} from "react";
-import {useNavigate} from "react-router-dom";
-import {CreateQuizWay} from "../../components/CreateQuizWay/CreateQuizWay";
-import {type IWayCardsData, wayCardsData} from "../../components/CreateQuizWay/wayCardsData";
-import {useUser} from "../../store/useUserStore";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { CreateQuizWay } from "../../components/CreateQuizWay/CreateQuizWay";
+import { type IWayCardsData, wayCardsData } from "../../components/CreateQuizWay/wayCardsData";
+import { useUser } from "../../store/useUserStore";
 import "./pageCreateQuiz.css";
 
 export const PageCreateQuiz = () => {
@@ -19,6 +19,7 @@ export const PageCreateQuiz = () => {
   //   }
   // }, [user]);
 
+  console.log(user);
   return (
     <div className='creating-container'>
       <h2 className="creating-head">Создайте свой тест<br/>любым из способов</h2>

@@ -178,9 +178,7 @@ export const QuizStorageManager = {
 
   saveRecentStat(statisticInfo: IStatistics): void {
     const storageKey = `recentQuizzes`;
-    let currentStatistic
-      :
-      IStatistics[] = [statisticInfo];
+    let currentStatistic: IStatistics[] = [statisticInfo];
     const recentStatistic: IStatistics[] | null = this.getRecentAllStat();
     let isCurrentExists = false;
     if (recentStatistic && recentStatistic.length > 0) {
@@ -194,14 +192,14 @@ export const QuizStorageManager = {
 
       recentStatisticClear.forEach((statistic: IStatistics, i) => {
         if (statistic.testId === statisticInfo.testId) {
-          recentStatistic[i] = statisticInfo;
+          recentStatisticClear[i] = statisticInfo;
           isCurrentExists = true;
         }
       });
       if (isCurrentExists) {
         currentStatistic = [...recentStatisticClear];
       } else {
-        currentStatistic = [statisticInfo, ...recentStatisticClear];
+        currentStatistic = [...recentStatisticClear, statisticInfo];
       }
     }
     try {
@@ -229,8 +227,7 @@ export const QuizStorageManager = {
       console.error('Failed to clear quiz result:', error);
       return null;
     }
-  }
-  ,
+  },
 
   getRecentAllStat(): IStatistics[] | null {
     try {
@@ -242,8 +239,7 @@ export const QuizStorageManager = {
       console.error('Failed to retrieve quiz result:', error);
       return null;
     }
-  }
-  ,
+  },
 
   getRecentStatTestId(testId: string):
     IStatistics | null {
@@ -263,8 +259,7 @@ export const QuizStorageManager = {
       console.error('Failed to retrieve quiz result:', error);
       return null;
     }
-  }
-  ,
+  },
 
 // saveRecentQuiz(quizStorage: IQuizStorage): void {
 //   let quizzes: IQuizStorage[] = [quizStorage];
