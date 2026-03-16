@@ -1,35 +1,32 @@
 import React from "react";
 import type { Question, Option } from "../../types/Quiz";
 import { useFormError } from "../../store/useCurrentCreatingQuiz";
+import { useQuizEditor } from "../../hooks/useQuizEditor";
 import "./questionEdit.css";
 
 interface IQuestionEditProps {
   question: Question;
-  handleQuestionEdit: (question: Question, value: string) => void;
-  handleOptionEdit: (option: Option, value: string) => void;
   handleKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
-  handleCorrectCheck: (event: React.ChangeEvent<HTMLInputElement>, option: Option, question: Question) => void;
-  addOption: (question: Question) => void;
-  deleteOption: (question: Question) => void;
   handleDeleteQuestion: (question: Question) => void;
-  explanationEdit: (question: Question, value: string) => void;
   isOnlyOneQuestion: boolean;
 }
 
 export const QuestionEdit: React.FC<IQuestionEditProps> = (
   {
     question,
-    handleQuestionEdit,
-    handleOptionEdit,
     handleKeyDown,
-    handleCorrectCheck,
-    addOption,
-    deleteOption,
     handleDeleteQuestion,
-    explanationEdit,
     isOnlyOneQuestion
   }) => {
   const formError = useFormError();
+  const {
+    handleQuestionEdit,
+    handleOptionEdit,
+    handleCorrectCheck,
+    addOption,
+    deleteOption,
+    explanationEdit
+  } = useQuizEditor();
   const MAX_OPTIONS = 6;
 
   // console.log(question.options);

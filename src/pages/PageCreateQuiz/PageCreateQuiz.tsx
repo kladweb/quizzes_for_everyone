@@ -19,7 +19,6 @@ export const PageCreateQuiz = () => {
   //   }
   // }, [user]);
 
-  console.log(user);
   return (
     <div className='creating-container'>
       <h2 className="creating-head">Создайте свой тест<br/>любым из способов</h2>
