@@ -34,6 +34,10 @@ export const MainLayout = () => {
         }
         <ToastNotice/>
         <ScrollUp/>
+        <div className="dot_lights">
+          <div className="dot_light dot_light_1"></div>
+          <div className="dot_light dot_light_2"></div>
+        </div>
       </main>
       <Footer/>
     </>

@@ -54,6 +54,45 @@ input[type="file"] {
   text-align: center;
 }
 
+/*Dot lights*/
+
+.dot_lights {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.dot_light {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.dot_light_1 {
+  width: 14.15rem;
+  height: 81.4rem;
+  top: -1rem;
+  left: 15rem;
+  background: linear-gradient(var(--color-bg-dotlight1), var(--color-bg-dotlight2));
+  transform: rotate(-54.31deg);
+  filter: blur(8rem);
+  opacity: 30%;
+}
+
+.dot_light_2 {
+  width: 35.875rem;
+  height: 35.875rem;
+  bottom: -7.875rem;
+  right: -9.94rem;
+  background: linear-gradient(45deg, var(--color-bg-dotlight1), var(--color-bg-dotlight2));
+  filter: blur(15rem);
+  opacity: 50%;
+}
+
 @media (max-width: 660px) {
   .main {
     margin: 0;
@@ -65,5 +104,21 @@ input[type="file"] {
 
   .noticeText {
     font-size: 1.2rem;
+  }
+
+  .dot_light_1 {
+    width: 7rem;
+    height: 41.4rem;
+    top: -1rem;
+    left: 5rem;
+    filter: blur(5rem);
+  }
+
+  .dot_light_2 {
+    width: 17rem;
+    height: 17rem;
+    bottom: -1rem;
+    right: -3.94rem;
+    filter: blur(8rem);
   }
 }
