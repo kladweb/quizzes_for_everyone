@@ -1,9 +1,12 @@
 :root {
   /* ===== Backgrounds ===== */
   --color-bg-page: #D0ECF7;
-  --color-bg-card: #F4FAFD;
+  --color-bg-card: rgba(244, 250, 253, 0.5);
+  --color-bg-card2: #F4FAFD;
   --color-bg-footer: #E6F4FA;
   --color-bg-contrast: white;
+  --color-bg-dotlight1: #015B76;
+  --color-bg-dotlight2: #01475D;
 
   /* ===== Text ===== */
   --color-text-primary: #1F2933;
@@ -42,9 +45,12 @@
 [data-theme="dark"] {
   /* ===== Backgrounds ===== */
   --color-bg-page: #0F172A;
-  --color-bg-card: #334155;
+  --color-bg-card: rgba(51, 65, 85, 0.5);
+  --color-bg-card2: #334155;
   --color-bg-footer: #0F172A;
   --color-bg-contrast: #1E293B;
+  --color-bg-dotlight1: #9DADF2;
+  --color-bg-dotlight2: #478BF9;
 
   /* ===== Text ===== */
   --color-text-primary: #E5E7EB;
@@ -55,7 +61,7 @@
   --color-border: #64748B;
   --color-disabled: #64748B;
   --color-selected-bg: #FFF8E1;
-  --notice-shadow:  #000;
+  --notice-shadow: #000;
   /*--color-checkbox: #666;*/
 
   /* ===== Brand ===== */
