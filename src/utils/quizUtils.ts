@@ -42,7 +42,7 @@ export const toggleLike = async (
   });
 
   if (!userUID && !isAllowLiked) {
-    showToast("Чтобы поставить оценку, нужно залогиниться или пройти тест.", ToastType.WARNING);
+    showToast("Чтобы поставить оценку, нужно залогиниться или пройти этот тест.", ToastType.WARNING);
     return;
   }
 

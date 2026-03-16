@@ -1,8 +1,6 @@
 import { create, type StateCreator } from "zustand";
 import type { IQuizMeta } from "../types/Quiz";
 
-type FieldType = "title" | "category";
-
 interface IInitialState {
   currentQuizDraft: IQuizMeta | null,
   isQuizDraftLoaded: boolean,

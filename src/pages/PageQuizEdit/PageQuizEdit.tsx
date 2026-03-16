@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { IQuizMeta, IQuizzes, Option, Question, ToastType } from "../../types/Quiz";
+import type { IQuizMeta, IQuizzes, Option, Question } from "../../types/Quiz";
+import { ToastType } from "../../types/Quiz";
 import { setIsLoading, useAllQuizzes, useIsLoading } from "../../store/useQuizzesStore";
 import { useUser } from "../../store/useUserStore";
 import { QuizLoaderExtraInfo } from "../../components/QuizLoaderExtraInfo/QuizLoaderExtraInfo";
@@ -16,9 +17,8 @@ import { showToast } from "../../store/useNoticeStore";
 import { QuestionEdit } from "../../components/QuestionEdit/QuestionEdit";
 import { LinkQuiz } from "../../components/LinkQuiz/LinkQuiz";
 import { ModalConfirm } from "../../components/ModalConfirm/ModalConfirm";
+import { useQuizEditor } from "../../hooks/useQuizEditor";
 import "./pageQuizEdit.css";
-
-const optionsVar = ["a", "b", "c", "d", "e", "f"];
 
 export const PageQuizEdit = () => {
   const params = useParams();
@@ -29,22 +29,9 @@ export const PageQuizEdit = () => {
   const [isCreatingNewTest, setIsCreatingNewTest] = useState(false);
   const quiz = useQuizDraft();
   const quizComplete = useQuizComplete();
-  const isFormValid = Object.values(formError).every(e => !e);
-  const isLoading = useIsLoading();
+  const {addQuestion, deleteQuestion, getQuestionTemplate} = useQuizEditor();
   const [isModalConfirmOpen, setIsModalConfirmOpen] = useState<boolean>(false);
   const [questionToDelete, setQuestionToDelete] = useState<Question | null>(null);
-
-  const getQuestionTemplate = (questionNumber: number = 0) => {
-    const questionId: string = questionNumber ? "q" + questionNumber : "q1";
-    const newQuestion: Question = {
-      id: questionId,
-      question: "",
-      options: [{id: questionId + "_a", text: ""}, {id: questionId + "_b", text: ""}],
-      correctAnswers: [questionId + "_a"],
-      explanation: ""
-    }
-    return newQuestion;
-  }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
@@ -59,39 +46,6 @@ export const PageQuizEdit = () => {
     }
     validateField(key, value);
   };
-
-  const addOption = (question: Question) => {
-    if (!quiz) return;
-    const optionName = optionsVar[question.options.length];
-    const newQuiz = {
-      ...quiz,
-      questions: quiz.questions?.map(q => {
-        if (q.id !== question.id) return q;
-
-        return {
-          ...q,
-          options: [
-            ...q.options,
-            {
-              id: `${question.id}_${optionName}`,
-              text: ""
-            }
-          ]
-        };
-      })
-    };
-    setQuizDraft(newQuiz);
-  };
-
-  const deleteOption = (question: Question) => {
-    if (quiz) {
-      validateField(question.options[question.options.length - 1].id, "ok");
-      question.options.pop();
-      const newQuiz = {...quiz};
-      resetFormError();
-      setQuizDraft(newQuiz);
-    }
-  }
 
   const handleDeleteQuestion = (question: Question) => {
     if (!question) return;
@@ -113,25 +67,6 @@ export const PageQuizEdit = () => {
     }
   }
 
-  const deleteQuestion = (question: Question) => {
-    if (!quiz || !quiz.questions) return;
-    const questions: Question[] = [...quiz.questions];
-    const lastQuestion = questions[questions.length - 1];
-    questions.forEach((q: Question, i: number) => {
-      if (q.id === question.id) {
-        lastQuestion.id = question.id;
-        questions.splice(i, 1, lastQuestion);
-      }
-    });
-    questions.pop();
-    const newQuiz = {
-      ...quiz,
-      questions: questions
-    };
-    resetFormError();
-    setQuizDraft(newQuiz);
-  }
-
   const handlerConfirmDelete = (toDelete: boolean) => {
     if (!user || !questionToDelete) {
       return;
@@ -140,89 +75,6 @@ export const PageQuizEdit = () => {
       deleteQuestion(questionToDelete);
     }
     setIsModalConfirmOpen(false);
-  }
-
-  const handleQuestionEdit = (question: Question, value: string) => {
-    if (!quiz) return;
-    const newQuiz = {
-      ...quiz,
-      questions: quiz.questions?.map(q =>
-        q.id === question.id
-          ? {...q, question: value ? value : ""}
-          : q
-      )
-    };
-    validateField(question.id, value);
-    setQuizDraft(newQuiz);
-  };
-
-  const handleOptionEdit = (option: Option, value: string) => {
-    if (!quiz) return;
-    const newQuiz = {
-      ...quiz,
-      questions: quiz.questions?.map(q => ({
-        ...q,
-        options: q.options.map(o =>
-          o.id === option.id
-            ? {...o, text: value}
-            : o
-        )
-      }))
-    };
-    validateField(option.id, value);
-    setQuizDraft(newQuiz);
-  };
-
-  const handleCorrectCheck = (e: React.ChangeEvent<HTMLInputElement>, option: Option, question: Question) => {
-    if (!quiz) return;
-    const correctAnswers: string[] = [...question.correctAnswers];
-    if (e.target.checked) {
-      correctAnswers.push(option.id);
-    } else {
-      if (correctAnswers.length <= 1) {
-        showToast("Должен быть хотя бы один правильный вариант!", ToastType.WARNING)
-        return;
-      }
-      let index = correctAnswers.indexOf(option.id);
-      if (index !== -1) {
-        correctAnswers.splice(index, 1);
-      }
-    }
-    const newQuiz = {
-      ...quiz,
-      questions: quiz.questions?.map(q =>
-        q.id === question.id
-          ? {...q, correctAnswers: correctAnswers}
-          : q
-      )
-    };
-    setQuizDraft(newQuiz);
-  }
-
-  const addQuestion = () => {
-    console.log('addQuestion');
-    if (!quiz) return;
-    const questions = quiz.questions ? quiz.questions : [];
-    const newQuiz = {
-      ...quiz,
-      questions: [...questions, getQuestionTemplate(quiz.questions ? quiz.questions.length + 1 : 0)],
-    };
-    console.log(newQuiz);
-    resetFormError();
-    setQuizDraft(newQuiz);
-  }
-
-  const explanationEdit = (question: Question, value: string) => {
-    if (!quiz) return;
-    const newQuiz = {
-      ...quiz,
-      questions: quiz.questions?.map(q =>
-        q.id === question.id
-          ? {...q, explanation: value}
-          : q
-      )
-    };
-    setQuizDraft(newQuiz);
   }
 
   const loadQuizAsTemplate = (testId: string) => {
@@ -291,7 +143,6 @@ export const PageQuizEdit = () => {
     }
   }, []);
 
-  // console.log(formError);
   return (
     <>
       {
@@ -332,14 +183,8 @@ export const PageQuizEdit = () => {
                         <QuestionEdit
                           key={question.id}
                           question={question}
-                          handleQuestionEdit={handleQuestionEdit}
-                          handleOptionEdit={handleOptionEdit}
                           handleKeyDown={handleKeyDown}
-                          handleCorrectCheck={handleCorrectCheck}
-                          addOption={addOption}
-                          deleteOption={deleteOption}
                           handleDeleteQuestion={handleDeleteQuestion}
-                          explanationEdit={explanationEdit}
                           isOnlyOneQuestion={quiz.questions ? quiz.questions.length > 1 : false}
                         />
                       )

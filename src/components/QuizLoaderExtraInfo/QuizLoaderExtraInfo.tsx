@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { QUIZ_CATEGORIES, QUIZ_LANGUAGES } from "./quizCategories";
 import {
-  resetFormError,
-  setQuizComplete,
-  useFormError, useIsQuizDraftLoaded,
-  useQuizDraft,
-  validateField,
+  resetFormError, setQuizComplete,
+  useFormError, useIsQuizDraftLoaded, useQuizDraft, validateField,
 } from "../../store/useCurrentCreatingQuiz";
 import { saveUserQuiz } from "../../store/useQuizzesStore";
 import { IQuizMeta, type Question, ToastType } from "../../types/Quiz";
@@ -29,9 +25,8 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
   const isQuizDraftLoaded = useIsQuizDraftLoaded();
   const formError = useFormError();
   const [quizCategory, setQuizCategory] = useState(quizDraft?.category ?? "");
-  const [quizLanguage, setQuizLanguage] = useState(quizDraft?.lang ?? "english");
+  const [quizLanguage, setQuizLanguage] = useState(quizDraft?.lang ?? "русский");
   const [quizAccess, setQuizAccess] = useState<"public" | "private">(quizDraft?.access ?? "public");
-  const navigate = useNavigate();
   // const isFormValid = Object.values(formError).every(e => !e);
   const isFormValid = React.useMemo(
     () => Object.values(formError).every(e => !e),
@@ -104,12 +99,11 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
   }
 
   useEffect(() => {
-    if (isQuizDraftLoaded && quizDraft) {
-      setQuizCategory(quizDraft.category);
-      setQuizLanguage(quizDraft.lang);
-      setQuizAccess(quizDraft.access);
-    }
-  }, [isQuizDraftLoaded]);
+    if (!isQuizDraftLoaded || !quizDraft) return;
+    setQuizCategory(quizDraft.category ?? "");
+    setQuizLanguage(quizDraft.lang ?? "русский");
+    setQuizAccess(quizDraft.access ?? "public");
+  }, [isQuizDraftLoaded, quizDraft]);
 
   return (
     <div className='extra-info-block'>
@@ -153,7 +147,7 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
           type="radio"
           name="access"
           id="public"
-          defaultChecked={quizAccess === "public"}
+          checked={quizAccess === "public"}
           onChange={(e) => setQuizAccess("public")}
         />
         <label htmlFor="public">public</label>
@@ -163,7 +157,7 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
           type="radio"
           name="access"
           id="private"
-          defaultChecked={quizAccess === "private"}
+          checked={quizAccess === "private"}
           onChange={(e) => setQuizAccess("private")}
         />
         <label htmlFor="private">private</label>
