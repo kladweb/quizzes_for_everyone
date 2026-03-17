@@ -53,6 +53,7 @@ export const PageQuiz = () => {
     }
   }
 
+
   useEffect(() => {
     if (quiz && quiz.testId === testId) {
       showToast("Вы уже на странице этого теста!\nТест пройден!", ToastType.INFO);
@@ -75,6 +76,15 @@ export const PageQuiz = () => {
         setSavedResultStorage(null);
       }
     }
+
+    const apiRes = fetch(
+      `https://quizzes-for-everyone.firebaseio.com/quizzesMeta/${testId}.json999`
+    );
+    console.log(apiRes);
+    apiRes.then(data => {
+      console.log(data);
+    })
+
   }, [testId]);
 
   if (savedResultStorage) {
