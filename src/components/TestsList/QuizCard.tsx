@@ -4,6 +4,7 @@ import { handleCopy, toggleLike } from "../../utils/quizUtils";
 import { Statistics } from "../Statistics/Statistics";
 import type { IQuizMeta } from "../../types/Quiz";
 import "./quizCard.css"
+import { CATEGORY_LABELS_RU, QUIZ_LANGUAGES } from "../../variables/quizData";
 
 interface ITestCardProps {
   quiz: IQuizMeta;
@@ -36,8 +37,8 @@ export const QuizCard: React.FC<ITestCardProps> = memo(
           <h3 className='test-name'>{quiz.title}</h3>
         </div>
         <div className="quiz-container-info">
-          <div className="info-item">Категория: <span>{quiz.category}</span></div>
-          <div className="info-item">Язык вопросов: <span>{quiz.lang}</span></div>
+          <div className="info-item">Категория: <span>{CATEGORY_LABELS_RU[quiz.category]}</span></div>
+          <div className="info-item">Язык вопросов: <span>{QUIZ_LANGUAGES[quiz.lang]}</span></div>
           <div className="quiz-feedback-info" title="Скольким людям тест понравился">
             <div className={`action-info btn-like-act${isLiked ? " isLiked" : ""}`} role="button"
                  onClick={() => toggleLike(quiz, userUID, guestUserId, setLikesCount)}>
