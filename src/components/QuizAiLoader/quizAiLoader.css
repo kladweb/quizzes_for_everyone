@@ -1,0 +1,23 @@
+#quiz-prompt {
+  width: 96%;
+  max-width: 96%;
+  height: 10rem;
+  font-size: 1.2rem;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-page);
+  resize: vertical;
+}
+
+.quiz-note {
+  /*display: block;*/
+  margin: 0.5em 0 0.3em 0.6em;
+  text-align: left;
+  line-height: 1em;
+  color: var(--color-text-secondary);
+  white-space: wrap;
+}
+
+.quiz-questionCount {
+  text-align: center;
+  color: var(--color-text-secondary);
+}

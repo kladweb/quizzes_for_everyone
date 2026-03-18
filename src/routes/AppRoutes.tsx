@@ -11,6 +11,7 @@ import { PageCreateQuizJson } from "../pages/PageCreateQuizJson/PageCreateQuizJs
 import { PageAllQuizzes } from "../pages/PageAllQuizzes/PageAllQuizzes";
 import { PageCreateQuizManual } from "../pages/PageCreateQuizManual/PageCreateQuizManual";
 import { PageQuizEdit } from "../pages/PageQuizEdit/PageQuizEdit";
+import { PageCreateQuizAI } from "../pages/PageCreateQuizAI/PageCreateQuizAI";
 
 export const AppRoutes = () => {
   return (
@@ -23,7 +24,8 @@ export const AppRoutes = () => {
           <Route path="/createquiz/json" element={<PageCreateQuizJson/>}/>
           <Route path="/createquiz/manual" element={<PageCreateQuizManual/>}/>
           <Route path="/createquiz/manual/:testid" element={<PageQuizEdit/>}/>
-          <Route path="/createquiz/ai" element={<PageEmpty emptyReason="pageDevelopment"/>}/>
+          <Route path="/createquiz/ai" element={<PageCreateQuizAI/>}/>
+          {/*<Route path="/createquiz/ai" element={<PageEmpty emptyReason="pageDevelopment"/>}/>*/}
           <Route path="/myquizzes" element={<PageMyQuizzes/>}/>
         </Route>
 
