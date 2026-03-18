@@ -77,15 +77,11 @@ export const PageQuiz = () => {
       }
     }
 
-    const apiRes = fetch(
-      `https://quizzes-for-everyone.firebaseio.com/quizzesMeta/${testId}.json999`
-    );
-    console.log(apiRes);
-    apiRes.then(data => {
-      console.log(data);
-    })
+    if (quiz?.title) {
+      document.title = `${quiz.title} · ANY QUIZ`;
+    }
 
-  }, [testId]);
+  }, [testId, quiz?.title]);
 
   if (savedResultStorage) {
     return <QuizResultView result={savedResultStorage} onReset={handleReset}/>;

@@ -20,6 +20,7 @@ export const PageAllQuizzes = () => {
 
   useEffect(
     () => {
+      document.title = "ВСЕ ТЕСТЫ · ANY QUIZ";
       if (isAllLoaded) {
         console.log("All Quizzes already loaded");
         return;

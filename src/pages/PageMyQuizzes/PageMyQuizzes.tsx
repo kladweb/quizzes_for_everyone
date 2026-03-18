@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../../store/useUserStore";
+import { useGuestUserId, useUser } from "../../store/useUserStore";
 import {
   deleteUserQuiz, loadUserIds, loadUserQuizzes, useAllQuizzes, useIsAllLoaded, useIsLoading, useIsMyIdsLoaded,
   useIsMyQuizzesLoaded, useMyQuizzesIds
@@ -22,6 +22,7 @@ export const PageMyQuizzes: React.FC = () => {
   const isLoading = useIsLoading();
   const userQuizzesIds = useMyQuizzesIds();
   const testsListObj: IQuizzes | null = useAllQuizzes();
+  const guestUserId = useGuestUserId();
   const testList: IQuizMeta[] = [];
   // const testList: IQuizMeta[] = Object.values(testsListObj ? testsListObj : {});
   // testList.sort((a, b) => b.createdAt - a.createdAt);
@@ -68,6 +69,7 @@ export const PageMyQuizzes: React.FC = () => {
 
   useEffect(
     () => {
+      document.title = "МОИ ТЕСТЫ · ANY QUIZ";
       if (isAllLoaded && isMyQuizzesLoaded) {
         console.log("User data already loaded");
         return;
@@ -103,6 +105,7 @@ export const PageMyQuizzes: React.FC = () => {
                     openStatistic={openStatistic}
                     dateFormatter={formatter}
                     userUID={user?.uid}
+                    guestUserId={guestUserId}
                     isShowStatistics={!!quizIdStatistics && quizIdStatistics === quiz.testId}
                     handlerDeleteQuiz={handlerDeleteQuiz}
                   />)

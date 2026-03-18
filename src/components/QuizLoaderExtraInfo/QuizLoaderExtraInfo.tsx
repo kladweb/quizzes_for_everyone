@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { QUIZ_CATEGORIES, QUIZ_LANGUAGES } from "./quizCategories";
+import { CATEGORY_LABELS_RU, QUIZ_LANGUAGES } from "../../variables/quizData";
 import {
   resetFormError, setQuizComplete,
   useFormError, useIsQuizDraftLoaded, useQuizDraft, validateField,
@@ -21,10 +21,11 @@ const catTitles = {
 }
 
 export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, setIsCreatingNewTest}) => {
+  const CATEGORY_values = Object.values(CATEGORY_LABELS_RU);
   const quizDraft = useQuizDraft();
   const isQuizDraftLoaded = useIsQuizDraftLoaded();
   const formError = useFormError();
-  const [quizCategory, setQuizCategory] = useState(quizDraft?.category ?? "");
+  const [quizCategory, setQuizCategory] = useState(quizDraft?.category ? CATEGORY_LABELS_RU[quizDraft.category] : "");
   const [quizLanguage, setQuizLanguage] = useState(quizDraft?.lang ?? "русский");
   const [quizAccess, setQuizAccess] = useState<"public" | "private">(quizDraft?.access ?? "public");
   // const isFormValid = Object.values(formError).every(e => !e);
@@ -57,15 +58,29 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
     if (!quizDraft) return;
     const quiz: IQuizMeta = {...quizDraft};
 
+    console.log(quiz.testId);
     const valid = validateForm();
     if (!valid) return;
-    if (!QUIZ_CATEGORIES.includes(quizCategory)) {
-      quiz.category = "разное";
-      quiz.categoryDraft = quizCategory.trim();
+
+    if (CATEGORY_values.includes(quizCategory.trim())) {
+      for (const key in CATEGORY_LABELS_RU) {
+        if (CATEGORY_LABELS_RU[key] === quizCategory.trim()) {
+          console.log(key);
+          quiz.category = key;
+          break;
+        }
+      }
     } else {
-      quiz.category = quizCategory.trim();
+      quiz.category = "general";
     }
-    quiz.lang = quizLanguage;
+
+    for (const key in QUIZ_LANGUAGES) {
+      if (QUIZ_LANGUAGES[key] === quizLanguage) {
+        quiz.lang = key;
+
+      }
+    }
+
     quiz.access = quizAccess;
     quiz.likeUsers = quizDraft?.likeUsers ?? [];
     quiz.executionCount = quizDraft?.executionCount ?? 0;
@@ -100,8 +115,8 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
 
   useEffect(() => {
     if (!isQuizDraftLoaded || !quizDraft) return;
-    setQuizCategory(quizDraft.category ?? "");
-    setQuizLanguage(quizDraft.lang ?? "русский");
+    setQuizCategory(CATEGORY_LABELS_RU[quizDraft.category] ?? "");
+    setQuizLanguage(QUIZ_LANGUAGES[quizDraft.lang] ?? "русский");
     setQuizAccess(quizDraft.access ?? "public");
   }, [isQuizDraftLoaded, quizDraft]);
 
@@ -124,7 +139,8 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
       />
       <datalist id="categories">
         {
-          QUIZ_CATEGORIES.map((item, i) => <option key={i} value={item}/>)
+          CATEGORY_values.sort((a, b) => a.localeCompare(b, 'ru'))
+            .map((item, i) => <option key={i} value={item}/>)
         }
       </datalist>
       {
@@ -138,7 +154,7 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
         onChange={(e) => setQuizLanguage(e.target.value)}
       >
         {
-          QUIZ_LANGUAGES.map((item, i) => <option key={i} value={item}>{item}</option>)
+          Object.values(QUIZ_LANGUAGES).map((item, i) => <option key={i} value={item}>{item}</option>)
         }
       </select>
       <span title={catTitles.access}>Доступность теста: </span>
@@ -163,7 +179,7 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
         <label htmlFor="private">private</label>
       </div>
       {
-        (quizCategory && !QUIZ_CATEGORIES.includes(quizCategory)) &&
+        (quizCategory && !CATEGORY_values.includes(quizCategory)) &&
         <>
           <p className='warning-save'>Ваш тест будет сохранен в категории <span>"разное"</span>!</p>
           <p className='warning-save'>
