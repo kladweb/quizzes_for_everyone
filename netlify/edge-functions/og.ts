@@ -3,7 +3,9 @@ export default async (request: Request) => {
 
   const match = url.pathname.match(/^\/quizzes\/(.+)/);
 
-  if (!match) return;
+  if (!match) {
+    return fetch(request);
+  }
 
   const quizId = match[1];
 
@@ -11,12 +13,14 @@ export default async (request: Request) => {
     `https://quizzes-for-everyone-default-rtdb.europe-west1.firebasedatabase.app/quizzesMeta/${quizId}.json`
   );
 
-  if (!apiRes.ok) return;
+  if (!apiRes.ok) {
+    return fetch(request);
+  }
 
-  const data = await apiRes.json();
+  const data = (await apiRes.json()) ?? {};
 
   const title = data?.title ?? "ANY QUIZ";
-  const description = data?.description ?? "Create and share quizzes easily";
+  const description = (data?.description ?? "Create and share quizzes easily").slice(0, 200);
 
   const htmlRes = await fetch(new URL("/", request.url));
   let html = await htmlRes.text();
@@ -37,6 +41,6 @@ export default async (request: Request) => {
   );
 
   return new Response(html, {
-    headers: { "content-type": "text/html" }
+    headers: {"content-type": "text/html"}
   });
 };

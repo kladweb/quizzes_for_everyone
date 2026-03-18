@@ -96,6 +96,7 @@ export const PageQuizEdit = () => {
   }
 
   useEffect(() => {
+    document.title = "ПРАВКА ТЕСТА · ANY QUIZ";
     if (quiz || !testId) return;
 
     if (quizzesAll && testId && (testId in quizzesAll)) {

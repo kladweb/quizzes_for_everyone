@@ -1,5 +1,5 @@
-import React, {useEffect} from "react";
-import {useNavigate} from "react-router-dom";
+import React, { useEffect } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import { loginGoogle, useIsAuthLoading, useUser } from "../../store/useUserStore";
 
 export const PageMain = () => {
@@ -8,6 +8,7 @@ export const PageMain = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    document.title = "ANY QUIZ";
     if (user) {
       navigate("/createquiz");
     }
@@ -15,6 +16,9 @@ export const PageMain = () => {
 
   return (
     <div className='tests-container'>
+      <NavLink to='/allquizzes'>
+        <img className="main-image" src="open.png" alt="any-quiz"/>
+      </NavLink>
       <div className='noticeBlock'>
         <p className='noticeText'>Авторизуйтесь, чтобы начать создавать свои тесты...</p>
       </div>

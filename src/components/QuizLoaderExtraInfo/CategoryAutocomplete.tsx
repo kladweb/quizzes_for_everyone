@@ -1,5 +1,5 @@
 import React from "react";
-import {QUIZ_CATEGORIES} from "./quizCategories";
+import { CATEGORY_LABELS_RU } from "../../variables/quizData";
 
 interface IPropsCategoryAutocomplete {
   value: string;
@@ -10,7 +10,7 @@ export const CategoryAutocomplete: React.FC<IPropsCategoryAutocomplete> = ({valu
   const [query, setQuery] = React.useState(value || "");
   const [open, setOpen] = React.useState(false);
 
-  const filtered = QUIZ_CATEGORIES.filter(c =>
+  const filtered = Object.values(CATEGORY_LABELS_RU).filter(c =>
     c.toLowerCase().includes(query.toLowerCase())
   );
 

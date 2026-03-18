@@ -54,6 +54,12 @@ input[type="file"] {
   text-align: center;
 }
 
+.main-image {
+  max-width: 100%;
+  margin-top: 0.5em;
+  border-radius: 0.75em;
+}
+
 /*Dot lights*/
 
 .dot_lights {
@@ -75,7 +81,7 @@ input[type="file"] {
 .dot_light_1 {
   width: 14.15rem;
   height: 81.4rem;
-  top: -1rem;
+  top: -20rem;
   left: 15rem;
   background: linear-gradient(var(--color-bg-dotlight1), var(--color-bg-dotlight2));
   transform: rotate(-54.31deg);
@@ -103,7 +109,7 @@ input[type="file"] {
   }
 
   .noticeText {
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
 
   .dot_light_1 {
