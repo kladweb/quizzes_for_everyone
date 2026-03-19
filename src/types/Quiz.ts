@@ -82,7 +82,18 @@ interface IFirestoreData {
   },
   users: {
     [userId: string]: {
-      [testId: string]: true;
+      userQuizzes: {
+        [testId: string]: true;
+      },
+      userTokens: {
+        dailyCount: 50,
+        coinsUsed: {
+          [date: number]: number
+        },
+        coinsBought: {
+          [date: number]: number
+        }
+      }
     }
   }
 }
