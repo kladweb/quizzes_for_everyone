@@ -21,3 +21,8 @@
   text-align: center;
   color: var(--color-text-secondary);
 }
+
+.input-range {
+  display: block;
+  margin: 0 auto 3em;
+}

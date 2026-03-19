@@ -81,3 +81,9 @@ export const CATEGORY_LABELS_RU: ILabels = {
 
 // export const QUIZ_LANGUAGES = ["русский", "беларускi", "english", "polski"]
 export const QUIZ_LANGUAGES: ILabels = {ru: "русский", be: "беларускi", en: "english", pl: "polski"}
+
+export const catTitles = {
+  category: "Тематика, которой посвящен тест",
+  language: "Язык, на котором написаны вопросы теста",
+  access: "Будет ли Ваш тест виден в общем списке тестов или только в Вашем"
+}
