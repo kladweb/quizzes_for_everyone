@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { nanoid } from "nanoid";
-import type { IQuizMeta } from "../../types/Quiz";
+import { IQuizMeta, ToastType } from "../../types/Quiz";
 import { setQuizDraft } from "../../store/useCurrentCreatingQuiz";
 import "./quizLoader.css";
+import { showToast } from "../../store/useNoticeStore";
 
 interface IQuizLoaderProps {
   userUID: string,
@@ -55,8 +56,10 @@ export const QuizLoader: React.FC<IQuizLoaderProps> =
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
-      if (!file) return;
-
+      if (!file) {
+        showToast('Ошибка создания теста!', ToastType.ERROR);
+        return;
+      }
       setError('');
       const reader = new FileReader();
 

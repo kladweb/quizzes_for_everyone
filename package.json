@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@netlify/functions": "^5.1.5",
     "@types/react-router-dom": "^5.3.3",
     "firebase": "^12.6.0",
     "nanoid": "^5.1.6",

@@ -4,13 +4,26 @@ import { QuizLoaderExtraInfo } from "../../components/QuizLoaderExtraInfo/QuizLo
 import { Loader } from "../../components/Loader/Loader";
 import { LinkQuiz } from "../../components/LinkQuiz/LinkQuiz";
 import { useUser } from "../../store/useUserStore";
-import { useQuizComplete, useQuizDraft } from "../../store/useCurrentCreatingQuiz";
+import { useIsJsonLoading, useQuizComplete, useQuizDraft } from "../../store/useCurrentCreatingQuiz";
 
 export const PageCreateQuizAI = () => {
   const user = useUser();
   const quizDraft = useQuizDraft();
   const quizComplete = useQuizComplete();
   const [isCreatingNewTest, setIsCreatingNewTest] = useState(false);
+  const isCreatingQuiz = useIsJsonLoading();
+
+  if (isCreatingQuiz) {
+    return (
+      <div className='loader-container'>
+        <div className="loader-info-text">
+          <p>Идёт создание теста...</p>
+          <p>Это может занять несколько минут...</p>
+        </div>
+        <Loader/>
+      </div>
+    );
+  }
 
   return (
     <div className='tests-container'>

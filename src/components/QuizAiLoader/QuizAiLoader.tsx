@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { setQuizDraft, useQuizDraft } from "../../store/useCurrentCreatingQuiz";
+import { setQuizDraft, startJsonLoading, useQuizDraft } from "../../store/useCurrentCreatingQuiz";
 import { catTitles, QUIZ_LANGUAGES } from "../../variables/quizData";
 import { useOpenAiQuizCreator } from "../../hooks/useOpenAiQuizGenerator";
 import type { IQuizMeta } from "../../types/Quiz";
@@ -21,6 +21,7 @@ export const QuizAiLoader = () => {
 
   const saveCurrentTest = () => {
     if (aiUserPrompt) {
+      startJsonLoading();
       generateQuiz(aiUserPrompt, questionCount)
         .then((result) => {
           if (result && userUID) {
@@ -79,7 +80,7 @@ export const QuizAiLoader = () => {
           type="range"
           name="questionCount"
           min="3"
-          max="20"
+          max="15"
           value={questionCount}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuestionCount(Number(e.target.value))}
         />

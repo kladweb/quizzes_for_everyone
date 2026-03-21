@@ -2,6 +2,14 @@
   font-size: 1.2rem;
 }
 
+.loader-info-text {
+  position: absolute;
+  text-align: center;
+  margin: auto;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 @media (max-width: 460px) {
   .test-list-name {
     margin: 0.5rem 0;
