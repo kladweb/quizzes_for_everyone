@@ -10,7 +10,7 @@ export const Header: React.FC = () => {
   const isQuizPage = useMatch("/quizzes/:testid");
   const user: IUser | null = useUser();
   const isAuthLoading = useIsAuthLoading();
-  const {remaining, limit} = useTokens(user?.uid ?? null);
+  const {remaining, limit, loading} = useTokens(user?.uid ?? null);
 
   return (
     <header className="header-container">
@@ -32,7 +32,7 @@ export const Header: React.FC = () => {
         </nav>
         {
           user &&
-          <TokenBadge remaining={remaining} limit={limit}/>
+          <TokenBadge remaining={remaining} limit={limit} loading={loading}/>
         }
         <div className="login-theme">
           {

@@ -82,7 +82,7 @@ interface IFirestoreData {
   },
   users: {
     [userId: string]: {
-      userQuizzes: {
+      quizIds: {
         [testId: string]: true;
       },
       tokens: {

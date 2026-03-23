@@ -1,64 +1,76 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { setQuizDraft, startJsonLoading, useQuizDraft } from "../../store/useCurrentCreatingQuiz";
 import { catTitles, QUIZ_LANGUAGES } from "../../variables/quizData";
 import { useOpenAiQuizCreator } from "../../hooks/useOpenAiQuizGenerator";
-import type { IQuizMeta } from "../../types/Quiz";
+import { IQuizMeta, ToastType } from "../../types/Quiz";
 import { nanoid } from "nanoid";
-import { useUser } from "../../store/useUserStore";
+import { IUser, useUser } from "../../store/useUserStore";
+import { showToast } from "../../store/useNoticeStore";
 import "./quizAiLoader.css"
+import { useTokens } from "../../hooks/useTokens";
 
 export const QuizAiLoader = () => {
+  const navigate = useNavigate();
   const quizDraft = useQuizDraft();
-  const userUID = useUser()?.uid;
+  const user = useUser() as IUser;
+  const userUID = user.uid;
   const [aiUserPrompt, setAiUserPrompt] = React.useState("");
   const [questionCount, setQuestionCount] = React.useState(3);
   const [quizLanguage, setQuizLanguage] = useState(quizDraft?.lang ?? "русский");
   const {generateQuiz} = useOpenAiQuizCreator();
+  const {canSpend, spend} = useTokens(userUID);
 
   const promptTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setAiUserPrompt(e.target.value);
   }
 
-  const saveCurrentTest = () => {
-    if (aiUserPrompt) {
+  const saveCurrentTest = async () => {
+    if (!aiUserPrompt || !userUID) return;
+
+    // Проверяем токены
+    if (!canSpend) {
+      showToast("Недостаточно токенов для генерации теста.", ToastType.WARNING);
+      return;
+    }
+    try {
       startJsonLoading();
-      generateQuiz(aiUserPrompt, questionCount)
-        .then((result) => {
-          if (result && userUID) {
-            console.log(JSON.parse(result));
-            const content = result as string;
-            const quiz: IQuizMeta = JSON.parse(content);
-            quiz.testId = nanoid(12);
-            quiz.createdBy = userUID;
-            quiz.createdAt = Date.now();
-            quiz.modifiedAt = Date.now();
+      const result = await generateQuiz(aiUserPrompt, questionCount);
 
-            if (!quiz.title || !quiz.questions || !Array.isArray(quiz.questions)) {
-              throw new Error('Неверный формат файла. Выберите, пожалуйста, другой файл.');
-            }
+      if (result) {
+        const content = result as string;
+        const quiz: IQuizMeta = JSON.parse(content);
+        quiz.testId = nanoid(12);
+        quiz.createdBy = userUID;
+        quiz.createdAt = Date.now();
+        quiz.modifiedAt = Date.now();
 
-            // Validate each question has the new structure
-            quiz.questions.forEach((q, idx) => {
-              if (!q.id) throw new Error(`Question ${idx + 1} missing id`);
-              if (!q.options || !Array.isArray(q.options)) {
-                throw new Error(`Question ${idx + 1} missing options array`);
-              }
-              if (!q.correctAnswers || !Array.isArray(q.correctAnswers)) {
-                throw new Error(`Question ${idx + 1} missing correctAnswers array`);
-              }
-              q.options.forEach((opt, optIdx) => {
-                if (!opt.id || !opt.text) {
-                  throw new Error(`Question ${idx + 1}, option ${optIdx + 1} missing id or text`);
-                }
-              });
-            });
+        if (!quiz.title || !quiz.questions || !Array.isArray(quiz.questions)) {
+          throw new Error('Неверный формат файла.');
+        }
 
-            setQuizDraft(quiz);
+        quiz.questions.forEach((q, idx) => {
+          if (!q.id) throw new Error(`Question ${idx + 1} missing id`);
+          if (!q.options || !Array.isArray(q.options)) {
+            throw new Error(`Question ${idx + 1} missing options`);
           }
-        })
-        .catch((err) => {
-          console.log(err);
+          if (!q.correctAnswers || !Array.isArray(q.correctAnswers)) {
+            throw new Error(`Question ${idx + 1} missing correctAnswers`);
+          }
+          q.options.forEach((opt, optIdx) => {
+            if (!opt.id || !opt.text) {
+              throw new Error(`Question ${idx + 1}, option ${optIdx + 1} missing id or text`);
+            }
+          });
         });
+        setQuizDraft(quiz);
+        await spend(20);
+      }
+
+    } catch (err) {
+      console.log(err);
+      showToast("Ошибка генерации теста. Попробуйте позже...", ToastType.ERROR);
+      navigate("/createquiz/ai");
     }
   }
 

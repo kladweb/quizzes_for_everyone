@@ -22,7 +22,7 @@
   /*flex-direction: column;*/
   width: min(42rem, 90%);
   /*height: 20rem;*/
-  background-color: var(--color-bg-card);
+  background-color: var(--color-bg-card2);
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);

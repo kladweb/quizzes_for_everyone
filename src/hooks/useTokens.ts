@@ -9,7 +9,7 @@ const PLAN_LIMITS = {
   pro: 1000
 } as const;
 
-type Plan = keyof typeof PLAN_LIMITS
+type Plan = keyof typeof PLAN_LIMITS;
 
 interface Tokens {
   dailyCount: number
@@ -33,7 +33,7 @@ function getLimit(tokens: Tokens): number {
 }
 
 export function useTokens(userId: string | null) {
-  const db = getDatabase()
+  const db = getDatabase();
 
   const [tokens, setTokens] = useState<Tokens>({
     dailyCount: 50,
@@ -43,14 +43,14 @@ export function useTokens(userId: string | null) {
     expiresAt: 0
   })
 
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
 
   const load = useCallback(async () => {
     if (!userId) return;
     setLoading(true);
 
-    const userRef = ref(db, `users/${userId}`)
-    const snapshot = await get(userRef)
+    const userRef = ref(db, `users/${userId}`);
+    const snapshot = await get(userRef);
 
     let nextTokens: Tokens = {
       dailyCount: 50,
@@ -63,7 +63,21 @@ export function useTokens(userId: string | null) {
     if (snapshot.exists()) {
       const data = snapshot.val()
 
-      if (data.tokens) {
+      if (!data.tokens) {
+        const defaultTokens: Tokens = {
+          dailyCount: 50,
+          plan: "start",
+          usedToday: 0,
+          lastReset: Date.now(),
+          expiresAt: 0
+        }
+
+        await update(userRef, {
+          tokens: defaultTokens
+        })
+
+        nextTokens = defaultTokens
+      } else {
         const t = data.tokens
 
         nextTokens = {
@@ -80,19 +94,19 @@ export function useTokens(userId: string | null) {
 
     const now = Date.now()
 
-    // 🔄 reset раз в 24 часа
+    // reset раз в 24 часа
     if (now - nextTokens.lastReset > DAY_MS) {
       nextTokens.usedToday = 0
       nextTokens.lastReset = now
 
       await update(userRef, {
-        "tokens.usedToday": 0,
-        "tokens.lastReset": now
+        "tokens/usedToday": 0,
+        "tokens/lastReset": now
       })
     }
 
-    setTokens(nextTokens)
-    setLoading(false)
+    setTokens(nextTokens);
+    setLoading(false);
   }, [db, userId])
 
   useEffect(() => {
@@ -109,7 +123,7 @@ export function useTokens(userId: string | null) {
 
       let updated = {...tokens}
 
-      // 🔄 reset если нужно
+      // reset если нужно
       if (now - updated.lastReset > DAY_MS) {
         updated.usedToday = 0
         updated.lastReset = now
@@ -121,16 +135,18 @@ export function useTokens(userId: string | null) {
         throw new Error("Not enough tokens")
       }
 
-      updated.usedToday += amount
-
       const userRef = ref(db, `users/${userId}`)
 
+      const newUsed = tokens.usedToday + amount;
       await update(userRef, {
-        "tokens.usedToday": updated.usedToday,
-        "tokens.lastReset": updated.lastReset
+        "tokens/usedToday": newUsed,
+        "tokens/lastReset": updated.lastReset
       })
 
-      setTokens(updated)
+      setTokens(prev => prev ? {
+        ...prev,
+        usedToday: newUsed
+      } : prev);
     },
     [db, userId, tokens]
   )

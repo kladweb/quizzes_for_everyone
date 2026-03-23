@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { QuizAiLoader } from "../../components/QuizAiLoader/QuizAiLoader";
 import { QuizLoaderExtraInfo } from "../../components/QuizLoaderExtraInfo/QuizLoaderExtraInfo";
 import { Loader } from "../../components/Loader/Loader";
 import { LinkQuiz } from "../../components/LinkQuiz/LinkQuiz";
 import { useUser } from "../../store/useUserStore";
-import { useIsJsonLoading, useQuizComplete, useQuizDraft } from "../../store/useCurrentCreatingQuiz";
+import { clearCurrentQuiz, useIsJsonLoading, useQuizComplete, useQuizDraft } from "../../store/useCurrentCreatingQuiz";
 
 export const PageCreateQuizAI = () => {
   const user = useUser();
@@ -12,6 +12,14 @@ export const PageCreateQuizAI = () => {
   const quizComplete = useQuizComplete();
   const [isCreatingNewTest, setIsCreatingNewTest] = useState(false);
   const isCreatingQuiz = useIsJsonLoading();
+
+  useEffect(() => {
+    return (
+      () => {
+        clearCurrentQuiz();
+      }
+    )
+  }, []);
 
   if (isCreatingQuiz) {
     return (
