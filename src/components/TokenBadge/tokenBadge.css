@@ -1,0 +1,9 @@
+.token-badge-wrapper {
+  display: inline-block;
+  margin: 0 0.6em 0 0;
+  color: var(--color-warning);
+  font-size: 1em;
+  font-weight: 500;
+  vertical-align: middle;
+  cursor: default;
+}

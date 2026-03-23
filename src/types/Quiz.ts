@@ -85,17 +85,32 @@ interface IFirestoreData {
       userQuizzes: {
         [testId: string]: true;
       },
-      userTokens: {
+      tokens: {
         dailyCount: 50,
-        coinsUsed: {
-          [date: number]: number
-        },
-        coinsBought: {
-          [date: number]: number
-        }
+        plan: "start", // "start" | "basic" | "pro"
+        usedToday: 0,
+        lastReset: 1710800000000,
+        expiresAt: 1713400000000
       }
     }
   }
+  // users: {
+  //   [userId: string]: {
+  //     userQuizzes: {
+  //       [testId: string]: true;
+  //     },
+  //     tokens: {
+  //       dailyCount: 50,
+  //       usedToday: 0,
+  //       lastReset: 1710800000000
+  //     },
+  //     subscription: {
+  //       active: false,
+  //       plan: "start", // "start" | "basic" | "pro"
+  //       expiresAt: 1713400000000
+  //     }
+  //   }
+  // }
 }
 
 export enum ToastType {
