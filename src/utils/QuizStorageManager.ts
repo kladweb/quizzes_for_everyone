@@ -120,7 +120,7 @@ export const QuizStorageManager = {
       const promiseMeta = set(ref(database, `quizzesMeta/${quizMeta.testId}`), quizMeta);
       // const promiseQuestions = set(ref(database, `questions/${quizMeta.testId}`), JSON.stringify(questions, null, 2));
       const promiseQuestions = set(ref(database, `questions/${quizMeta.testId}`), JSON.stringify(questions, null, 2));
-      const promiseUserList = set(ref(database, `users/${userUid}/${quizMeta.testId}`), true);
+      const promiseUserList = set(ref(database, `users/${userUid}/quizIds/${quizMeta.testId}`), true);
       await Promise.all([promiseMeta, promiseQuestions, promiseUserList]);
     } catch (error) {
       console.error(error);
