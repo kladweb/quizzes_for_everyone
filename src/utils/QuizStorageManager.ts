@@ -40,7 +40,7 @@ export const QuizStorageManager = {
   async fetchUserQuizIds(userUid: string): Promise<string[]> {
     const dbRef = ref(database);
     try {
-      const snapshot = await get(child(dbRef, `users/${userUid}`));
+      const snapshot = await get(child(dbRef, `users/${userUid}/quizIds`));
       if (!snapshot.exists()) {
         return [];
         // throw new Error('No such quiz found!');
@@ -131,7 +131,7 @@ export const QuizStorageManager = {
     try {
       const promiseMeta = set(ref(database, `quizzesMeta/${testId}`), null);
       const promiseQuestions = set(ref(database, `questions/${testId}`), null);
-      const promiseUserList = set(ref(database, `users/${userUid}/${testId}`), null);
+      const promiseUserList = set(ref(database, `users/${userUid}/quizIds/${testId}`), null);
       await Promise.all([promiseMeta, promiseQuestions, promiseUserList]);
     } catch (error) {
       console.error(error);
