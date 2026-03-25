@@ -1,14 +1,21 @@
 import React from "react";
+import { useLimit, useLoading, useRemaining } from "../../store/useTokensStore";
 import "./tokenBadge.css";
 
-type ITokenBadgeProps = {
-  remaining: number
-  limit: number
-  loading: boolean
-  handlerToken?: () => void
-}
+// type ITokenBadgeProps = {
+//   remaining: number
+//   limit: number
+//   loading: boolean
+//   handlerToken?: () => void
+// }
 
-export const TokenBadge: React.FC<ITokenBadgeProps> = ({remaining, limit, loading, handlerToken}) => {
+export const TokenBadge: React.FC = () => {
+
+  const remaining = useRemaining();
+  const limit = useLimit();
+  const loading = useLoading();
+
+  console.log(loading);
 
   return (
     <div className="token-badge-wrapper" title={`Осталось ${remaining} из ${limit} токенов`}>

@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { nanoid } from "nanoid";
 import { setQuizDraft, startJsonLoading, useQuizDraft } from "../../store/useCurrentCreatingQuiz";
 import { catTitles, QUIZ_LANGUAGES } from "../../variables/quizData";
 import { useOpenAiQuizCreator } from "../../hooks/useOpenAiQuizGenerator";
 import { IQuizMeta, ToastType } from "../../types/Quiz";
-import { nanoid } from "nanoid";
 import { IUser, useUser } from "../../store/useUserStore";
 import { showToast } from "../../store/useNoticeStore";
+import { useCanSpend, spendTokens } from "../../store/useTokensStore";
 import "./quizAiLoader.css"
-import { useTokens } from "../../hooks/useTokens";
 
 export const QuizAiLoader = () => {
   const navigate = useNavigate();
@@ -19,7 +19,8 @@ export const QuizAiLoader = () => {
   const [questionCount, setQuestionCount] = React.useState(3);
   const [quizLanguage, setQuizLanguage] = useState(quizDraft?.lang ?? "русский");
   const {generateQuiz} = useOpenAiQuizCreator();
-  const {canSpend, spend} = useTokens(userUID);
+  // const {canSpend, spend} = useTokens(userUID);
+  const canSpend = useCanSpend();
 
   const promptTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setAiUserPrompt(e.target.value);
@@ -64,7 +65,7 @@ export const QuizAiLoader = () => {
           });
         });
         setQuizDraft(quiz);
-        await spend(20);
+        await spendTokens(userUID, 20);
       }
 
     } catch (err) {

@@ -4,14 +4,14 @@ import { CreateQuizWay } from "../../components/CreateQuizWay/CreateQuizWay";
 import { type IWayCardsData, wayCardsData } from "../../components/CreateQuizWay/wayCardsData";
 import { IUser, useUser } from "../../store/useUserStore";
 import "./pageCreateQuiz.css";
-import { useTokens } from "../../hooks/useTokens";
 import { showToast } from "../../store/useNoticeStore";
 import { ToastType } from "../../types/Quiz";
+import { useCanSpend } from "../../store/useTokensStore";
 
 export const PageCreateQuiz = () => {
   const navigate = useNavigate();
   const user = useUser() as IUser;
-  const {canSpend} = useTokens(user.uid);
+  const canSpend = useCanSpend();
 
   const handlerCreateWay = (e: React.MouseEvent<HTMLElement>) => {
 
