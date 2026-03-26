@@ -16,7 +16,7 @@ const Toast: React.FC<IToastProps> = ({toast}) => {
     }, 100);
     setTimeout(() => {
       setShow("");
-    }, 3000);
+    }, 5000);
   }, [toast]);
 
   return (

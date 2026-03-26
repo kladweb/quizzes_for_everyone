@@ -18,6 +18,7 @@ interface IActions {
   validateField: (name: string, value: string) => void,
   resetFormError: () => void,
   startJsonLoading: () => void,
+  finishJsonLoading: () => void,
 
   // setIsValidate: (field: FieldType, isCurrValidate: boolean) => void,
 }
@@ -58,6 +59,9 @@ const currentQuizStore: StateCreator<IQuizzesState> = (set, get) => ({
   },
   startJsonLoading: () => {
     set(() => ({isJsonLoading: true}));
+  },
+  finishJsonLoading: () => {
+    set(() => ({isJsonLoading: false}));
   }
 });
 
@@ -75,3 +79,4 @@ export const clearCurrentQuiz = () => useCurrentQuizStore.getState().clearCurren
 export const validateField = (name: string, value: string) => useCurrentQuizStore.getState().validateField(name, value);
 export const resetFormError = () => useCurrentQuizStore.getState().resetFormError();
 export const startJsonLoading = () => useCurrentQuizStore.getState().startJsonLoading();
+export const finishJsonLoading = () => useCurrentQuizStore.getState().finishJsonLoading();

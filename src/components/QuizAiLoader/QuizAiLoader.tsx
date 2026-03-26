@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { nanoid } from "nanoid";
-import { setQuizDraft, startJsonLoading, useQuizDraft } from "../../store/useCurrentCreatingQuiz";
+import { finishJsonLoading, setQuizDraft, startJsonLoading, useQuizDraft } from "../../store/useCurrentCreatingQuiz";
 import { catTitles, QUIZ_LANGUAGES } from "../../variables/quizData";
 import { useOpenAiQuizCreator } from "../../hooks/useOpenAiQuizGenerator";
 import { IQuizMeta, ToastType } from "../../types/Quiz";
@@ -37,7 +37,6 @@ export const QuizAiLoader = () => {
     try {
       startJsonLoading();
       const result = await generateQuiz(aiUserPrompt, questionCount);
-
       if (result) {
         const content = result as string;
         const quiz: IQuizMeta = JSON.parse(content);
@@ -45,11 +44,9 @@ export const QuizAiLoader = () => {
         quiz.createdBy = userUID;
         quiz.createdAt = Date.now();
         quiz.modifiedAt = Date.now();
-
         if (!quiz.title || !quiz.questions || !Array.isArray(quiz.questions)) {
           throw new Error('Неверный формат файла.');
         }
-
         quiz.questions.forEach((q, idx) => {
           if (!q.id) throw new Error(`Question ${idx + 1} missing id`);
           if (!q.options || !Array.isArray(q.options)) {
@@ -69,9 +66,10 @@ export const QuizAiLoader = () => {
       }
 
     } catch (err) {
+      finishJsonLoading();
       console.log(err);
       showToast("Ошибка генерации теста. Попробуйте позже...", ToastType.ERROR);
-      navigate("/createquiz/ai");
+      navigate("/createquiz");
     }
   }
 
