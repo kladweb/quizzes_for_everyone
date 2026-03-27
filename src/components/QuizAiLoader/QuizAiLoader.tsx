@@ -81,7 +81,7 @@ export const QuizAiLoader: React.FC<IQuizAiLoaderProps> = ({userUID}) => {
           console.log("Quiz сохранён");
 
           // 💰 списываем токены
-          await spendTokens(userUID, 2);
+          await spendTokens(userUID, 20);
         } catch (err) {
           console.error(err);
           showToast(
@@ -89,7 +89,6 @@ export const QuizAiLoader: React.FC<IQuizAiLoaderProps> = ({userUID}) => {
             ToastType.ERROR
           );
         } finally {
-          // ОЧЕНЬ ВАЖНО
           unsubscribe();
           finishJsonLoading();
           console.log("Отписка + стоп лоадера");
