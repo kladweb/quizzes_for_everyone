@@ -4,18 +4,20 @@ import { QuizAiLoader } from "../../components/QuizAiLoader/QuizAiLoader";
 import { QuizLoaderExtraInfo } from "../../components/QuizLoaderExtraInfo/QuizLoaderExtraInfo";
 import { Loader } from "../../components/Loader/Loader";
 import { LinkQuiz } from "../../components/LinkQuiz/LinkQuiz";
-import { useUser } from "../../store/useUserStore";
+import { type IUser, useUser } from "../../store/useUserStore";
 import { clearCurrentQuiz, useIsJsonLoading, useQuizComplete, useQuizDraft } from "../../store/useCurrentCreatingQuiz";
 import { useCanSpend } from "../../store/useTokensStore";
 import "./pageCreateQuizAI.css";
 
 export const PageCreateQuizAI = () => {
-  const user = useUser();
+  const user = useUser() as IUser;
+  const userUID = user.uid;
   const quizDraft = useQuizDraft();
   const quizComplete = useQuizComplete();
   const [isCreatingNewTest, setIsCreatingNewTest] = useState(false);
   const isCreatingQuiz = useIsJsonLoading();
   const canSpend = useCanSpend();
+  // const [jobUID, setJobUID] = useState<string | null>(null);
 
   useEffect(() => {
     return (
@@ -45,7 +47,9 @@ export const PageCreateQuizAI = () => {
     <div className='tests-container'>
       {
         (user && (!quizDraft && !quizComplete)) &&
-        <QuizAiLoader/>
+        <QuizAiLoader
+          userUID={userUID}
+        />
       }
       {
         (user && quizDraft) &&

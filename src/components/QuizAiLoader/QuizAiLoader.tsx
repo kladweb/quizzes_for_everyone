@@ -1,25 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { nanoid } from "nanoid";
 import { finishJsonLoading, setQuizDraft, startJsonLoading, useQuizDraft } from "../../store/useCurrentCreatingQuiz";
 import { catTitles, QUIZ_LANGUAGES } from "../../variables/quizData";
-import { useOpenAiQuizCreator } from "../../hooks/useOpenAiQuizGenerator";
 import { IQuizMeta, ToastType } from "../../types/Quiz";
-import { IUser, useUser } from "../../store/useUserStore";
 import { showToast } from "../../store/useNoticeStore";
 import { useCanSpend, spendTokens } from "../../store/useTokensStore";
+import { startQuizGeneration } from "../../api/quizApi";
+import { subscribeToQuiz } from "../../api/subscribeToQuiz";
 import "./quizAiLoader.css"
 
-export const QuizAiLoader = () => {
+interface IQuizAiLoaderProps {
+  userUID: string;
+}
+
+export const QuizAiLoader: React.FC<IQuizAiLoaderProps> = ({userUID}) => {
   const navigate = useNavigate();
   const quizDraft = useQuizDraft();
-  const user = useUser() as IUser;
-  const userUID = user.uid;
-  const [aiUserPrompt, setAiUserPrompt] = React.useState("");
-  const [questionCount, setQuestionCount] = React.useState(3);
+  const [aiUserPrompt, setAiUserPrompt] = useState("");
+  const [questionCount, setQuestionCount] = useState(3);
   const [quizLanguage, setQuizLanguage] = useState(quizDraft?.lang ?? "русский");
-  const {generateQuiz} = useOpenAiQuizCreator();
-  // const {canSpend, spend} = useTokens(userUID);
   const canSpend = useCanSpend();
 
   const promptTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -29,53 +29,86 @@ export const QuizAiLoader = () => {
   const saveCurrentTest = async () => {
     if (!aiUserPrompt || !userUID) return;
 
-    // Проверяем токены
     if (!canSpend) {
-      showToast("Недостаточно токенов для генерации теста.", ToastType.WARNING);
+      showToast(
+        "Недостаточно токенов для генерации теста.",
+        ToastType.WARNING
+      );
       return;
     }
+
     try {
       startJsonLoading();
-      const result = await generateQuiz(aiUserPrompt, questionCount);
-      if (result) {
-        const content = result as string;
-        const quiz: IQuizMeta = JSON.parse(content);
-        quiz.testId = nanoid(12);
-        quiz.createdBy = userUID;
-        quiz.createdAt = Date.now();
-        quiz.modifiedAt = Date.now();
-        if (!quiz.title || !quiz.questions || !Array.isArray(quiz.questions)) {
-          throw new Error('Неверный формат файла.');
-        }
-        quiz.questions.forEach((q, idx) => {
-          if (!q.id) throw new Error(`Question ${idx + 1} missing id`);
-          if (!q.options || !Array.isArray(q.options)) {
-            throw new Error(`Question ${idx + 1} missing options`);
+      const response = await startQuizGeneration(
+        aiUserPrompt,
+        questionCount,
+        userUID
+      );
+      const jobId = response.jobId;
+      console.log("Получен jobId:", jobId);
+
+      // СРАЗУ подписываемся
+      const unsubscribe = subscribeToQuiz(jobId, async (result) => {
+        console.log("Получен результат:", result);
+
+        try {
+          const quiz: IQuizMeta = JSON.parse(result);
+
+          quiz.testId = nanoid(12);
+          quiz.createdBy = userUID;
+          quiz.createdAt = Date.now();
+          quiz.modifiedAt = Date.now();
+
+          // базовая валидация
+          if (!quiz.title || !Array.isArray(quiz.questions)) {
+            throw new Error("Неверный формат файла.");
           }
-          if (!q.correctAnswers || !Array.isArray(q.correctAnswers)) {
-            throw new Error(`Question ${idx + 1} missing correctAnswers`);
-          }
-          q.options.forEach((opt, optIdx) => {
-            if (!opt.id || !opt.text) {
-              throw new Error(`Question ${idx + 1}, option ${optIdx + 1} missing id or text`);
+
+          quiz.questions.forEach((q, idx) => {
+            if (!q.id) throw new Error(`Question ${idx + 1} missing id`);
+            if (!Array.isArray(q.options)) {
+              throw new Error(`Question ${idx + 1} missing options`);
+            }
+            if (!Array.isArray(q.correctAnswers)) {
+              throw new Error(
+                `Question ${idx + 1} missing correctAnswers`
+              );
             }
           });
-        });
-        setQuizDraft(quiz);
-        await spendTokens(userUID, 20);
-      }
 
+          // кладём в zustand
+          setQuizDraft(quiz);
+          console.log("Quiz сохранён");
+
+          // 💰 списываем токены
+          await spendTokens(userUID, 2);
+        } catch (err) {
+          console.error(err);
+          showToast(
+            "Ошибка обработки результата теста.",
+            ToastType.ERROR
+          );
+        } finally {
+          // ОЧЕНЬ ВАЖНО
+          unsubscribe();
+          finishJsonLoading();
+          console.log("Отписка + стоп лоадера");
+        }
+      });
     } catch (err) {
       finishJsonLoading();
-      console.log(err);
-      showToast("Ошибка генерации теста. Попробуйте позже...", ToastType.ERROR);
+      console.error(err);
+      showToast(
+        "Ошибка генерации теста. Попробуйте позже...",
+        ToastType.ERROR
+      );
       navigate("/createquiz");
     }
-  }
+  };
 
   return (
-    <div className='loaderBlock'>
-      <h2 className='loader-head'>Создаём новый тест</h2>
+    <div className="loaderBlock">
+      <h2 className="loader-head">Создаём новый тест</h2>
       <p className="quiz-note">Введите описание теста (не менее 30 символов):</p>
       <textarea
         name="quiz-prompt"
@@ -85,7 +118,9 @@ export const QuizAiLoader = () => {
         value={aiUserPrompt}
       />
       <div className="btn-save-block">
-        <p className="quiz-questionCount">Количество вопросов: <span>{questionCount}</span></p>
+        <p className="quiz-questionCount">
+          Количество вопросов: <span>{questionCount}</span>
+        </p>
         <input
           className="input-range"
           type="range"
@@ -93,7 +128,7 @@ export const QuizAiLoader = () => {
           min="3"
           max="15"
           value={questionCount}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuestionCount(Number(e.target.value))}
+          onChange={(e) => setQuestionCount(Number(e.target.value))}
         />
         <span title={catTitles.language}>Язык вопросов теста:</span>
         <select
@@ -102,13 +137,12 @@ export const QuizAiLoader = () => {
           value={quizLanguage}
           onChange={(e) => setQuizLanguage(e.target.value)}
         >
-          {
-            Object.values(QUIZ_LANGUAGES).map((item, i) => <option key={i} value={item}>{item}</option>)
-          }
+          {Object.values(QUIZ_LANGUAGES).map((item, i) => (
+            <option key={i} value={item}>{item}</option>
+          ))}
         </select>
         <button
-          name="quiz-prompt"
-          className='btn button-create btn-save'
+          className="btn button-create btn-save"
           disabled={aiUserPrompt.length < 30}
           onClick={saveCurrentTest}
         >
