@@ -29,8 +29,6 @@ export const PageAllQuizzes = () => {
       loadAllQuizzes();
     }, []);
 
-  // console.log(user);
-  // console.log(guestUserId);
   return (
     <div className='tests-container'>
       <h2 className="test-list-name">СПИСОК ОБЩЕДОСТУПНЫХ ТЕСТОВ</h2>

@@ -15,8 +15,6 @@ export const TokenBadge: React.FC = () => {
   const limit = useLimit();
   const loading = useLoading();
 
-  console.log(loading);
-
   return (
     <div className="token-badge-wrapper" title={`Осталось ${remaining} из ${limit} токенов`}>
       <span>⛃</span>

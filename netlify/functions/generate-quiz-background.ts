@@ -29,8 +29,8 @@ export const handler: BackgroundHandler = async (event) => {
 
   const systemPrompt = `Ты — помощник для создания учебных тестов.
 Сгенерируй тест по описанию: "${userDescription}", которое будет приведено ниже из ${numQuestions} количества вопросов.
-Если в описании указано иное количество вопросов, игнорируй эту цифру.
-Правильное количество вопросов должно быть ${numQuestions}.
+Правильное количество вопросов должно быть ${numQuestions}. Если в описании теста указано иное количество вопросов, 
+игнорируй эту цифру.
 Каждый вопрос должен иметь несколько вариантов ответов, один из которых верный. Может быть несколько верных ответов,
 если это указано в описании.
 Вопросы должны быть на русском языке, если иное не указано в описании теста.
@@ -71,7 +71,10 @@ export const handler: BackgroundHandler = async (event) => {
 general, english, russian, math, algebra, geometry, physics, chemistry, biology, geography, history, 
 informatics, logic, iq, astronomy, engineering, building, economics, finance, business, psychology,
 sociology, music, art, literature, cinema, sport, health, nutrition, travel, culture, traditions, cars, space.
-Убедись, что JSON синтаксически верен: используй двойные кавычки, никаких trailing commas.`;
+Убедись, что JSON синтаксически верен: используй двойные кавычки, никаких trailing commas.
+Если в описании теста содержится мат, нецензурные слова или произвольный непонятный набор символов, 
+в этом случае останавливай генерацию теста и выбрасывай ошибку (status: "error").
+`;
 
   const userPrompt = `Создай тест. Верни ТОЛЬКО JSON.`
 

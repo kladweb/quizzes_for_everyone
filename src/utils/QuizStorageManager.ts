@@ -180,6 +180,7 @@ export const QuizStorageManager = {
     const storageKey = `recentQuizzes`;
     let currentStatistic: IStatistics[] = [statisticInfo];
     const recentStatistic: IStatistics[] | null = this.getRecentAllStat();
+    console.log(recentStatistic);
     let isCurrentExists = false;
     if (recentStatistic && recentStatistic.length > 0) {
       const currentDate = Number(new Date());
@@ -202,6 +203,7 @@ export const QuizStorageManager = {
         currentStatistic = [...recentStatisticClear, statisticInfo];
       }
     }
+    console.log(currentStatistic);
     try {
       localStorage.setItem(storageKey, JSON.stringify(currentStatistic));
     } catch (error) {

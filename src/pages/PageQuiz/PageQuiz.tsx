@@ -19,7 +19,10 @@ export const PageQuiz = () => {
   const [savedResultStorage, setSavedResultStorage] = useState<IStatistics | null>(null);
   const [isPageEmpty, setIsPageEmpty] = useState(false);
 
+  console.log(testId);
+
   const handleReset = () => {
+    console.log("сделали сброс");
     if (testId) {
       const resultStorage = QuizStorageManager.getRecentStatTestId(testId);
       if (resultStorage) {
@@ -53,7 +56,6 @@ export const PageQuiz = () => {
     }
   }
 
-
   useEffect(() => {
     if (quiz && quiz.testId === testId) {
       showToast("Вы уже на странице этого теста!\nТест пройден!", ToastType.INFO);
@@ -69,18 +71,15 @@ export const PageQuiz = () => {
     if (existingStat && existingStat.finishedAt) {
       setSavedResultStorage(existingStat);
     }
-
     if (!quiz || (quiz && quiz.testId !== testId)) {
       loadQuizAndQuestions();
       if (savedResultStorage) {
         setSavedResultStorage(null);
       }
     }
-
     if (quiz?.title) {
       document.title = `${quiz.title} · ANY QUIZ`;
     }
-
   }, [testId, quiz?.title]);
 
   if (savedResultStorage) {

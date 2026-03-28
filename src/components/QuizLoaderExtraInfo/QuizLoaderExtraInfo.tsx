@@ -52,14 +52,12 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
     if (!quizDraft) return;
     const quiz: IQuizMeta = {...quizDraft};
 
-    console.log(quiz.testId);
     const valid = validateForm();
     if (!valid) return;
 
     if (CATEGORY_values.includes(quizCategory.trim())) {
       for (const key in CATEGORY_LABELS_RU) {
         if (CATEGORY_LABELS_RU[key] === quizCategory.trim()) {
-          console.log(key);
           quiz.category = key;
           break;
         }
@@ -71,7 +69,6 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
     for (const key in QUIZ_LANGUAGES) {
       if (QUIZ_LANGUAGES[key] === quizLanguage) {
         quiz.lang = key;
-
       }
     }
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { nanoid } from "nanoid";
 import { finishJsonLoading, setQuizDraft, startJsonLoading, useQuizDraft } from "../../store/useCurrentCreatingQuiz";
@@ -7,7 +7,7 @@ import { IQuizMeta, ToastType } from "../../types/Quiz";
 import { showToast } from "../../store/useNoticeStore";
 import { useCanSpend, spendTokens } from "../../store/useTokensStore";
 import { startQuizGeneration } from "../../api/quizApi";
-import { subscribeToQuiz } from "../../api/subscribeToQuiz";
+import { removeQuizJob, subscribeToQuiz } from "../../api/subscribeToQuiz";
 import "./quizAiLoader.css"
 
 interface IQuizAiLoaderProps {
@@ -45,12 +45,9 @@ export const QuizAiLoader: React.FC<IQuizAiLoaderProps> = ({userUID}) => {
         userUID
       );
       const jobId = response.jobId;
-      console.log("Получен jobId:", jobId);
 
       // СРАЗУ подписываемся
       const unsubscribe = subscribeToQuiz(jobId, async (result) => {
-        console.log("Получен результат:", result);
-
         try {
           const quiz: IQuizMeta = JSON.parse(result);
 
@@ -78,10 +75,12 @@ export const QuizAiLoader: React.FC<IQuizAiLoaderProps> = ({userUID}) => {
 
           // кладём в zustand
           setQuizDraft(quiz);
-          console.log("Quiz сохранён");
 
-          // 💰 списываем токены
+          // списываем токены
           await spendTokens(userUID, 20);
+
+          // удаляем временный файл на сервере
+          await removeQuizJob(userUID, jobId);
         } catch (err) {
           console.error(err);
           showToast(
@@ -91,7 +90,6 @@ export const QuizAiLoader: React.FC<IQuizAiLoaderProps> = ({userUID}) => {
         } finally {
           unsubscribe();
           finishJsonLoading();
-          console.log("Отписка + стоп лоадера");
         }
       });
     } catch (err) {

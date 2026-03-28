@@ -1,4 +1,4 @@
-import { getDatabase, ref, onValue } from "firebase/database";
+import { getDatabase, ref, onValue, remove } from "firebase/database";
 
 export function subscribeToQuiz(jobId: string, onDone: (data: any) => void) {
   const db = getDatabase();
@@ -21,4 +21,11 @@ export function subscribeToQuiz(jobId: string, onDone: (data: any) => void) {
   });
 
   return unsubscribe;
+}
+
+export async function removeQuizJob(userId: string, jobId: string) {
+  const db = getDatabase();
+  const jobRef = ref(db, `quizJobs/${jobId}`);
+  await remove(jobRef);
+  console.log("должны были удалить");
 }
