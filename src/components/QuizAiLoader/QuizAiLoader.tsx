@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { nanoid } from "nanoid";
 import { finishJsonLoading, setQuizDraft, startJsonLoading, useQuizDraft } from "../../store/useCurrentCreatingQuiz";
 import { catTitles, QUIZ_LANGUAGES } from "../../variables/quizData";
@@ -102,6 +102,13 @@ export const QuizAiLoader: React.FC<IQuizAiLoaderProps> = ({userUID}) => {
       // navigate("/createquiz");
     }
   };
+
+  if (!canSpend) {
+    setTimeout(() => {
+      showToast("У Вас недостаточно токенов.", ToastType.WARNING);
+    }, 1000);
+    return <Navigate to="/createquiz"/>
+  }
 
   return (
     <div className="loaderBlock">

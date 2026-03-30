@@ -20,17 +20,13 @@ export const PageCreateQuizAI = () => {
   // const [jobUID, setJobUID] = useState<string | null>(null);
 
   useEffect(() => {
+
     return (
       () => {
         clearCurrentQuiz();
       }
     )
   }, []);
-
-  if (!canSpend) {
-    console.log("Сработала ловушка 1");
-    return <Navigate to="/createquiz" replace/>;
-  }
 
   if (isCreatingQuiz) {
     return (
