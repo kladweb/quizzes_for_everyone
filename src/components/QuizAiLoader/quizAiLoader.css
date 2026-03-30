@@ -17,9 +17,14 @@
   white-space: wrap;
 }
 
-.quiz-questionCount {
+.quiz-questionCount, .charCount {
   text-align: center;
   color: var(--color-text-secondary);
+}
+
+.charCount {
+  margin: 0;
+  font-size: 0.7em;
 }
 
 .input-range {

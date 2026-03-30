@@ -79,8 +79,6 @@ export const QuizAiLoader: React.FC<IQuizAiLoaderProps> = ({userUID}) => {
           // списываем токены
           await spendTokens(userUID, 20);
 
-          // удаляем временный файл на сервере
-          await removeQuizJob(userUID, jobId);
         } catch (err) {
           console.error(err);
           showToast(
@@ -90,6 +88,8 @@ export const QuizAiLoader: React.FC<IQuizAiLoaderProps> = ({userUID}) => {
         } finally {
           unsubscribe();
           finishJsonLoading();
+          // удаляем временный файл на сервере
+          await removeQuizJob(userUID, jobId);
         }
       });
     } catch (err) {
@@ -99,7 +99,7 @@ export const QuizAiLoader: React.FC<IQuizAiLoaderProps> = ({userUID}) => {
         "Ошибка генерации теста. Попробуйте позже...",
         ToastType.ERROR
       );
-      navigate("/createquiz");
+      // navigate("/createquiz");
     }
   };
 
@@ -110,10 +110,11 @@ export const QuizAiLoader: React.FC<IQuizAiLoaderProps> = ({userUID}) => {
       <textarea
         name="quiz-prompt"
         id="quiz-prompt"
-        maxLength={2000}
+        maxLength={1500}
         onChange={promptTextChange}
         value={aiUserPrompt}
       />
+      {/*<p className="charCount">Доступно символов: <span>{1500 - aiUserPrompt.length}</span></p>*/}
       <div className="btn-save-block">
         <p className="quiz-questionCount">
           Количество вопросов: <span>{questionCount}</span>
@@ -140,7 +141,7 @@ export const QuizAiLoader: React.FC<IQuizAiLoaderProps> = ({userUID}) => {
         </select>
         <button
           className="btn button-create btn-save"
-          disabled={aiUserPrompt.length < 30}
+          disabled={aiUserPrompt.trim().length < 30}
           onClick={saveCurrentTest}
         >
           ЗАПРОСИТЬ ТЕСТ

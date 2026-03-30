@@ -1,12 +1,12 @@
 .link-head {
   margin: 1rem;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: 500;
   color: var(--color-text-secondary);
 }
 
 .link-block .link-body {
-  margin: 1rem;
+  margin: 1rem auto;
   font-size: 1.5rem;
   color: var(--color-warning);
 
@@ -17,11 +17,16 @@
 
 .link-body {
   display: block;
+  padding: 0.1em 0.5em 0.2em;
   text-decoration: none;
+  border: 1px dotted var(--color-warning);
+  border-radius: 0.5em;
+  width: fit-content;
 }
 
 .btn-link-copy, .btn-link-create {
-  margin: 0 auto;
+  display: block;
+  margin: 1rem auto;
   padding: 8px 16px;
   font-size: 14px;
   alignment-baseline: text-bottom;
@@ -39,7 +44,7 @@
 }
 
 .btn-link-create {
-  margin-bottom: 1rem;
+  margin-top: 3rem;
 }
 
 .btn-link-copy--copied,
@@ -67,6 +72,8 @@
 }
 
 .link-info {
-  margin-bottom: 2rem;
+  /*margin-bottom: 2rem;*/
+  margin: 0.5em 0;
+  padding: 0;
   color: var(--color-text-secondary);
 }

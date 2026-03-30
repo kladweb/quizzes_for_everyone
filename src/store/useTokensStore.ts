@@ -67,22 +67,20 @@ const tokensStore: StateCreator<TokensStore> = (set, get) => ({
     try {
       const data = await fetchUserTokens(userId);
       let nextTokens: Tokens = getDefaultTokens();
-      if (data) {
-        if (!data.tokens) {
-          await createDefaultTokens(userId, nextTokens);
-          nextTokens = getDefaultTokens();
-        } else {
-          const t = data.tokens;
-          nextTokens = {
-            dailyCount: t.dailyCount ?? 50,
-            plan: ["start", "basic", "pro"].includes(t.plan)
-              ? t.plan
-              : "start",
-            usedToday: t.usedToday ?? 0,
-            lastReset: t.lastReset ?? Date.now(),
-            expiresAt: t.expiresAt ?? 0
-          };
-        }
+      if (!data?.tokens) {
+        await createDefaultTokens(userId, nextTokens);
+        nextTokens = getDefaultTokens();
+      } else {
+        const t = data.tokens;
+        nextTokens = {
+          dailyCount: t.dailyCount ?? 50,
+          plan: ["start", "basic", "pro"].includes(t.plan)
+            ? t.plan
+            : "start",
+          usedToday: t.usedToday ?? 0,
+          lastReset: t.lastReset ?? Date.now(),
+          expiresAt: t.expiresAt ?? 0
+        };
       }
       const now = Date.now();
       // reset

@@ -1,8 +1,10 @@
 export const QUIZ_CATEGORIES = [
   "разное",
   "общий",
-  "английский язык",
+  "белорусский язык",
   "русский язык",
+  "английский язык",
+  "польский язык",
   "математика",
   "алгебра",
   "геометрия",
@@ -44,8 +46,10 @@ interface ILabels {
 
 export const CATEGORY_LABELS_RU: ILabels = {
   general: "разное",
-  english: "английский язык",
   russian: "русский язык",
+  belorussian: "белорусский язык",
+  english: "английский язык",
+  polish: "польский язык",
   math: "математика",
   algebra: "алгебра",
   geometry: "геометрия",

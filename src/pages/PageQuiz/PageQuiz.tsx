@@ -19,8 +19,6 @@ export const PageQuiz = () => {
   const [savedResultStorage, setSavedResultStorage] = useState<IStatistics | null>(null);
   const [isPageEmpty, setIsPageEmpty] = useState(false);
 
-  console.log(testId);
-
   const handleReset = () => {
     console.log("сделали сброс");
     if (testId) {

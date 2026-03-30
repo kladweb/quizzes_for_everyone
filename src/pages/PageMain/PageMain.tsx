@@ -10,9 +10,10 @@ export const PageMain = () => {
   useEffect(() => {
     document.title = "ANY QUIZ";
     if (user) {
+      console.log("Ловушка 2");
       navigate("/createquiz");
     }
-  }, [user]);
+  }, [user?.uid]);
 
   return (
     <div className='tests-container'>

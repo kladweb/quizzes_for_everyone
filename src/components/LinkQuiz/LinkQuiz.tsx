@@ -36,13 +36,13 @@ export const LinkQuiz: React.FC<{ testId: string }> = ({testId}) => {
       <h4 className='link-head'>Ваша ссылка на страницу с тестом:</h4>
       <NavLink className='link-body' to={currentLink}>{currentLink}</NavLink>
       <p className="link-info">Кликните по ссылке для перехода к выполнению теста.</p>
+      <p className="link-info">Или скопируйте ссылку в буфер для того чтобы ею поделиться.</p>
       <button
         className={`btn btn-link-copy ${copied ? " btn-link-copy--copied" : ""}`}
         onClick={handleCopy}
       >
         {copied ? 'Скопировано!' : 'Копировать ссылку на тест в буфер'}
       </button>
-      <p className="link-info">Или скопируйте ссылку в буфер для того чтобы ею поделиться.</p>
       {/*<NavLink className='link-body' to={'/myquizzes'}>Перейти к моим тестам</NavLink>*/}
       {/*<NavLink className='link-body' to={'/createquiz'}>Вернутся на главную страницу</NavLink>*/}
       <button className="btn btn-link-create" onClick={handleCreateNewTest}>Создать ещё один тест</button>

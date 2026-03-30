@@ -28,6 +28,7 @@ export const PageCreateQuizAI = () => {
   }, []);
 
   if (!canSpend) {
+    console.log("Сработала ловушка 1");
     return <Navigate to="/createquiz" replace/>;
   }
 
