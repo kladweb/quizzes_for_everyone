@@ -29,13 +29,6 @@ export const PageAllQuizzes = () => {
       loadAllQuizzes();
     }, []);
 
-  if (testsListObj) {
-    console.log(Object.keys(testsListObj).length)
-  }
-  if (testList) {
-    console.log(testList.length);
-  }
-
   return (
     <div className='tests-container'>
       <h2 className="test-list-name">СПИСОК ОБЩЕДОСТУПНЫХ ТЕСТОВ</h2>

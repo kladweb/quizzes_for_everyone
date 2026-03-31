@@ -89,13 +89,6 @@ export const PageMyQuizzes: React.FC = () => {
     )
   }
 
-  if (testsListObj) {
-    console.log(Object.keys(testsListObj).length)
-  }
-  if (testList) {
-    console.log(testList.length);
-  }
-
   return (
     <>
       <div className='tests-container'>

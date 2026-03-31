@@ -8,6 +8,7 @@ import { saveUserQuiz } from "../../store/useQuizzesStore";
 import { IQuizMeta, type Question, ToastType } from "../../types/Quiz";
 import { showToast } from "../../store/useNoticeStore";
 import "./quizLoaderExtraInfo.css"
+import { useLocation } from "react-router-dom";
 
 interface IQuizLoaderExtraInfo {
   userUID: string,
@@ -19,6 +20,7 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
   const quizDraft = useQuizDraft();
   const isQuizDraftLoaded = useIsQuizDraftLoaded();
   const formError = useFormError();
+  const isAi = useLocation().pathname.includes("/ai");
   const [quizCategory, setQuizCategory] = useState(quizDraft?.category ? CATEGORY_LABELS_RU[quizDraft.category] : "");
   const [quizLanguage, setQuizLanguage] = useState(quizDraft?.lang ?? "русский");
   const [quizAccess, setQuizAccess] = useState<"public" | "private">(quizDraft?.access ?? "public");
@@ -137,17 +139,22 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
       {
         formError.category && <p className='text-save-error'>Поле не может быть пустым!</p>
       }
-      <span title={catTitles.language}>Язык вопросов теста:</span>
-      <select
-        className="input-language"
-        name="select"
-        value={quizLanguage}
-        onChange={(e) => setQuizLanguage(e.target.value)}
-      >
-        {
-          Object.values(QUIZ_LANGUAGES).map((item, i) => <option key={i} value={item}>{item}</option>)
-        }
-      </select>
+      {
+        !isAi &&
+        <>
+          <span title={catTitles.language}>Язык вопросов теста:</span>
+          <select
+            className="input-language"
+            name="select"
+            value={quizLanguage}
+            onChange={(e) => setQuizLanguage(e.target.value)}
+          >
+            {
+              Object.values(QUIZ_LANGUAGES).map((item, i) => <option key={i} value={item}>{item}</option>)
+            }
+          </select>
+        </>
+      }
       <span title={catTitles.access}>Доступность теста: </span>
       <div className="extra-info-input">
         <input

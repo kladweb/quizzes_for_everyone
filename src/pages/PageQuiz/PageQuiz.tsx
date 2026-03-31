@@ -78,9 +78,6 @@ export const PageQuiz = () => {
     //   }
     // }
 
-    console.log("A: ", quiz?.testId);
-    console.log("B: ", testId)
-
     if (quiz?.testId !== testId) {
       setQuiz(null);
       setQuestions(null);
