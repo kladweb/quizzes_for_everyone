@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { CATEGORY_LABELS_RU, QUIZ_LANGUAGES } from "../../variables/quizData";
+import { CATEGORY_LABELS_RU, catTitles, QUIZ_LANGUAGES } from "../../variables/quizData";
 import {
   resetFormError, setQuizComplete,
   useFormError, useIsQuizDraftLoaded, useQuizDraft, validateField,
@@ -12,12 +12,6 @@ import "./quizLoaderExtraInfo.css"
 interface IQuizLoaderExtraInfo {
   userUID: string,
   setIsCreatingNewTest: (isCreatingNewTest: boolean) => void
-}
-
-const catTitles = {
-  category: "Тематика, которой посвящен тест",
-  language: "Язык, на котором написаны вопросы теста",
-  access: "Будет ли Ваш тест виден в общем списке тестов или только в Вашем"
 }
 
 export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, setIsCreatingNewTest}) => {
@@ -58,14 +52,12 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
     if (!quizDraft) return;
     const quiz: IQuizMeta = {...quizDraft};
 
-    console.log(quiz.testId);
     const valid = validateForm();
     if (!valid) return;
 
     if (CATEGORY_values.includes(quizCategory.trim())) {
       for (const key in CATEGORY_LABELS_RU) {
         if (CATEGORY_LABELS_RU[key] === quizCategory.trim()) {
-          console.log(key);
           quiz.category = key;
           break;
         }
@@ -77,7 +69,6 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
     for (const key in QUIZ_LANGUAGES) {
       if (QUIZ_LANGUAGES[key] === quizLanguage) {
         quiz.lang = key;
-
       }
     }
 
@@ -146,7 +137,7 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
       {
         formError.category && <p className='text-save-error'>Поле не может быть пустым!</p>
       }
-      <span title={catTitles.language}>Язык теста: </span>
+      <span title={catTitles.language}>Язык вопросов теста:</span>
       <select
         className="input-language"
         name="select"

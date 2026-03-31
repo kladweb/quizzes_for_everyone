@@ -32,7 +32,7 @@ const noticeStore: StateCreator<INoticeState> = (set, get) => ({
         const toasts: Toast[] = get().toasts;
         toasts.shift();
         set(() => ({toasts: [...toasts]}));
-      }, 3500);
+      }, 5500);
     }
   },
 });

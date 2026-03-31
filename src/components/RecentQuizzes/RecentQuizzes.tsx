@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { NavLink, useNavigate, useParams, type Params } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { QuizStorageManager } from "../../utils/QuizStorageManager";
 import type { IStatistics } from "../../types/Quiz";
 import "./recentQuizzes.css";
@@ -9,10 +9,7 @@ interface IRecentQuizzes {
 }
 
 export const RecentQuizzes: React.FC<IRecentQuizzes> = ({currentTestId}) => {
-  const navigate = useNavigate();
   const [recentStat, setRecentStat] = useState<IStatistics[]>([]);
-  const params: Readonly<Params<string>> = useParams();
-  const testId: string | undefined = params.testid;
 
   // const openRecentQuiz = (testId: string) => {
   //   console.log("testId: ", testId);

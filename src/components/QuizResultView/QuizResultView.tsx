@@ -99,11 +99,11 @@ export const QuizResultView: React.FC<QuizResultViewProps> = ({result, onReset})
             !isLiked ?
               <>
                 <h4 className="quiz-rate">Оцените, пожалуйста, тест</h4>
-                <button className='btn-like' onClick={handlerDisLike}>
-                  <img className="img-btn-like img-dislike" src="/images/Like-quiz.png" alt="dislike"/>
-                </button>
                 <button className='btn-like' onClick={handlerLike}>
                   <img className="img-btn-like" src="/images/Like-quiz.png" alt="like"/>
+                </button>
+                <button className='btn-like' onClick={handlerDisLike}>
+                  <img className="img-btn-like img-dislike" src="/images/Like-quiz.png" alt="dislike"/>
                 </button>
               </>
               :

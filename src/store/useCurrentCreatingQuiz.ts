@@ -4,6 +4,7 @@ import type { IQuizMeta } from "../types/Quiz";
 interface IInitialState {
   currentQuizDraft: IQuizMeta | null,
   isQuizDraftLoaded: boolean,
+  isJsonLoading: boolean,
   currentQuizComplete: IQuizMeta | null,
   formError: {
     [key: string]: boolean;
@@ -16,6 +17,8 @@ interface IActions {
   clearCurrentQuiz: () => void,
   validateField: (name: string, value: string) => void,
   resetFormError: () => void,
+  startJsonLoading: () => void,
+  finishJsonLoading: () => void,
 
   // setIsValidate: (field: FieldType, isCurrValidate: boolean) => void,
 }
@@ -26,6 +29,7 @@ interface IQuizzesState extends IInitialState, IActions {
 const initialState: IInitialState = {
   currentQuizDraft: null,
   isQuizDraftLoaded: false,
+  isJsonLoading: false,
   currentQuizComplete: null,
   formError: {},
 }
@@ -33,7 +37,7 @@ const initialState: IInitialState = {
 const currentQuizStore: StateCreator<IQuizzesState> = (set, get) => ({
   ...initialState,
   setQuizDraft: (quiz) => {
-    set(() => ({currentQuizDraft: quiz, isQuizDraftLoaded: true}));
+    set(() => ({currentQuizDraft: quiz, isQuizDraftLoaded: true, isJsonLoading: false}));
     set(() => ({currentQuizComplete: null}));
   },
   setQuizComplete: (quiz) => {
@@ -52,6 +56,12 @@ const currentQuizStore: StateCreator<IQuizzesState> = (set, get) => ({
   },
   resetFormError: () => {
     set(() => ({formError: {}}));
+  },
+  startJsonLoading: () => {
+    set(() => ({isJsonLoading: true}));
+  },
+  finishJsonLoading: () => {
+    set(() => ({isJsonLoading: false}));
   }
 });
 
@@ -61,9 +71,12 @@ export const useQuizDraft = () => useCurrentQuizStore((state) => state.currentQu
 export const useIsQuizDraftLoaded = () => useCurrentQuizStore((state) => state.isQuizDraftLoaded);
 export const useQuizComplete = () => useCurrentQuizStore((state) => state.currentQuizComplete);
 export const useFormError = () => useCurrentQuizStore((state) => state.formError);
+export const  useIsJsonLoading = () => useCurrentQuizStore((state) => state.isJsonLoading);
 
 export const setQuizDraft = (quiz: IQuizMeta) => useCurrentQuizStore.getState().setQuizDraft(quiz);
 export const setQuizComplete = (quiz: IQuizMeta) => useCurrentQuizStore.getState().setQuizComplete(quiz);
 export const clearCurrentQuiz = () => useCurrentQuizStore.getState().clearCurrentQuiz();
 export const validateField = (name: string, value: string) => useCurrentQuizStore.getState().validateField(name, value);
 export const resetFormError = () => useCurrentQuizStore.getState().resetFormError();
+export const startJsonLoading = () => useCurrentQuizStore.getState().startJsonLoading();
+export const finishJsonLoading = () => useCurrentQuizStore.getState().finishJsonLoading();

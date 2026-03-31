@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { child, get, ref, set } from "firebase/database";
 import { nanoid } from "nanoid";
 import { database } from "../../firebase/firebase";
@@ -153,28 +153,32 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, questions, onReset, s
     // setTimeout(() => location.reload(), 0);
   }
 
-  useEffect(() => {
-    const startStatistics: IStatistics = {
-        testId: quiz.testId,
-        statId: statId,
-        userUid: null,
-        title:
-        quiz.title,
-        userName: userName.trim(),
-        startedAt: startTime,
-        finishedAt: 0,
-        incorrectCount: 0,
-        score: 0,
-        totalScore: 0,
-        maxScore: 0,
-        correctCount: 0,
-        answers: [],
-      }
-    ;
-    // console.log("statistics 02: ", startStatistics);
-    QuizStorageManager.saveRecentStat(startStatistics);
-
-  }, []);
+  // useEffect(() => {
+  //   console.log("робим")
+  //   if (!currentStatistics) {
+  //     console.log("робим2")
+  //     const startStatistics: IStatistics = {
+  //         testId: quiz.testId,
+  //         statId: statId,
+  //         userUid: null,
+  //         title:
+  //         quiz.title,
+  //         userName: userName.trim(),
+  //         startedAt: startTime,
+  //         finishedAt: 0,
+  //         incorrectCount: 0,
+  //         score: 0,
+  //         totalScore: 0,
+  //         maxScore: 0,
+  //         correctCount: 0,
+  //         answers: [],
+  //       }
+  //     ;
+  //     // console.log("statistics 02: ", startStatistics);
+  //     QuizStorageManager.saveRecentStat(startStatistics);
+  //   }
+  //
+  // }, []);
 
   return (
     <div className='quizContainer'>

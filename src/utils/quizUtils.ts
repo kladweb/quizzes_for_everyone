@@ -14,11 +14,11 @@ export const handleCopy = async (currentLink: string, setCopied: (copied: boolea
   }
 };
 
-export const handlerDeleteQuiz = (
-  testId: string,
-  userUID: string,
-  setIsModalConfirmOpen: (isModalConfirmOpen: boolean) => void) => {
-}
+// export const handlerDeleteQuiz = (
+//   testId: string,
+//   userUID: string,
+//   setIsModalConfirmOpen: (isModalConfirmOpen: boolean) => void) => {
+// }
 
 export const toggleLike = async (
   quiz: IQuizMeta,

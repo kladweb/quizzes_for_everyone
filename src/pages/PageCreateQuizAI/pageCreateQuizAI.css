@@ -1,0 +1,6 @@
+.loader-info-text {
+  p {
+    color: var(--color-success);
+    font-size: 1.5em;
+  }
+}

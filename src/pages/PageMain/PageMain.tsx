@@ -12,7 +12,7 @@ export const PageMain = () => {
     if (user) {
       navigate("/createquiz");
     }
-  }, [user]);
+  }, [user?.uid]);
 
   return (
     <div className='tests-container'>

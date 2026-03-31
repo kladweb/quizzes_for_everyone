@@ -1,12 +1,13 @@
 import React from "react";
 import { NavLink, useMatch } from "react-router-dom";
 import ThemeSwitch from "../ThemeSwitch/ThemeSwitch";
-import { loginGoogle, logoutGoogle, useIsAuthLoading, useUser } from "../../store/useUserStore";
+import { type IUser, loginGoogle, logoutGoogle, useIsAuthLoading, useUser } from "../../store/useUserStore";
+import { TokenBadge } from "../TokenBadge/TokenBadge";
 import "./header.css"
 
 export const Header: React.FC = () => {
   const isQuizPage = useMatch("/quizzes/:testid");
-  const user = useUser();
+  const user: IUser | null = useUser();
   const isAuthLoading = useIsAuthLoading();
 
   return (
@@ -27,6 +28,10 @@ export const Header: React.FC = () => {
             </NavLink>
           }
         </nav>
+        {
+          user &&
+          <TokenBadge/>
+        }
         <div className="login-theme">
           {
             !isQuizPage &&

@@ -1,14 +1,25 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { CreateQuizWay } from "../../components/CreateQuizWay/CreateQuizWay";
 import { type IWayCardsData, wayCardsData } from "../../components/CreateQuizWay/wayCardsData";
-import { useUser } from "../../store/useUserStore";
+import { IUser, useUser } from "../../store/useUserStore";
 import "./pageCreateQuiz.css";
+import { showToast } from "../../store/useNoticeStore";
+import { ToastType } from "../../types/Quiz";
+import { useCanSpend } from "../../store/useTokensStore";
 
 export const PageCreateQuiz = () => {
   const navigate = useNavigate();
-  const user = useUser();
+  const user = useUser() as IUser;
+  const canSpend = useCanSpend();
+
   const handlerCreateWay = (e: React.MouseEvent<HTMLElement>) => {
+
+    if (e.currentTarget.id === "ai" && !canSpend) {
+      showToast("У Вас недостаточно токенов.", ToastType.WARNING);
+      return;
+    }
+
     navigate(`/createquiz/${e.currentTarget.id}`);
     console.log(e.currentTarget.id);
   }

@@ -9,15 +9,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@netlify/functions": "^5.1.5",
     "@types/react-router-dom": "^5.3.3",
     "firebase": "^12.6.0",
     "nanoid": "^5.1.6",
+    "openai": "^6.32.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.9.6",
     "zustand": "^5.0.9"
   },
   "devDependencies": {
+    "@types/node": "^25.5.0",
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
     "@vitejs/plugin-react": "^4.0.0",
