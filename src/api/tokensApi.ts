@@ -3,6 +3,7 @@ import { getDatabase, ref, get, update } from "firebase/database";
 const db = getDatabase();
 
 export async function fetchUserTokens(userId: string) {
+  // console.log("Fetching user tokens");
   const userRef = ref(db, `users/${userId}`);
   const snapshot = await get(userRef);
 

@@ -9,8 +9,8 @@ const DAY_MS = 86400000;
 
 const PLAN_LIMITS = {
   start: 50,
-  basic: 500,
-  pro: 1000
+  basic: 200,
+  pro: 500
 } as const;
 
 type Plan = keyof typeof PLAN_LIMITS;
@@ -25,7 +25,7 @@ interface Tokens {
 
 interface TokensStore {
   tokens: Tokens;
-  loading: boolean;
+  loadingTokens: boolean;
 
   loadTokens: (userId: string) => Promise<void>;
   spendTokens: (userId: string, amount: number) => Promise<void>;
@@ -58,12 +58,11 @@ function getLimit(tokens: Tokens): number {
 
 const tokensStore: StateCreator<TokensStore> = (set, get) => ({
   tokens: getDefaultTokens(),
-  loading: true,
-
+  loadingTokens: true,
 
   // LOAD
   loadTokens: async (userId) => {
-    set({loading: true});
+    set({loadingTokens: true});
     try {
       const data = await fetchUserTokens(userId);
       let nextTokens: Tokens = getDefaultTokens();
@@ -98,7 +97,7 @@ const tokensStore: StateCreator<TokensStore> = (set, get) => ({
     } catch (e) {
       console.error(e);
     } finally {
-      set(() => ({loading: false}));
+      set(() => ({loadingTokens: false}));
     }
   },
 
@@ -161,7 +160,7 @@ const tokensStore: StateCreator<TokensStore> = (set, get) => ({
 const useTokensStore = create<TokensStore>()(tokensStore);
 
 export const useTokens = () => useTokensStore((state) => state.tokens);
-export const useLoading = () => useTokensStore((state) => state.loading);
+export const useLoadingTokens = () => useTokensStore((state) => state.loadingTokens);
 
 export const useRemaining = () =>
   useTokensStore((state) => {
@@ -186,6 +185,7 @@ export const useIsSubscribed = () =>
       Date.now() < state.tokens.expiresAt
     );
   });
+
 
 export const loadTokens = (userId: string) =>
   useTokensStore.getState().loadTokens(userId);

@@ -1,11 +1,12 @@
 export async function startQuizGeneration(
   userDescription: string,
   numQuestions: number,
+  language: string,
   userId: string
 ) {
   const res = await fetch("/.netlify/functions/generate-quiz-start", {
     method: "POST",
-    body: JSON.stringify({ userDescription, numQuestions, userId }),
+    body: JSON.stringify({userDescription, numQuestions, language, userId}),
   });
 
   if (!res.ok) {

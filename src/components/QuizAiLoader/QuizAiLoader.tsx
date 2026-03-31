@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { nanoid } from "nanoid";
 import { finishJsonLoading, setQuizDraft, startJsonLoading, useQuizDraft } from "../../store/useCurrentCreatingQuiz";
 import { catTitles, QUIZ_LANGUAGES } from "../../variables/quizData";
@@ -15,7 +15,6 @@ interface IQuizAiLoaderProps {
 }
 
 export const QuizAiLoader: React.FC<IQuizAiLoaderProps> = ({userUID}) => {
-  const navigate = useNavigate();
   const quizDraft = useQuizDraft();
   const [aiUserPrompt, setAiUserPrompt] = useState("");
   const [questionCount, setQuestionCount] = useState(3);
@@ -42,6 +41,7 @@ export const QuizAiLoader: React.FC<IQuizAiLoaderProps> = ({userUID}) => {
       const response = await startQuizGeneration(
         aiUserPrompt,
         questionCount,
+        quizLanguage,
         userUID
       );
       const jobId = response.jobId;
@@ -55,6 +55,7 @@ export const QuizAiLoader: React.FC<IQuizAiLoaderProps> = ({userUID}) => {
           quiz.createdBy = userUID;
           quiz.createdAt = Date.now();
           quiz.modifiedAt = Date.now();
+          quiz.lang = quizLanguage;
 
           // базовая валидация
           if (!quiz.title || !Array.isArray(quiz.questions)) {
@@ -135,7 +136,7 @@ export const QuizAiLoader: React.FC<IQuizAiLoaderProps> = ({userUID}) => {
           value={questionCount}
           onChange={(e) => setQuestionCount(Number(e.target.value))}
         />
-        <span title={catTitles.language}>Язык вопросов теста:</span>
+        <p className="lang-info" title={catTitles.language}>Язык вопросов теста:</p>
         <select
           className="input-language"
           name="select"
@@ -146,6 +147,7 @@ export const QuizAiLoader: React.FC<IQuizAiLoaderProps> = ({userUID}) => {
             <option key={i} value={item}>{item}</option>
           ))}
         </select>
+        {/*<p className="lang-info">Описание теста следует писать на выбранном языке</p>*/}
         <button
           className="btn button-create btn-save"
           disabled={aiUserPrompt.trim().length < 30}

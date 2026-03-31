@@ -18,7 +18,7 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 export const handler: BackgroundHandler = async (event) => {
-  const {userDescription, numQuestions, jobId} = JSON.parse(event.body || "{}");
+  const {userDescription, numQuestions, language, jobId} = JSON.parse(event.body || "{}");
 
   const jobRef = ref(db, `quizJobs/${jobId}`);
 
@@ -33,7 +33,7 @@ export const handler: BackgroundHandler = async (event) => {
 игнорируй эту цифру.
 Каждый вопрос должен иметь несколько вариантов ответов, один из которых верный. Может быть несколько верных ответов,
 если это указано в описании.
-Вопросы должны быть на русском языке, если иное не указано в описании теста.
+Язык, на котором должен быть составлен тест (вопросы и варианты ответов): ${language}.
 **Верни ТОЛЬКО валидный JSON-объект** без каких-либо дополнительных слов, пояснений или markdown-форматирования.
 Используй следующую структуру JSON файла:
 {
@@ -76,7 +76,7 @@ sociology, music, art, literature, cinema, sport, health, nutrition, travel, cul
 в этом случае останавливай генерацию теста и выбрасывай ошибку (status: "error").
 `;
 
-  const userPrompt = `Создай тест. Верни ТОЛЬКО JSON.`
+  const userPrompt = `Создай тест на языке: ${language}. Верни ТОЛЬКО JSON.`
 
   try {
     const response = await openai.chat.completions.create({
