@@ -37,22 +37,22 @@ export const PageQuiz = () => {
     await set(ref(database, `statistics/${testId}/${statistics.statId}`), JSON.stringify(statistics));
   }
 
-  const loadQuizAndQuestions = async () => {
-    if (testId) {
-      try {
-        const [quizData, questionData] = await Promise.all([QuizStorageManager.fetchCurrentQuiz(testId), QuizStorageManager.fetchQuestions(testId)]);
-        if (quizData && questionData) {
-          setQuiz(quizData);
-          setQuestions(questionData);
-        } else {
-          setIsPageEmpty(true);
-        }
-      } catch (error) {
-        console.log(error);
-        showToast("Ошибка загрузки данных!", ToastType.ERROR);
-      }
-    }
-  }
+  // const loadQuizAndQuestions = async () => {
+  //   if (testId) {
+  //     try {
+  //       const [quizData, questionData] = await Promise.all([QuizStorageManager.fetchCurrentQuiz(testId), QuizStorageManager.fetchQuestions(testId)]);
+  //       if (quizData && questionData) {
+  //         setQuiz(quizData);
+  //         setQuestions(questionData);
+  //       } else {
+  //         setIsPageEmpty(true);
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //       showToast("Ошибка загрузки данных!", ToastType.ERROR);
+  //     }
+  //   }
+  // }
 
   useEffect(() => {
     if (quiz && quiz.testId === testId) {
@@ -66,18 +66,46 @@ export const PageQuiz = () => {
     }
 
     const existingStat = QuizStorageManager.getRecentStatTestId(testId);
+
     if (existingStat && existingStat.finishedAt) {
       setSavedResultStorage(existingStat);
     }
-    if (!quiz || (quiz && quiz.testId !== testId)) {
-      loadQuizAndQuestions();
+
+    // if (!quiz || (quiz && quiz.testId !== testId)) {
+    //   loadQuizAndQuestions();
+    //   if (savedResultStorage) {
+    //     setSavedResultStorage(null);
+    //   }
+    // }
+
+    console.log("A: ", quiz?.testId);
+    console.log("B: ", testId)
+
+    if (quiz?.testId !== testId) {
+      setQuiz(null);
+      setQuestions(null);
+      QuizStorageManager.loadQuizAndQuestions(testId)
+        .then((quiz) => {
+          if (quiz && quiz.questions) {
+            setQuiz({...quiz});
+            setQuestions([...quiz.questions]);
+          } else {
+            setIsPageEmpty(true);
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+          showToast('Ошибка загрузки теста...', ToastType.ERROR);
+        })
       if (savedResultStorage) {
         setSavedResultStorage(null);
       }
     }
+
     if (quiz?.title) {
       document.title = `${quiz.title} · ANY QUIZ`;
     }
+
   }, [testId, quiz?.title]);
 
   if (savedResultStorage) {

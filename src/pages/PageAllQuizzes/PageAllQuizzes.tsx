@@ -7,16 +7,16 @@ import { useGuestUserId, useUser } from "../../store/useUserStore";
 import "./pageAllQuizzes.css";
 
 export const PageAllQuizzes = () => {
+  const locale = navigator.languages?.[0] || navigator.language;
+  const formatter = new Intl.DateTimeFormat(locale);
+  const user = useUser();
   const isAllLoaded = useIsAllLoaded();
   const testsListObj: IQuizzes | null = useAllQuizzes();
   const guestUserId = useGuestUserId();
+  const isLoading = useIsLoading();
   const testList: IQuizMeta[] = Object.values(testsListObj ? testsListObj : {})
     .filter(quiz => quiz.access !== "private");
   testList.sort((a, b) => b.createdAt - a.createdAt);
-  const isLoading = useIsLoading();
-  const user = useUser();
-  const locale = navigator.languages?.[0] || navigator.language;
-  const formatter = new Intl.DateTimeFormat(locale);
 
   useEffect(
     () => {
@@ -28,6 +28,13 @@ export const PageAllQuizzes = () => {
       console.log('loadAllQuizzes');
       loadAllQuizzes();
     }, []);
+
+  if (testsListObj) {
+    console.log(Object.keys(testsListObj).length)
+  }
+  if (testList) {
+    console.log(testList.length);
+  }
 
   return (
     <div className='tests-container'>

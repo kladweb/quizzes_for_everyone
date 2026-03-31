@@ -1,7 +1,6 @@
 import { create, type StateCreator } from "zustand";
 import { QuizStorageManager } from "../utils/QuizStorageManager";
 import { IQuizMeta, IQuizzes } from "../types/Quiz";
-import { loginGoogle } from "./useUserStore";
 
 interface IInitialState {
   allQuizzes: IQuizzes | null;
@@ -70,13 +69,17 @@ const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
   loadUserQuizzes: async (userUid) => {
     const userQuizzesIds = get().myQuizzesIds;
     const isMyIdsLoaded = get().isMyIdsLoaded;
+    const isAllLoaded = get().isAllLoaded;
     if (!isMyIdsLoaded) {
       return;
     }
     try {
       set(() => ({isLoading: true, errorLoading: ""}));
-      const userQuizzes = await QuizStorageManager.fetchUserQuizzes(userUid, userQuizzesIds);
-      set(() => ({allQuizzes: userQuizzes, isMyQuizzesLoaded: true}));
+      set(() => ({isMyQuizzesLoaded: true}));
+      if (!isAllLoaded) {
+        const userQuizzes = await QuizStorageManager.fetchUserQuizzes(userUid, userQuizzesIds);
+        set(() => ({allQuizzes: userQuizzes}));
+      }
     } catch (error) {
       // set(() => ({myQuizzes: []}));
       console.log(error);

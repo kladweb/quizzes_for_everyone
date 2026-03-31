@@ -10,8 +10,8 @@ import { Loader } from "../../components/Loader/Loader";
 import { IQuizMeta, IQuizzes } from "../../types/Quiz";
 import { QuizCard } from "../../components/TestsList/QuizCard";
 import { ModalConfirm } from "../../components/ModalConfirm/ModalConfirm";
-import "./PageMyQuizzes.css";
 import { PageEmpty } from "../PageEmpty/PageEmpty";
+import "./PageMyQuizzes.css";
 
 export const PageMyQuizzes: React.FC = () => {
   const navigate = useNavigate();
@@ -87,6 +87,13 @@ export const PageMyQuizzes: React.FC = () => {
     return (
       <PageEmpty emptyReason="noCreatedQuizzes"/>
     )
+  }
+
+  if (testsListObj) {
+    console.log(Object.keys(testsListObj).length)
+  }
+  if (testList) {
+    console.log(testList.length);
   }
 
   return (

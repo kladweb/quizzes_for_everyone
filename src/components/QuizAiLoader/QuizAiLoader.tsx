@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { nanoid } from "nanoid";
 import { finishJsonLoading, setQuizDraft, startJsonLoading, useQuizDraft } from "../../store/useCurrentCreatingQuiz";
 import { catTitles, QUIZ_LANGUAGES } from "../../variables/quizData";
@@ -15,7 +15,6 @@ interface IQuizAiLoaderProps {
 }
 
 export const QuizAiLoader: React.FC<IQuizAiLoaderProps> = ({userUID}) => {
-  const navigate = useNavigate();
   const quizDraft = useQuizDraft();
   const [aiUserPrompt, setAiUserPrompt] = useState("");
   const [questionCount, setQuestionCount] = useState(3);
@@ -42,6 +41,7 @@ export const QuizAiLoader: React.FC<IQuizAiLoaderProps> = ({userUID}) => {
       const response = await startQuizGeneration(
         aiUserPrompt,
         questionCount,
+        quizLanguage,
         userUID
       );
       const jobId = response.jobId;
