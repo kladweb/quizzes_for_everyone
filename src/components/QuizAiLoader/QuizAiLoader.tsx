@@ -9,6 +9,7 @@ import { useCanSpend, spendTokens } from "../../store/useTokensStore";
 import { startQuizGeneration } from "../../api/quizApi";
 import { removeQuizJob, subscribeToQuiz } from "../../api/subscribeToQuiz";
 import "./quizAiLoader.css"
+import { prepareQuiz } from "../../utils/quizUtils";
 
 interface IQuizAiLoaderProps {
   userUID: string;
@@ -49,31 +50,8 @@ export const QuizAiLoader: React.FC<IQuizAiLoaderProps> = ({userUID}) => {
       // СРАЗУ подписываемся
       const unsubscribe = subscribeToQuiz(jobId, async (result) => {
         try {
-          const quiz: IQuizMeta = JSON.parse(result);
-
-          quiz.testId = nanoid(12);
-          quiz.createdBy = userUID;
-          quiz.createdAt = Date.now();
-          quiz.modifiedAt = Date.now();
+          const quiz = prepareQuiz(result, userUID);
           quiz.lang = quizLanguage;
-
-          // базовая валидация
-          if (!quiz.title || !Array.isArray(quiz.questions)) {
-            throw new Error("Неверный формат файла.");
-          }
-
-          quiz.questions.forEach((q, idx) => {
-            if (!q.id) throw new Error(`Question ${idx + 1} missing id`);
-            if (!Array.isArray(q.options)) {
-              throw new Error(`Question ${idx + 1} missing options`);
-            }
-            if (!Array.isArray(q.correctAnswers)) {
-              throw new Error(
-                `Question ${idx + 1} missing correctAnswers`
-              );
-            }
-          });
-
           // кладём в zustand
           setQuizDraft(quiz);
 
