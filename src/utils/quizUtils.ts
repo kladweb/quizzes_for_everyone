@@ -1,5 +1,6 @@
-import { showToast } from "../store/useNoticeStore";
 import { ref, set } from "firebase/database";
+import { nanoid } from "nanoid";
+import { showToast } from "../store/useNoticeStore";
 import { database } from "../firebase/firebase";
 import { type IQuizMeta, ToastType } from "../types/Quiz";
 import { QuizStorageManager } from "./QuizStorageManager";
@@ -67,4 +68,26 @@ export const toggleLike = async (
   }
 }
 
+export function prepareQuiz(raw: string, userUID: string): IQuizMeta {
+  const quiz: IQuizMeta = JSON.parse(raw);
 
+  quiz.testId = nanoid(12);
+  quiz.createdBy = userUID;
+  quiz.createdAt = Date.now();
+  quiz.modifiedAt = Date.now();
+
+  if (!quiz.title || !Array.isArray(quiz.questions)) {
+    throw new Error("Неверный формат файла.");
+  }
+
+  quiz.questions.forEach((q, idx) => {
+    if (!q.id) throw new Error(`Question ${idx + 1} missing id`);
+    if (!Array.isArray(q.options)) {
+      throw new Error(`Question ${idx + 1} missing options`);
+    }
+    if (!Array.isArray(q.correctAnswers)) {
+      throw new Error(`Question ${idx + 1} missing correctAnswers`);
+    }
+  });
+  return quiz;
+}

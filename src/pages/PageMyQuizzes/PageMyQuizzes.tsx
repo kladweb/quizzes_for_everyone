@@ -70,15 +70,16 @@ export const PageMyQuizzes: React.FC = () => {
   useEffect(
     () => {
       document.title = "МОИ ТЕСТЫ · ANY QUIZ";
-      if (isAllLoaded && isMyQuizzesLoaded) {
-        console.log("User data already loaded");
+
+      if (isMyQuizzesLoaded) {
+        // console.log("User data already loaded");
         return;
       }
       if (!isMyIdsLoaded && user?.uid) {
         loadUserIds(user.uid)
       }
       if (isMyIdsLoaded && user?.uid) {
-        console.log('loadUserQuizzes');
+        // console.log('loadUserQuizzes');
         loadUserQuizzes(user.uid);
       }
     }, [isMyIdsLoaded]);

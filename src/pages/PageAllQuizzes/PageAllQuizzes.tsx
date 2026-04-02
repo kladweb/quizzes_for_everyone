@@ -22,10 +22,10 @@ export const PageAllQuizzes = () => {
     () => {
       document.title = "ВСЕ ТЕСТЫ · ANY QUIZ";
       if (isAllLoaded) {
-        console.log("All Quizzes already loaded");
+        // console.log("All Quizzes already loaded");
         return;
       }
-      console.log('loadAllQuizzes');
+      // console.log('loadAllQuizzes');
       loadAllQuizzes();
     }, []);
 
