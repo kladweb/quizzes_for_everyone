@@ -21,7 +21,7 @@ export const PageCreateQuiz = () => {
     }
 
     navigate(`/createquiz/${e.currentTarget.id}`);
-    console.log(e.currentTarget.id);
+    // console.log(e.currentTarget.id);
   }
 
   // useEffect(() => {
