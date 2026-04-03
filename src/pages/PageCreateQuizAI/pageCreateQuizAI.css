@@ -3,4 +3,9 @@
     color: var(--color-success);
     font-size: 1.5em;
   }
+
+  p:last-child {
+    color: var(--color-text-secondary);
+    font-size: 1.2em;
+  }
 }

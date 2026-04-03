@@ -5,6 +5,7 @@ import { Loader } from "../../components/Loader/Loader";
 import { LinkQuiz } from "../../components/LinkQuiz/LinkQuiz";
 import { type IUser, useUser } from "../../store/useUserStore";
 import { clearCurrentQuiz, useIsJsonLoading, useQuizComplete, useQuizDraft } from "../../store/useCurrentCreatingQuiz";
+import { steps } from "../../variables/quizData";
 import "./pageCreateQuizAI.css";
 
 export const PageCreateQuizAI = () => {
@@ -12,12 +13,24 @@ export const PageCreateQuizAI = () => {
   const userUID = user.uid;
   const quizDraft = useQuizDraft();
   const quizComplete = useQuizComplete();
-  const [isCreatingNewTest, setIsCreatingNewTest] = useState(false);
   const isCreatingQuiz = useIsJsonLoading();
+  const [isCreatingNewTest, setIsCreatingNewTest] = useState(false);
+  const [stepIndex, setStepIndex] = useState(0);
   // const [jobUID, setJobUID] = useState<string | null>(null);
 
-  useEffect(() => {
+  const changeStepIndex = (questionCount: number) => {
+    const interval = setInterval(() => {
+      setStepIndex((prev) => {
+        const next = prev + 1;
+        if (next >= steps.length - 1) {
+          clearInterval(interval);
+        }
+        return next;
+      });
+    }, questionCount * 750);
+  };
 
+  useEffect(() => {
     return (
       () => {
         clearCurrentQuiz();
@@ -31,6 +44,7 @@ export const PageCreateQuizAI = () => {
         <div className="loader-info-text">
           <p>Идёт создание теста...</p>
           <p>Это может занять несколько минут...</p>
+          <p>{steps[stepIndex]}</p>
         </div>
         <Loader/>
       </div>
@@ -43,6 +57,7 @@ export const PageCreateQuizAI = () => {
         (user && (!quizDraft && !quizComplete)) &&
         <QuizAiLoader
           userUID={userUID}
+          changeStepIndex={changeStepIndex}
         />
       }
       {

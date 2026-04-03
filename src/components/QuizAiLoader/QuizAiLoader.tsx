@@ -13,9 +13,10 @@ import { prepareQuiz } from "../../utils/quizUtils";
 
 interface IQuizAiLoaderProps {
   userUID: string;
+  changeStepIndex: (questionCount: number) => void;
 }
 
-export const QuizAiLoader: React.FC<IQuizAiLoaderProps> = ({userUID}) => {
+export const QuizAiLoader: React.FC<IQuizAiLoaderProps> = ({userUID, changeStepIndex}) => {
   const quizDraft = useQuizDraft();
   const [aiUserPrompt, setAiUserPrompt] = useState("");
   const [questionCount, setQuestionCount] = useState(3);
@@ -37,6 +38,7 @@ export const QuizAiLoader: React.FC<IQuizAiLoaderProps> = ({userUID}) => {
       return;
     }
 
+    changeStepIndex(questionCount);
     try {
       startJsonLoading();
       const response = await startQuizGeneration(
