@@ -9,3 +9,19 @@
     font-size: 1.2em;
   }
 }
+
+.info-container {
+  min-height: 15em;
+}
+
+@media (max-width: 460px) {
+  .loader-info-text  {
+    p {
+      font-size: 1.2em;
+    }
+
+    p:last-child {
+      font-size: 1em;
+    }
+  }
+}
