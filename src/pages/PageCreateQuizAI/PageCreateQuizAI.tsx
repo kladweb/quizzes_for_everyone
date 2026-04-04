@@ -40,13 +40,15 @@ export const PageCreateQuizAI = () => {
 
   if (isCreatingQuiz) {
     return (
-      <div className='loader-container'>
-        <div className="loader-info-text">
-          <p>Идёт создание теста...</p>
-          <p>Это может занять несколько минут...</p>
-          <p>{steps[stepIndex]}</p>
+      <div className='info-container'>
+        <div className='loader-container'>
+          <div className="loader-info-text">
+            <p>Идёт создание теста...</p>
+            <p>Это может занять несколько минут...</p>
+            <p>{steps[stepIndex]}</p>
+          </div>
+          <Loader/>
         </div>
-        <Loader/>
       </div>
     );
   }

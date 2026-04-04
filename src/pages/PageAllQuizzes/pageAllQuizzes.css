@@ -4,6 +4,7 @@
 
 .loader-info-text {
   position: absolute;
+  width: 96vw;
   text-align: center;
   margin: auto;
   left: 50%;

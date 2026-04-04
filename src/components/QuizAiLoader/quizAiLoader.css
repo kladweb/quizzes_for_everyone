@@ -39,3 +39,9 @@
   padding: 0;
   color: var(--color-text-secondary);
 }
+
+@media (max-width: 460px) {
+  #quiz-prompt {
+    font-size: 0.9rem;
+  }
+}
