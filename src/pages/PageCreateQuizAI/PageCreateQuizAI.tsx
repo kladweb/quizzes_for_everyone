@@ -27,7 +27,7 @@ export const PageCreateQuizAI = () => {
         }
         return next;
       });
-    }, questionCount * 750);
+    }, questionCount * 700);
   };
 
   useEffect(() => {

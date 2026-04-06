@@ -93,10 +93,10 @@
   font-size: 14px;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 600px) {
   .questionsContainer {
     margin: 1em;
-    padding: 0.9em;
+    padding: 0.5em;
     font-size: 0.9em;
   }
 }

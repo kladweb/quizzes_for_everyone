@@ -122,6 +122,12 @@
     margin: 0 1em;
     font-size: 0.9rem;
   }
+
+  .submitSettings {
+    label {
+      font-size: 0.9em;
+    }
+  }
 }
 
 @media (max-width: 400px) {

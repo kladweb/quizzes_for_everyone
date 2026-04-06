@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
-import { nanoid } from "nanoid";
 import { finishJsonLoading, setQuizDraft, startJsonLoading, useQuizDraft } from "../../store/useCurrentCreatingQuiz";
 import { catTitles, QUIZ_LANGUAGES } from "../../variables/quizData";
-import { IQuizMeta, ToastType } from "../../types/Quiz";
+import { ToastType } from "../../types/Quiz";
 import { showToast } from "../../store/useNoticeStore";
 import { useCanSpend, spendTokens } from "../../store/useTokensStore";
 import { startQuizGeneration } from "../../api/quizApi";
 import { removeQuizJob, subscribeToQuiz } from "../../api/subscribeToQuiz";
-import "./quizAiLoader.css"
 import { prepareQuiz } from "../../utils/quizUtils";
+import "./quizAiLoader.css"
 
 interface IQuizAiLoaderProps {
   userUID: string;
