@@ -128,3 +128,9 @@ input[type="file"] {
     filter: blur(8rem);
   }
 }
+
+@media (max-width: 460px) {
+  .tests-container {
+    padding: 0.6em;
+  }
+}

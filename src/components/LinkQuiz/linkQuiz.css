@@ -5,7 +5,7 @@
   color: var(--color-text-secondary);
 }
 
-.link-block .link-body {
+.link-body {
   margin: 1rem auto;
   font-size: 1.5rem;
   color: var(--color-warning);
@@ -22,6 +22,7 @@
   border: 1px dotted var(--color-warning);
   border-radius: 0.3em;
   width: fit-content;
+  word-break: break-all;
 }
 
 .btn-link-copy, .btn-link-create {
@@ -72,8 +73,22 @@
 }
 
 .link-info {
-  /*margin-bottom: 2rem;*/
   margin: 0.5em 0;
   padding: 0;
   color: var(--color-text-secondary);
+}
+
+@media (max-width: 600px) {
+  .test-load-info {
+    font-size: 1.2em;
+  }
+
+  .link-head {
+    font-size: 1.1em;
+  }
+
+  .link-body {
+    margin: 1rem auto;
+    font-size: 0.86em;
+  }
 }
