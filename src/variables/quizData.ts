@@ -47,20 +47,21 @@ interface ILabels {
 
 export const CATEGORY_LABELS_RU: ILabels = {
   general: "разное",
-  russian: "русский язык",
-  belorussian: "белорусский язык",
-  english: "английский язык",
-  polish: "польский язык",
-  ukrainian: "украинский язык",
-  math: "математика",
+  russian: "русский язык", //+
+  belorussian: "белорусский язык",  //+
+  english: "английский язык",  //+
+  polish: "польский язык",  //+
+  ukrainian: "украинский язык",  //+
+  math: "математика",  //+
   algebra: "алгебра",
   geometry: "геометрия",
-  physics: "физика",
-  chemistry: "химия",
-  biology: "биология",
+  physics: "физика",  //+
+  chemistry: "химия", //+
+  biology: "биология", //+
   geography: "география",
-  history: "история",
-  informatics: "информатика",
+  history: "история",  //+
+  informatics: "информатика", //+
+  it: "IT", //+
   logic: "логика",
   iq: "IQ",
   astronomy: "астрономия",
@@ -74,7 +75,7 @@ export const CATEGORY_LABELS_RU: ILabels = {
   music: "музыка",
   art: "искусство",
   literature: "литература",
-  cinema: "кино",
+  cinema: "кино",  //+
   sport: "спорт",
   health: "здоровье",
   nutrition: "питание",
