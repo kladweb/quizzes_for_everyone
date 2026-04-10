@@ -53,7 +53,7 @@ export const CATEGORY_LABELS_RU: ILabels = {
   polish: "польский язык",  //+
   ukrainian: "украинский язык",  //+
   math: "математика",  //+
-  algebra: "алгебра",
+  algebra: "алгебра",  //+
   geometry: "геометрия",
   physics: "физика",  //+
   chemistry: "химия", //+
@@ -62,10 +62,10 @@ export const CATEGORY_LABELS_RU: ILabels = {
   history: "история",  //+
   informatics: "информатика", //+
   it: "IT", //+
-  logic: "логика",
-  iq: "IQ",
-  astronomy: "астрономия",
-  engineering: "инженерия",
+  logic: "логика", //+
+  iq: "IQ", //+
+  astronomy: "астрономия",  //+
+  engineering: "инженерия", //+
   building: "строительство",
   economics: "экономика",
   finance: "финансы",
@@ -74,13 +74,13 @@ export const CATEGORY_LABELS_RU: ILabels = {
   sociology: "социология",
   music: "музыка",
   art: "искусство",
-  literature: "литература",
+  literature: "литература", //+
   cinema: "кино",  //+
   sport: "спорт",
   health: "здоровье",
   nutrition: "питание",
   travel: "путешествия",
-  culture: "культура",
+  culture: "культура", //+
   traditions: "традиции",
   cars: "автомобили",
   space: "космос"
