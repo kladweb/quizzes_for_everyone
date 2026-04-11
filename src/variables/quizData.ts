@@ -66,17 +66,17 @@ export const CATEGORY_LABELS_RU: ILabels = {
   iq: "IQ", //+
   astronomy: "астрономия",  //+
   engineering: "инженерия", //+
-  building: "строительство",
-  economics: "экономика",
-  finance: "финансы",
-  business: "бизнес",
+  building: "строительство", //+
+  economics: "экономика", //+
+  finance: "финансы", //+
+  business: "бизнес", //+
   psychology: "психология",
   sociology: "социология",
   music: "музыка",
   art: "искусство",
   literature: "литература", //+
   cinema: "кино",  //+
-  sport: "спорт",
+  sport: "спорт", //+
   health: "здоровье",
   nutrition: "питание",
   travel: "путешествия",
