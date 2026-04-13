@@ -31,7 +31,7 @@ const replaceOgUrl = (html: string, url: string): string => {
 
 const isAssetAvailable = async (assetUrl: URL): Promise<boolean> => {
   try {
-    const response = await fetch(assetUrl, {method: "HEAD"});
+    const response = await fetch(assetUrl);
     return response.ok;
   } catch {
     return false;
@@ -45,8 +45,7 @@ const resolveOgImageUrl = async (request: Request, category?: string): Promise<s
     normalizedCategory ? `/images/og/${normalizedCategory}.jpg` : "",
     normalizedCategory ? `/images/og/${normalizedCategory}.jpeg` : "",
     normalizedCategory ? `/images/og/${normalizedCategory}.png` : "",
-    "/images/og/default.jpg",
-    "/open.png"
+    "/images/og/default.jpg"
   ].filter(Boolean);
 
   for (const candidate of candidates) {
@@ -57,7 +56,7 @@ const resolveOgImageUrl = async (request: Request, category?: string): Promise<s
     }
   }
 
-  return new URL("/open.png", base).toString();
+  return new URL("/images/og/default.jpg", base).toString();
 };
 
 export default async (request: Request) => {
