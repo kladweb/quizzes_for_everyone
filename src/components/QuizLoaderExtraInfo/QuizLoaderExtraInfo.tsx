@@ -179,7 +179,7 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
       {
         (quizCategory && !CATEGORY_values.includes(quizCategory)) &&
         <>
-          <p className='warning-save'>Ваш тест будет сохранен в категории <span>"разное"</span>!</p>
+          <p className='warning-save'>Ваш тест будет временно сохранен в категории <span>"разное"</span>!</p>
           <p className='warning-save'>
             В дальнейшем, при появлении категории <span>"{quizCategory}"</span>, тест будет перенесен в неё
             автоматически.

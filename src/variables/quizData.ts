@@ -47,39 +47,40 @@ interface ILabels {
 
 export const CATEGORY_LABELS_RU: ILabels = {
   general: "разное",
-  russian: "русский язык",
-  belorussian: "белорусский язык",
-  english: "английский язык",
-  polish: "польский язык",
-  ukrainian: "украинский язык",
-  math: "математика",
-  algebra: "алгебра",
+  russian: "русский язык", //+
+  belorussian: "белорусский язык",  //+
+  english: "английский язык",  //+
+  polish: "польский язык",  //+
+  ukrainian: "украинский язык",  //+
+  math: "математика",  //+
+  algebra: "алгебра",  //+
   geometry: "геометрия",
-  physics: "физика",
-  chemistry: "химия",
-  biology: "биология",
+  physics: "физика",  //+
+  chemistry: "химия", //+
+  biology: "биология", //+
   geography: "география",
-  history: "история",
-  informatics: "информатика",
-  logic: "логика",
-  iq: "IQ",
-  astronomy: "астрономия",
-  engineering: "инженерия",
-  building: "строительство",
-  economics: "экономика",
-  finance: "финансы",
-  business: "бизнес",
-  psychology: "психология",
-  sociology: "социология",
-  music: "музыка",
-  art: "искусство",
-  literature: "литература",
-  cinema: "кино",
-  sport: "спорт",
+  history: "история",  //+
+  informatics: "информатика", //+
+  it: "IT", //+
+  logic: "логика", //+
+  iq: "IQ", //+
+  astronomy: "астрономия",  //+
+  engineering: "инженерия", //+
+  building: "строительство", //+
+  economics: "экономика", //+
+  finance: "финансы", //+
+  business: "бизнес", //+
+  psychology: "психология", //+
+  sociology: "социология", //+
+  music: "музыка", //+
+  art: "искусство", //+
+  literature: "литература", //+
+  cinema: "кино",  //+
+  sport: "спорт", //+
   health: "здоровье",
   nutrition: "питание",
   travel: "путешествия",
-  culture: "культура",
+  culture: "культура", //+
   traditions: "традиции",
   cars: "автомобили",
   space: "космос"

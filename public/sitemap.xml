@@ -10,9 +10,4 @@
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
-  <url>
-    <loc>https://any-quiz.netlify.app/service</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
-  </url>
 </urlset>
