@@ -19,7 +19,7 @@ const db = getDatabase(app);
 
 export const handler: Handler = async (event) => {
   try {
-    const { userDescription, numQuestions, userId } = JSON.parse(event.body || "{}");
+    const { userDescription, numQuestions, language, userId } = JSON.parse(event.body || "{}");
 
     const jobId = nanoid(10);
 
@@ -34,7 +34,7 @@ export const handler: Handler = async (event) => {
     // запускаем background
     await fetch(`${process.env.URL}/.netlify/functions/generate-quiz-background`, {
       method: "POST",
-      body: JSON.stringify({ userDescription, numQuestions, jobId }),
+      body: JSON.stringify({ userDescription, numQuestions, language, jobId }),
     });
 
     return {

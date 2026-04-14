@@ -36,33 +36,33 @@ export const handler: BackgroundHandler = async (event) => {
 **Верни ТОЛЬКО валидный JSON-объект** без каких-либо дополнительных слов, пояснений или markdown-форматирования.
 Используй следующую структуру JSON файла:
 {
-  "title": "English Test: Present Simple",
-  "description": "Mini test",
+  "title": "[название теста на целевом языке]",
+  "description": "[краткое описание на целевом языке]",
   "category": "general",
   "questions": [
     {
       "id": "q1",
-      "question": "She ___ to school.",
+      "question": "[текст вопроса на целевом языке]",
       "options": [
-        { "id": "q1_a", "text": "go" },
-        { "id": "q1_b", "text": "goes" },
-        { "id": "q1_c", "text": "went" },
-        { "id": "q1_d", "text": "going" }
+        { "id": "q1_a", "text": "[вариант ответа на целевом языке]" },
+        { "id": "q1_b", "text": "[вариант ответа на целевом языке]" },
+        { "id": "q1_c", "text": "[вариант ответа на целевом языке]" },
+        { "id": "q1_d", "text": "[вариант ответа на целевом языке]" }
       ],
       "correctAnswers": ["q1_b"],
-      "explanation": "He/She/It → goes"
+      "explanation": "[краткое объяснение на целевом языке]"
     },
     {
       "id": "q2",
-      "question": "Which are correct present simple forms?",
+      "question": "[текст вопроса на целевом языке]",
       "options": [
-        { "id": "q2_a", "text": "I am" },
-        { "id": "q2_b", "text": "He are" },
-        { "id": "q2_c", "text": "They are" },
-        { "id": "q2_d", "text": "She am" }
+        { "id": "q2_a", "text": "[вариант ответа на целевом языке]" },
+        { "id": "q2_b", "text": "[вариант ответа на целевом языке]" },
+        { "id": "q2_c", "text": "[вариант ответа на целевом языке]" },
+        { "id": "q2_d", "text": "[вариант ответа на целевом языке]" }
       ],
       "correctAnswers": ["q2_a", "q2_c"],
-      "explanation": "I am, They are - correct forms"
+      "explanation": "[краткое объяснение на целевом языке]"
     }
   ]
 }
@@ -74,13 +74,16 @@ sociology, music, art, literature, cinema, sport, health, nutrition, travel, cul
 Убедись, что JSON синтаксически верен: используй двойные кавычки, никаких trailing commas.
 Если в описании теста содержится мат, нецензурные слова или произвольный непонятный набор символов, 
 в этом случае останавливай генерацию теста и выбрасывай ошибку (status: "error").
+Если ты не понимаешь задачу, не можешь надёжно определить тему теста или видишь, что запрос может подпадать под ограничения модерации,
+не создавай общий или "примерный" тест: выбрасывай ошибку (status: "error").
 `;
 
   const userPrompt = `Создай тест. Верни ТОЛЬКО JSON. Язык теста ${language}.`
 
   try {
     const response = await openai.chat.completions.create({
-      model: "deepseek-coder", // быстрее для JSON
+      // model: "deepseek-coder",
+      model: "deepseek-chat",
       messages: [
         {role: "system", content: systemPrompt},
         {role: "user", content: userPrompt},
