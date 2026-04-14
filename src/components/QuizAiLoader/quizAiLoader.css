@@ -40,6 +40,15 @@
   color: var(--color-text-secondary);
 }
 
+.quiz-generation-note {
+  margin: 0.7em auto 0;
+  max-width: 40rem;
+  text-align: center;
+  font-size: 0.85em;
+  font-style: italic;
+  color: var(--color-text-secondary);
+}
+
 @media (max-width: 460px) {
   #quiz-prompt {
     font-size: 0.9rem;
