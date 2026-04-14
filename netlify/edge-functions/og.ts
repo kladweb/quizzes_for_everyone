@@ -32,7 +32,10 @@ const replaceOgUrl = (html: string, url: string): string => {
 const isAssetAvailable = async (assetUrl: URL): Promise<boolean> => {
   try {
     const response = await fetch(assetUrl);
-    return response.ok;
+    if (!response.ok) return false;
+
+    const contentType = (response.headers.get("content-type") ?? "").toLowerCase();
+    return contentType.startsWith("image/");
   } catch {
     return false;
   }
