@@ -54,11 +54,11 @@ export const CATEGORY_LABELS_RU: ILabels = {
   ukrainian: "украинский язык",  //+
   math: "математика",  //+
   algebra: "алгебра",  //+
-  geometry: "геометрия",
+  geometry: "геометрия",//+
   physics: "физика",  //+
   chemistry: "химия", //+
   biology: "биология", //+
-  geography: "география",
+  geography: "география",//+
   history: "история",  //+
   informatics: "информатика", //+
   it: "IT", //+
@@ -77,13 +77,13 @@ export const CATEGORY_LABELS_RU: ILabels = {
   literature: "литература", //+
   cinema: "кино",  //+
   sport: "спорт", //+
-  health: "здоровье",
-  nutrition: "питание",
-  travel: "путешествия",
+  health: "здоровье", //+
+  nutrition: "питание", //+
+  travel: "путешествия", //+
   culture: "культура", //+
   traditions: "традиции",
   cars: "автомобили",
-  space: "космос"
+  space: "космос" //+
 };
 
 // export const QUIZ_LANGUAGES = ["русский", "беларускi", "english", "polski"]

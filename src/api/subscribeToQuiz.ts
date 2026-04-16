@@ -1,6 +1,10 @@
 import { getDatabase, ref, onValue, remove } from "firebase/database";
 
-export function subscribeToQuiz(jobId: string, onDone: (data: any) => void) {
+export function subscribeToQuiz(
+  jobId: string,
+  onDone: (data: any) => void,
+  onError?: () => void
+) {
   const db = getDatabase();
   const jobRef = ref(db, `quizJobs/${jobId}`);
 
@@ -16,6 +20,7 @@ export function subscribeToQuiz(jobId: string, onDone: (data: any) => void) {
 
     if (data.status === "error") {
       console.error("Ошибка генерации");
+      onError?.();
       unsubscribe();
     }
   });
