@@ -19,6 +19,7 @@ export const PageCreateQuizAI = () => {
   // const [jobUID, setJobUID] = useState<string | null>(null);
 
   const changeStepIndex = (questionCount: number) => {
+    setStepIndex(0);
     const interval = setInterval(() => {
       setStepIndex((prev) => {
         const next = prev + 1;

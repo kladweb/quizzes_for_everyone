@@ -49,29 +49,40 @@ export const QuizAiLoader: React.FC<IQuizAiLoaderProps> = ({userUID, changeStepI
       const jobId = response.jobId;
 
       // СРАЗУ подписываемся
-      const unsubscribe = subscribeToQuiz(jobId, async (result) => {
-        try {
-          const quiz = prepareQuiz(result, userUID);
-          quiz.lang = quizLanguage;
-          // кладём в zustand
-          setQuizDraft(quiz);
+      const unsubscribe = subscribeToQuiz(
+        jobId,
+        async (result) => {
+          try {
+            const quiz = prepareQuiz(result, userUID);
+            quiz.lang = quizLanguage;
+            // кладём в zustand
+            setQuizDraft(quiz);
 
-          // списываем токены
-          await spendTokens(userUID, 20);
+            // списываем токены
+            await spendTokens(userUID, 20);
 
-        } catch (err) {
-          console.error(err);
+          } catch (err) {
+            console.error(err);
+            showToast(
+              "Ошибка обработки результата теста.",
+              ToastType.ERROR
+            );
+          } finally {
+            unsubscribe();
+            finishJsonLoading();
+            // удаляем временный файл на сервере
+            await removeQuizJob(userUID, jobId);
+          }
+        },
+        async () => {
+          finishJsonLoading();
           showToast(
-            "Ошибка обработки результата теста.",
+            "Ошибка генерации теста. Попробуйте позже...",
             ToastType.ERROR
           );
-        } finally {
-          unsubscribe();
-          finishJsonLoading();
-          // удаляем временный файл на сервере
           await removeQuizJob(userUID, jobId);
         }
-      });
+      );
     } catch (err) {
       finishJsonLoading();
       console.error(err);
@@ -135,7 +146,7 @@ export const QuizAiLoader: React.FC<IQuizAiLoaderProps> = ({userUID, changeStepI
           ЗАПРОСИТЬ ТЕСТ
         </button>
         <p className="quiz-generation-note">
-          Описание теста должно быть на том же языке, что и желаемый язык вопросов теста!
+          Описание теста должно быть на том же языке, что и желаемый язык вопросов теста.
         </p>
         <p className="quiz-generation-note">
           Если результат теста Вас не устроит, попробуйте при следующей генерации описать тему более подробно:

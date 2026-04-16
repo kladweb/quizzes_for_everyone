@@ -28,6 +28,14 @@ export const handler: BackgroundHandler = async (event) => {
   });
 
   const systemPrompt = `Ты — помощник для создания учебных тестов.
+  **КРИТИЧЕСКОЕ ПРАВИЛО:**
+Если пользовательский запрос (описание теста) содержит нецензурные слова, мат, оскорбления или явно провокационный контент, 
+ТЫ ДОЛЖЕН ВЕРНУТЬ ТОЛЬКО ЭТОТ ТОЧНЫЙ JSON (без дополнительных слов):
+{"status": "error", "reason": "inappropriate_content"}
+
+НЕ ПЫТАЙСЯ СОЗДАВАТЬ ТЕСТ!
+НЕ ГЕНЕРИРУЙ СЛУЧАЙНЫЙ ТЕСТ!
+НЕ ИГНОРИРУЙ ЭТО ПРАВИЛО!
 Сгенерируй тест по описанию: "${userDescription}". Количество вопросов в тесте: ${numQuestions}.
 Если в описании теста указано иное количество вопросов, игнорируй эту цифру.
 Каждый вопрос должен иметь несколько вариантов ответов, один из которых верный. Может быть несколько верных ответов,
@@ -70,11 +78,11 @@ general, english, russian, math, algebra, geometry, physics, chemistry, biology,
 informatics, logic, iq, astronomy, engineering, building, economics, finance, business, psychology,
 sociology, music, art, literature, cinema, sport, health, nutrition, travel, culture, traditions, cars, space.
 Убедись, что JSON синтаксически верен: используй двойные кавычки, никаких trailing commas.
-Если в описании теста содержится мат или нецензурные слова, останавливай генерацию теста и выбрасывай ошибку 
-(status: "error").
-`;
+Если в описании теста содержится мат или нецензурные слова, останавливай генерацию теста и выбрасывай ошибку
+или верни такой json: {status: "error"}.`;
 
-  const userPrompt = `Создай тест.`
+  const userPrompt = `Проверь, есть ли в этом описании мат или нецензурные слова. Если есть - верни {"status": "error"}. 
+  Если нет - создай тест. Верни ТОЛЬКО JSON.`
 
   try {
     const response = await openai.chat.completions.create({
