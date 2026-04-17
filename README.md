@@ -64,17 +64,7 @@ npm install
 
 ### 3. Configure environment variables
 
-Create a `.env` file in the project root and add your credentials:
-
-```env
-VITE_FIREBASE_API_KEY=your_firebase_api_key
-VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=your_project_id
-VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
-VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-VITE_FIREBASE_APP_ID=your_app_id
-VITE_OPENAI_API_KEY=your_openai_api_key
-```
+Create a `.env` file in the project root and add your credentials.
 
 ---
 
@@ -169,4 +159,4 @@ Contributions are welcome! Feel free to open an [issue](https://github.com/kladw
 ## 📄 License
 
 This project is licensed under the **MIT License** — see the [LICENSE](./LICENSE) file for details.
-You are free to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of this software.
+
