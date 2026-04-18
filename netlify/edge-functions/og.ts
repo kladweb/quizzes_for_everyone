@@ -75,14 +75,15 @@ export default async (request: Request) => {
       return fetch(request);
     }
 
-    let title = "Создавайте и проходите квизы";
+    let title = "Создавайте и проходите тесты";
     let description =
-      "ANY QUIZ - платформа для создания, публикации и прохождения квизов онлайн. Делитесь тестами и проверяйте знания бесплатно.";
+      "ANY QUIZ - платформа для создания, публикации и прохождения тестов онлайн. Делитесь тестами и проверяйте" +
+      " знания бесплатно.";
     let ogImageUrl = new URL("/open.png", url.origin).toString();
 
     if (isAllQuizzesPage) {
       title = "Все квизы";
-      description = "Каталог публичных квизов ANY QUIZ. Находите интересные тесты и проходите их онлайн.";
+      description = "Каталог публичных тестов ANY QUIZ. Находите интересные тесты и проходите их онлайн.";
     }
 
     if (isQuizPage && quizMatch) {

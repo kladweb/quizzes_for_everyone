@@ -19,12 +19,12 @@ export const Header: React.FC = () => {
       <div className="nav-container">
         <nav className="navbar">
           <NavLink className='link-nav' to={'/allquizzes'}>
-            <span>ALL QUIZZES</span>
+            <span>ВСЕ ТЕСТЫ</span>
           </NavLink>
           {
             user &&
             <NavLink className='link-nav' to={'/myquizzes'}>
-              <span>MY QUIZZES</span>
+              <span>МОИ ТЕСТЫ</span>
             </NavLink>
           }
         </nav>
