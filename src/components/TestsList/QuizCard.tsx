@@ -34,7 +34,7 @@ export const QuizCard: React.FC<ITestCardProps> = memo(
     return (
       <div className='test-item' key={quiz.testId}>
         <div className='test-content'>
-          <h3 className='test-name'>{quiz.title}</h3>
+          <h3 className='test-name' title={quiz.description}>{quiz.title}</h3>
         </div>
         <div className="quiz-container-info">
           <div className="info-item">Категория: <span>{CATEGORY_LABELS_RU[quiz.category]}</span></div>

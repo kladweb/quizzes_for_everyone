@@ -26,6 +26,7 @@
   color: var(--color-secondary);
   font-weight: 500;
   text-wrap: balance;
+  cursor: default;
 }
 
 .quiz-container-info {
