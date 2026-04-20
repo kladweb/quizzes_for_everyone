@@ -82,11 +82,16 @@
   background-color: var(--color-bg-footer);
   border-radius: 8px;
   text-align: left;
+
+  h3 {
+    margin: 0;
+  }
 }
 
 .json-example-field {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   align-items: center;
   margin-bottom: 10px;
 
@@ -97,8 +102,9 @@
 }
 
 .json-example-content {
-  background-color: var(--color-text-contrast);
   padding: 15px;
+  margin: 0;
+  background-color: var(--color-text-contrast);
   border-radius: 6px;
   overflow: auto;
   font-size: 0.75rem;
