@@ -47,43 +47,44 @@ interface ILabels {
 
 export const CATEGORY_LABELS_RU: ILabels = {
   general: "разное",
-  russian: "русский язык", //+
-  belorussian: "белорусский язык",  //+
-  english: "английский язык",  //+
-  polish: "польский язык",  //+
-  ukrainian: "украинский язык",  //+
-  math: "математика",  //+
-  algebra: "алгебра",  //+
-  geometry: "геометрия",//+
-  physics: "физика",  //+
-  chemistry: "химия", //+
-  biology: "биология", //+
-  geography: "география",//+
-  history: "история",  //+
-  informatics: "информатика", //+
-  it: "IT", //+
-  logic: "логика", //+
-  iq: "IQ", //+
-  astronomy: "астрономия",  //+
-  engineering: "инженерия", //+
-  building: "строительство", //+
-  economics: "экономика", //+
-  finance: "финансы", //+
-  business: "бизнес", //+
-  psychology: "психология", //+
-  sociology: "социология", //+
-  music: "музыка", //+
-  art: "искусство", //+
-  literature: "литература", //+
-  cinema: "кино",  //+
-  sport: "спорт", //+
-  health: "здоровье", //+
-  nutrition: "питание", //+
-  travel: "путешествия", //+
-  culture: "культура", //+
+  russian: "русский язык",
+  belorussian: "белорусский язык",
+  english: "английский язык",
+  polish: "польский язык",
+  ukrainian: "украинский язык",
+  math: "математика",
+  algebra: "алгебра",
+  geometry: "геометрия",
+  physics: "физика",
+  chemistry: "химия",
+  biology: "биология",
+  geography: "география",
+  history: "история",
+  informatics: "информатика",
+  it: "IT",
+  logic: "логика",
+  iq: "IQ",
+  astronomy: "астрономия",
+  engineering: "инженерия",
+  building: "строительство",
+  economics: "экономика",
+  finance: "финансы",
+  business: "бизнес",
+  psychology: "психология",
+  sociology: "социология",
+  music: "музыка",
+  art: "искусство",
+  literature: "литература",
+  cinema: "кино",
+  sport: "спорт",
+  health: "здоровье",
+  nutrition: "питание",
+  travel: "путешествия",
+  culture: "культура",
   traditions: "традиции",
   cars: "автомобили",
-  space: "космос" //+
+  space: "космос",
+  medicine: "медицина"
 };
 
 // export const QUIZ_LANGUAGES = ["русский", "беларускi", "english", "polski"]
@@ -102,3 +103,35 @@ export const steps: string[] = [
   "Проверяем структуру...",
   "Финализируем тест..."
 ];
+
+export const jsonTemplate = '{\n' +
+  '  "title": "[название теста на целевом языке]",\n' +
+  '  "description": "[краткое описание на целевом языке]",\n' +
+  '  "category": "general",\n' +
+  '  "questions": [\n' +
+  '    {\n' +
+  '      "id": "q1",\n' +
+  '      "question": "[текст вопроса на целевом языке]",\n' +
+  '      "options": [\n' +
+  '        {"id": "q1_a", "text": "[вариант ответа на целевом языке]"},\n' +
+  '        {"id": "q1_b", "text": "[вариант ответа на целевом языке]"},\n' +
+  '        {"id": "q1_c", "text": "[вариант ответа на целевом языке]"},\n' +
+  '        {"id": "q1_d", "text": "[вариант ответа на целевом языке]"}\n' +
+  '      ],\n' +
+  '      "correctAnswers": ["q1_b"],\n' +
+  '      "explanation": "[краткое объяснение верного ответа на целевом языке]"\n' +
+  '    },\n' +
+  '    {\n' +
+  '      "id": "q2",\n' +
+  '      "question": "[текст вопроса на целевом языке]",\n' +
+  '      "options": [\n' +
+  '        {"id": "q2_a", "text": "[вариант ответа на целевом языке]"},\n' +
+  '        {"id": "q2_b", "text": "[вариант ответа на целевом языке]"},\n' +
+  '        {"id": "q2_c", "text": "[вариант ответа на целевом языке]"},\n' +
+  '        {"id": "q2_d", "text": "[вариант ответа на целевом языке]"}\n' +
+  '      ],\n' +
+  '      "correctAnswers": ["q2_a", "q2_c"],\n' +
+  '      "explanation": "[краткое объяснение верного ответа на целевом языке]"\n' +
+  '    }\n' +
+  '  ]\n' +
+  '}';

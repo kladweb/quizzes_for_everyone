@@ -2,6 +2,7 @@ import type { BackgroundHandler } from "@netlify/functions";
 import OpenAI from "openai";
 import { getDatabase, ref, update } from "firebase/database";
 import { initializeApp } from "firebase/app";
+import { jsonTemplate } from "../../src/variables/quizData";
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -42,37 +43,7 @@ export const handler: BackgroundHandler = async (event) => {
 если это указано в описании. Язык вопросов и ответов (целевой язык): ${language}.
 **Верни ТОЛЬКО валидный JSON-объект** без каких-либо дополнительных слов, пояснений или markdown-форматирования.
 Используй следующую структуру JSON файла:
-{
-  "title": "[название теста на целевом языке]",
-  "description": "[краткое описание на целевом языке]",
-  "category": "general",
-  "questions": [
-    {
-      "id": "q1",
-      "question": "[текст вопроса на целевом языке]",
-      "options": [
-        { "id": "q1_a", "text": "[вариант ответа на целевом языке]" },
-        { "id": "q1_b", "text": "[вариант ответа на целевом языке]" },
-        { "id": "q1_c", "text": "[вариант ответа на целевом языке]" },
-        { "id": "q1_d", "text": "[вариант ответа на целевом языке]" }
-      ],
-      "correctAnswers": ["q1_b"],
-      "explanation": "[краткое объяснение верного ответа на целевом языке]"
-    },
-    {
-      "id": "q2",
-      "question": "[текст вопроса на целевом языке]",
-      "options": [
-        { "id": "q2_a", "text": "[вариант ответа на целевом языке]" },
-        { "id": "q2_b", "text": "[вариант ответа на целевом языке]" },
-        { "id": "q2_c", "text": "[вариант ответа на целевом языке]" },
-        { "id": "q2_d", "text": "[вариант ответа на целевом языке]" }
-      ],
-      "correctAnswers": ["q2_a", "q2_c"],
-      "explanation": "[краткое объяснение верного ответа на целевом языке]"
-    }
-  ]
-}
+${jsonTemplate}
 Для поля "category" вместо "general" подбери соответствующую тесту категорию из списка:
 general, english, russian, math, algebra, geometry, physics, chemistry, biology, geography, history, 
 informatics, logic, iq, astronomy, engineering, building, economics, finance, business, psychology,
