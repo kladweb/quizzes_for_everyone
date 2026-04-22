@@ -107,7 +107,6 @@ export const steps: string[] = [
 export const jsonTemplate = '{\n' +
   '  "title": "[название теста на целевом языке]",\n' +
   '  "description": "[краткое описание на целевом языке]",\n' +
-  '  "category": "general",\n' +
   '  "questions": [\n' +
   '    {\n' +
   '      "id": "q1",\n' +

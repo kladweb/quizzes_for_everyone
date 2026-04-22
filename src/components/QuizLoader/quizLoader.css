@@ -103,7 +103,7 @@
 
 .json-example-content {
   padding: 15px;
-  margin: 0;
+  margin: 0 0 1em;
   background-color: var(--color-text-contrast);
   border-radius: 6px;
   overflow: auto;
