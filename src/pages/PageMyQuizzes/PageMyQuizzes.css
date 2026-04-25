@@ -1,5 +1,5 @@
 .button-create {
-  margin: 1rem auto;
+  margin: 1rem auto 0;
   padding: 8px 16px;
   font-size: 14px;
   color: var(--color-text-contrast);

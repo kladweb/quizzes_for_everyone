@@ -2,7 +2,7 @@ import type { BackgroundHandler } from "@netlify/functions";
 import OpenAI from "openai";
 import { getDatabase, ref, update } from "firebase/database";
 import { initializeApp } from "firebase/app";
-import { jsonTemplate } from "../../src/variables/quizData";
+import { jsonTemplateCat } from "../../src/variables/quizData";
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -29,30 +29,29 @@ export const handler: BackgroundHandler = async (event) => {
   });
 
   const systemPrompt = `Ты — помощник для создания учебных тестов.
-  **КРИТИЧЕСКОЕ ПРАВИЛО:**
-Если пользовательский запрос (описание теста) содержит нецензурные слова, мат, оскорбления или явно провокационный контент, 
-ТЫ ДОЛЖЕН ВЕРНУТЬ ТОЛЬКО ЭТОТ ТОЧНЫЙ JSON (без дополнительных слов):
-{"status": "error", "reason": "inappropriate_content"}
-
-НЕ ПЫТАЙСЯ СОЗДАВАТЬ ТЕСТ!
-НЕ ГЕНЕРИРУЙ СЛУЧАЙНЫЙ ТЕСТ!
-НЕ ИГНОРИРУЙ ЭТО ПРАВИЛО!
 Сгенерируй тест по описанию: "${userDescription}". Количество вопросов в тесте: ${numQuestions}.
 Если в описании теста указано иное количество вопросов, игнорируй эту цифру.
 Каждый вопрос должен иметь несколько вариантов ответов, один из которых верный. Может быть несколько верных ответов,
 если это указано в описании. Язык вопросов и ответов (целевой язык): ${language}.
 **Верни ТОЛЬКО валидный JSON-объект** без каких-либо дополнительных слов, пояснений или markdown-форматирования.
 Используй следующую структуру JSON файла:
-${jsonTemplate}
+${jsonTemplateCat}
 Для поля "category" вместо "general" подбери соответствующую тесту категорию из списка:
 general, english, russian, math, algebra, geometry, physics, chemistry, biology, geography, history, 
 informatics, logic, iq, astronomy, engineering, building, economics, finance, business, psychology,
 sociology, music, art, literature, cinema, sport, health, nutrition, travel, culture, traditions, cars, space.
 Убедись, что JSON синтаксически верен: используй двойные кавычки, никаких trailing commas.
 Если в описании теста содержится мат или нецензурные слова, останавливай генерацию теста и выбрасывай ошибку
-или верни такой json: {status: "error"}.`;
+или верни такой json: {status: "error"}.
+**КРИТИЧЕСКОЕ ПРАВИЛО:**
+Если пользовательский запрос (описание теста) содержит нецензурные слова, любой мат, оскорбления или явно
+провокационный контент, ТЫ ДОЛЖЕН ВЕРНУТЬ ТОЛЬКО ЭТОТ ТОЧНЫЙ JSON (без дополнительных слов):
+{"status": "error", "reason": "inappropriate_content"}
+В ЭТОМ СЛУЧАЕ НЕ ПЫТАЙСЯ СОЗДАВАТЬ ТЕСТ!
+В ЭТОМ СЛУЧАЕ НЕ ГЕНЕРИРУЙ СЛУЧАЙНЫЙ ТЕСТ!`;
 
-  const userPrompt = `Проверь, есть ли в этом описании мат или нецензурные слова. Если есть - верни {"status": "error"}. 
+  const userPrompt = `Проверь, есть ли в описании теста любой мат или нецензурные слова. Если есть - верни: 
+  {"status": "error", "reason": "inappropriate_content"}
   Если нет - создай тест. Верни ТОЛЬКО JSON.`
 
   try {
