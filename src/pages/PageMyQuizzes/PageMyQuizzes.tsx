@@ -23,21 +23,15 @@ export const PageMyQuizzes: React.FC = () => {
   const userQuizzesIds = useMyQuizzesIds();
   const testsListObj: IQuizzes | null = useAllQuizzes();
   const guestUserId = useGuestUserId();
-  const testList: IQuizMeta[] = [];
-  // const testList: IQuizMeta[] = Object.values(testsListObj ? testsListObj : {});
-  // testList.sort((a, b) => b.createdAt - a.createdAt);
   const locale = navigator.languages?.[0] || navigator.language;
   const formatter = new Intl.DateTimeFormat(locale);
   const [quizIdStatistics, setQuizIdStatistics] = useState<string | null>(null);
   const [isModalConfirmOpen, setIsModalConfirmOpen] = useState<boolean>(false);
   const [quizToDelete, setQuizToDelete] = useState<IQuizMeta | null>(null);
 
-  for (let key in testsListObj) {
-    if (userQuizzesIds.includes(key)) {
-      testList.push(testsListObj[key]);
-    }
-  }
-  testList.sort((a, b) => b.createdAt - a.createdAt);
+  const testList: IQuizMeta[] = Object.values(testsListObj ?? {})
+    .filter(q => userQuizzesIds.includes(q.testId))
+    .sort((a, b) => b.createdAt - a.createdAt);
 
   const createQuiz = () => {
     clearCurrentQuiz();

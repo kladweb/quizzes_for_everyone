@@ -1,4 +1,4 @@
-import { child, get, ref, set } from "firebase/database";
+import { child, endAt, get, limitToLast, orderByChild, query, ref, set } from "firebase/database";
 import { IQuizMeta, IQuizzes, IStatistics, Question } from "../types/Quiz";
 import { database } from "../firebase/firebase";
 
@@ -8,6 +8,33 @@ interface QuizAnswer {
   correctAnswer: string;
   isCorrect: boolean;
 }
+
+interface IPublicQuizzesPage {
+  quizzes: IQuizzes;
+  nextCursor: number | null;
+  hasMore: boolean;
+}
+
+const buildPublicPageFromQuizzes = (allQuizzes: IQuizzes, limit: number, cursor?: number): IPublicQuizzesPage => {
+  const pageSize = Math.max(1, limit);
+  const sortedPublic = Object.values(allQuizzes)
+    .filter((quiz) => quiz.access !== "private")
+    .sort((a, b) => b.createdAt - a.createdAt);
+  const filtered = typeof cursor === "number"
+    ? sortedPublic.filter((quiz) => quiz.createdAt < cursor)
+    : sortedPublic;
+  const pageItems = filtered.slice(0, pageSize);
+  const pageQuizzes: IQuizzes = {};
+  for (const quiz of pageItems) {
+    pageQuizzes[quiz.testId] = quiz;
+  }
+  const lastQuiz = pageItems[pageItems.length - 1];
+  return {
+    quizzes: pageQuizzes,
+    nextCursor: lastQuiz ? lastQuiz.createdAt : null,
+    hasMore: filtered.length > pageItems.length,
+  };
+};
 
 // interface QuizResult {
 //   quizId: string;
@@ -34,6 +61,57 @@ export const QuizStorageManager = {
     } catch (error) {
       console.error(error);
       throw error;
+    }
+  },
+
+  async fetchPublicQuizzesPage(limit: number, cursor?: number): Promise<IPublicQuizzesPage> {
+    const dbRef = ref(database, "quizzesMeta");
+    const pageSize = Math.max(1, limit);
+
+    try {
+      const quizzesQuery = typeof cursor === "number"
+        ? query(
+          dbRef,
+          orderByChild("createdAt"),
+          endAt(cursor - 1), //важно: исключаем cursor
+          limitToLast(pageSize * 2) //небольшой запас из-за фильтра private
+        )
+        : query(
+          dbRef,
+          orderByChild("createdAt"),
+          limitToLast(pageSize * 2)
+        );
+
+      const snapshot = await get(quizzesQuery);
+
+      if (!snapshot.exists()) {
+        return {quizzes: {}, nextCursor: null, hasMore: false};
+      }
+
+      const quizzesObj = snapshot.val() as IQuizzes;
+
+      const ordered = Object.values(quizzesObj)
+        .sort((a, b) => b.createdAt - a.createdAt)
+        .filter(q => q.access !== "private");
+
+      const pageItems = ordered.slice(0, pageSize);
+      const quizzes: IQuizzes = {};
+      for (const quiz of pageItems) {
+        quizzes[quiz.testId] = quiz;
+      }
+      const lastQuiz = pageItems[pageItems.length - 1];
+      return {
+        quizzes,
+        nextCursor: lastQuiz ? lastQuiz.createdAt : null,
+        hasMore: pageItems.length === pageSize, // 👈 ключевой момент
+      };
+    } catch (error) {
+      const maybeIndexError = `${error}`.includes("Index not defined");
+      if (!maybeIndexError) {
+        throw error;
+      }
+      const allQuizzes = await this.fetchAllQuizzes();
+      return buildPublicPageFromQuizzes(allQuizzes, limit, cursor);
     }
   },
 

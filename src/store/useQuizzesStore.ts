@@ -6,14 +6,17 @@ interface IInitialState {
   allQuizzes: IQuizzes | null;
   myQuizzesIds: string[],
   isLoading: boolean,
+  isLoadingAllMore: boolean,
   isAllLoaded: boolean,
   isMyIdsLoaded: boolean,
   isMyQuizzesLoaded: boolean,
-  errorLoading: string
+  errorLoading: string,
+  allQuizzesNextCursor: number | null,
 }
 
 interface IActions {
   loadAllQuizzes: () => void;
+  loadMoreAllQuizzes: () => void;
   loadUserIds: (userUid: string) => void;
   loadUserQuizzes: (userUid: string) => void;
   saveUserQuiz: (quiz: IQuizMeta, userUid: string) => Promise<void>;
@@ -29,27 +32,64 @@ const initialState: IInitialState = {
   allQuizzes: null,
   myQuizzesIds: [],
   isLoading: false,
+  isLoadingAllMore: false,
   isAllLoaded: false,
   isMyIdsLoaded: false,
   isMyQuizzesLoaded: false,
-  errorLoading: ""
+  errorLoading: "",
+  allQuizzesNextCursor: null,
 }
 
 const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
   ...initialState,
   loadAllQuizzes: async () => {
+    if (get().allQuizzesNextCursor !== null || get().isAllLoaded) {
+      return;
+    }
     try {
       set(() => ({isLoading: true}));
       set(() => ({errorLoading: ""}));
-      const quizzes: IQuizzes = await QuizStorageManager.fetchAllQuizzes();
-      // const quizzesPublic = quizzes.filter(quiz => quiz.access !== "private");
-      set(() => ({allQuizzes: quizzes}));
-      set(() => ({isAllLoaded: true}));
+      const page = await QuizStorageManager.fetchPublicQuizzesPage(10);
+      set(() => ({
+        allQuizzes: page.quizzes,
+        isAllLoaded: !page.hasMore,
+        allQuizzesNextCursor: page.nextCursor,
+      }));
     } catch (error) {
       console.log(error);
       set(() => ({errorLoading: "Ошибка загрузки данных!"}));
     } finally {
       set(() => ({isLoading: false}));
+    }
+  },
+  loadMoreAllQuizzes: async () => {
+    const allQuizzes = get().allQuizzes;
+    const isLoading = get().isLoading;
+    const isLoadingAllMore = get().isLoadingAllMore;
+    const isAllLoaded = get().isAllLoaded;
+    const cursor = get().allQuizzesNextCursor;
+
+    if (isLoading || isLoadingAllMore || isAllLoaded || cursor === null) {
+      return;
+    }
+
+    try {
+      set(() => ({isLoadingAllMore: true, errorLoading: ""}));
+      const page = await QuizStorageManager.fetchPublicQuizzesPage(10, cursor);
+      const mergedQuizzes: IQuizzes = {
+        ...(allQuizzes ?? {}),
+        ...page.quizzes,
+      };
+      set(() => ({
+        allQuizzes: mergedQuizzes,
+        isAllLoaded: !page.hasMore,
+        allQuizzesNextCursor: page.nextCursor,
+      }));
+    } catch (error) {
+      console.log(error);
+      set(() => ({errorLoading: "Ошибка загрузки данных!"}));
+    } finally {
+      set(() => ({isLoadingAllMore: false}));
     }
   },
   loadUserIds: async (userUid) => {
@@ -69,17 +109,14 @@ const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
   loadUserQuizzes: async (userUid) => {
     const userQuizzesIds = get().myQuizzesIds;
     const isMyIdsLoaded = get().isMyIdsLoaded;
-    const isAllLoaded = get().isAllLoaded;
     if (!isMyIdsLoaded) {
       return;
     }
     try {
       set(() => ({isLoading: true, errorLoading: ""}));
       set(() => ({isMyQuizzesLoaded: true}));
-      if (!isAllLoaded) {
-        const userQuizzes = await QuizStorageManager.fetchUserQuizzes(userUid, userQuizzesIds);
-        set(() => ({allQuizzes: userQuizzes}));
-      }
+      const userQuizzes = await QuizStorageManager.fetchUserQuizzes(userUid, userQuizzesIds);
+      set((state) => ({allQuizzes: {...(state.allQuizzes ?? {}), ...userQuizzes}}));
     } catch (error) {
       // set(() => ({myQuizzes: []}));
       console.log(error);
@@ -184,11 +221,13 @@ const useQuizzesStore = create<IQuizzesState>()(quizzesStore);
 export const useAllQuizzes = () => useQuizzesStore((state) => state.allQuizzes);
 export const useMyQuizzesIds = () => useQuizzesStore((state) => state.myQuizzesIds);
 export const useIsLoading = () => useQuizzesStore((state) => state.isLoading);
+export const useIsLoadingAllMore = () => useQuizzesStore((state) => state.isLoadingAllMore);
 export const useIsAllLoaded = () => useQuizzesStore((state) => state.isAllLoaded);
 export const useIsMyIdsLoaded = () => useQuizzesStore((state) => state.isMyIdsLoaded);
 export const useIsMyQuizzesLoaded = () => useQuizzesStore((state) => state.isMyQuizzesLoaded);
 export const useErrorLoading = () => useQuizzesStore((state) => state.errorLoading);
 export const loadAllQuizzes = () => useQuizzesStore.getState().loadAllQuizzes();
+export const loadMoreAllQuizzes = () => useQuizzesStore.getState().loadMoreAllQuizzes();
 export const loadUserIds = (userUid: string) =>
   useQuizzesStore.getState().loadUserIds(userUid);
 export const loadUserQuizzes = (userUid: string) =>
