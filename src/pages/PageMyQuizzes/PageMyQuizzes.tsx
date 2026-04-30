@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGuestUserId, useUser } from "../../store/useUserStore";
 import {
-  deleteUserQuiz, loadUserIds, loadUserQuizzes, useAllQuizzes, useIsAllLoaded, useIsLoading, useIsMyIdsLoaded,
+  deleteUserQuiz, loadUserIds, loadUserQuizzes, useAllQuizzes, useIsLoading, useIsMyIdsLoaded,
   useIsMyQuizzesLoaded, useMyQuizzesIds
 } from "../../store/useQuizzesStore";
 import { clearCurrentQuiz } from "../../store/useCurrentCreatingQuiz";
@@ -14,11 +14,12 @@ import { PageEmpty } from "../PageEmpty/PageEmpty";
 import "./PageMyQuizzes.css";
 
 export const PageMyQuizzes: React.FC = () => {
+  const PAGE_SIZE = 10;
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
   const user = useUser();
   const isMyIdsLoaded = useIsMyIdsLoaded();
   const isMyQuizzesLoaded = useIsMyQuizzesLoaded();
-  const isAllLoaded = useIsAllLoaded();
   const isLoading = useIsLoading();
   const userQuizzesIds = useMyQuizzesIds();
   const testsListObj: IQuizzes | null = useAllQuizzes();
@@ -28,10 +29,12 @@ export const PageMyQuizzes: React.FC = () => {
   const [quizIdStatistics, setQuizIdStatistics] = useState<string | null>(null);
   const [isModalConfirmOpen, setIsModalConfirmOpen] = useState<boolean>(false);
   const [quizToDelete, setQuizToDelete] = useState<IQuizMeta | null>(null);
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   const testList: IQuizMeta[] = Object.values(testsListObj ?? {})
     .filter(q => userQuizzesIds.includes(q.testId))
     .sort((a, b) => b.createdAt - a.createdAt);
+  const visibleQuizzes = testList.slice(0, visibleCount);
 
   const createQuiz = () => {
     clearCurrentQuiz();
@@ -78,6 +81,24 @@ export const PageMyQuizzes: React.FC = () => {
       }
     }, [isMyIdsLoaded]);
 
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE);
+  }, [testList.length]);
+
+  useEffect(() => {
+    if (!sentinelRef.current) return;
+    const observer = new IntersectionObserver((entries) => {
+      const firstEntry = entries[0];
+      if (firstEntry?.isIntersecting && visibleCount < testList.length) {
+        setVisibleCount((prev) => prev + PAGE_SIZE);
+      }
+    }, {root: null, rootMargin: "200px", threshold: 0.1,});
+    observer.observe(sentinelRef.current);
+
+    return () => observer.disconnect();
+
+  }, [visibleCount, testList.length]);
+
   if (userQuizzesIds.length === 0 && !isLoading) {
     return (
       <PageEmpty emptyReason="noCreatedQuizzes"/>
@@ -93,14 +114,14 @@ export const PageMyQuizzes: React.FC = () => {
           {
             (isLoading) ? <Loader/> :
               <>
-                {testList.map((quiz: IQuizMeta) => (
+                {visibleQuizzes.map((quiz: IQuizMeta) => (
                   <QuizCard
                     key={quiz.testId}
                     quiz={quiz}
-                    openStatistic={openStatistic}
-                    dateFormatter={formatter}
                     userUID={user?.uid}
                     guestUserId={guestUserId}
+                    dateFormatter={formatter}
+                    openStatistic={openStatistic}
                     isShowStatistics={!!quizIdStatistics && quizIdStatistics === quiz.testId}
                     handlerDeleteQuiz={handlerDeleteQuiz}
                   />)
@@ -108,6 +129,9 @@ export const PageMyQuizzes: React.FC = () => {
               </>
           }
         </div>
+        {
+          visibleCount < testList.length && (<div className="all-quizzes-load-more"><Loader/></div>)
+        }
       </div>
       {
         quizToDelete &&
@@ -117,6 +141,7 @@ export const PageMyQuizzes: React.FC = () => {
           handlerConfirmDelete={handlerConfirmDelete}
         />
       }
+      <div ref={sentinelRef} className="my-quizzes-sentinel"/>
     </>
   );
 };

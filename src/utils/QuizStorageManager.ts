@@ -73,7 +73,7 @@ export const QuizStorageManager = {
         ? query(
           dbRef,
           orderByChild("createdAt"),
-          endAt(cursor - 1), //важно: исключаем cursor
+          endAt(cursor - 1), //исключаем cursor
           limitToLast(pageSize * 2) //небольшой запас из-за фильтра private
         )
         : query(
@@ -91,8 +91,8 @@ export const QuizStorageManager = {
       const quizzesObj = snapshot.val() as IQuizzes;
 
       const ordered = Object.values(quizzesObj)
-        .sort((a, b) => b.createdAt - a.createdAt)
-        .filter(q => q.access !== "private");
+        .filter(q => q.access !== "private")
+        .sort((a, b) => b.createdAt - a.createdAt);
 
       const pageItems = ordered.slice(0, pageSize);
       const quizzes: IQuizzes = {};
@@ -103,7 +103,7 @@ export const QuizStorageManager = {
       return {
         quizzes,
         nextCursor: lastQuiz ? lastQuiz.createdAt : null,
-        hasMore: pageItems.length === pageSize, // 👈 ключевой момент
+        hasMore: pageItems.length === pageSize,
       };
     } catch (error) {
       const maybeIndexError = `${error}`.includes("Index not defined");

@@ -25,11 +25,13 @@ export const AppRoutes = () => {
           <Route path="/createquiz/manual" element={<PageCreateQuizManual/>}/>
           <Route path="/createquiz/manual/:testid" element={<PageQuizEdit/>}/>
           <Route path="/createquiz/ai" element={<PageCreateQuizAI/>}/>
-          {/*<Route path="/createquiz/ai" element={<PageEmpty emptyReason="pageDevelopment"/>}/>*/}
           <Route path="/myquizzes" element={<PageMyQuizzes/>}/>
+          <Route path="/myquizzes/:category?" element={<PageMyQuizzes/>}/>
+          {/*<Route path="/createquiz/ai" element={<PageEmpty emptyReason="pageDevelopment"/>}/>*/}
         </Route>
 
         <Route path="/allquizzes" element={<PageAllQuizzes/>}/>
+        <Route path="/allquizzes/:category?" element={<PageAllQuizzes/>}/>
         <Route path="/quizzes/:testid" element={<PageQuiz/>}/>
         <Route path="/service" element={<PageEmpty emptyReason="serviceWork"/>}/>
       </Route>

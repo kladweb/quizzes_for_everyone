@@ -39,7 +39,15 @@ export const QuizCard: React.FC<ITestCardProps> = memo(
           </NavLink>
         </div>
         <div className="quiz-container-info">
-          <div className="info-item">Категория: <span>{CATEGORY_LABELS_RU[quiz.category]}</span></div>
+          <div className="info-item">
+            <span className="cat-title">Категория: </span>
+            <NavLink
+              className="link-category"
+              to={`/${openStatistic ? "myquizzes" : "allquizzes"}/${quiz.category}`}
+            >
+              <span>{CATEGORY_LABELS_RU[quiz.category]}</span>
+            </NavLink>
+          </div>
           <div className="info-item">Язык вопросов: <span>{QUIZ_LANGUAGES[quiz.lang]}</span></div>
           <div className="quiz-feedback-info" title="Скольким людям тест понравился">
             <div className={`action-info btn-like-act${isLiked ? " isLiked" : ""}`} role="button"

@@ -43,15 +43,21 @@ const initialState: IInitialState = {
 const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
   ...initialState,
   loadAllQuizzes: async () => {
-    if (get().allQuizzesNextCursor !== null || get().isAllLoaded) {
+    // if (get().allQuizzesNextCursor !== null || get().isAllLoaded) {
+    //   return;
+    // }
+    if (get().isAllLoaded) {
       return;
     }
     try {
       set(() => ({isLoading: true}));
       set(() => ({errorLoading: ""}));
       const page = await QuizStorageManager.fetchPublicQuizzesPage(10);
-      set(() => ({
-        allQuizzes: page.quizzes,
+      set((state) => ({
+        allQuizzes: {
+          ...(state.allQuizzes ?? {}),
+          ...page.quizzes,
+        },
         isAllLoaded: !page.hasMore,
         allQuizzesNextCursor: page.nextCursor,
       }));
@@ -76,15 +82,26 @@ const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
     try {
       set(() => ({isLoadingAllMore: true, errorLoading: ""}));
       const page = await QuizStorageManager.fetchPublicQuizzesPage(10, cursor);
+      const prevCount = Object.keys(allQuizzes ?? {}).length;
       const mergedQuizzes: IQuizzes = {
         ...(allQuizzes ?? {}),
         ...page.quizzes,
       };
+
+      const newCount = Object.keys(mergedQuizzes).length;
+      const nothingAdded = newCount === prevCount;
+
       set(() => ({
         allQuizzes: mergedQuizzes,
         isAllLoaded: !page.hasMore,
         allQuizzesNextCursor: page.nextCursor,
       }));
+
+      if (nothingAdded && page.hasMore) {
+        // форсим следующую загрузку
+        get().loadMoreAllQuizzes();
+      }
+
     } catch (error) {
       console.log(error);
       set(() => ({errorLoading: "Ошибка загрузки данных!"}));
