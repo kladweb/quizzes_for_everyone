@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGuestUserId, useUser } from "../../store/useUserStore";
 import {
@@ -7,16 +7,18 @@ import {
 } from "../../store/useQuizzesStore";
 import { clearCurrentQuiz } from "../../store/useCurrentCreatingQuiz";
 import { Loader } from "../../components/Loader/Loader";
-import { IQuizMeta, IQuizzes } from "../../types/Quiz";
+import type { IQuizMeta, IQuizzes } from "../../types/Quiz";
 import { QuizCard } from "../../components/TestsList/QuizCard";
 import { ModalConfirm } from "../../components/ModalConfirm/ModalConfirm";
 import { PageEmpty } from "../PageEmpty/PageEmpty";
-import { filterQuizzes } from "../../utils/quizUtils";
+import { filterQuizzes, getUniqueCategories } from "../../utils/quizUtils";
+import { PAGE_SIZE } from "../../variables/quizData";
+import { FiltersMenu } from "../../components/FiltersMenu/FiltersMenu";
 import "./PageMyQuizzes.css";
 
 export const PageMyQuizzes: React.FC = () => {
-  const PAGE_SIZE = 10;
   const sentinelRef = useRef<HTMLDivElement | null>(null);
+  const {category} = useParams();
   const navigate = useNavigate();
   const user = useUser();
   const isMyIdsLoaded = useIsMyIdsLoaded();
@@ -31,18 +33,22 @@ export const PageMyQuizzes: React.FC = () => {
   const [isModalConfirmOpen, setIsModalConfirmOpen] = useState<boolean>(false);
   const [quizToDelete, setQuizToDelete] = useState<IQuizMeta | null>(null);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
-  const {category} = useParams();
 
-  // const testList: IQuizMeta[] = Object.values(testsListObj ?? {})
-  //   .filter(q => userQuizzesIds.includes(q.testId))
-  //   .sort((a, b) => b.createdAt - a.createdAt);
+  const testList = useMemo(() => {
+    return Object.values(testsListObj ?? {})
+      .filter(q => userQuizzesIds.includes(q.testId))
+      .sort((a, b) => b.createdAt - a.createdAt);
+  }, [testsListObj, userQuizzesIds]);
 
-  const testList = Object.values(testsListObj ?? {})
-    .filter(q => userQuizzesIds.includes(q.testId))
-    .sort((a, b) => b.createdAt - a.createdAt);
+  const uniqueCategories = getUniqueCategories(testList);
 
-  const filtered = filterQuizzes(testList, category, true);
-  const visibleQuizzes = filtered.slice(0, visibleCount);
+  const filtered = useMemo(() => {
+    return filterQuizzes(testList, category, true);
+  }, [testList, category]);
+
+  const visibleQuizzes = useMemo(() => {
+    return filtered.slice(0, visibleCount);
+  }, [filtered, visibleCount]);
 
   const createQuiz = () => {
     clearCurrentQuiz();
@@ -89,9 +95,10 @@ export const PageMyQuizzes: React.FC = () => {
       }
     }, [isMyIdsLoaded]);
 
-  useEffect(() => {
-    setVisibleCount(PAGE_SIZE);
-  }, [testList.length]);
+  useEffect(
+    () => {
+      setVisibleCount(PAGE_SIZE);
+    }, [testList.length, category]);
 
   useEffect(() => {
     if (!sentinelRef.current) return;
@@ -102,9 +109,7 @@ export const PageMyQuizzes: React.FC = () => {
       }
     }, {root: null, rootMargin: "200px", threshold: 0.1,});
     observer.observe(sentinelRef.current);
-
     return () => observer.disconnect();
-
   }, [visibleCount, testList.length]);
 
   if (userQuizzesIds.length === 0 && !isLoading) {
@@ -118,6 +123,7 @@ export const PageMyQuizzes: React.FC = () => {
       <div className='tests-container'>
         <button className='btn button-create' onClick={createQuiz}>Создать новый тест</button>
         <h2 className="test-list-name">МОИ ТЕСТЫ</h2>
+        <FiltersMenu category={category} uniqueCategories={uniqueCategories} pageQuizzes="myquizzes"/>
         <div className='test-list-block'>
           {
             (isLoading) ? <Loader/> :

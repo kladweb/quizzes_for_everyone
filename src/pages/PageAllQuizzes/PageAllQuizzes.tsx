@@ -1,127 +1,93 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-
-import {
-  loadAllQuizzes,
-  loadMoreAllQuizzes,
-  useAllQuizzes,
-  useIsAllLoaded,
-  useIsLoading,
-  useIsLoadingAllMore,
-} from "../../store/useQuizzesStore";
-
+import { loadAllQuizzes, useAllQuizzes, useIsAllLoaded, useIsLoading } from "../../store/useQuizzesStore";
 import { Loader } from "../../components/Loader/Loader";
+import type { IQuizMeta, IQuizzes } from "../../types/Quiz";
 import { QuizCard } from "../../components/TestsList/QuizCard";
 import { useGuestUserId, useUser } from "../../store/useUserStore";
-import { filterQuizzes } from "../../utils/quizUtils";
+import { PAGE_SIZE } from "../../variables/quizData";
+import { filterQuizzes, getUniqueCategories } from "../../utils/quizUtils";
 import { FiltersMenu } from "../../components/FiltersMenu/FiltersMenu";
-
-import type { IQuizMeta, IQuizzes } from "../../types/Quiz";
 import "./pageAllQuizzes.css";
 
 export const PageAllQuizzes = () => {
-  const user = useUser();
-  const guestUserId = useGuestUserId();
-
-  const isLoading = useIsLoading();
-  const isLoadingAllMore = useIsLoadingAllMore();
-  const isAllLoaded = useIsAllLoaded();
-
-  const testsListObj: IQuizzes | null = useAllQuizzes();
-
-  const { category } = useParams();
-
   const sentinelRef = useRef<HTMLDivElement | null>(null);
-  const observerRef = useRef<IntersectionObserver | null>(null);
+  const {category} = useParams();
+  const locale = navigator.languages?.[0] || navigator.language;
+  const formatter = new Intl.DateTimeFormat(locale);
+  const user = useUser();
+  const isAllLoaded = useIsAllLoaded();
+  const testsListObj: IQuizzes | null = useAllQuizzes();
+  const guestUserId = useGuestUserId();
+  const isLoading = useIsLoading();
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
-  const formatter = useMemo(() => {
-    const locale = navigator.languages?.[0] || navigator.language;
-    return new Intl.DateTimeFormat(locale);
-  }, []);
+  const testList = useMemo(() => {
+    return Object.values(testsListObj ?? {})
+      .filter(quiz => quiz.access !== "private")
+      .sort((a, b) => b.createdAt - a.createdAt);
+  }, [testsListObj]);
 
-  const testList: IQuizMeta[] = useMemo(() => {
-    const quizzes = filterQuizzes(
-      Object.values(testsListObj ?? {}),
-      category,
-      false // public only
-    );
+  const uniqueCategories = getUniqueCategories(testList);
 
-    // quizzes.sort((a, b) => b.createdAt - a.createdAt);
-    return quizzes;
-  }, [testsListObj, category]);
+  const filtered = useMemo(() => {
+    return filterQuizzes(testList, category, true);
+  }, [testList, category]);
 
-  // 1. initial load
-  useEffect(() => {
-    document.title = "ВСЕ ТЕСТЫ · ANY QUIZ";
-    loadAllQuizzes();
-  }, []);
+  const visibleQuizzes = useMemo(() => {
+    return filtered.slice(0, visibleCount);
+  }, [filtered, visibleCount]);
 
-  // 2. stable observer (НЕ пересоздаём постоянно)
-  useEffect(() => {
-    const sentinel = sentinelRef.current;
-    if (!sentinel) return;
-
-    if (observerRef.current) {
-      observerRef.current.disconnect();
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0];
-        if (!entry?.isIntersecting) return;
-
-        if (isLoading || isLoadingAllMore || isAllLoaded) return;
-
-        loadMoreAllQuizzes();
-      },
-      {
-        root: null,
-        rootMargin: "300px",
-        threshold: 0.1,
+  useEffect(
+    () => {
+      document.title = "ВСЕ ТЕСТЫ · ANY QUIZ";
+      if (isAllLoaded) {
+        // console.log("All Quizzes already loaded");
+        return;
       }
-    );
+      // console.log('loadAllQuizzes');
+      loadAllQuizzes();
+    }, []);
 
-    observer.observe(sentinel);
-    observerRef.current = observer;
+  useEffect(
+    () => {
+      setVisibleCount(PAGE_SIZE);
+    }, [testList.length, category]);
 
-    return () => {
-      observer.disconnect();
-    };
-  }, [isLoading, isLoadingAllMore, isAllLoaded, testList.length]);
-
-  console.log("RENDER")
+  useEffect(() => {
+    if (!sentinelRef.current) return;
+    const observer = new IntersectionObserver((entries) => {
+      const firstEntry = entries[0];
+      if (firstEntry?.isIntersecting && visibleCount < testList.length) {
+        setVisibleCount((prev) => prev + PAGE_SIZE);
+      }
+    }, {root: null, rootMargin: "200px", threshold: 0.1,});
+    observer.observe(sentinelRef.current);
+    return () => observer.disconnect();
+  }, [visibleCount, testList.length]);
 
   return (
-    <div className="tests-container">
+    <div className='tests-container'>
       <h2 className="test-list-name">СПИСОК ОБЩЕДОСТУПНЫХ ТЕСТОВ</h2>
-
-      <FiltersMenu category={category} pageQuizzes="allquizzes" />
-
-      <div className="test-list-block">
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <>
-            {testList.map((quiz: IQuizMeta) => (
-              <QuizCard
-                key={quiz.testId}
-                quiz={quiz}
-                userUID={user?.uid}
-                guestUserId={guestUserId}
-                dateFormatter={formatter}
-              />
-            ))}
-
-            {isLoadingAllMore && (
-              <div className="all-quizzes-load-more">
-                <Loader />
-              </div>
-            )}
-
-            <div ref={sentinelRef} className="all-quizzes-sentinel" />
-          </>
-        )}
+      <FiltersMenu category={category} uniqueCategories={uniqueCategories} pageQuizzes="allquizzes"/>
+      <div className='test-list-block'>
+        {
+          (isLoading) ? <Loader/> :
+            <>
+              {visibleQuizzes.map((quiz: IQuizMeta) => (
+                <QuizCard
+                  key={quiz.testId}
+                  quiz={quiz}
+                  userUID={user?.uid}
+                  category={category}
+                  guestUserId={guestUserId}
+                  dateFormatter={formatter}
+                />)
+              )}
+            </>
+        }
       </div>
+      <div ref={sentinelRef} className="my-quizzes-sentinel"/>
     </div>
-  );
-};
+  )
+}

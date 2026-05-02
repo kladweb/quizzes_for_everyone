@@ -1,16 +1,17 @@
 import React, { memo, useEffect, useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import { handleCopy, toggleLike } from "../../utils/quizUtils";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { checkCategory, handleCopy, toggleLike } from "../../utils/quizUtils";
 import { Statistics } from "../Statistics/Statistics";
 import type { IQuizMeta } from "../../types/Quiz";
-import "./quizCard.css"
 import { CATEGORY_LABELS_RU, QUIZ_LANGUAGES } from "../../variables/quizData";
+import "./quizCard.css"
 
 interface ITestCardProps {
   quiz: IQuizMeta;
   dateFormatter: Intl.DateTimeFormat;
   openStatistic?: (testId: string) => void;
   userUID?: string;
+  category?: string;
   guestUserId: string | null;
   isShowStatistics?: boolean;
   handlerDeleteQuiz?: (quiz: IQuizMeta) => void;
@@ -19,6 +20,7 @@ interface ITestCardProps {
 export const QuizCard: React.FC<ITestCardProps> = memo(
   ({quiz, openStatistic, dateFormatter, userUID, guestUserId, isShowStatistics, handlerDeleteQuiz}) => {
     const navigate = useNavigate();
+    const {category} = useParams();
     const currentLink = `${window.location.origin}/quizzes/${quiz.testId}`;
     const [copied, setCopied] = useState(false);
     const [likesCount, setLikesCount] = useState<number>(quiz.likeUsers ? Object.keys(quiz.likeUsers).length : 0);
@@ -44,6 +46,7 @@ export const QuizCard: React.FC<ITestCardProps> = memo(
             <NavLink
               className="link-category"
               to={`/${openStatistic ? "myquizzes" : "allquizzes"}/${quiz.category}`}
+              onClick={(e) => checkCategory(e, category)}
             >
               <span>{CATEGORY_LABELS_RU[quiz.category]}</span>
             </NavLink>
