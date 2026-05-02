@@ -1,12 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 import { loadAllQuizzes, useAllQuizzes, useIsAllLoaded, useIsLoading } from "../../store/useQuizzesStore";
 import { Loader } from "../../components/Loader/Loader";
 import type { IQuizMeta, IQuizzes } from "../../types/Quiz";
 import { QuizCard } from "../../components/TestsList/QuizCard";
 import { useGuestUserId, useUser } from "../../store/useUserStore";
+import { PAGE_SIZE } from "../../variables/quizData";
+import { filterQuizzes, getUniqueCategories } from "../../utils/quizUtils";
+import { FiltersMenu } from "../../components/FiltersMenu/FiltersMenu";
 import "./pageAllQuizzes.css";
 
 export const PageAllQuizzes = () => {
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
+  const {category} = useParams();
   const locale = navigator.languages?.[0] || navigator.language;
   const formatter = new Intl.DateTimeFormat(locale);
   const user = useUser();
@@ -14,9 +20,23 @@ export const PageAllQuizzes = () => {
   const testsListObj: IQuizzes | null = useAllQuizzes();
   const guestUserId = useGuestUserId();
   const isLoading = useIsLoading();
-  const testList: IQuizMeta[] = Object.values(testsListObj ? testsListObj : {})
-    .filter(quiz => quiz.access !== "private");
-  testList.sort((a, b) => b.createdAt - a.createdAt);
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+
+  const testList = useMemo(() => {
+    return Object.values(testsListObj ?? {})
+      .filter(quiz => quiz.access !== "private")
+      .sort((a, b) => b.createdAt - a.createdAt);
+  }, [testsListObj]);
+
+  const uniqueCategories = getUniqueCategories(testList);
+
+  const filtered = useMemo(() => {
+    return filterQuizzes(testList, category, true);
+  }, [testList, category]);
+
+  const visibleQuizzes = useMemo(() => {
+    return filtered.slice(0, visibleCount);
+  }, [filtered, visibleCount]);
 
   useEffect(
     () => {
@@ -29,18 +49,37 @@ export const PageAllQuizzes = () => {
       loadAllQuizzes();
     }, []);
 
+  useEffect(
+    () => {
+      setVisibleCount(PAGE_SIZE);
+    }, [testList.length, category]);
+
+  useEffect(() => {
+    if (!sentinelRef.current) return;
+    const observer = new IntersectionObserver((entries) => {
+      const firstEntry = entries[0];
+      if (firstEntry?.isIntersecting && visibleCount < testList.length) {
+        setVisibleCount((prev) => prev + PAGE_SIZE);
+      }
+    }, {root: null, rootMargin: "200px", threshold: 0.1,});
+    observer.observe(sentinelRef.current);
+    return () => observer.disconnect();
+  }, [visibleCount, testList.length]);
+
   return (
     <div className='tests-container'>
       <h2 className="test-list-name">СПИСОК ОБЩЕДОСТУПНЫХ ТЕСТОВ</h2>
+      <FiltersMenu category={category} uniqueCategories={uniqueCategories} pageQuizzes="allquizzes"/>
       <div className='test-list-block'>
         {
           (isLoading) ? <Loader/> :
             <>
-              {testList.map((quiz: IQuizMeta) => (
+              {visibleQuizzes.map((quiz: IQuizMeta) => (
                 <QuizCard
                   key={quiz.testId}
                   quiz={quiz}
                   userUID={user?.uid}
+                  category={category}
                   guestUserId={guestUserId}
                   dateFormatter={formatter}
                 />)
@@ -48,6 +87,7 @@ export const PageAllQuizzes = () => {
             </>
         }
       </div>
+      <div ref={sentinelRef} className="my-quizzes-sentinel"/>
     </div>
   )
 }

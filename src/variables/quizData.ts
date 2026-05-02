@@ -87,6 +87,8 @@ export const CATEGORY_LABELS_RU: ILabels = {
   medicine: "медицина"
 };
 
+export const CAT_LABELS_RU_EXT: ILabels = {all: "ВСЕ КАТЕГОРИИ", ...CATEGORY_LABELS_RU};
+
 // export const QUIZ_LANGUAGES = ["русский", "беларускi", "english", "polski"]
 export const QUIZ_LANGUAGES: ILabels = {ru: "русский", be: "беларускi", en: "english", pl: "polski"}
 
@@ -166,3 +168,5 @@ export const jsonTemplateCat = `{
     }
   ]
 }`;
+
+export const PAGE_SIZE = 10;

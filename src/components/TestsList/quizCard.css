@@ -38,6 +38,10 @@
   span {
     color: var(--color-success);
   }
+
+  .cat-title {
+    color: var(--color-text-primary);
+  }
 }
 
 .info-item {
@@ -45,6 +49,11 @@
   width: 48%;
   font-size: 0.85em;
   text-align: left;
+}
+
+.link-category {
+  text-decoration: none;
+  color: var(--color-success);
 }
 
 .quiz-feedback-info {
@@ -170,7 +179,7 @@
 }
 
 @media (max-width: 400px) {
-.test-item {
-  font-size: 0.9rem;
-}
+  .test-item {
+    font-size: 0.9rem;
+  }
 }

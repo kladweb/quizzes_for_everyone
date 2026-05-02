@@ -1,6 +1,6 @@
 import { child, get, ref, set } from "firebase/database";
-import { IQuizMeta, IQuizzes, IStatistics, Question } from "../types/Quiz";
 import { database } from "../firebase/firebase";
+import { IQuizMeta, IQuizzes, IStatistics, Question } from "../types/Quiz";
 
 interface QuizAnswer {
   questionId: string;

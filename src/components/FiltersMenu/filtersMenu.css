@@ -1,0 +1,12 @@
+.filters-menu {
+  svg {
+    stroke: var(--color-text-secondary);
+  }
+
+  .input-filters {
+    &:focus-visible, &:focus {
+      border: 1px solid var(--color-border);
+    }
+  }
+}
+

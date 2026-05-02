@@ -143,28 +143,6 @@ const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
         set(() => ({allQuizzes: allTestListPrev}));
       }
     }
-    // console.log(testListPrev.length);
-    // if (!quizIdsListPrev) {
-    //   return;
-    // }
-    // const testListNext = testListPrev.filter((quiz: IQuizMeta) => quiz.testId !== testId);
-    // set(() => ({myQuizzes: testListNext}));
-    //
-    // let allTestListNext: IQuizMeta[];
-    // if (allTestListPrev) {
-    //   allTestListNext = allTestListPrev.filter((quiz: IQuizMeta) => quiz.testId !== testId);
-    //   set(() => ({allQuizzes: allTestListNext}));
-    // }
-    // try {
-    //   await QuizStorageManager.removeUserQuiz(testId, userUid);
-    //   // set(() => ({errorLoading: ""}));
-    // } catch (error) {
-    //   set(() => ({myQuizzes: testListPrev}));
-    //   if (allTestListPrev) {
-    //     set(() => ({allQuizzes: allTestListPrev}));
-    //   }
-    //   set(() => ({errorLoading: "Ошибка удаления!"}));
-    // }
   },
 
   updateQuiz: (quiz: IQuizMeta) => {

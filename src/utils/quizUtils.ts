@@ -1,9 +1,11 @@
 import { ref, set } from "firebase/database";
 import { nanoid } from "nanoid";
-import { showToast } from "../store/useNoticeStore";
 import { database } from "../firebase/firebase";
+import { showToast } from "../store/useNoticeStore";
 import { type IQuizMeta, ToastType } from "../types/Quiz";
 import { QuizStorageManager } from "./QuizStorageManager";
+import { CAT_LABELS_RU_EXT } from "../variables/quizData";
+import React from "react";
 
 export const handleCopy = async (currentLink: string, setCopied: (copied: boolean) => void) => {
   try {
@@ -14,12 +16,6 @@ export const handleCopy = async (currentLink: string, setCopied: (copied: boolea
     console.error('Failed to copy:', err);
   }
 };
-
-// export const handlerDeleteQuiz = (
-//   testId: string,
-//   userUID: string,
-//   setIsModalConfirmOpen: (isModalConfirmOpen: boolean) => void) => {
-// }
 
 export const toggleLike = async (
   quiz: IQuizMeta,
@@ -33,8 +29,6 @@ export const toggleLike = async (
   }
 
   let quizzes = QuizStorageManager.getRecentAllStat();
-  // console.log(quiz);
-  // console.log(quizzes);
   let isAllowLiked = false;
   quizzes?.forEach((q) => {
     if (q.testId === quiz.testId) {
@@ -90,4 +84,32 @@ export function prepareQuiz(raw: string, userUID: string): IQuizMeta {
     }
   });
   return quiz;
+}
+
+export const filterQuizzes = (
+  quizzes: IQuizMeta[],
+  category?: string,
+  includePrivate = false
+) => {
+  return quizzes
+    .filter(q => includePrivate || q.access !== "private")
+    .filter(q => !category || q.category === category);
+};
+
+export const getUniqueCategories = (quizzes: IQuizMeta[]): string[] => {
+  const sorted = Array.from(
+    new Set(
+      quizzes
+        .map(q => q.category)
+        .filter((c): c is string => Boolean(c))
+    )
+  ).sort((a, b) =>
+    CAT_LABELS_RU_EXT[a].localeCompare(CAT_LABELS_RU_EXT[b], "ru"));
+  return ["all", ...sorted];
+};
+
+export const checkCategory = (e: React.MouseEvent<HTMLElement>, category?: string) => {
+  if (category) {
+    e.preventDefault();
+  }
 }

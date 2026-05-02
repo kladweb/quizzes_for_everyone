@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { MainLayout } from "../layouts/MainLayout";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { PageMyQuizzes } from "../pages/PageMyQuizzes/PageMyQuizzes";
@@ -25,13 +25,16 @@ export const AppRoutes = () => {
           <Route path="/createquiz/manual" element={<PageCreateQuizManual/>}/>
           <Route path="/createquiz/manual/:testid" element={<PageQuizEdit/>}/>
           <Route path="/createquiz/ai" element={<PageCreateQuizAI/>}/>
-          {/*<Route path="/createquiz/ai" element={<PageEmpty emptyReason="pageDevelopment"/>}/>*/}
           <Route path="/myquizzes" element={<PageMyQuizzes/>}/>
+          <Route path="/myquizzes/:category?" element={<PageMyQuizzes/>}/>
+          {/*<Route path="/createquiz/ai" element={<PageEmpty emptyReason="pageDevelopment"/>}/>*/}
         </Route>
 
         <Route path="/allquizzes" element={<PageAllQuizzes/>}/>
+        <Route path="/allquizzes/:category?" element={<PageAllQuizzes/>}/>
         <Route path="/quizzes/:testid" element={<PageQuiz/>}/>
         <Route path="/service" element={<PageEmpty emptyReason="serviceWork"/>}/>
+        <Route path='*' element={<Navigate to='/'/>}/>
       </Route>
     </Routes>
   )

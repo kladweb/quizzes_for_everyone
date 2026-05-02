@@ -11,6 +11,11 @@
   transform: translateX(-50%);
 }
 
+.all-quizzes-sentinel {
+  width: 100%;
+  height: 1px;
+}
+
 @media (max-width: 460px) {
   .test-list-name {
     margin: 0.5rem 0;
