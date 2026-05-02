@@ -41,7 +41,7 @@ export const QUIZ_CATEGORIES = [
   "космос"
 ].sort((a, b) => a.localeCompare(b, 'ru'));
 
-interface ILabels {
+export interface ILabels {
   [key: string]: string;
 }
 
@@ -86,6 +86,8 @@ export const CATEGORY_LABELS_RU: ILabels = {
   space: "космос",
   medicine: "медицина"
 };
+
+export const CATEGORY_LIST: ILabels = {all: "ВСЕ КАТЕГОРИИ", ...CATEGORY_LABELS_RU};
 
 // export const QUIZ_LANGUAGES = ["русский", "беларускi", "english", "polski"]
 export const QUIZ_LANGUAGES: ILabels = {ru: "русский", be: "беларускi", en: "english", pl: "polski"}

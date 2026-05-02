@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useGuestUserId, useUser } from "../../store/useUserStore";
 import {
   deleteUserQuiz, loadUserIds, loadUserQuizzes, useAllQuizzes, useIsLoading, useIsMyIdsLoaded,
@@ -11,6 +11,7 @@ import { IQuizMeta, IQuizzes } from "../../types/Quiz";
 import { QuizCard } from "../../components/TestsList/QuizCard";
 import { ModalConfirm } from "../../components/ModalConfirm/ModalConfirm";
 import { PageEmpty } from "../PageEmpty/PageEmpty";
+import { filterQuizzes } from "../../utils/quizUtils";
 import "./PageMyQuizzes.css";
 
 export const PageMyQuizzes: React.FC = () => {
@@ -30,11 +31,18 @@ export const PageMyQuizzes: React.FC = () => {
   const [isModalConfirmOpen, setIsModalConfirmOpen] = useState<boolean>(false);
   const [quizToDelete, setQuizToDelete] = useState<IQuizMeta | null>(null);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const {category} = useParams();
 
-  const testList: IQuizMeta[] = Object.values(testsListObj ?? {})
+  // const testList: IQuizMeta[] = Object.values(testsListObj ?? {})
+  //   .filter(q => userQuizzesIds.includes(q.testId))
+  //   .sort((a, b) => b.createdAt - a.createdAt);
+
+  const testList = Object.values(testsListObj ?? {})
     .filter(q => userQuizzesIds.includes(q.testId))
     .sort((a, b) => b.createdAt - a.createdAt);
-  const visibleQuizzes = testList.slice(0, visibleCount);
+
+  const filtered = filterQuizzes(testList, category, true);
+  const visibleQuizzes = filtered.slice(0, visibleCount);
 
   const createQuiz = () => {
     clearCurrentQuiz();

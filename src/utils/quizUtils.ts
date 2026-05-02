@@ -91,3 +91,13 @@ export function prepareQuiz(raw: string, userUID: string): IQuizMeta {
   });
   return quiz;
 }
+
+export const filterQuizzes = (
+  quizzes: IQuizMeta[],
+  category?: string,
+  includePrivate = false
+) => {
+  return quizzes
+    .filter(q => includePrivate || q.access !== "private")
+    .filter(q => !category || q.category === category);
+};

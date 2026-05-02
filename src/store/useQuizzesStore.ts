@@ -97,10 +97,10 @@ const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
         allQuizzesNextCursor: page.nextCursor,
       }));
 
-      if (nothingAdded && page.hasMore) {
-        // форсим следующую загрузку
-        get().loadMoreAllQuizzes();
-      }
+      // if (nothingAdded && page.hasMore) {
+      //   // форсим следующую загрузку
+      //   get().loadMoreAllQuizzes();
+      // }
 
     } catch (error) {
       console.log(error);

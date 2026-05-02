@@ -1,84 +1,127 @@
 import React, { useEffect, useMemo, useRef } from "react";
+import { useParams } from "react-router-dom";
+
 import {
   loadAllQuizzes,
   loadMoreAllQuizzes,
   useAllQuizzes,
   useIsAllLoaded,
   useIsLoading,
-  useIsLoadingAllMore
+  useIsLoadingAllMore,
 } from "../../store/useQuizzesStore";
+
 import { Loader } from "../../components/Loader/Loader";
-import type { IQuizMeta, IQuizzes } from "../../types/Quiz";
 import { QuizCard } from "../../components/TestsList/QuizCard";
 import { useGuestUserId, useUser } from "../../store/useUserStore";
+import { filterQuizzes } from "../../utils/quizUtils";
+import { FiltersMenu } from "../../components/FiltersMenu/FiltersMenu";
+
+import type { IQuizMeta, IQuizzes } from "../../types/Quiz";
 import "./pageAllQuizzes.css";
 
 export const PageAllQuizzes = () => {
-  const locale = navigator.languages?.[0] || navigator.language;
-  const formatter = new Intl.DateTimeFormat(locale);
   const user = useUser();
-  const isAllLoaded = useIsAllLoaded();
-  const isLoadingAllMore = useIsLoadingAllMore();
-  const testsListObj: IQuizzes | null = useAllQuizzes();
   const guestUserId = useGuestUserId();
+
   const isLoading = useIsLoading();
+  const isLoadingAllMore = useIsLoadingAllMore();
+  const isAllLoaded = useIsAllLoaded();
+
+  const testsListObj: IQuizzes | null = useAllQuizzes();
+
+  const { category } = useParams();
 
   const sentinelRef = useRef<HTMLDivElement | null>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+
+  const formatter = useMemo(() => {
+    const locale = navigator.languages?.[0] || navigator.language;
+    return new Intl.DateTimeFormat(locale);
+  }, []);
 
   const testList: IQuizMeta[] = useMemo(() => {
-    const quizzes = Object.values(testsListObj ? testsListObj : {}).filter((quiz) => quiz.access !== "private");
+    const quizzes = filterQuizzes(
+      Object.values(testsListObj ?? {}),
+      category,
+      false // public only
+    );
+
     // quizzes.sort((a, b) => b.createdAt - a.createdAt);
     return quizzes;
-  }, [testsListObj]);
+  }, [testsListObj, category]);
 
+  // 1. initial load
   useEffect(() => {
     document.title = "ВСЕ ТЕСТЫ · ANY QUIZ";
     loadAllQuizzes();
   }, []);
 
+  // 2. stable observer (НЕ пересоздаём постоянно)
   useEffect(() => {
-    if (!sentinelRef.current || isLoading || isLoadingAllMore || isAllLoaded) {
-      return;
-    }
-    const observer = new IntersectionObserver((entries) => {
-      const firstEntry = entries[0];
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
 
-      if (firstEntry?.isIntersecting && !isLoading && !isLoadingAllMore && !isAllLoaded) {
+    if (observerRef.current) {
+      observerRef.current.disconnect();
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (!entry?.isIntersecting) return;
+
+        if (isLoading || isLoadingAllMore || isAllLoaded) return;
+
         loadMoreAllQuizzes();
+      },
+      {
+        root: null,
+        rootMargin: "300px",
+        threshold: 0.1,
       }
-    }, {root: null, rootMargin: "300px", threshold: 0.1,});
-    observer.observe(sentinelRef.current);
-    return () => observer.disconnect();
+    );
+
+    observer.observe(sentinel);
+    observerRef.current = observer;
+
+    return () => {
+      observer.disconnect();
+    };
   }, [isLoading, isLoadingAllMore, isAllLoaded, testList.length]);
 
+  console.log("RENDER")
+
   return (
-    <div className='tests-container'>
+    <div className="tests-container">
       <h2 className="test-list-name">СПИСОК ОБЩЕДОСТУПНЫХ ТЕСТОВ</h2>
-      <div className='test-list-block'>
-        {
-          (isLoading) ?
-            <Loader/> :
-            <>
-              {
-                testList.map((quiz: IQuizMeta) => (
-                  <QuizCard
-                    key={quiz.testId}
-                    quiz={quiz}
-                    userUID={user?.uid}
-                    guestUserId={guestUserId}
-                    dateFormatter={formatter}
-                  />))
-              }
-              {
-                isLoadingAllMore &&
-                <div className="all-quizzes-load-more">
-                  <Loader/>
-                </div>
-              }
-              <div ref={sentinelRef} className="all-quizzes-sentinel"/>
-            </>
-        }
+
+      <FiltersMenu category={category} pageQuizzes="allquizzes" />
+
+      <div className="test-list-block">
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
+            {testList.map((quiz: IQuizMeta) => (
+              <QuizCard
+                key={quiz.testId}
+                quiz={quiz}
+                userUID={user?.uid}
+                guestUserId={guestUserId}
+                dateFormatter={formatter}
+              />
+            ))}
+
+            {isLoadingAllMore && (
+              <div className="all-quizzes-load-more">
+                <Loader />
+              </div>
+            )}
+
+            <div ref={sentinelRef} className="all-quizzes-sentinel" />
+          </>
+        )}
       </div>
     </div>
-  )
-}
+  );
+};
