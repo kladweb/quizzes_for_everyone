@@ -37,7 +37,6 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, questions, onReset, s
       };
     });
 
-
     // Then shuffle the questions themselves
     const shuffledQuestions = [...questionsWithShuffledOptions];
     for (let i = shuffledQuestions.length - 1; i > 0; i--) {
@@ -52,7 +51,10 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, questions, onReset, s
   );
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showCorrectExplanations, setShowCorrectExplanations] = useState(true);
-  const [userName, setUserName] = useState('');
+
+  const lastUserName = localStorage.getItem("quizUserName");
+  const currentUserName = lastUserName ? lastUserName : user?.displayName;
+  const [userName, setUserName] = useState(currentUserName ? currentUserName : "");
   const [startTime] = useState<number>(Date.now());
 
   const handleAnswer = (questionIndex: number, optionIds: string[]) => {
@@ -81,6 +83,7 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, questions, onReset, s
 
   const handleSubmit = async () => {
     setIsSubmitted(true);
+    localStorage.setItem("quizUserName", userName);
     const finishTime = Date.now();
     // Calculate total score with partial credit
     const totalScore = shuffledQuestions.reduce((sum, _, index) => {
@@ -150,35 +153,7 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, questions, onReset, s
         behavior: 'smooth'
       });
     }, 100);
-    // setTimeout(() => location.reload(), 0);
   }
-
-  // useEffect(() => {
-  //   console.log("робим")
-  //   if (!currentStatistics) {
-  //     console.log("робим2")
-  //     const startStatistics: IStatistics = {
-  //         testId: quiz.testId,
-  //         statId: statId,
-  //         userUid: null,
-  //         title:
-  //         quiz.title,
-  //         userName: userName.trim(),
-  //         startedAt: startTime,
-  //         finishedAt: 0,
-  //         incorrectCount: 0,
-  //         score: 0,
-  //         totalScore: 0,
-  //         maxScore: 0,
-  //         correctCount: 0,
-  //         answers: [],
-  //       }
-  //     ;
-  //     // console.log("statistics 02: ", startStatistics);
-  //     QuizStorageManager.saveRecentStat(startStatistics);
-  //   }
-  //
-  // }, []);
 
   return (
     <div className='quizContainer'>

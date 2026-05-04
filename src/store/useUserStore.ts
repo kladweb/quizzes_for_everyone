@@ -6,6 +6,7 @@ import { nanoid } from "nanoid";
 export interface IUser {
   uid: string;
   email: string | null;
+  displayName: string | null;
 }
 
 interface IInitialState {
@@ -37,9 +38,11 @@ const userStore: StateCreator<IUserState> = (set) => ({
     set(() => ({isAuthLoading: true}));
     onAuthStateChanged(auth, (getUser) => {
       if (getUser) {
+        console.log(getUser);
         const user: IUser = {
           uid: getUser.uid,
           email: getUser.email,
+          displayName: getUser.displayName,
         };
         set(() => ({user}));
       }
@@ -58,9 +61,11 @@ const userStore: StateCreator<IUserState> = (set) => ({
     signInWithPopup(auth, provider)
       .then((result) => {
         const getUser = auth.currentUser as IUser;
+        console.log(getUser);
         const user: IUser = {
           uid: getUser.uid,
           email: getUser.email,
+          displayName: getUser.displayName,
         };
         return user.uid;
       })
