@@ -4,6 +4,8 @@
   }
 
   .input-filters {
+    background-color: var(--color-bg-card2);
+
     &:focus-visible, &:focus {
       border: 1px solid var(--color-border);
     }
