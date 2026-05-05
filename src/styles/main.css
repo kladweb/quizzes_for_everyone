@@ -60,6 +60,13 @@ input[type="file"] {
   border-radius: 0.75em;
 }
 
+.link-all-quizzes {
+  display: block;
+  width: fit-content;
+  margin: 1em auto;
+  font-size: 1.1em;
+}
+
 /*Dot lights*/
 
 .dot_lights {

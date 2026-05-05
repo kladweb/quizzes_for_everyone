@@ -100,7 +100,7 @@ export const PageQuiz = () => {
     }
 
     if (quiz?.title) {
-      document.title = `${quiz.title} · ANY QUIZ`;
+      document.title = `${quiz.title} | ANY QUIZ`;
     }
 
   }, [testId, quiz?.title]);

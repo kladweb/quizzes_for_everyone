@@ -80,7 +80,7 @@ export const PageMyQuizzes: React.FC = () => {
 
   useEffect(
     () => {
-      document.title = "МОИ ТЕСТЫ · ANY QUIZ";
+      document.title = "МОИ ТЕСТЫ | ANY QUIZ";
 
       if (isMyQuizzesLoaded) {
         // console.log("User data already loaded");

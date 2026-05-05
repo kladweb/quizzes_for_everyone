@@ -15,16 +15,21 @@ export const PageMain = () => {
   }, [user?.uid]);
 
   return (
-    <div className='tests-container'>
-      <NavLink to='/allquizzes'>
-        <img className="main-image" src="open.png" alt="any-quiz"/>
-      </NavLink>
-      <div className='noticeBlock'>
-        <p className='noticeText'>Авторизуйтесь, чтобы начать создавать свои тесты...</p>
+    <>
+      <div className='tests-container'>
+        <NavLink to='/allquizzes'>
+          <img className="main-image" src="open.png" alt="any-quiz" title="Перейти к списку всех тестов"/>
+        </NavLink>
+        <div className='noticeBlock'>
+          <p className='noticeText'>Авторизуйтесь, чтобы начать создавать свои тесты...</p>
+        </div>
+        <button className='btn button-login ' onClick={loginGoogle} disabled={isAuthLoading}>
+          {isAuthLoading ? "GOOGLE IN..." : "GOOGLE LOGIN"}
+        </button>
+        <NavLink className='link-nav link-all-quizzes' to={'/allquizzes'}>
+          <span>Перейти к списку всех тестов</span>
+        </NavLink>
       </div>
-      <button className='btn button-login ' onClick={loginGoogle} disabled={isAuthLoading}>
-        {isAuthLoading ? "GOOGLE IN..." : "GOOGLE LOGIN"}
-      </button>
-    </div>
+    </>
   );
 }
