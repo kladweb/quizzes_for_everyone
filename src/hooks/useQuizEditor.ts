@@ -1,6 +1,7 @@
 import React from "react";
 import { useQuizDraft, setQuizDraft, resetFormError, validateField } from "../store/useCurrentCreatingQuiz";
-import { Option, Question, ToastType } from "../types/Quiz";
+import { ToastType } from "../types/Quiz";
+import type { Option, Question } from "../types/Quiz";
 import { showToast } from "../store/useNoticeStore";
 
 const optionsVar = ["a", "b", "c", "d", "e", "f"];
