@@ -2,16 +2,16 @@ import React, { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { Header } from "../components/Header/Header";
 import { Footer } from "../components/Footer/Footer";
-import { useIsAuthLoading, useUser } from "../store/useUserStore";
 import { Loader } from "../components/Loader/Loader";
-import { useErrorLoading } from "../store/useQuizzesStore";
 import { ToastNotice } from "../components/ToastNotice/ToastNotice";
 import { ScrollUp } from "../components/ScroppUp/ScrollUp";
+import { useErrorLoading } from "../store/useQuizzesStore";
+import { useIsAuthLoading, useUser } from "../store/useUserStore";
 import { loadTokens, useLoadingTokens } from "../store/useTokensStore";
 
 export const MainLayout = () => {
-  const isAuthLoading = useIsAuthLoading();
   const navigate = useNavigate();
+  const isAuthLoading = useIsAuthLoading();
   const errorLoading = useErrorLoading();
   const user = useUser();
   const loadingTokens = useLoadingTokens();
