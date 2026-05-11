@@ -4,6 +4,7 @@
   align-items: center;
   background: var(--color-bg-page);
   box-shadow: 0 0 1.5em 0 var(--color-disabled);
+  z-index: 10;
 }
 
 .link-logo {
