@@ -1,18 +1,18 @@
 import React, { useEffect } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Navigate, NavLink } from "react-router-dom";
 import { loginGoogle, useIsAuthLoading, useUser } from "../../store/useUserStore";
 
 export const PageMain = () => {
   const user = useUser();
   const isAuthLoading = useIsAuthLoading();
-  const navigate = useNavigate();
 
   useEffect(() => {
     document.title = "ANY QUIZ";
-    if (user) {
-      navigate("/createquiz");
-    }
-  }, [user?.uid]);
+  }, []);
+
+  if (user) {
+    return <Navigate to="/createquiz" replace/>;
+  }
 
   return (
     <>

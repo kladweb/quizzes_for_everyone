@@ -1,0 +1,42 @@
+.not-found-wrapper {
+  position: relative;
+  margin: -3rem auto;
+  overflow: hidden;
+  /*text-align: center;*/
+  width: 100%;
+  height: calc(100vh - 4rem);
+  object-position: center;
+}
+
+.not-found-image {
+  position: relative;
+  height: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  object-fit: cover;
+  object-position: center;
+}
+
+.not-found-link {
+  position: absolute;
+  top: 81%;
+  left: max(48%, 52vw);
+  transform: translateX(-45%);
+  height: min(5rem, 8vh);
+  width: min(17rem, 25vh);
+  border-radius: 999px;
+  background: transparent;
+  /*background: rgba(255, 0, 0, 0.3);*/
+  -webkit-tap-highlight-color: transparent;
+  text-decoration: none;
+}
+
+@media (orientation: portrait) {
+  .not-found-link {
+    top: 82%;
+    left: max(48%, 51vw);
+    transform: translateX(-50%);
+  }
+}

@@ -1,5 +1,5 @@
 import React from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import {  Route, Routes } from "react-router-dom";
 import { MainLayout } from "../layouts/MainLayout";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { PageMyQuizzes } from "../pages/PageMyQuizzes/PageMyQuizzes";
@@ -12,6 +12,7 @@ import { PageAllQuizzes } from "../pages/PageAllQuizzes/PageAllQuizzes";
 import { PageCreateQuizManual } from "../pages/PageCreateQuizManual/PageCreateQuizManual";
 import { PageQuizEdit } from "../pages/PageQuizEdit/PageQuizEdit";
 import { PageCreateQuizAI } from "../pages/PageCreateQuizAI/PageCreateQuizAI";
+import { Page404 } from "../pages/Page404/Page404";
 
 export const AppRoutes = () => {
   return (
@@ -34,7 +35,7 @@ export const AppRoutes = () => {
         <Route path="/allquizzes/:category?" element={<PageAllQuizzes/>}/>
         <Route path="/quizzes/:testid" element={<PageQuiz/>}/>
         <Route path="/service" element={<PageEmpty emptyReason="serviceWork"/>}/>
-        <Route path='*' element={<Navigate to='/'/>}/>
+        <Route path='*' element={<Page404/>}/>
       </Route>
     </Routes>
   )
