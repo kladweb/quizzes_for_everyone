@@ -27,7 +27,7 @@ export const QuestionEdit: React.FC<IQuestionEditProps> = (
     deleteOption,
     explanationEdit
   } = useQuizEditor();
-  const MAX_OPTIONS = 6;
+  const MAX_OPTIONS = 7;
 
   // console.log(question.options);
   // console.log(question)
