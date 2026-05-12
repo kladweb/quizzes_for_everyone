@@ -38,7 +38,6 @@ const userStore: StateCreator<IUserState> = (set) => ({
     set(() => ({isAuthLoading: true}));
     onAuthStateChanged(auth, (getUser) => {
       if (getUser) {
-        console.log(getUser);
         const user: IUser = {
           uid: getUser.uid,
           email: getUser.email,
