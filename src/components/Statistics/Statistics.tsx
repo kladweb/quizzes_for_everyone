@@ -46,7 +46,12 @@ export const Statistics: React.FC<{ testId: string }> = ({testId}) => {
             {
               statistics.map(item => (
                 <div className="stat-card" key={item.statId}>
-                  <button className="btn-delete" title="Удалить навсегда" onClick={() => deleteStat(item.statId)}>✖</button>
+                  {/*<button*/}
+                  {/*  className="btn-delete"*/}
+                  {/*  title="Удалить навсегда"*/}
+                  {/*  onClick={() => deleteStat(item.statId)}>*/}
+                  {/*  ✖*/}
+                  {/*</button>*/}
                   <p>Дата выполнения: <span>{(new Date(item.finishedAt)).toLocaleDateString()}</span></p>
                   <p>Имя: <span>{item.userName}</span></p>
                   <p>Результат: <span>{item.score}</span></p>
@@ -56,7 +61,10 @@ export const Statistics: React.FC<{ testId: string }> = ({testId}) => {
           </>
           :
           <div className="stat-card">
-            <p>Информация отсутствует. <span>Возможно, история очищена.</span></p>
+            <p>
+              Информация отсутствует.
+              {/*<span>Возможно, история очищена.</span>*/}
+            </p>
           </div>
       }
     </div>
