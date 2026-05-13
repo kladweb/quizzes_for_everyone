@@ -85,9 +85,9 @@
   background-color: var(--color-success);
   color: #0F172A;
 
-  &:unchecked {
-    /*accent-color: var(--color-success);*/
-  }
+  /*&:unchecked {*/
+  /*  !*accent-color: var(--color-success);*!*/
+  /*}*/
 
   &:checked::after {
     content: "✔";

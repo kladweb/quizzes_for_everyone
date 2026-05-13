@@ -17,6 +17,10 @@
   border-radius: 6px;
 }
 
+.test-item-private {
+  border-color: var(--color-warning);
+}
+
 .test-name {
   display: inline-block;
   width: 100%;
