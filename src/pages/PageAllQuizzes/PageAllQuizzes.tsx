@@ -9,6 +9,7 @@ import { PAGE_SIZE } from "../../variables/quizData";
 import { filterQuizzes, getUniqueCategories } from "../../utils/quizUtils";
 import { FiltersMenu } from "../../components/FiltersMenu/FiltersMenu";
 import "./pageAllQuizzes.css";
+import { ModalQRCode } from "../../components/ModalQRCode/ModalQRCode";
 
 export const PageAllQuizzes = () => {
   const sentinelRef = useRef<HTMLDivElement | null>(null);
@@ -21,6 +22,7 @@ export const PageAllQuizzes = () => {
   const guestUserId = useGuestUserId();
   const isLoading = useIsLoading();
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [qrCodeToShow, setQrCodeToShow] = useState<string | null>(null);
 
   const testList = useMemo(() => {
     return Object.values(testsListObj ?? {})
@@ -82,11 +84,19 @@ export const PageAllQuizzes = () => {
                   category={category}
                   guestUserId={guestUserId}
                   dateFormatter={formatter}
+                  setQrCodeToShow={setQrCodeToShow}
                 />)
               )}
             </>
         }
       </div>
+      {
+        qrCodeToShow &&
+        <ModalQRCode
+          url={`https://any-quiz.netlify.app/quizzes/${qrCodeToShow}`}
+          setQrCodeToShow={setQrCodeToShow}
+        />
+      }
       <div ref={sentinelRef} className="my-quizzes-sentinel"/>
     </div>
   )

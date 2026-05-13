@@ -15,6 +15,7 @@ import { filterQuizzes, getUniqueCategories } from "../../utils/quizUtils";
 import { PAGE_SIZE } from "../../variables/quizData";
 import { FiltersMenu } from "../../components/FiltersMenu/FiltersMenu";
 import "./PageMyQuizzes.css";
+import { ModalQRCode } from "../../components/ModalQRCode/ModalQRCode";
 
 export const PageMyQuizzes: React.FC = () => {
   const sentinelRef = useRef<HTMLDivElement | null>(null);
@@ -33,6 +34,7 @@ export const PageMyQuizzes: React.FC = () => {
   const [isModalConfirmOpen, setIsModalConfirmOpen] = useState<boolean>(false);
   const [quizToDelete, setQuizToDelete] = useState<IQuizMeta | null>(null);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [qrCodeToShow, setQrCodeToShow] = useState<string | null>(null);
 
   const testList = useMemo(() => {
     return Object.values(testsListObj ?? {})
@@ -138,6 +140,7 @@ export const PageMyQuizzes: React.FC = () => {
                     openStatistic={openStatistic}
                     isShowStatistics={!!quizIdStatistics && quizIdStatistics === quiz.testId}
                     handlerDeleteQuiz={handlerDeleteQuiz}
+                    setQrCodeToShow={setQrCodeToShow}
                   />)
                 )}
               </>
@@ -153,6 +156,13 @@ export const PageMyQuizzes: React.FC = () => {
           isModalConfirmOpen={isModalConfirmOpen}
           modalQuestion={`Вы действительно хотите удалить тест\n"${quizToDelete.title}"\nбез возможности восстановления?`}
           handlerConfirmDelete={handlerConfirmDelete}
+        />
+      }
+      {
+        qrCodeToShow &&
+        <ModalQRCode
+          url={`https://any-quiz.netlify.app/quizzes/${qrCodeToShow}`}
+          setQrCodeToShow={setQrCodeToShow}
         />
       }
       <div ref={sentinelRef} className="my-quizzes-sentinel"/>

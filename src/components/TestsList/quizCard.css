@@ -170,6 +170,24 @@
   color: var(--color-text-secondary);
 }
 
+.qrcode-icon-link {
+  padding: 0;
+  margin-right: 0.2em;
+  /*background: none;*/
+  vertical-align: middle;
+  height: 1rem;
+
+  img {
+    margin: 0;
+    padding: 0;
+    width: 1rem;
+  }
+
+  &:hover {
+    box-shadow: 0 0 5px var(--color-success);
+  }
+}
+
 @media (max-width: 580px) {
   .test-item {
     width: 100%;
