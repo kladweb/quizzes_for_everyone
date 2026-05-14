@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { QRCode } from "react-qr-code";
 import { clearCurrentQuiz, useQuizComplete } from "../../store/useCurrentCreatingQuiz";
+import { ModalQRCode } from "../ModalQRCode/ModalQRCode";
 import "./linkQuiz.css";
 
 export const LinkQuiz: React.FC<{ testId: string }> = ({testId}) => {
@@ -8,6 +10,7 @@ export const LinkQuiz: React.FC<{ testId: string }> = ({testId}) => {
   const quizComplete = useQuizComplete();
   const [copied, setCopied] = useState(false);
   const currentLink = `${window.location.origin}/quizzes/${testId}`;
+  const [qrCodeToShow, setQrCodeToShow] = useState<string | null>(null);
 
   const handleCopy = async () => {
     try {
@@ -43,9 +46,19 @@ export const LinkQuiz: React.FC<{ testId: string }> = ({testId}) => {
       >
         {copied ? 'Скопировано!' : 'Копировать ссылку на тест в буфер'}
       </button>
+      <button className="btn button-qrcode" onClick={() => setQrCodeToShow(testId)}>
+        <QRCode value={currentLink} size={100}/>
+      </button>
       {/*<NavLink className='link-body' to={'/myquizzes'}>Перейти к моим тестам</NavLink>*/}
       {/*<NavLink className='link-body' to={'/createquiz'}>Вернутся на главную страницу</NavLink>*/}
       <button className="btn btn-link-create" onClick={handleCreateNewTest}>Создать ещё один тест</button>
+      {
+        qrCodeToShow &&
+        <ModalQRCode
+          url={`https://any-quiz.netlify.app/quizzes/${qrCodeToShow}`}
+          setQrCodeToShow={setQrCodeToShow}
+        />
+      }
     </div>
   )
 }
