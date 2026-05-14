@@ -78,6 +78,11 @@
   color: var(--color-text-secondary);
 }
 
+.button-qrcode {
+  margin: 0;
+  padding: 0.2em 0.2em 0;
+}
+
 @media (max-width: 600px) {
   .test-load-info {
     font-size: 1.2em;

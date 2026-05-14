@@ -30,9 +30,11 @@
     max-width: 19em;
     padding: 10px 15px;
     font-size: 1em;
+    background-color: var(--color-bg-card2);
     border: 2px solid var(--color-border);
     border-radius: 6px;
     outline: none;
+    color: var(--color-text-primary);
 
     &:focus-visible {
       border: 2px solid var(--color-disabled);
