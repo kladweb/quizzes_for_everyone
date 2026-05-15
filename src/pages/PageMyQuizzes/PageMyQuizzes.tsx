@@ -150,21 +150,16 @@ export const PageMyQuizzes: React.FC = () => {
           visibleCount < testList.length && (<div className="all-quizzes-load-more"><Loader/></div>)
         }
       </div>
-      {
-        quizToDelete &&
-        <ModalConfirm
-          isModalConfirmOpen={isModalConfirmOpen}
-          modalQuestion={`Вы действительно хотите удалить тест\n"${quizToDelete.title}"\nбез возможности восстановления?`}
-          handlerConfirmDelete={handlerConfirmDelete}
-        />
-      }
-      {
-        qrCodeToShow &&
-        <ModalQRCode
-          url={`https://any-quiz.netlify.app/quizzes/${qrCodeToShow}`}
-          setQrCodeToShow={setQrCodeToShow}
-        />
-      }
+      <ModalConfirm
+        isModalConfirmOpen={isModalConfirmOpen}
+        modalQuestion={`Вы действительно хотите удалить тест\n"${quizToDelete?.title}"\nбез возможности восстановления?`}
+        handlerConfirmDelete={handlerConfirmDelete}
+      />
+      <ModalQRCode
+        url={`https://any-quiz.netlify.app/quizzes/${qrCodeToShow}`}
+        qrCodeToShow={qrCodeToShow}
+        setQrCodeToShow={setQrCodeToShow}
+      />
       <div ref={sentinelRef} className="my-quizzes-sentinel"/>
     </>
   );

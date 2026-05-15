@@ -90,13 +90,11 @@ export const PageAllQuizzes = () => {
             </>
         }
       </div>
-      {
-        qrCodeToShow &&
-        <ModalQRCode
-          url={`https://any-quiz.netlify.app/quizzes/${qrCodeToShow}`}
-          setQrCodeToShow={setQrCodeToShow}
-        />
-      }
+      <ModalQRCode
+        url={`https://any-quiz.netlify.app/quizzes/${qrCodeToShow}`}
+        qrCodeToShow={qrCodeToShow}
+        setQrCodeToShow={setQrCodeToShow}
+      />
       <div ref={sentinelRef} className="my-quizzes-sentinel"/>
     </div>
   )

@@ -67,6 +67,11 @@ input[type="file"] {
   font-size: 1.1em;
 }
 
+.modal-container {
+  position: relative;
+  z-index: 20;
+}
+
 /*Dot lights*/
 
 .dot_lights {
