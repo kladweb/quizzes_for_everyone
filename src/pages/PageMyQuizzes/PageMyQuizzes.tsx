@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { AnimatePresence } from 'framer-motion';
 import { useGuestUserId, useUser } from "../../store/useUserStore";
 import {
   deleteUserQuiz, loadUserIds, loadUserQuizzes, useAllQuizzes, useIsLoading, useIsMyIdsLoaded,
@@ -129,7 +130,7 @@ export const PageMyQuizzes: React.FC = () => {
         <div className='test-list-block'>
           {
             (isLoading) ? <Loader/> :
-              <>
+              <AnimatePresence>
                 {visibleQuizzes.map((quiz: IQuizMeta) => (
                   <QuizCard
                     key={quiz.testId}
@@ -143,7 +144,7 @@ export const PageMyQuizzes: React.FC = () => {
                     setQrCodeToShow={setQrCodeToShow}
                   />)
                 )}
-              </>
+              </AnimatePresence>
           }
         </div>
         {

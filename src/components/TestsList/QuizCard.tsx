@@ -1,5 +1,6 @@
 import React, { memo, useEffect, useState } from "react";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { motion } from 'framer-motion';
 import { checkCategory, handleCopy, toggleLike } from "../../utils/quizUtils";
 import { Statistics } from "../Statistics/Statistics";
 import type { IQuizMeta } from "../../types/Quiz";
@@ -44,7 +45,13 @@ export const QuizCard: React.FC<ITestCardProps> = memo(
     }, [likesCount]);
 
     return (
-      <div className={`test-item${quiz.access === "private" ? " test-item-private" : ""}`} key={quiz.testId}>
+      <motion.div
+        key={quiz.testId}
+        className={`test-item${quiz.access === "private" ? " test-item-private" : ""}`}
+        animate={{opacity: 1, y: 0}}
+        exit={{opacity: 0, x: 500}}
+        transition={{delay: 0.5, duration: 0.5, ease: "anticipate"}}
+      >
         <div className='test-content'>
           <NavLink to={`/quizzes/${quiz.testId}`}>
             <h3 className='test-name' title={quiz.description}>{quiz.title}</h3>
@@ -118,7 +125,7 @@ export const QuizCard: React.FC<ITestCardProps> = memo(
         {
           isShowStatistics && <Statistics testId={quiz.testId}/>
         }
-      </div>
+      </motion.div>
     )
   }, (oldProps: ITestCardProps, nextProps: ITestCardProps) => {
     return (
