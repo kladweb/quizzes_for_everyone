@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { AnimatePresence } from 'framer-motion';
 import { useGuestUserId, useUser } from "../../store/useUserStore";
 import {
   deleteUserQuiz, loadUserIds, loadUserQuizzes, useAllQuizzes, useIsLoading, useIsMyIdsLoaded,
@@ -129,7 +130,7 @@ export const PageMyQuizzes: React.FC = () => {
         <div className='test-list-block'>
           {
             (isLoading) ? <Loader/> :
-              <>
+              <AnimatePresence>
                 {visibleQuizzes.map((quiz: IQuizMeta) => (
                   <QuizCard
                     key={quiz.testId}
@@ -143,28 +144,23 @@ export const PageMyQuizzes: React.FC = () => {
                     setQrCodeToShow={setQrCodeToShow}
                   />)
                 )}
-              </>
+              </AnimatePresence>
           }
         </div>
         {
           visibleCount < testList.length && (<div className="all-quizzes-load-more"><Loader/></div>)
         }
       </div>
-      {
-        quizToDelete &&
-        <ModalConfirm
-          isModalConfirmOpen={isModalConfirmOpen}
-          modalQuestion={`Вы действительно хотите удалить тест\n"${quizToDelete.title}"\nбез возможности восстановления?`}
-          handlerConfirmDelete={handlerConfirmDelete}
-        />
-      }
-      {
-        qrCodeToShow &&
-        <ModalQRCode
-          url={`https://any-quiz.netlify.app/quizzes/${qrCodeToShow}`}
-          setQrCodeToShow={setQrCodeToShow}
-        />
-      }
+      <ModalConfirm
+        isModalConfirmOpen={isModalConfirmOpen}
+        modalQuestion={`Вы действительно хотите удалить тест\n"${quizToDelete?.title}"\nбез возможности восстановления?`}
+        handlerConfirmDelete={handlerConfirmDelete}
+      />
+      <ModalQRCode
+        url={`https://any-quiz.netlify.app/quizzes/${qrCodeToShow}`}
+        qrCodeToShow={qrCodeToShow}
+        setQrCodeToShow={setQrCodeToShow}
+      />
       <div ref={sentinelRef} className="my-quizzes-sentinel"/>
     </>
   );

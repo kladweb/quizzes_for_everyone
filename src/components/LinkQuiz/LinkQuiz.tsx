@@ -52,13 +52,11 @@ export const LinkQuiz: React.FC<{ testId: string }> = ({testId}) => {
       {/*<NavLink className='link-body' to={'/myquizzes'}>Перейти к моим тестам</NavLink>*/}
       {/*<NavLink className='link-body' to={'/createquiz'}>Вернутся на главную страницу</NavLink>*/}
       <button className="btn btn-link-create" onClick={handleCreateNewTest}>Создать ещё один тест</button>
-      {
-        qrCodeToShow &&
-        <ModalQRCode
-          url={`https://any-quiz.netlify.app/quizzes/${qrCodeToShow}`}
-          setQrCodeToShow={setQrCodeToShow}
-        />
-      }
+      <ModalQRCode
+        url={`https://any-quiz.netlify.app/quizzes/${qrCodeToShow}`}
+        qrCodeToShow={qrCodeToShow}
+        setQrCodeToShow={setQrCodeToShow}
+      />
     </div>
   )
 }

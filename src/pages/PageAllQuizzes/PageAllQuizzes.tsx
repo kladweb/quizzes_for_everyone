@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
+import { AnimatePresence } from 'framer-motion';
 import { loadAllQuizzes, useAllQuizzes, useIsAllLoaded, useIsLoading } from "../../store/useQuizzesStore";
 import { Loader } from "../../components/Loader/Loader";
 import type { IQuizMeta, IQuizzes } from "../../types/Quiz";
@@ -75,7 +76,7 @@ export const PageAllQuizzes = () => {
       <div className='test-list-block'>
         {
           (isLoading) ? <Loader/> :
-            <>
+            <AnimatePresence>
               {visibleQuizzes.map((quiz: IQuizMeta) => (
                 <QuizCard
                   key={quiz.testId}
@@ -87,16 +88,14 @@ export const PageAllQuizzes = () => {
                   setQrCodeToShow={setQrCodeToShow}
                 />)
               )}
-            </>
+            </AnimatePresence>
         }
       </div>
-      {
-        qrCodeToShow &&
-        <ModalQRCode
-          url={`https://any-quiz.netlify.app/quizzes/${qrCodeToShow}`}
-          setQrCodeToShow={setQrCodeToShow}
-        />
-      }
+      <ModalQRCode
+        url={`https://any-quiz.netlify.app/quizzes/${qrCodeToShow}`}
+        qrCodeToShow={qrCodeToShow}
+        setQrCodeToShow={setQrCodeToShow}
+      />
       <div ref={sentinelRef} className="my-quizzes-sentinel"/>
     </div>
   )
