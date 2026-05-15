@@ -18,11 +18,13 @@ export const QuizLoader: React.FC<IQuizLoaderProps> =
     const [copied, setCopied] = useState(false);
     const [copiedTemplate, setCopiedTemplate] = useState(false);
 
-    const sampleJSON = `Сделай (придумай) тест по [описание теста/тема/примеру: пример теста]
-состоящий из [кол-во вопросов] вопросов. 
-В каждом вопросе должно быть три варианта ответов, 
-один из которых верный. 
-Добавь краткое объяснение для каждого вопроса. 
+    const sampleJSON = `Ты — помощник для создания учебных тестов. Изучи материал [в файле pdf]. 
+Сделай (придумай) тест на проверку и закрепление знаний по 
+[описание/тема/пример теста]. Тест сделай из [кол-во вопросов] вопросов. 
+В каждом вопросе должно быть три варианта ответов, один из которых верный. 
+[20% вопросов сделай с множественным выбором верных ответов.]
+Варианты ответов должны быть правдоподобными. 
+Добавь объяснение для каждого вопроса.
 Тест оформи и пришли в виде JSON файла по такому шаблону:
 ${jsonTemplate}`;
 
@@ -64,28 +66,15 @@ ${jsonTemplate}`;
               }
             });
           });
-
           setQuizDraft(quiz);
-
-          // saveUserQuiz(quiz, userUID)
-          //   .then(() => {
-          //     setCurrentTestId(quiz.testId);
-          //     setIsCreatingNewTest(false);
-          //   })
-          //   .catch((error) => {
-          //     console.error(error);
-          //   })
-
         } catch (err) {
           setError(`Error loading quiz: ${(err as Error).message}`);
           console.error(err);
         }
       };
-
       reader.onerror = () => {
         setError('Error reading file.');
       };
-
       reader.readAsText(file);
     };
 
