@@ -1,17 +1,19 @@
 .loader-head {
   color: var(--color-text-primary);
-  margin-bottom: 20px;
+  margin: 0;
+  padding: 0.2em 0;
 }
 
 .loader-dsc {
   color: var(--color-text-secondary);
-  margin-bottom: 30px;
+  margin: 0.4em;
+  padding: 0;
   font-size: 16px;
 }
 
 .input-loader-block {
   width: min-content;
-  margin: 0 auto 3rem;
+  margin: 0 auto 1rem;
 }
 
 .input-loader {
@@ -77,7 +79,7 @@
 }
 
 .json-example-container {
-  margin-top: 40px;
+  margin-top: 1em;
   padding: 20px;
   background-color: var(--color-bg-footer);
   border-radius: 8px;
@@ -85,6 +87,8 @@
 
   h3 {
     margin: 0;
+    padding: 0;
+    font-size: 0.9em;
   }
 }
 
@@ -102,12 +106,12 @@
 }
 
 .json-example-content {
-  padding: 15px;
+  padding: 0.7em;
   margin: 0 0 1em;
   background-color: var(--color-text-contrast);
   border-radius: 6px;
   overflow: auto;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   color: var(--color-text-secondary);
 }
 
