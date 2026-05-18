@@ -36,6 +36,7 @@ export const QuizCard: React.FC<ITestCardProps> = memo(
     const [copied, setCopied] = useState(false);
     const [likesCount, setLikesCount] = useState<number>(quiz.likeUsers ? Object.keys(quiz.likeUsers).length : 0);
     const [isLiked, setIsLiked] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     useEffect(() => {
       const userID = userUID ? userUID : (guestUserId ? guestUserId : null);
@@ -49,7 +50,7 @@ export const QuizCard: React.FC<ITestCardProps> = memo(
         key={quiz.testId}
         className={`test-item${quiz.access === "private" ? " test-item-private" : ""}`}
         animate={{opacity: 1, y: 0}}
-        exit={{opacity: 0, x: 500}}
+        exit={isDeleting ? {opacity: 0, x: 500} : {}}
         transition={{delay: 0.5, duration: 0.5, ease: "anticipate"}}
       >
         <div className='test-content'>
@@ -98,7 +99,10 @@ export const QuizCard: React.FC<ITestCardProps> = memo(
               (userUID && handlerDeleteQuiz) &&
               // <button className='button-test' onClick={() => deleteUserQuiz(quiz.testId, userUID)}>Удалить</button>
               <button className='button-test'
-                      onClick={() => handlerDeleteQuiz(quiz)}>
+                      onClick={() => {
+                        setIsDeleting(true);
+                        handlerDeleteQuiz(quiz);
+                      }}>
                 Удалить
               </button>
             }
