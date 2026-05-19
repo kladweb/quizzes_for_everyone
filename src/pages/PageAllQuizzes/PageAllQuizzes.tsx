@@ -9,8 +9,8 @@ import { useGuestUserId, useUser } from "../../store/useUserStore";
 import { PAGE_SIZE } from "../../variables/quizData";
 import { filterQuizzes, getUniqueCategories } from "../../utils/quizUtils";
 import { FiltersMenu } from "../../components/FiltersMenu/FiltersMenu";
-import "./pageAllQuizzes.css";
 import { ModalQRCode } from "../../components/ModalQRCode/ModalQRCode";
+import "./pageAllQuizzes.css";
 
 export const PageAllQuizzes = () => {
   const sentinelRef = useRef<HTMLDivElement | null>(null);
