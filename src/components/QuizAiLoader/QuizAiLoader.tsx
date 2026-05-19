@@ -104,7 +104,7 @@ export const QuizAiLoader: React.FC<IQuizAiLoaderProps> = ({userUID, changeStepI
   return (
     <div className="loaderBlock">
       <h2 className="loader-head">Создаём новый тест</h2>
-      <p className="quiz-note">Введите описание теста (не менее 30 символов):</p>
+      <p className="quiz-note">Введите описание теста (не менее 30 символов, максимум 1500):</p>
       <textarea
         name="quiz-prompt"
         id="quiz-prompt"
