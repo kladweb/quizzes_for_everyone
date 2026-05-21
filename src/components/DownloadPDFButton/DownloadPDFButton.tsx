@@ -3,6 +3,7 @@ import { usePDF } from '@react-pdf/renderer';
 import { saveAs } from 'file-saver';
 import { type IQuizPDFProps, TestPDF } from "../TestPDF/TestPDF";
 import { getSafeFileName } from "../../utils/quizUtils";
+import "./downloadPDFButton.css";
 
 
 export const DownloadPDFButton: React.FC<IQuizPDFProps> = ({quiz}) => {
@@ -17,11 +18,12 @@ export const DownloadPDFButton: React.FC<IQuizPDFProps> = ({quiz}) => {
 
   return (
     <button
-      className="btn button-create"
+      className="btn getPdf-btn"
       onClick={handleDownload}
       disabled={instance.loading || !instance.blob}
     >
-      {instance.loading ? 'Генерация PDF...' : 'Скачать тест в PDF'}
+      {/*{instance.loading ? 'Генерация PDF...' : 'Сохранить тест в PDF'}*/}
+      <img src="/images/pdfIcon.png" alt="get pdf" title="Сохранить pdf версию теста"/>
     </button>
   );
 };
