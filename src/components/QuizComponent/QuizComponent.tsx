@@ -9,6 +9,7 @@ import { updateQuiz } from "../../store/useQuizzesStore";
 import { QuizStorageManager } from "../../utils/QuizStorageManager";
 import type { IStatistics, Question, IQuizMeta } from "../../types/Quiz";
 import "./quizComponent.css";
+import { DownloadPDFButton } from "../DownloadPDFButton/DownloadPDFButton";
 
 interface IQuizProps {
   quiz: IQuizMeta;
@@ -45,6 +46,8 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, questions, onReset, s
     }
     return shuffledQuestions;
   });
+
+  const quizToPdf = {...quiz, questions: shuffledQuestions};
 
   const [selectedAnswers, setSelectedAnswers] = useState<string[][]>(
     new Array(shuffledQuestions.length).fill(null).map(() => [])
@@ -222,6 +225,7 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, questions, onReset, s
               Пожалуйста, введите Ваше имя и/или фамилию перед отправкой
             </p>
           )}
+          <DownloadPDFButton quiz={quizToPdf}/>
         </div>
       )}
       {currentStatistics && isSubmitted && <QuizResultView result={currentStatistics} onReset={handleReset}/>}
