@@ -113,3 +113,22 @@ export const checkCategory = (e: React.MouseEvent<HTMLElement>, category?: strin
     e.preventDefault();
   }
 }
+
+export const getSafeFileName = (title: string | undefined, maxLength: number = 30): string => {
+  if (!title || title.trim() === '') {
+    return 'quiz';
+  }
+  let cleanTitle = title
+    .replace(/[^a-zA-Z0-9а-яА-ЯёЁ _-]/g, '_')
+    .replace(/_{2,}/g, '_')
+    .trim();
+  if (cleanTitle.length <= maxLength) {
+    return cleanTitle;
+  }
+  let truncated = cleanTitle.substring(0, maxLength);
+  const lastSpaceIndex = truncated.lastIndexOf(' ');
+  if (lastSpaceIndex > 8) {
+    truncated = truncated.substring(0, lastSpaceIndex);
+  }
+  return truncated.trim();
+};

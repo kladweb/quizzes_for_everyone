@@ -1,0 +1,13 @@
+.getPdf-btn {
+  margin-top: 1.5rem;
+  background: none;
+  transition: 300ms transform ease;
+
+  img {
+    width: 2.5rem;
+  }
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
