@@ -21,5 +21,5 @@ export const registerFonts = () => {
     ],
   });
 
-  console.log('Fonts registered:', Font.getRegisteredFontFamilies()); // для проверки
+  // console.log('Fonts registered:', Font.getRegisteredFontFamilies());
 };

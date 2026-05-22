@@ -1,5 +1,6 @@
 .getPdf-btn {
-  margin-top: 1.5rem;
+  display: block;
+  margin: 1.5rem auto 0;
   padding: 0;
   background-color: var(--color-border);
   transition: 300ms transform ease;

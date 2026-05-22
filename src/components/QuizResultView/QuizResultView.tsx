@@ -71,6 +71,8 @@ export const QuizResultView: React.FC<QuizResultViewProps> = ({result, onReset})
       })
   }, []);
 
+  console.log(result);
+
   return (
     <div ref={myRef} className="result-wrapper">
       <div className="result-card">
