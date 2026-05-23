@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { child, get, ref, set } from "firebase/database";
-import { type IStatistics } from "../../types/Quiz";
+import type { IQuizMeta, IStatistics } from "../../types/Quiz";
 import { RecentQuizzes } from "../RecentQuizzes/RecentQuizzes";
 import "./quizResultView.css";
 import { database } from "../../firebase/firebase";
@@ -8,10 +8,11 @@ import { useGuestUserId, useUser } from "../../store/useUserStore";
 
 interface QuizResultViewProps {
   result: IStatistics;
+  quiz: IQuizMeta
   onReset: () => void;
 }
 
-export const QuizResultView: React.FC<QuizResultViewProps> = ({result, onReset}) => {
+export const QuizResultView: React.FC<QuizResultViewProps> = ({result, quiz, onReset}) => {
   const myRef = useRef<HTMLDivElement>(null);
   const userUid = useUser()?.uid;
   const guestUser = useGuestUserId();

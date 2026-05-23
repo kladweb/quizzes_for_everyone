@@ -64,9 +64,7 @@ export const PageQuiz = () => {
     if (!testId) {
       return;
     }
-
     const existingStat = QuizStorageManager.getRecentStatTestId(testId);
-
     if (existingStat && existingStat.finishedAt) {
       setSavedResultStorage(existingStat);
     }
@@ -105,8 +103,8 @@ export const PageQuiz = () => {
 
   }, [testId, quiz?.title]);
 
-  if (savedResultStorage) {
-    return <QuizResultView result={savedResultStorage} onReset={handleReset}/>;
+  if (savedResultStorage && quiz) {
+    return <QuizResultView result={savedResultStorage} quiz={quiz} onReset={handleReset}/>;
   }
 
   if (!quiz || !questions) {

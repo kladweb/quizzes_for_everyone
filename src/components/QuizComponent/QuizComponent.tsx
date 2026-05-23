@@ -228,7 +228,8 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, questions, onReset, s
           <DownloadPDFButton quiz={quizToPdf}/>
         </div>
       )}
-      {currentStatistics && isSubmitted && <QuizResultView result={currentStatistics} onReset={handleReset}/>}
+      {currentStatistics && isSubmitted &&
+        <QuizResultView result={currentStatistics} quiz={quiz} onReset={handleReset}/>}
     </div>
   );
 };
