@@ -36,8 +36,31 @@ export interface IQuizzes {
   [testId: string]: IQuizMeta
 }
 
-interface IAnswer {
-  questionId: string;
+// interface IAnswer {
+//   questionId: string;
+//   isCorrect: boolean;
+//   score: number;
+//   selectedOptionIds: string[];
+//   correctOptionIds: string[];
+// }
+//
+// export interface IStatistics {
+//   testId: string;
+//   statId: string;
+//   userUid?: string | null;
+//   title: string;
+//   userName: string;
+//   startedAt: number;
+//   finishedAt: number;  //0 - not finished;
+//   incorrectCount: number;
+//   score: number;
+//   totalScore: number;
+//   maxScore: number;
+//   correctCount: number;
+//   answers: IAnswer[];
+// }
+
+export interface IAnswer {
   isCorrect: boolean;
   score: number;
   selectedOptionIds: string[];
@@ -57,7 +80,9 @@ export interface IStatistics {
   totalScore: number;
   maxScore: number;
   correctCount: number;
-  answers: IAnswer[];
+  answers: {
+    [questionId: string]: IAnswer;
+  }
 }
 
 interface IFirestoreData {

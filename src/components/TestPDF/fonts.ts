@@ -3,6 +3,7 @@ import { Font } from '@react-pdf/renderer';
 
 import RobotoRegular from './fonts/Roboto-Regular.ttf';
 import RobotoBold from './fonts/Roboto-Bold.ttf';
+import RobotoItalic from './fonts/Roboto-Italic.ttf';
 
 export const registerFonts = () => {
   Font.register({
@@ -17,6 +18,11 @@ export const registerFonts = () => {
         src: RobotoBold,
         fontStyle: 'normal',
         fontWeight: 'bold'
+      },
+      {
+        src: RobotoItalic,
+        fontStyle: 'italic',
+        fontWeight: 'normal'
       },
     ],
   });

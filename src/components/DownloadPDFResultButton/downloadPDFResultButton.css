@@ -1,0 +1,7 @@
+.qetResult {
+  display: block;
+  margin: 1.5rem auto 0;
+  padding: 0.5em;
+  font-size: 0.9em;
+  background-color: var(--color-selected-bg);
+}

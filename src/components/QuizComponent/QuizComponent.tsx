@@ -7,9 +7,9 @@ import { QuizResultView } from "../QuizResultView/QuizResultView";
 import { useGuestUserId, useUser } from "../../store/useUserStore";
 import { updateQuiz } from "../../store/useQuizzesStore";
 import { QuizStorageManager } from "../../utils/QuizStorageManager";
-import type { IStatistics, Question, IQuizMeta } from "../../types/Quiz";
-import "./quizComponent.css";
+import type { IStatistics, Question, IQuizMeta, IAnswer } from "../../types/Quiz";
 import { DownloadPDFButton } from "../DownloadPDFButton/DownloadPDFButton";
+import "./quizComponent.css";
 
 interface IQuizProps {
   quiz: IQuizMeta;
@@ -97,6 +97,17 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, questions, onReset, s
     const correctCount = shuffledQuestions.filter((_, index) => isQuestionCorrect(index)).length;
     const incorrectCount = shuffledQuestions.length - correctCount;
 
+    const answers: Record<string, IAnswer> = {};
+    shuffledQuestions.forEach((question: Question, index) => {
+      const questionScore = calculateQuestionScore(index);
+      answers[question.id] = {
+        isCorrect: questionScore === 1,
+        score: questionScore,
+        selectedOptionIds: selectedAnswers[index],
+        correctOptionIds: question.correctAnswers
+      };
+    });
+
     const statistics: IStatistics = {
       testId: quiz.testId,
       statId: statId,
@@ -110,16 +121,17 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, questions, onReset, s
       totalScore: totalScore,
       maxScore: maxScore,
       correctCount: correctCount,
-      answers: shuffledQuestions.map((question, index) => {
-        const questionScore = calculateQuestionScore(index);
-        return {
-          questionId: question.id,
-          isCorrect: questionScore === 1,
-          score: questionScore,
-          selectedOptionIds: selectedAnswers[index],
-          correctOptionIds: question.correctAnswers
-        };
-      })
+      answers: answers,
+      // answers: shuffledQuestions.map((question, index) => {
+      //   const questionScore = calculateQuestionScore(index);
+      //   return {
+      //     questionId: question.id,
+      //     isCorrect: questionScore === 1,
+      //     score: questionScore,
+      //     selectedOptionIds: selectedAnswers[index],
+      //     correctOptionIds: question.correctAnswers
+      //   };
+      // })
     };
     setCurrentStatistics(statistics);
     // console.log(JSON.stringify(statistics, null, 2));
