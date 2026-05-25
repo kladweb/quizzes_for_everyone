@@ -6,6 +6,7 @@ import {
   Checkbox, CheckboxChecked, CorrectMark, IncorrectMark, RadioButton,
   RadioButtonChecked
 } from "./SvgComponents";
+import { formatScore } from "../../../utils/formatters";
 
 export interface IQuizPDFResultProps {
   quiz: IQuizMeta;
@@ -19,21 +20,30 @@ export const ResultPDF: React.FC<IQuizPDFResultProps> = ({quiz, result}) => {
       <Page size="A4" style={stylesGen.page}>
         <Text style={stylesGen.header}>{`Результаты теста: "${quiz.title}"`}</Text>
         <Text style={stylesQResult.userName}>{`Исполнитель: ${result.userName}`}</Text>
-        <View style={stylesQuiz.question}>
+        <View>
           <View style={stylesGen.optionRow}>
             <Text style={stylesGen.option}>{`Верных ответов: ${result.correctCount}`}</Text>
             <CorrectMark/>
           </View>
-          <Text style={[stylesGen.optionRow, stylesGen.option]}>
-            {`Неверных/частично верных ответов: ${result.incorrectCount}`}
-          </Text>
-          <Text style={[stylesGen.optionRow, stylesGen.option]}>
-            {`Общий итог: ${result.totalScore.toFixed(2)} / ${result.maxScore}`}
-          </Text>
-          <Text style={[stylesGen.optionRow, stylesGen.option]}>{`Ваш результат: ${result.score}%`}</Text>
+          <View style={stylesGen.optionRow}>
+            <Text style={stylesGen.option}>
+              {`Неверных/частично верных ответов: ${result.incorrectCount}`}
+            </Text>
+            <IncorrectMark/>
+          </View>
+          <View style={stylesGen.optionRow}>
+            <Text style={stylesGen.option}>
+              {`Общий итог: ${formatScore(result.totalScore)} / ${result.maxScore}`}
+            </Text>
+          </View>
+          <View style={stylesGen.optionRow}>
+            <Text style={stylesGen.option}>
+              Ваш результат:
+              <Text style={{fontWeight: 'bold'}}>{` ${result.score}%`}</Text>
+            </Text>
+          </View>
         </View>
-
-
+        <Text style={{textAlign: "center", marginBottom: 10}}>Ваши ответы:</Text>
         {quiz.questions?.map((q: Question, index) => {
           const isCheckbox = q.correctAnswers.length > 1;
           const isQuestionCorrect = result.answers[q.id].isCorrect;
@@ -60,7 +70,8 @@ export const ResultPDF: React.FC<IQuizPDFResultProps> = ({quiz, result}) => {
                   return (
                     <View key={option.id} style={stylesGen.optionRow}>
                       {
-                        isCorrect ? <CorrectMark/> : <IncorrectMark/>
+                        isCorrect ? <CorrectMark style={stylesQResult.svgFirstMark}/> :
+                          <IncorrectMark style={stylesQResult.svgFirstMark}/>
                       }
                       <CheckboxChecked/>
                       <Text style={stylesGen.option}>
@@ -74,7 +85,7 @@ export const ResultPDF: React.FC<IQuizPDFResultProps> = ({quiz, result}) => {
                   return (
                     <View key={option.id} style={stylesGen.optionRow}>
                       {
-                        isCorrect && <CorrectMark/>
+                        isCorrect && <CorrectMark style={stylesQResult.svgFirstMark}/>
                       }
                       <Checkbox/>
                       <Text style={stylesGen.option}>
@@ -88,7 +99,8 @@ export const ResultPDF: React.FC<IQuizPDFResultProps> = ({quiz, result}) => {
                   return (
                     <View key={option.id} style={stylesGen.optionRow}>
                       {
-                        isCorrect ? <CorrectMark/> : <IncorrectMark/>
+                        isCorrect ? <CorrectMark style={stylesQResult.svgFirstMark}/> :
+                          <IncorrectMark style={stylesQResult.svgFirstMark}/>
                       }
                       <RadioButtonChecked/>
                       <Text style={stylesGen.option}>
@@ -102,7 +114,7 @@ export const ResultPDF: React.FC<IQuizPDFResultProps> = ({quiz, result}) => {
                   return (
                     <View key={option.id} style={stylesGen.optionRow}>
                       {
-                        isCorrect && <CorrectMark/>
+                        isCorrect && <CorrectMark style={stylesQResult.svgFirstMark}/>
                       }
                       <RadioButton/>
                       <Text style={stylesGen.option}>

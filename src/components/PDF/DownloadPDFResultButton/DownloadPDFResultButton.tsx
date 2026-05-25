@@ -27,7 +27,7 @@ export const DownloadPDFResultButton: React.FC<IQuizPDFResultProps> = ({quiz, re
 
   return (
     <button
-      className="result-button qetResult"
+      className="qetResult"
       onClick={handleDownload}
       disabled={isGenerating}
     >

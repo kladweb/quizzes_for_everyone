@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { child, get, ref, set } from "firebase/database";
-import type { IQuizMeta, IStatistics } from "../../types/Quiz";
 import { RecentQuizzes } from "../RecentQuizzes/RecentQuizzes";
 import { database } from "../../firebase/firebase";
 import { useGuestUserId, useUser } from "../../store/useUserStore";
-import "./quizResultView.css";
 import { DownloadPDFResultButton } from "../PDF/DownloadPDFResultButton/DownloadPDFResultButton";
+import { formatScore } from "../../utils/formatters";
+import type { IQuizMeta, IStatistics } from "../../types/Quiz";
+import "./quizResultView.css";
 
 interface QuizResultViewProps {
   result: IStatistics;
@@ -74,9 +75,6 @@ export const QuizResultView: React.FC<QuizResultViewProps> = ({result, quiz, onR
       })
   }, []);
 
-  console.log(quiz.questions);
-  console.log(result.answers);
-
   return (
     <div ref={myRef} className="result-wrapper">
       <div className="result-card">
@@ -90,7 +88,7 @@ export const QuizResultView: React.FC<QuizResultViewProps> = ({result, quiz, onR
         </p>
         <p className="result-text result-text--total">
           {/*<strong>Общий итог:</strong> {result.totalScore.toFixed(2)} / {result.answers.length}*/}
-          <strong>Общий итог:</strong> {result.totalScore.toFixed(2)} / {resultAnswersLength}
+          <strong>Общий итог:</strong> {formatScore(result.totalScore)} / {resultAnswersLength}
         </p>
         <p className="result-percent">
           Ваш результат: {Math.round((result.totalScore / resultAnswersLength) * 100)}%

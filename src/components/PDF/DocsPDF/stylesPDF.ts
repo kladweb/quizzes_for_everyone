@@ -22,6 +22,7 @@ export const stylesGen = StyleSheet.create({
   },
   questionText: {
     fontWeight: 'bold',
+    marginBottom: 4,
   },
   optionRow: {
     position: 'relative',
@@ -63,7 +64,7 @@ export const stylesQuiz = StyleSheet.create({
     textAlign: 'center',
   },
   question: {
-    marginBottom: 18,
+    marginBottom: 14,
   },
 });
 
@@ -93,6 +94,12 @@ export const stylesQResult = StyleSheet.create({
   },
   explanation: {
     fontSize: 9,
+  },
+  svgFirstMark: {
+    position: 'absolute',
+    left: -15,
+    width: 20,
+    alignItems: 'center'
   }
 });
 
