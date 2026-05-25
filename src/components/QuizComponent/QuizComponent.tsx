@@ -8,7 +8,7 @@ import { useGuestUserId, useUser } from "../../store/useUserStore";
 import { updateQuiz } from "../../store/useQuizzesStore";
 import { QuizStorageManager } from "../../utils/QuizStorageManager";
 import type { IStatistics, Question, IQuizMeta, IAnswer } from "../../types/Quiz";
-import { DownloadPDFButton } from "../DownloadPDFButton/DownloadPDFButton";
+import { DownloadPDFQuizButton } from "../PDF/DownloadPDFQuizButton/DownloadPDFQuizButton";
 import "./quizComponent.css";
 
 interface IQuizProps {
@@ -237,7 +237,7 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, questions, onReset, s
               Пожалуйста, введите Ваше имя и/или фамилию перед отправкой
             </p>
           )}
-          <DownloadPDFButton quiz={quizToPdf}/>
+          <DownloadPDFQuizButton quiz={quizToPdf}/>
         </div>
       )}
       {currentStatistics && isSubmitted &&

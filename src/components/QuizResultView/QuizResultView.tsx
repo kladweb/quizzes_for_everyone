@@ -5,7 +5,7 @@ import { RecentQuizzes } from "../RecentQuizzes/RecentQuizzes";
 import { database } from "../../firebase/firebase";
 import { useGuestUserId, useUser } from "../../store/useUserStore";
 import "./quizResultView.css";
-import { DownloadPDFResultButton } from "../DownloadPDFResultButton/DownloadPDFResultButton";
+import { DownloadPDFResultButton } from "../PDF/DownloadPDFResultButton/DownloadPDFResultButton";
 
 interface QuizResultViewProps {
   result: IStatistics;

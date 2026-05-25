@@ -1,4 +1,4 @@
-//components/TestPDF/fonts.ts
+//components/DocsPDF/fonts.ts
 import { Font } from '@react-pdf/renderer';
 
 import RobotoRegular from './fonts/Roboto-Regular.ttf';
