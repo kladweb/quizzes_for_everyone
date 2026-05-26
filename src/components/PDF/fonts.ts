@@ -1,8 +1,9 @@
-//components/TestPDF/fonts.ts
+//components/DocsPDF/fonts.ts
 import { Font } from '@react-pdf/renderer';
 
 import RobotoRegular from './fonts/Roboto-Regular.ttf';
 import RobotoBold from './fonts/Roboto-Bold.ttf';
+import RobotoItalic from './fonts/Roboto-Italic.ttf';
 
 export const registerFonts = () => {
   Font.register({
@@ -18,8 +19,13 @@ export const registerFonts = () => {
         fontStyle: 'normal',
         fontWeight: 'bold'
       },
+      {
+        src: RobotoItalic,
+        fontStyle: 'italic',
+        fontWeight: 'normal'
+      },
     ],
   });
 
-  console.log('Fonts registered:', Font.getRegisteredFontFamilies()); // для проверки
+  // console.log('Fonts registered:', Font.getRegisteredFontFamilies());
 };

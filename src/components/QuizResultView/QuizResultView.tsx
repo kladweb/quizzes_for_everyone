@@ -1,22 +1,26 @@
 import React, { useEffect, useRef, useState } from "react";
 import { child, get, ref, set } from "firebase/database";
-import { type IStatistics } from "../../types/Quiz";
 import { RecentQuizzes } from "../RecentQuizzes/RecentQuizzes";
-import "./quizResultView.css";
 import { database } from "../../firebase/firebase";
 import { useGuestUserId, useUser } from "../../store/useUserStore";
+import { DownloadPDFResultButton } from "../PDF/DownloadPDFResultButton/DownloadPDFResultButton";
+import { formatScore } from "../../utils/formatters";
+import type { IQuizMeta, IStatistics } from "../../types/Quiz";
+import "./quizResultView.css";
 
 interface QuizResultViewProps {
   result: IStatistics;
+  quiz: IQuizMeta
   onReset: () => void;
 }
 
-export const QuizResultView: React.FC<QuizResultViewProps> = ({result, onReset}) => {
+export const QuizResultView: React.FC<QuizResultViewProps> = ({result, quiz, onReset}) => {
   const myRef = useRef<HTMLDivElement>(null);
   const userUid = useUser()?.uid;
   const guestUser = useGuestUserId();
   const userId = userUid ? userUid : guestUser;
   const [isLiked, setIsLiked] = useState(2);
+  const resultAnswersLength = Object.keys(result.answers).length;
 
   const handlerLike = async () => {
     setIsLiked(1);
@@ -83,11 +87,13 @@ export const QuizResultView: React.FC<QuizResultViewProps> = ({result, onReset})
           <strong>Неверных/частично верных ответов:</strong> {result.incorrectCount} ✗
         </p>
         <p className="result-text result-text--total">
-          <strong>Общий итог:</strong> {result.totalScore.toFixed(2)} / {result.answers.length}
+          {/*<strong>Общий итог:</strong> {result.totalScore.toFixed(2)} / {result.answers.length}*/}
+          <strong>Общий итог:</strong> {formatScore(result.totalScore)} / {resultAnswersLength}
         </p>
         <p className="result-percent">
-          Ваш результат: {Math.round((result.totalScore / result.answers.length) * 100)}%
+          Ваш результат: {Math.round((result.totalScore / resultAnswersLength) * 100)}%
         </p>
+        <DownloadPDFResultButton quiz={quiz} result={result}/>
         <button className="result-button" onClick={onReset}>
           Пройти тест ещё раз
         </button>
