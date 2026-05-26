@@ -3,7 +3,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { ref, set } from "firebase/database";
 import { QuizComponent } from "../../components/QuizComponent/QuizComponent";
 import { database } from "../../firebase/firebase";
-import { IStatistics, IQuizMeta, Question, ToastType } from "../../types/Quiz";
+import { IStatistics, IQuizMeta, Question, ToastType, IAnswer } from "../../types/Quiz";
 import { QuizStorageManager } from "../../utils/QuizStorageManager";
 import { QuizResultView } from "../../components/QuizResultView/QuizResultView";
 import { Loader } from "../../components/Loader/Loader";
@@ -64,8 +64,23 @@ export const PageQuiz = () => {
     if (!testId) {
       return;
     }
-    const existingStat = QuizStorageManager.getRecentStatTestId(testId);
+    let existingStat = QuizStorageManager.getRecentStatTestId(testId);
+
     if (existingStat && existingStat.finishedAt) {
+
+      // Template format old data for statistics from localStorage
+      if (Array.isArray(existingStat.answers)) {
+        const answersMod: Record<string, any> = {};
+        existingStat.answers.forEach((answer) => {
+          answersMod[answer.questionId] = {};
+          Object.keys(answer).forEach((key) => {
+            answersMod[answer.questionId][key] = answer[key];
+          });
+        });
+        console.log(answersMod);
+        existingStat.answers = answersMod;
+      }
+
       setSavedResultStorage(existingStat);
     }
 
