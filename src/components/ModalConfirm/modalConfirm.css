@@ -17,11 +17,7 @@
 
 .modal-content {
   position: fixed;
-  /*display: flex;*/
-  /*justify-content: space-between;*/
-  /*flex-direction: column;*/
   width: min(42rem, 90%);
-  /*height: 20rem;*/
   background-color: var(--color-bg-card2);
   left: 50%;
   top: 50%;
@@ -60,7 +56,4 @@
     box-shadow: none;
     transform: scale(0.95);
   }
-}
-
-@media (max-width: 400px) {
 }

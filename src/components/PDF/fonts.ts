@@ -1,4 +1,3 @@
-//components/DocsPDF/fonts.ts
 import { Font } from '@react-pdf/renderer';
 
 import RobotoRegular from './fonts/Roboto-Regular.ttf';
@@ -26,6 +25,4 @@ export const registerFonts = () => {
       },
     ],
   });
-
-  // console.log('Fonts registered:', Font.getRegisteredFontFamilies());
 };

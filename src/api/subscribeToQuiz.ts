@@ -32,5 +32,4 @@ export async function removeQuizJob(userId: string, jobId: string) {
   const db = getDatabase();
   const jobRef = ref(db, `quizJobs/${jobId}`);
   await remove(jobRef);
-  // console.log("delete");
 }

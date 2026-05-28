@@ -17,14 +17,12 @@ export const QuestionComponent: React.FC<{
     if (isSubmitted) return;
 
     if (isMultipleChoice) {
-      // Checkbox logic
       if (selectedIds.includes(optionId)) {
         onAnswer(selectedIds.filter(id => id !== optionId));
       } else {
         onAnswer([...selectedIds, optionId]);
       }
     } else {
-      // Radio button logic
       onAnswer([optionId]);
     }
   };
