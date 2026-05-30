@@ -84,7 +84,7 @@ export const CorrectMark = ({style, ...props}: ViewProps) => (
       <Path
         d="M20 6L9 17L4 12"
         fill="none"
-        stroke="#2e7d32"           // тёмно-зелёный
+        stroke="#2e7d32"
         strokeWidth="3"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -99,7 +99,7 @@ export const IncorrectMark = ({style, ...props}: ViewProps) => (
       <Path
         d="M6 6L18 18M18 6L6 18"
         fill="none"
-        stroke="#d32f2f"           // красный
+        stroke="#d32f2f"
         strokeWidth="3"
         strokeLinecap="round"
         strokeLinejoin="round"

@@ -122,21 +122,9 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, questions, onReset, s
       maxScore: maxScore,
       correctCount: correctCount,
       answers: answers,
-      // answers: shuffledQuestions.map((question, index) => {
-      //   const questionScore = calculateQuestionScore(index);
-      //   return {
-      //     questionId: question.id,
-      //     isCorrect: questionScore === 1,
-      //     score: questionScore,
-      //     selectedOptionIds: selectedAnswers[index],
-      //     correctOptionIds: question.correctAnswers
-      //   };
-      // })
     };
     setCurrentStatistics(statistics);
-    // console.log(JSON.stringify(statistics, null, 2));
     saveStatistic(statistics);
-    // console.log("statistics 01: ", statistics);
     QuizStorageManager.saveRecentStat(statistics);
     const dbRef = ref(database);
     const snapshot = await get(child(dbRef, `quizzesMeta/${quiz.testId}/executionCount`));

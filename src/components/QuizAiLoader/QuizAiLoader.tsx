@@ -48,7 +48,6 @@ export const QuizAiLoader: React.FC<IQuizAiLoaderProps> = ({userUID, changeStepI
       );
       const jobId = response.jobId;
 
-      // СРАЗУ подписываемся
       const unsubscribe = subscribeToQuiz(
         jobId,
         async (result) => {

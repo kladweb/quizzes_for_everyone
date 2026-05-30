@@ -29,9 +29,6 @@ export const QuestionEdit: React.FC<IQuestionEditProps> = (
   } = useQuizEditor();
   const MAX_OPTIONS = 7;
 
-  // console.log(question.options);
-  // console.log(question)
-  // console.log(formError);
   return (
     <div className='questionsContainer questions-edit-container'>
       <input
@@ -45,7 +42,6 @@ export const QuestionEdit: React.FC<IQuestionEditProps> = (
         required
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           handleQuestionEdit(question, (e.target.value).split(") ", 2)[1])}
-        // handleQuestionEdit(question, (e.target.value))}
         onKeyDown={handleKeyDown}
       />
       <div className='options-edit'>

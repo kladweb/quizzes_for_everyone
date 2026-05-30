@@ -10,8 +10,6 @@ interface IModalQRCodeProps {
 }
 
 export const ModalQRCode: React.FC<IModalQRCodeProps> = ({url, qrCodeToShow, setQrCodeToShow}) => {
-  // const root = document.documentElement;
-  // const value = getComputedStyle(root).getPropertyValue('--color-selected-bg').trim();
   return (
     <AnimatePresence>
       {qrCodeToShow &&
