@@ -1,12 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { loginGoogle, useIsAuthLoading, useUser } from "../../store/useUserStore";
 import { clearCurrentQuiz } from "../../store/useCurrentCreatingQuiz";
+import { Skeleton } from "../../components/Skeleton/Skeleton";
 
 export const PageMain = () => {
   const navigate = useNavigate();
   const user = useUser();
   const isAuthLoading = useIsAuthLoading();
+  const [isImgLoaded, setIsImgLoaded] = useState(false);
 
   useEffect(() => {
     document.title = "ANY QUIZ";
@@ -21,10 +23,20 @@ export const PageMain = () => {
     navigate("/allquizzes");
   }
 
+  console.log(isImgLoaded);
+
   return (
     <div className='tests-container'>
+      {!isImgLoaded && <Skeleton height={"67cqw"} className={"main-image"}/>}
       <NavLink to='/allquizzes'>
-        <img className="main-image" src="open.png" alt="any-quiz" title="Перейти к списку всех тестов"/>
+        <img
+          className={`main-image${isImgLoaded ? "" : " hidden"}`}
+          src="/open.png"
+          alt="any-quiz"
+          title="Перейти к списку всех тестов"
+          onLoad={() => setIsImgLoaded(true)}
+          onError={() => setIsImgLoaded(true)}
+        />
       </NavLink>
       {
         user ?
