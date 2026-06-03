@@ -1,11 +1,11 @@
-import { ref, set } from "firebase/database";
+import React from "react";
 import { nanoid } from "nanoid";
+import { ref, set } from "firebase/database";
 import { database } from "../firebase/firebase";
 import { showToast } from "../store/useNoticeStore";
 import { type IQuizMeta, ToastType } from "../types/Quiz";
 import { QuizStorageManager } from "./QuizStorageManager";
 import { CAT_LABELS_RU_EXT } from "../variables/quizData";
-import React from "react";
 
 export const handleCopy = async (currentLink: string, setCopied: (copied: boolean) => void) => {
   try {

@@ -72,6 +72,25 @@ input[type="file"] {
   z-index: 20;
 }
 
+.button-main {
+  display: block;
+  min-width: 11rem;
+  margin: 1rem auto 0;
+  padding: 8px 16px;
+  font-size: 14px;
+  color: var(--color-text-contrast);
+  background-color: var(--color-primary);
+  border-radius: 6px;
+
+  &:hover {
+    background-color: var(--color-secondary);
+  }
+
+  &:active {
+    background-color: var(--color-tertiary);
+  }
+}
+
 /*Dot lights*/
 
 .dot_lights {
