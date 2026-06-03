@@ -25,6 +25,7 @@ body {
   max-width: 600px;
   margin: 10px auto;
   padding: 10px 20px;
+  container-type: inline-size;
   text-align: center;
   border: 2px dashed var(--color-border);
   border-radius: 12px;
@@ -58,6 +59,10 @@ input[type="file"] {
   max-width: 100%;
   margin-top: 0.5em;
   border-radius: 0.75em;
+}
+
+.hidden {
+  display: none;
 }
 
 .link-all-quizzes {
