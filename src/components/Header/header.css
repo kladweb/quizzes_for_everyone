@@ -25,8 +25,9 @@
 }
 
 .button-login {
+  min-width: 6.5em;
   margin: 6px 0;
-  padding: 8px 16px;
+  padding: 0.6em 1.18em;
   font-size: 0.85em;
   color: var(--color-text-contrast);
   background-color: var(--color-warning);
@@ -43,6 +44,7 @@
 
   &:disabled {
     background-color: var(--color-disabled);
+    cursor: not-allowed;
   }
 }
 
@@ -89,6 +91,7 @@
   .header-container {
     font-size: 0.8rem;
   }
+
   .nav-container {
     display: flex;
     flex-wrap: wrap;

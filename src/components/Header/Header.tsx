@@ -40,7 +40,7 @@ export const Header: React.FC = () => {
                 user ?
                   <button className='btn button-login' onClick={logoutGoogle}>LOGOUT</button> :
                   <button className='btn button-login ' onClick={loginGoogle} disabled={isAuthLoading}>
-                    {isAuthLoading ? "GOOGLE IN..." : "GOOGLE LOGIN"}
+                    {isAuthLoading ? "..." : "LOGIN"}
                   </button>
               }
             </>
