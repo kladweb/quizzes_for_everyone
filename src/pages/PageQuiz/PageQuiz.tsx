@@ -37,23 +37,6 @@ export const PageQuiz = () => {
     await set(ref(database, `statistics/${testId}/${statistics.statId}`), JSON.stringify(statistics));
   }
 
-  // const loadQuizAndQuestions = async () => {
-  //   if (testId) {
-  //     try {
-  //       const [quizData, questionData] = await Promise.all([QuizStorageManager.fetchCurrentQuiz(testId), QuizStorageManager.fetchQuestions(testId)]);
-  //       if (quizData && questionData) {
-  //         setQuiz(quizData);
-  //         setQuestions(questionData);
-  //       } else {
-  //         setIsPageEmpty(true);
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //       showToast("Ошибка загрузки данных!", ToastType.ERROR);
-  //     }
-  //   }
-  // }
-
   useEffect(() => {
     if (quiz && quiz.testId === testId) {
       showToast("Вы уже на странице этого теста!\nТест пройден!", ToastType.INFO);
@@ -83,13 +66,6 @@ export const PageQuiz = () => {
 
       setSavedResultStorage(existingStat);
     }
-
-    // if (!quiz || (quiz && quiz.testId !== testId)) {
-    //   loadQuizAndQuestions();
-    //   if (savedResultStorage) {
-    //     setSavedResultStorage(null);
-    //   }
-    // }
 
     if (quiz?.testId !== testId) {
       setQuiz(null);
