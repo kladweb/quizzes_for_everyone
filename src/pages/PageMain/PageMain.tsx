@@ -23,8 +23,6 @@ export const PageMain = () => {
     navigate("/allquizzes");
   }
 
-  console.log(isImgLoaded);
-
   return (
     <div className='tests-container'>
       {!isImgLoaded && <Skeleton height={"67cqw"} className={"main-image"}/>}

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { pdf } from '@react-pdf/renderer';
 import { saveAs } from 'file-saver';
-import { type IQuizPDFProps, QuizPDF } from "../DocsPDF/QuizPDF";
+import { type IQuizPDFProps } from "../DocsPDF/QuizPDF";
 import { getSafeFileName } from "../../../utils/quizUtils";
 import { showToast } from "../../../store/useNoticeStore";
 import { ToastType } from "../../../types/Quiz";
@@ -12,8 +11,14 @@ export const DownloadPDFQuizButton: React.FC<IQuizPDFProps> = ({quiz}) => {
 
   const handleDownload = async () => {
     setIsGenerating(true);
+
     try {
-      const blob = await pdf(<QuizPDF quiz={quiz}/>).toBlob();
+      const quizPDFModule = await import("../DocsPDF/QuizPDF");
+      const pdfServiceModule = await import("../pdfService");
+      const { QuizPDF } = quizPDFModule;
+      const { generatePDF } = pdfServiceModule;
+      const blob = await generatePDF(<QuizPDF quiz={quiz} />);
+
       saveAs(blob, `${getSafeFileName(quiz.title)}.pdf`);
     } catch (error) {
       console.error("Ошибка генерации PDF:", error);
