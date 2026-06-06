@@ -11,14 +11,14 @@ export const DownloadPDFQuizButton: React.FC<IQuizPDFProps> = ({quiz}) => {
 
   const handleDownload = async () => {
     setIsGenerating(true);
+
     try {
-      const [{QuizPDF}, {generatePDF}] = await Promise.all([
-        import("../DocsPDF/QuizPDF"),
-        import("../pdfService")
-      ]);
-      const blob = await generatePDF(
-        <QuizPDF quiz={quiz}/>
-      );
+      const quizPDFModule = await import("../DocsPDF/QuizPDF");
+      const pdfServiceModule = await import("../pdfService");
+      const { QuizPDF } = quizPDFModule;
+      const { generatePDF } = pdfServiceModule;
+      const blob = await generatePDF(<QuizPDF quiz={quiz} />);
+
       saveAs(blob, `${getSafeFileName(quiz.title)}.pdf`);
     } catch (error) {
       console.error("Ошибка генерации PDF:", error);
