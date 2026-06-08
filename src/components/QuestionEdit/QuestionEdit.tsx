@@ -73,7 +73,7 @@ export const QuestionEdit: React.FC<IQuestionEditProps> = (
           <div className="opt-btns-block">
             {
               (question.options.length > 2) &&
-              <button className="btn button-create del-option" onClick={() => {
+              <button className="btn del-option" onClick={() => {
                 deleteOption(question)
               }}>
                 -
@@ -81,7 +81,7 @@ export const QuestionEdit: React.FC<IQuestionEditProps> = (
             }
             {
               (question.options.length < MAX_OPTIONS) &&
-              <button className="btn button-create add-option" onClick={() => {
+              <button className="btn add-option" onClick={() => {
                 addOption(question)
               }}>
                 +
@@ -90,7 +90,7 @@ export const QuestionEdit: React.FC<IQuestionEditProps> = (
           </div>
           {
             isOnlyOneQuestion &&
-            <button className="btn button-create del-question" onClick={() => {
+            <button className="btn del-question" onClick={() => {
               handleDeleteQuestion(question)
             }}>Удалить вопрос
             </button>
