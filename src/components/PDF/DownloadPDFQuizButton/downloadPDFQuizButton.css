@@ -14,3 +14,7 @@
     transform: scale(1.1);
   }
 }
+
+.loader-min {
+  margin-top: 1.8em;
+}
