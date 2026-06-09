@@ -14,3 +14,9 @@
     opacity: 0.7;
   }
 }
+
+.loader-res {
+  color: var(--color-bg-dotlight1);
+  transform: scale(0.8);
+  margin: -0.1em 0;
+}

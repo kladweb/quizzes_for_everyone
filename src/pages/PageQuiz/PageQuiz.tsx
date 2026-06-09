@@ -94,6 +94,8 @@ export const PageQuiz = () => {
 
   }, [testId, quiz?.title]);
 
+
+
   if (savedResultStorage && quiz) {
     return <QuizResultView result={savedResultStorage} quiz={quiz} onReset={handleReset}/>;
   }

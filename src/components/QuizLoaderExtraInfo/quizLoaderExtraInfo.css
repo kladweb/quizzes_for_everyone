@@ -36,29 +36,6 @@
   }
 }
 
-.input-category, .input-language {
-  box-sizing: border-box;
-  display: inline-block;
-  width: 100%;
-  max-width: 15em;
-  margin: 0 1em 0.7em;
-  padding: 6px 8px;
-  font-size: 1em;
-  border: 1px solid var(--color-border);
-  border-radius: 6px;
-  outline: none;
-  background-color: var(--color-bg-card);
-  color: var(--color-text-primary);
-
-  /*&::placeholder {*/
-  /*  font-size: 0.8em;*/
-  /*}*/
-
-  &:focus-visible {
-    border: 2px solid var(--color-disabled);
-  }
-}
-
 .extra-info-input {
   display: inline-block;
 
@@ -67,10 +44,6 @@
     width: min-content;
     vertical-align: middle;
   }
-}
-
-.input-category {
-  width: 100%;
 }
 
 .btn-save-block {
@@ -112,10 +85,6 @@
       width: 100%;
       margin-bottom: 0.2em;
     }
-  }
-
-  .input-category {
-    width: 100%;
   }
 
   .extra-info-input {

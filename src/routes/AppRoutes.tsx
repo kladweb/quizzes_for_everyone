@@ -1,18 +1,30 @@
-import React from "react";
-import {  Route, Routes } from "react-router-dom";
+import React, { lazy } from "react";
+import { Route, Routes } from "react-router-dom";
 import { MainLayout } from "../layouts/MainLayout";
 import { ProtectedRoute } from "./ProtectedRoute";
-import { PageMyQuizzes } from "../pages/PageMyQuizzes/PageMyQuizzes";
 import { PageQuiz } from "../pages/PageQuiz/PageQuiz";
 import { PageMain } from "../pages/PageMain/PageMain";
-import { PageCreateQuiz } from "../pages/PageCreateQuiz/PageCreateQuiz";
-import { PageEmpty } from "../pages/PageEmpty/PageEmpty";
-import { PageCreateQuizJson } from "../pages/PageCreateQuizJson/PageCreateQuizJson";
 import { PageAllQuizzes } from "../pages/PageAllQuizzes/PageAllQuizzes";
-import { PageCreateQuizManual } from "../pages/PageCreateQuizManual/PageCreateQuizManual";
-import { PageQuizEdit } from "../pages/PageQuizEdit/PageQuizEdit";
-import { PageCreateQuizAI } from "../pages/PageCreateQuizAI/PageCreateQuizAI";
+import { PageEmpty } from "../pages/PageEmpty/PageEmpty";
 import { Page404 } from "../pages/Page404/Page404";
+
+const PageCreateQuiz = lazy(() => import ("../pages/PageCreateQuiz/PageCreateQuiz")
+  .then((module) => ({default: module.PageCreateQuiz})));
+
+const PageCreateQuizJson = lazy(() => import ("../pages/PageCreateQuizJson/PageCreateQuizJson")
+  .then((module) => ({default: module.PageCreateQuizJson})));
+
+const PageCreateQuizManual = lazy(() => import ("../pages/PageCreateQuizManual/PageCreateQuizManual")
+  .then((module) => ({default: module.PageCreateQuizManual})));
+
+const PageQuizEdit = lazy(() => import ("../pages/PageQuizEdit/PageQuizEdit")
+  .then((module) => ({default: module.PageQuizEdit})));
+
+const PageCreateQuizAI = lazy(() => import ("../pages/PageCreateQuizAI/PageCreateQuizAI")
+  .then((module) => ({default: module.PageCreateQuizAI})));
+
+const PageMyQuizzes = lazy(() => import ("../pages/PageMyQuizzes/PageMyQuizzes")
+  .then((module) => ({default: module.PageMyQuizzes})));
 
 export const AppRoutes = () => {
   return (

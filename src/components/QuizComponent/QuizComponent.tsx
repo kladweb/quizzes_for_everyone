@@ -158,6 +158,8 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, questions, onReset, s
     }, 100);
   }
 
+
+
   return (
     <div className='quizContainer'>
       <div className='quiz-head-block'>
