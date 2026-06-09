@@ -76,6 +76,10 @@ Create a `.env` file in the project root and add your credentials.
 | `npm run build` | Build the app for production |
 | `npm run preview` | Preview the production build locally |
 | `netlify dev` | Start frontend + Netlify Functions together (**recommended**) |
+| `npm run lint` | Run ESLint (React + TypeScript) |
+| `npm run lint:fix` | Run ESLint and auto-fix issues where possible |
+| `npm run format` | Format the codebase with Prettier |
+| `npm run format:check` | Check formatting with Prettier without writing files |
 
 ---
 
