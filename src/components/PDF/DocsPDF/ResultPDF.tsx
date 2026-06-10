@@ -61,11 +61,8 @@ export const ResultPDF: React.FC<IQuizPDFResultProps> = ({quiz, result}) => {
                 </Text>
               }
               {q.options.map((option, i) => {
-                console.log(result.answers);
-
                 const isChecked = result.answers[q.id].selectedOptionIds.includes(option.id);
                 const isCorrect = result.answers[q.id].correctOptionIds.includes(option.id);
-
                 if (isCheckbox && isChecked) {
                   return (
                     <View key={option.id} style={stylesGen.optionRow}>

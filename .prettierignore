@@ -1,0 +1,6 @@
+dist
+node_modules
+.netlify
+package-lock.json
+deno.lock
+public

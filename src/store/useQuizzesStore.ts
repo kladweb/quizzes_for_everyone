@@ -148,8 +148,7 @@ const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
   updateQuiz: (quiz: IQuizMeta) => {
     const testList = get().allQuizzes;
     if (testList) {
-      testList[quiz.testId] = quiz;
-      set(() => ({allQuizzes: testList}));
+      set(() => ({allQuizzes: {...testList, [quiz.testId]: quiz}}));
     }
   },
   setIsLoading: (isLoading: boolean) => {
