@@ -60,7 +60,6 @@ const userStore: StateCreator<IUserState> = (set) => ({
     signInWithPopup(auth, provider)
       .then((result) => {
         const getUser = auth.currentUser as IUser;
-        console.log(getUser);
         const user: IUser = {
           uid: getUser.uid,
           email: getUser.email,
@@ -69,18 +68,20 @@ const userStore: StateCreator<IUserState> = (set) => ({
         return user.uid;
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       })
       .finally(() => {
-        set(() => ({isAuthLoaded: true}));
+        set(() => ({isAuthLoaded: true, isAuthLoading: false}));
       });
   },
   logoutGoogle: () => {
     signOut(auth).then(() => {
       console.log('Sign-out successful', auth.currentUser);
-      set(() => ({user: null, isAuthLoading: false}));
+      set(() => ({user: null}));
     }).catch((error) => {
       console.log('Sign-out error', error);
+    }).finally(() => {
+      set(() => ({isAuthLoading: false}));
     });
   }
 })
