@@ -9,7 +9,7 @@ import {
 import { clearCurrentQuiz } from "../../store/useCurrentCreatingQuiz";
 import { Loader } from "../../components/Loader/Loader";
 import type { IQuizMeta, IQuizzes } from "../../types/Quiz";
-import { QuizCard } from "../../components/TestsList/QuizCard";
+import { QuizCard } from "../../components/QuizCard/QuizCard";
 import { ModalConfirm } from "../../components/ModalConfirm/ModalConfirm";
 import { PageEmpty } from "../PageEmpty/PageEmpty";
 import { filterQuizzes, getUniqueCategories } from "../../utils/quizUtils";

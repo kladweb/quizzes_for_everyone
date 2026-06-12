@@ -4,7 +4,7 @@ import { AnimatePresence } from 'framer-motion';
 import { loadAllQuizzes, useAllQuizzes, useIsAllLoaded, useIsLoading } from "../../store/useQuizzesStore";
 import { Loader } from "../../components/Loader/Loader";
 import type { IQuizMeta, IQuizzes } from "../../types/Quiz";
-import { QuizCard } from "../../components/TestsList/QuizCard";
+import { QuizCard } from "../../components/QuizCard/QuizCard";
 import { useGuestUserId, useUser } from "../../store/useUserStore";
 import { PAGE_SIZE } from "../../variables/quizData";
 import { filterQuizzes, getUniqueCategories } from "../../utils/quizUtils";
