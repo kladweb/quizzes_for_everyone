@@ -15,7 +15,7 @@ const PLAN_LIMITS = {
 
 type Plan = keyof typeof PLAN_LIMITS;
 
-interface Tokens {
+export interface Tokens {
   dailyCount: number;
   plan: Plan;
   usedToday: number;
@@ -187,7 +187,7 @@ export const useIsSubscribed = () =>
   });
 
 
-export const loadTokens = (userId: string) =>
+export const loadTokens = (userId: string): Promise<void> =>
   useTokensStore.getState().loadTokens(userId);
-export const spendTokens = (userId: string, amount: number) =>
+export const spendTokens = (userId: string, amount: number): Promise<void> =>
   useTokensStore.getState().spendTokens(userId, amount);

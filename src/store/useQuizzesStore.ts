@@ -13,9 +13,9 @@ interface IInitialState {
 }
 
 interface IActions {
-  loadAllQuizzes: () => void;
-  loadUserIds: (userUid: string) => void;
-  loadUserQuizzes: (userUid: string) => void;
+  loadAllQuizzes: () => Promise<void>;
+  loadUserIds: (userUid: string) => Promise<void>;
+  loadUserQuizzes: (userUid: string) => Promise<void>;
   saveUserQuiz: (quiz: IQuizMeta, userUid: string) => Promise<void>;
   deleteUserQuiz: (testId: string, userUid: string) => Promise<void>;
   updateQuiz: (quiz: IQuizMeta) => void;
@@ -165,14 +165,15 @@ export const useIsAllLoaded = () => useQuizzesStore((state) => state.isAllLoaded
 export const useIsMyIdsLoaded = () => useQuizzesStore((state) => state.isMyIdsLoaded);
 export const useIsMyQuizzesLoaded = () => useQuizzesStore((state) => state.isMyQuizzesLoaded);
 export const useErrorLoading = () => useQuizzesStore((state) => state.errorLoading);
-export const loadAllQuizzes = () => useQuizzesStore.getState().loadAllQuizzes();
-export const loadUserIds = (userUid: string) =>
+export const loadAllQuizzes = (): Promise<void> =>
+  useQuizzesStore.getState().loadAllQuizzes();
+export const loadUserIds = (userUid: string): Promise<void> =>
   useQuizzesStore.getState().loadUserIds(userUid);
-export const loadUserQuizzes = (userUid: string) =>
+export const loadUserQuizzes = (userUid: string): Promise<void> =>
   useQuizzesStore.getState().loadUserQuizzes(userUid);
-export const saveUserQuiz = (quiz: IQuizMeta, userUid: string) =>
+export const saveUserQuiz = (quiz: IQuizMeta, userUid: string): Promise<void> =>
   useQuizzesStore.getState().saveUserQuiz(quiz, userUid);
-export const deleteUserQuiz = (testId: string, userUid: string) =>
+export const deleteUserQuiz = (testId: string, userUid: string): Promise<void> =>
   useQuizzesStore.getState().deleteUserQuiz(testId, userUid);
 export const updateQuiz = (quiz: IQuizMeta,) =>
   useQuizzesStore.getState().updateQuiz(quiz);
