@@ -3,7 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { Header } from "../components/Header/Header";
 import { Footer } from "../components/Footer/Footer";
 import { ToastNotice } from "../components/ToastNotice/ToastNotice";
-import { ScrollUp } from "../components/ScroppUp/ScrollUp";
+import { ScrollUp } from "../components/ScrollUp/ScrollUp";
 import { useErrorLoading } from "../store/useQuizzesStore";
 import { useUser } from "../store/useUserStore";
 import { loadTokens, useLoadingTokens } from "../store/useTokensStore";

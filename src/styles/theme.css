@@ -12,6 +12,8 @@
   --color-text-primary: #1F2933;
   --color-text-secondary: #4B5563;
   --color-text-contrast: white;
+  --color-contrast-dark: #1F2933;
+
 
   /* ===== UI ===== */
   --color-border: #E5E7EB;
@@ -23,9 +25,10 @@
 
   /* ===== Brand ===== */
   --color-primary: #015B76;
-  --color-secondary: #017A9B;
+  --color-secondary: #016C89;
+  /*--color-secondary: #017A9B;*/
   --color-tertiary: #01475D;
-  --color-quaternary: #F59E0B;
+  --color-quaternary: #C66A05;
 
   /* ===== States ===== */
   --color-success: #2E7D32;
@@ -38,7 +41,7 @@
   --color-error-msg: #7F1D1D;
   --color-error-bg: #fdc6c6;
 
-  --color-warning: #F59E0B;
+  --color-warning: #C66A05;
   --color-warning-bg: #FFF8E1;
 }
 
@@ -56,6 +59,7 @@
   --color-text-primary: #E5E7EB;
   --color-text-secondary: #9CA3AF;
   --color-text-contrast: #0F172A;
+  --color-contrast-dark: #1F2933;
 
   /* ===== UI ===== */
   --color-border: #64748B;
@@ -68,6 +72,7 @@
   --color-primary: #7DD3FC;
   --color-secondary: #38BDF8;
   --color-tertiary: #7DD3FC;
+  --color-quaternary: #F59E0B;
 
   /* ===== States ===== */
   --color-success: #4ADE80;
@@ -77,5 +82,7 @@
   --color-error: #F87171;
   --color-error-msg: #fdc6c6;
   --color-error-bg: #7F1D1D;
+
+  --color-warning: #F59E0B;
 }
 

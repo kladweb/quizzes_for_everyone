@@ -128,6 +128,7 @@
 }
 
 .quiz-link-copy {
+  min-width: 9.8em;
   border: none;
   background: none;
   color: var(--color-primary);
