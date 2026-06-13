@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { lazy, Suspense, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { QRCode } from "react-qr-code";
 import { clearCurrentQuiz, useQuizComplete } from "../../store/useCurrentCreatingQuiz";
-import { ModalQRCode } from "../ModalQRCode/ModalQRCode";
 import "./linkQuiz.css";
+
+const ModalQRCodeLazy = lazy(() =>
+  import("../ModalQRCode/ModalQRCodeLazy").then((module) => ({
+    default: module.ModalQRCodeLazy,
+  })));
 
 export const LinkQuiz: React.FC<{ testId: string }> = ({testId}) => {
   const navigate = useNavigate();
@@ -50,11 +54,15 @@ export const LinkQuiz: React.FC<{ testId: string }> = ({testId}) => {
         <QRCode value={currentLink} size={100}/>
       </button>
       <button className="btn btn-link-create" onClick={handleCreateNewTest}>Создать ещё один тест</button>
-      <ModalQRCode
-        url={`https://any-quiz.netlify.app/quizzes/${qrCodeToShow}`}
-        qrCodeToShow={qrCodeToShow}
-        setQrCodeToShow={setQrCodeToShow}
-      />
+      {qrCodeToShow &&
+        <Suspense fallback={null}>
+          <ModalQRCodeLazy
+            url={`https://any-quiz.netlify.app/quizzes/${qrCodeToShow}`}
+            qrCodeToShow={qrCodeToShow}
+            setQrCodeToShow={setQrCodeToShow}
+          />
+        </Suspense>
+      }
     </div>
   )
 }
