@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import React, { Suspense, useEffect } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Header } from "../components/Header/Header";
 import { Footer } from "../components/Footer/Footer";
+import { Loader } from "../components/Loader/Loader";
 import { ToastNotice } from "../components/ToastNotice/ToastNotice";
 import { ScrollUp } from "../components/ScrollUp/ScrollUp";
 import { useErrorLoading } from "../store/useQuizzesStore";
@@ -10,6 +11,7 @@ import { loadTokens, useLoadingTokens } from "../store/useTokensStore";
 
 export const MainLayout = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const errorLoading = useErrorLoading();
   const user = useUser();
   const loadingTokens = useLoadingTokens();
@@ -35,7 +37,9 @@ export const MainLayout = () => {
     <>
       <Header/>
       <main className="main">
-        <Outlet/>
+        <Suspense fallback={<div className="loader-container"><Loader/></div>}>
+          <Outlet/>
+        </Suspense>
         <ToastNotice/>
         <ScrollUp/>
         <div className="dot_lights">

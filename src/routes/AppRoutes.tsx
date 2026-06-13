@@ -40,15 +40,14 @@ export const AppRoutes = () => {
           <Route path="/createquiz/ai" element={<PageCreateQuizAI/>}/>
           <Route path="/myquizzes" element={<PageMyQuizzes/>}/>
           <Route path="/myquizzes/:category?" element={<PageMyQuizzes/>}/>
-          {/*<Route path="/createquiz/ai" element={<PageEmpty emptyReason="pageDevelopment"/>}/>*/}
         </Route>
 
         <Route path="/allquizzes" element={<PageAllQuizzes/>}/>
         <Route path="/allquizzes/:category?" element={<PageAllQuizzes/>}/>
         <Route path="/quizzes/:testid" element={<PageQuiz/>}/>
         <Route path="/service" element={<PageEmpty emptyReason="serviceWork"/>}/>
-        <Route path='*' element={<Page404/>}/>
+        <Route path="*" element={<Page404/>}/>
       </Route>
     </Routes>
-  )
-}
+  );
+};
