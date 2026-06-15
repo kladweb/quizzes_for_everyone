@@ -7,6 +7,7 @@ import { QuizResultView } from "../QuizResultView/QuizResultView";
 import { useGuestUserId, useUser } from "../../store/useUserStore";
 import { updateQuiz } from "../../store/useQuizzesStore";
 import { QuizStorageManager } from "../../utils/QuizStorageManager";
+import { calculateQuestionScore, isQuestionFullyCorrect } from "../../utils/quizScoring";
 import type { IStatistics, Question, IQuizMeta, IAnswer } from "../../types/Quiz";
 import { DownloadPDFQuizButton } from "../PDF/DownloadPDFQuizButton/DownloadPDFQuizButton";
 import "./quizComponent.css";
@@ -66,22 +67,13 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, questions, onReset, s
     setSelectedAnswers(newAnswers);
   };
 
-  const calculateQuestionScore = (questionIndex: number): number => {
+  const getQuestionScore = (questionIndex: number): number => {
     const question = shuffledQuestions[questionIndex];
-    const selected = selectedAnswers[questionIndex];
-    const correct = question.correctAnswers;
-    // If any wrong answer is selected, score is 0
-    const hasWrongAnswer = selected.some(id => !correct.includes(id));
-    if (hasWrongAnswer) return 0;
-    // If no answers selected, score is 0
-    if (selected.length === 0) return 0;
-    // Score = correct choices selected / total number of correct answers
-    const correctSelected = selected.filter(id => correct.includes(id)).length;
-    return correctSelected / correct.length;
+    return calculateQuestionScore(selectedAnswers[questionIndex], question.correctAnswers);
   };
 
   const isQuestionCorrect = (questionIndex: number): boolean => {
-    return calculateQuestionScore(questionIndex) === 1;
+    return isQuestionFullyCorrect(getQuestionScore(questionIndex));
   };
 
   const handleSubmit = async () => {
@@ -90,7 +82,7 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, questions, onReset, s
     const finishTime = Date.now();
     // Calculate total score with partial credit
     const totalScore = shuffledQuestions.reduce((sum, _, index) => {
-      return sum + calculateQuestionScore(index);
+      return sum + getQuestionScore(index);
     }, 0);
     const maxScore = shuffledQuestions.length;
     const scorePercentage = Math.round((totalScore / maxScore) * 100);
@@ -99,7 +91,7 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, questions, onReset, s
 
     const answers: Record<string, IAnswer> = {};
     shuffledQuestions.forEach((question: Question, index) => {
-      const questionScore = calculateQuestionScore(index);
+      const questionScore = getQuestionScore(index);
       answers[question.id] = {
         isCorrect: questionScore === 1,
         score: questionScore,
