@@ -32,6 +32,7 @@
 - **Frontend:** React 18, TypeScript, React Router v7
 - **State management:** Zustand
 - **Build tool:** Vite
+- **Testing:** Vitest, Testing Library
 - **Backend / DB:** Firebase (Firestore)
 - **AI integration:** OpenAI API
 - **Serverless:** Netlify Functions
@@ -80,8 +81,49 @@ Create a `.env` file in the project root and add your credentials.
 | `npm run lint:fix` | Run ESLint and auto-fix issues where possible |
 | `npm run format` | Format the codebase with Prettier |
 | `npm run format:check` | Check formatting with Prettier without writing files |
+| `npm test` | Run tests in watch mode (Vitest) |
+| `npm run test:run` | Run all tests once and exit |
 
 ---
+
+## 🧪 Testing
+
+The project uses [Vitest](https://vitest.dev/) for unit tests. Test files live next to the source code (e.g. `src/utils/quizScoring.test.ts`).
+
+### Run tests
+
+```bash
+# Watch mode — re-runs on file changes
+npm test
+
+# Single run — used in CI and pre-commit hook
+npm run test:run
+```
+
+### What is covered
+
+| Area | File |
+|---|---|
+| Score formatting | `src/utils/formatters.test.ts` |
+| Quiz scoring logic | `src/utils/quizScoring.test.ts` |
+| Quiz import, filtering, file names | `src/utils/quizUtils.test.ts` |
+
+### Pre-commit hook (Husky)
+
+Tests run automatically before every `git commit`. A commit is created **only if all tests pass**.
+
+This is configured via [Husky](https://typicode.github.io/husky/) in `.husky/pre-commit`, which runs `npm run test:run`.
+
+After cloning the repository, hooks are installed automatically when you run:
+
+```bash
+npm install
+```
+
+The `prepare` script in `package.json` sets up Husky for you — no extra steps needed.
+
+> **Bypassing the hook (emergency only):** use `git commit --no-verify` to skip the pre-commit check. Avoid this in normal workflow — the hook exists to prevent broken code from being committed.
+
 
 ## 💻 Local Development Modes
 
