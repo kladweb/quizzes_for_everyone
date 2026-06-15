@@ -159,6 +159,8 @@ const tokensStore: StateCreator<TokensStore> = (set, get) => ({
 
 const useTokensStore = create<TokensStore>()(tokensStore);
 
+export { useTokensStore };
+
 export const useTokens = () => useTokensStore((state) => state.tokens);
 export const useLoadingTokens = () => useTokensStore((state) => state.loadingTokens);
 

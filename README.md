@@ -107,6 +107,8 @@ npm run test:run
 | Score formatting | `src/utils/formatters.test.ts` |
 | Quiz scoring logic | `src/utils/quizScoring.test.ts` |
 | Quiz import, filtering, file names | `src/utils/quizUtils.test.ts` |
+| Token limits and spending | `src/store/useTokensStore.test.ts` |
+| Recent quiz results (localStorage) | `src/utils/QuizStorageManager.test.ts` |
 
 ### Pre-commit hook (Husky)
 
