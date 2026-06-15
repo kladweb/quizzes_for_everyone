@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { AnimatePresence } from 'framer-motion';
 import { useGuestUserId, useUser } from "../../store/useUserStore";
@@ -16,7 +16,11 @@ import { filterQuizzes, getUniqueCategories } from "../../utils/quizUtils";
 import { PAGE_SIZE } from "../../variables/quizData";
 import { FiltersMenu } from "../../components/FiltersMenu/FiltersMenu";
 import "./PageMyQuizzes.css";
-import { ModalQRCode } from "../../components/ModalQRCode/ModalQRCode";
+
+const ModalQRCodeLazy = lazy(() =>
+  import("../../components/ModalQRCode/ModalQRCodeLazy").then((module) => ({
+    default: module.ModalQRCodeLazy,
+  })));
 
 export const PageMyQuizzes: React.FC = () => {
   const sentinelRef = useRef<HTMLDivElement | null>(null);
@@ -156,11 +160,15 @@ export const PageMyQuizzes: React.FC = () => {
         modalQuestion={`Вы действительно хотите удалить тест\n"${quizToDelete?.title}"\nбез возможности восстановления?`}
         handlerConfirmDelete={handlerConfirmDelete}
       />
-      <ModalQRCode
-        url={`https://any-quiz.netlify.app/quizzes/${qrCodeToShow}`}
-        qrCodeToShow={qrCodeToShow}
-        setQrCodeToShow={setQrCodeToShow}
-      />
+      {qrCodeToShow &&
+        <Suspense fallback={null}>
+          <ModalQRCodeLazy
+            url={`https://any-quiz.netlify.app/quizzes/${qrCodeToShow}`}
+            qrCodeToShow={qrCodeToShow}
+            setQrCodeToShow={setQrCodeToShow}
+          />
+        </Suspense>
+      }
       <div ref={sentinelRef} className="my-quizzes-sentinel"/>
     </>
   );

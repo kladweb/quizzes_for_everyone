@@ -33,3 +33,6 @@ env
 
 # Local Netlify folder
 .netlify
+
+# Performance reports
+reports/

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { AnimatePresence } from 'framer-motion';
 import { loadAllQuizzes, useAllQuizzes, useIsAllLoaded, useIsLoading } from "../../store/useQuizzesStore";
@@ -9,8 +9,12 @@ import { useGuestUserId, useUser } from "../../store/useUserStore";
 import { PAGE_SIZE } from "../../variables/quizData";
 import { filterQuizzes, getUniqueCategories } from "../../utils/quizUtils";
 import { FiltersMenu } from "../../components/FiltersMenu/FiltersMenu";
-import { ModalQRCode } from "../../components/ModalQRCode/ModalQRCode";
 import "./pageAllQuizzes.css";
+
+const ModalQRCodeLazy = lazy(() =>
+  import("../../components/ModalQRCode/ModalQRCodeLazy").then((module) => ({
+    default: module.ModalQRCodeLazy,
+  })));
 
 export const PageAllQuizzes = () => {
   const sentinelRef = useRef<HTMLDivElement | null>(null);
@@ -91,11 +95,15 @@ export const PageAllQuizzes = () => {
             </AnimatePresence>
         }
       </div>
-      <ModalQRCode
-        url={`https://any-quiz.netlify.app/quizzes/${qrCodeToShow}`}
-        qrCodeToShow={qrCodeToShow}
-        setQrCodeToShow={setQrCodeToShow}
-      />
+      {qrCodeToShow &&
+        <Suspense fallback={null}>
+          <ModalQRCodeLazy
+            url={`https://any-quiz.netlify.app/quizzes/${qrCodeToShow}`}
+            qrCodeToShow={qrCodeToShow}
+            setQrCodeToShow={setQrCodeToShow}
+          />
+        </Suspense>
+      }
       <div ref={sentinelRef} className="my-quizzes-sentinel"/>
     </div>
   )
