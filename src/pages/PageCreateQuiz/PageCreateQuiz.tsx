@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { CreateQuizWay } from "../../components/CreateQuizWay/CreateQuizWay";
 import { type IWayCardsData, wayCardsData } from "../../components/CreateQuizWay/wayCardsData";
 import { IUser, useUser } from "../../store/useUserStore";
-import "./pageCreateQuiz.css";
 import { showToast } from "../../store/useNoticeStore";
 import { ToastType } from "../../types/Quiz";
 import { useCanSpend } from "../../store/useTokensStore";
+import "./pageCreateQuiz.css";
 
 export const PageCreateQuiz = () => {
   const navigate = useNavigate();
