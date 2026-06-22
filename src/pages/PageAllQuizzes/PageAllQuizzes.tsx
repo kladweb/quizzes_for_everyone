@@ -1,15 +1,16 @@
 import React, { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { AnimatePresence } from 'framer-motion';
 import { loadAllQuizzes, useAllQuizzes, useIsAllLoaded, useIsLoading } from "../../store/useQuizzesStore";
 import { Loader } from "../../components/Loader/Loader";
 import type { IQuizMeta, IQuizzes } from "../../types/Quiz";
 import { QuizCard } from "../../components/QuizCard/QuizCard";
 import { useGuestUserId, useUser } from "../../store/useUserStore";
-import { PAGE_SIZE } from "../../variables/quizData";
+import { CAT_LABELS_RU_EXT, PAGE_SIZE } from "../../variables/quizData";
 import { filterQuizzes, getUniqueCategories } from "../../utils/quizUtils";
 import { FiltersMenu } from "../../components/FiltersMenu/FiltersMenu";
 import "./pageAllQuizzes.css";
+import { Page404 } from "../Page404/Page404";
 
 const ModalQRCodeLazy = lazy(() =>
   import("../../components/ModalQRCode/ModalQRCodeLazy").then((module) => ({
@@ -59,6 +60,7 @@ export const PageAllQuizzes = () => {
   useEffect(
     () => {
       setVisibleCount(PAGE_SIZE);
+
     }, [testList.length, category]);
 
   useEffect(() => {
@@ -72,6 +74,10 @@ export const PageAllQuizzes = () => {
     observer.observe(sentinelRef.current);
     return () => observer.disconnect();
   }, [visibleCount, testList.length]);
+
+  if (category && !Object.keys(CAT_LABELS_RU_EXT).includes(category)) {
+    return <Page404/>
+  }
 
   return (
     <div className='tests-container'>

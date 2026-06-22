@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { vi } from "vitest";
 import { IWayCardsData } from "./wayCardsData";
 import { CreateQuizWay } from "./CreateQuizWay";
@@ -38,8 +38,15 @@ const renderCreateQuizWay = (props: IDataCreateQuizWayProps) => {
 }
 
 describe("Creating quiz way card", () => {
-  renderCreateQuizWay(testProps);
+  beforeEach(() => {
+    renderCreateQuizWay(testProps);
+  });
   it("renders creating quiz way card", () => {
     expect(screen.getByText(testCard.head)).toBeInTheDocument();
   })
+
+  it("onClick is triggered when card is clicked", () => {
+    fireEvent.click(screen.getByText(testCard.head));
+    expect(clickCallback).toHaveBeenCalledTimes(1);
+  });
 });
