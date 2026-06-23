@@ -13,9 +13,10 @@ import { QuizCard } from "../../components/QuizCard/QuizCard";
 import { ModalConfirm } from "../../components/ModalConfirm/ModalConfirm";
 import { PageEmpty } from "../PageEmpty/PageEmpty";
 import { filterQuizzes, getUniqueCategories } from "../../utils/quizUtils";
-import { PAGE_SIZE } from "../../variables/quizData";
+import { CAT_LABELS_RU_EXT, PAGE_SIZE } from "../../variables/quizData";
 import { FiltersMenu } from "../../components/FiltersMenu/FiltersMenu";
 import "./PageMyQuizzes.css";
+import { Page404 } from "../Page404/Page404";
 
 const ModalQRCodeLazy = lazy(() =>
   import("../../components/ModalQRCode/ModalQRCodeLazy").then((module) => ({
@@ -123,6 +124,10 @@ export const PageMyQuizzes: React.FC = () => {
     return (
       <PageEmpty emptyReason="noCreatedQuizzes"/>
     )
+  }
+
+  if (category && !Object.keys(CAT_LABELS_RU_EXT).includes(category)) {
+    return <Page404/>
   }
 
   return (

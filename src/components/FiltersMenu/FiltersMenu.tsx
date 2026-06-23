@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { CAT_LABELS_RU_EXT } from "../../variables/quizData";
 import "./filtersMenu.css";
 
-interface IFiltersMenu {
+export interface IFiltersMenu {
   category?: string;
   uniqueCategories: string[];
   pageQuizzes: "allquizzes" | "myquizzes";
@@ -31,7 +31,7 @@ export const FiltersMenu: React.FC<IFiltersMenu> = ({category, uniqueCategories,
       >
         {uniqueCategories.map((item) => (
           <option key={item} value={item}>
-            {CAT_LABELS_RU_EXT[item]}
+            {CAT_LABELS_RU_EXT[item] ?? item}
           </option>
         ))}
       </select>
