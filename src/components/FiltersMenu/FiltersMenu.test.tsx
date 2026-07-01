@@ -31,8 +31,7 @@ describe("FiltersMenu", () => {
   });
 
   it("renders selected category from props", () => {
-    const category = "math";
-    renderWithRouter({category});
+    renderWithRouter({category: "math"});
     expect(screen.getByRole("combobox")).toHaveValue("math");
   });
 
@@ -49,11 +48,17 @@ describe("FiltersMenu", () => {
     expect(screen.getByText(CAT_LABELS_RU_EXT.english)).toBeInTheDocument();
   });
 
+  it("renders all category options", () => {
+    const uniqueCategories = ["russian", "math", "english"];
+    renderWithRouter({uniqueCategories});
+    expect(screen.getAllByRole("option")).toHaveLength(uniqueCategories.length);
+  });
+
   it("navigates to '/allquizzes/russian' when selecting a specific category on allquizzes page", async () => {
     const user = userEvent.setup();
     renderWithRouter({pageQuizzes: "allquizzes"});
-    const select = screen.getByRole("combobox");
-    await user.selectOptions(select, "russian");
+    await user.selectOptions(screen.getByRole("combobox"), "russian");
+    expect(mockNavigate).toHaveBeenCalledTimes(1);
     expect(mockNavigate).toHaveBeenCalledWith("/allquizzes/russian");
   });
 
@@ -80,6 +85,7 @@ describe("FiltersMenu", () => {
     const user = userEvent.setup();
     renderWithRouter({pageQuizzes: "myquizzes"});
     await user.selectOptions(screen.getByRole("combobox"), "math");
+    expect(mockNavigate).toHaveBeenCalledTimes(1);
     expect(mockNavigate).toHaveBeenCalledWith("/myquizzes/math");
   });
 
