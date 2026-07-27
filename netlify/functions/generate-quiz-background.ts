@@ -28,35 +28,33 @@ export const handler: BackgroundHandler = async (event) => {
     apiKey: process.env.DEEPSEEK_API_KEY,
   });
 
-  const systemPrompt = `Ты — помощник для создания учебных тестов.
-Сгенерируй тест по описанию: "${userDescription}". Количество вопросов в тесте: ${numQuestions}.
-Если в описании теста указано иное количество вопросов, игнорируй эту цифру.
-Каждый вопрос должен иметь несколько вариантов ответов, один из которых верный. Может быть несколько верных ответов,
-если это указано в описании. Язык вопросов и ответов (целевой язык): ${language}.
-**Верни ТОЛЬКО валидный JSON-объект** без каких-либо дополнительных слов, пояснений или markdown-форматирования.
-Используй следующую структуру JSON файла:
-${jsonTemplateCat}
-Для поля "category" вместо "general" подбери соответствующую тесту категорию из списка:
-general, english, russian, math, algebra, geometry, physics, chemistry, biology, geography, history, 
-informatics, logic, iq, astronomy, engineering, building, economics, finance, business, psychology,
-sociology, music, art, literature, cinema, sport, health, nutrition, travel, culture, traditions, cars, space.
-Убедись, что JSON синтаксически верен: используй двойные кавычки, никаких trailing commas.
-Если в описании теста содержится мат или нецензурные слова, останавливай генерацию теста и выбрасывай ошибку
-или верни такой json: {status: "error"}.
-**КРИТИЧЕСКОЕ ПРАВИЛО:**
-Если пользовательский запрос (описание теста) содержит нецензурные слова, любой мат, оскорбления или явно
-провокационный контент, ТЫ ДОЛЖЕН ВЕРНУТЬ ТОЛЬКО ЭТОТ ТОЧНЫЙ JSON (без дополнительных слов):
-{"status": "error", "reason": "inappropriate_content"}
-В ЭТОМ СЛУЧАЕ НЕ ПЫТАЙСЯ СОЗДАВАТЬ ТЕСТ!
-В ЭТОМ СЛУЧАЕ НЕ ГЕНЕРИРУЙ СЛУЧАЙНЫЙ ТЕСТ!`;
+  const systemPrompt = `
+    You generate educational quizzes.
+    User request:
+    "${userDescription}"
+    Generate exactly ${numQuestions} questions. Ignore any different number mentioned in the request.
+    Output language: ${language}.
+    Return ONLY a valid JSON object matching this structure: ${jsonTemplateCat}
+    
+    Rules:
+    - If the user request contains profanity, obscene language, insults or offensive content, return exactly: {"status":"error","reason":"inappropriate_content"} instead of JSON with the test. In this case, no other rules need to be followed.
+    - Make the incorrect options plausible.
+    - Choose "category" only from:
+    general, english, russian, math, algebra, geometry, physics, chemistry, biology, geography, history, informatics, logic, iq, astronomy, engineering, building, economics, finance, business, psychology, sociology, music, art, literature, cinema, sport, health, nutrition, travel, culture, traditions, cars, space.
+    - Return valid JSON only.
+    - Use double quotes.
+    - Do not use trailing commas.
+    
+    Use only well-established facts.
+    Never guess or fabricate information.
+    Before generating the quiz, ensure every correct answer is based on reliable knowledge.
+    If even one correct answer depends on uncertain, future, recent, ambiguous or unverifiable information, return exactly: {"status":"error","reason":"insufficient_reliable_information"}, do not substitute unknown facts with plausible guesses, do not generate a quiz in this case.
+   `;
 
-  const userPrompt = `Проверь, есть ли в описании теста любой мат или нецензурные слова. Если есть - верни: 
-  {"status": "error", "reason": "inappropriate_content"}
-  Если нет - создай тест. Верни ТОЛЬКО JSON.`
+  const userPrompt = `Generate the quiz according to the system instructions. If the questions concern events that occurred after May 2025, please return exactly: {"status":"error","reason":"insufficient_reliable_information"} instead of JSON with the test. In this case, no other rules need to be followed.`;
 
   try {
     const response = await openai.chat.completions.create({
-      // model: "deepseek-coder",
       model: "deepseek-chat",
       messages: [
         {role: "system", content: systemPrompt},
