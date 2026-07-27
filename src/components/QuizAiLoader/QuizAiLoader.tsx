@@ -63,7 +63,7 @@ export const QuizAiLoader: React.FC<IQuizAiLoaderProps> = ({userUID, changeStepI
           } catch (err) {
             console.error(err);
             showToast(
-              "Ошибка обработки результата теста.",
+              "Ошибка генерации теста по Вашему описанию. Попробуйте выбрать другую тему.",
               ToastType.ERROR
             );
           } finally {
@@ -146,6 +146,10 @@ export const QuizAiLoader: React.FC<IQuizAiLoaderProps> = ({userUID, changeStepI
         </button>
         <p className="quiz-generation-note">
           Описание теста должно быть на том же языке, что и желаемый язык вопросов теста.
+        </p>
+        <p className="quiz-generation-note">
+          Крайне не рекомендуется создавать тесты по событиям последнего года! Тест в этом случае
+          может не сгенерироваться или сгенерироваться с ошибками.
         </p>
         <p className="quiz-generation-note">
           Если результат теста Вас не устроит, попробуйте при следующей генерации описать тему более подробно:

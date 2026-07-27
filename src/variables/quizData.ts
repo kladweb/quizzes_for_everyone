@@ -138,33 +138,33 @@ export const jsonTemplate = `{
 }`;
 
 export const jsonTemplateCat = `{
-  "title": "[название теста на целевом языке]",
-  "description": "[краткое описание на целевом языке]",
+  "title": "[quiz title in target language]",
+  "description": "[short description in target language]",
   "category": "general",
   "questions": [
     {
       "id": "q1",
-      "question": "[текст вопроса на целевом языке]",
+      "question": "[question in target language]",
       "options": [
-        {"id": "q1_a", "text": "[вариант ответа на целевом языке]"},
-        {"id": "q1_b", "text": "[вариант ответа на целевом языке]"},
-        {"id": "q1_c", "text": "[вариант ответа на целевом языке]"},
-        {"id": "q1_d", "text": "[вариант ответа на целевом языке]"}
+        {"id": "q1_a", "text": "[option in target language]"},
+        {"id": "q1_b", "text": "[option in target language]"},
+        {"id": "q1_c", "text": "[option in target language]"},
+        {"id": "q1_d", "text": "[option in target language]"}
       ],
       "correctAnswers": ["q1_b"],
-      "explanation": "[краткое объяснение верного ответа на целевом языке]"
+      "explanation": "[short explanation in target language]"
     },
     {
       "id": "q2",
-      "question": "[текст вопроса на целевом языке]",
+      "question": "[question in target language]",
       "options": [
-        {"id": "q2_a", "text": "[вариант ответа на целевом языке]"},
-        {"id": "q2_b", "text": "[вариант ответа на целевом языке]"},
-        {"id": "q2_c", "text": "[вариант ответа на целевом языке]"},
-        {"id": "q2_d", "text": "[вариант ответа на целевом языке]"}
+        {"id": "q2_a", "text": "[option in target language]"},
+        {"id": "q2_b", "text": "[option in target language]"},
+        {"id": "q2_c", "text": "[option in target language]"},
+        {"id": "q2_d", "text": "[option in target language]"}
       ],
       "correctAnswers": ["q2_a", "q2_c"],
-      "explanation": "[краткое объяснение верного ответа на целевом языке]"
+      "explanation": "[short explanation in target language]"
     }
   ]
 }`;
