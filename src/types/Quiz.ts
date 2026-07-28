@@ -85,58 +85,58 @@ export interface IStatistics {
   }
 }
 
-interface IFirestoreData {
-  quizzesMeta: {
-    [testId: string]: {
-      title: string;
-      createdBy: string;
-      createdAt: number;
-      modifiedAt: number;
-      category: string;
-      lang: string;
-      access: "public" | "private";
-      likeUsers: string[];
-      executionCount: number;
-    }
-  },
-  questions: {
-    [testId: string]: string; //Question[]
-  },
-  statistics: {
-    [statId: string]: string //IStatistics;
-  },
-  users: {
-    [userId: string]: {
-      quizIds: {
-        [testId: string]: true;
-      },
-      tokens: {
-        dailyCount: 50,
-        plan: "start", // "start" | "basic" | "pro"
-        usedToday: 0,
-        lastReset: 1710800000000,
-        expiresAt: 1713400000000
-      }
-    }
-  }
-  // users: {
-  //   [userId: string]: {
-  //     userQuizzes: {
-  //       [testId: string]: true;
-  //     },
-  //     tokens: {
-  //       dailyCount: 50,
-  //       usedToday: 0,
-  //       lastReset: 1710800000000
-  //     },
-  //     subscription: {
-  //       active: false,
-  //       plan: "start", // "start" | "basic" | "pro"
-  //       expiresAt: 1713400000000
-  //     }
-  //   }
-  // }
-}
+// interface IFirestoreData {
+//   quizzesMeta: {
+//     [testId: string]: {
+//       title: string;
+//       createdBy: string;
+//       createdAt: number;
+//       modifiedAt: number;
+//       category: string;
+//       lang: string;
+//       access: "public" | "private";
+//       likeUsers: string[];
+//       executionCount: number;
+//     }
+//   },
+//   questions: {
+//     [testId: string]: string; //Question[]
+//   },
+//   statistics: {
+//     [statId: string]: string //IStatistics;
+//   },
+//   users: {
+//     [userId: string]: {
+//       quizIds: {
+//         [testId: string]: true;
+//       },
+//       tokens: {
+//         dailyCount: 50,
+//         plan: "start", // "start" | "basic" | "pro"
+//         usedToday: 0,
+//         lastReset: 1710800000000,
+//         expiresAt: 1713400000000
+//       }
+//     }
+//   }
+//   // users: {
+//   //   [userId: string]: {
+//   //     userQuizzes: {
+//   //       [testId: string]: true;
+//   //     },
+//   //     tokens: {
+//   //       dailyCount: 50,
+//   //       usedToday: 0,
+//   //       lastReset: 1710800000000
+//   //     },
+//   //     subscription: {
+//   //       active: false,
+//   //       plan: "start", // "start" | "basic" | "pro"
+//   //       expiresAt: 1713400000000
+//   //     }
+//   //   }
+//   // }
+// }
 
 export enum ToastType {
   INFO = "info",

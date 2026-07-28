@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { finishJsonLoading, setQuizDraft, startJsonLoading, useQuizDraft } from "../../store/useCurrentCreatingQuiz";
 import { catTitles, QUIZ_LANGUAGES } from "../../variables/quizData";
-import { ToastType } from "../../types/Quiz";
+import { type IQuizMeta, ToastType } from "../../types/Quiz";
 import { showToast } from "../../store/useNoticeStore";
 import { useCanSpend, spendTokens } from "../../store/useTokensStore";
 import { startQuizGeneration } from "../../api/quizApi";
@@ -52,7 +52,7 @@ export const QuizAiLoader: React.FC<IQuizAiLoaderProps> = ({userUID, changeStepI
         jobId,
         async (result) => {
           try {
-            const quiz = prepareQuiz(result, userUID);
+            const quiz: IQuizMeta = prepareQuiz(result, userUID);
             quiz.lang = quizLanguage;
             // кладём в zustand
             setQuizDraft(quiz);

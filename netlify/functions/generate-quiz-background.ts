@@ -51,7 +51,7 @@ export const handler: BackgroundHandler = async (event) => {
     If even one correct answer depends on uncertain, future, recent, ambiguous or unverifiable information, return exactly: {"status":"error","reason":"insufficient_reliable_information"}, do not substitute unknown facts with plausible guesses, do not generate a quiz in this case.
    `;
 
-  const userPrompt = `Generate the quiz according to the system instructions. If the questions concern events that occurred after May 2025, please return exactly: {"status":"error","reason":"insufficient_reliable_information"} instead of JSON with the test. In this case, no other rules need to be followed.`;
+  const userPrompt = `Generate the quiz according to the system instructions. If the requested topic requires knowledge of events after May 2025, please return exactly: {"status":"error","reason":"insufficient_reliable_information"} instead of JSON with the test. In this case, no other rules need to be followed.`;
 
   try {
     const response = await openai.chat.completions.create({
@@ -61,6 +61,7 @@ export const handler: BackgroundHandler = async (event) => {
         {role: "user", content: userPrompt},
       ],
       response_format: {type: "json_object"},
+      temperature: 0,
     });
 
     const content = response.choices[0].message.content;
