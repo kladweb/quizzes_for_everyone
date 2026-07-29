@@ -9,8 +9,11 @@ export interface IUser {
   displayName: string | null;
 }
 
+export type IUserRole = "user" | "admin";
+
 interface IInitialState {
   user: IUser | null;
+  role: IUserRole;
   isAuthLoading: boolean;
   isAuthLoaded: boolean;
   guestUserId: string | null;
@@ -27,23 +30,48 @@ interface IUserState extends IInitialState, IActions {
 
 const initialState: IInitialState = {
   user: null,
+  role: "user",
   isAuthLoading: true,
   isAuthLoaded: false,
   guestUserId: null
+}
+
+async function getUserRole(): Promise<IUserRole> {
+  const token = await auth.currentUser?.getIdToken();
+  if (!token) {
+    return "user";
+  }
+  const response = await fetch("/.netlify/functions/get-user-role", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (!response.ok) {
+    throw new Error("Failed to get user role");
+  }
+  const { role } = await response.json();
+  return role;
 }
 
 const userStore: StateCreator<IUserState> = (set) => ({
   ...initialState,
   initUser: () => {
     set(() => ({isAuthLoading: true}));
-    onAuthStateChanged(auth, (getUser) => {
+    onAuthStateChanged(auth, async (getUser) => {
       if (getUser) {
         const user: IUser = {
           uid: getUser.uid,
           email: getUser.email,
           displayName: getUser.displayName,
         };
-        set(() => ({user}));
+        let role: IUserRole = "user";
+        try {
+          role = await getUserRole();
+        } catch (e) {
+          console.error(e);
+        }
+
+        set(() => ({user, role}));
       }
       set(() => ({isAuthLoading: false, isAuthLoaded: true}));
     });
@@ -58,15 +86,6 @@ const userStore: StateCreator<IUserState> = (set) => ({
     set(() => ({isAuthLoading: true}));
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
-      .then((result) => {
-        const getUser = auth.currentUser as IUser;
-        const user: IUser = {
-          uid: getUser.uid,
-          email: getUser.email,
-          displayName: getUser.displayName,
-        };
-        return user.uid;
-      })
       .catch((error) => {
         console.error(error);
       })
@@ -91,6 +110,7 @@ export const useUser = () => useUserStore((state => state.user));
 export const useIsAuthLoading = () => useUserStore((state => state.isAuthLoading));
 export const useIsAuthLoaded = () => useUserStore((state => state.isAuthLoaded));
 export const useGuestUserId = () => useUserStore((state) => state.guestUserId);
+export const useRole = () => useUserStore((state) => state.role);
 export const initUser = () => useUserStore.getState().initUser();
 export const loginGoogle = () => useUserStore.getState().loginGoogle();
 export const logoutGoogle = () => useUserStore.getState().logoutGoogle();

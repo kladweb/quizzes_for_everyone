@@ -24,6 +24,7 @@
     "@react-pdf/renderer": "^4.5.1",
     "file-saver": "^2.0.5",
     "firebase": "^12.6.0",
+    "firebase-admin": "^14.2.0",
     "framer-motion": "^12.38.0",
     "nanoid": "^5.1.6",
     "openai": "^6.37.0",
