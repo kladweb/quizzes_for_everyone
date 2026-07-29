@@ -28,6 +28,7 @@
         "npm:eslint-plugin-react@^7.37.5",
         "npm:eslint@^9.39.4",
         "npm:file-saver@^2.0.5",
+        "npm:firebase-admin@^14.2.0",
         "npm:firebase@^12.6.0",
         "npm:framer-motion@^12.38.0",
         "npm:globals@^17.6.0",

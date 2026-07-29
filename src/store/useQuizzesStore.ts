@@ -94,7 +94,7 @@ const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
     const questions = quiz.questions ? quiz.questions : [];
     delete (quiz.questions);
 
-    if (quizIdsListPrev && !quizIdsListPrev.includes(quiz.testId)) {
+    if (quizIdsListPrev && !quizIdsListPrev.includes(quiz.testId) && userUid === quiz.createdBy) {
       const quizIdsListNext = [quiz.testId, ...quizIdsListPrev];
       set(() => ({myQuizzesIds: quizIdsListNext}));
     }

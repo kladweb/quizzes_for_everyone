@@ -15,11 +15,7 @@ export const FiltersMenu: React.FC<IFiltersMenu> = ({category, uniqueCategories,
 
   const changeCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
-    if (value === "all") {
-      navigate(`/${pageQuizzes}`);
-    } else {
-      navigate(`/${pageQuizzes}/${value}`);
-    }
+    navigate(value === "all" ? `/${pageQuizzes}` : `/${pageQuizzes}/${value}`);
   };
 
   return (

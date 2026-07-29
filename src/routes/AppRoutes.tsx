@@ -7,6 +7,8 @@ import { PageMain } from "../pages/PageMain/PageMain";
 import { PageAllQuizzes } from "../pages/PageAllQuizzes/PageAllQuizzes";
 import { PageEmpty } from "../pages/PageEmpty/PageEmpty";
 import { Page404 } from "../pages/Page404/Page404";
+import { ProtectedRouteAdmin } from "./ProtectedRouteAdmin";
+import { PageAdmin } from "../pages/PageAdmin/PageAdmin";
 
 const PageCreateQuiz = lazy(() => import ("../pages/PageCreateQuiz/PageCreateQuiz")
   .then((module) => ({default: module.PageCreateQuiz})));
@@ -40,6 +42,10 @@ export const AppRoutes = () => {
           <Route path="/createquiz/ai" element={<PageCreateQuizAI/>}/>
           <Route path="/myquizzes" element={<PageMyQuizzes/>}/>
           <Route path="/myquizzes/:category?" element={<PageMyQuizzes/>}/>
+        </Route>
+
+        <Route element={<ProtectedRouteAdmin/>}>
+          <Route path="/admin" element={<PageAdmin/>}/>
         </Route>
 
         <Route path="/allquizzes" element={<PageAllQuizzes/>}/>

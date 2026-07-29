@@ -1,0 +1,25 @@
+import React from "react";
+import { Navigate, Outlet } from "react-router-dom";
+import { useIsAuthLoading, useRole, useUser } from "../store/useUserStore";
+import { Loader } from "../components/Loader/Loader";
+
+
+export const ProtectedRouteAdmin = () => {
+  const user = useUser();
+  const role = useRole();
+  const isAuthLoading = useIsAuthLoading();
+
+  if (isAuthLoading) {
+    return <div className='loader-container'><Loader/></div>;
+  }
+
+  if (!user) {
+    return <Navigate to="/" replace/>;
+  }
+
+  if (role !== "admin") {
+    return <Navigate to="/" replace/>;
+  }
+
+  return <Outlet/>;
+};

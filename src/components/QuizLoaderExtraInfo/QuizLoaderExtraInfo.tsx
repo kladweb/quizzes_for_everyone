@@ -75,7 +75,7 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
     }
 
     quiz.access = quizAccess;
-    quiz.likeUsers = quizDraft?.likeUsers ?? [];
+    quiz.likeUsers = quizDraft?.likeUsers ?? {};
     quiz.executionCount = quizDraft?.executionCount ?? 0;
     quiz.title = quizDraft.title.trim();
     quiz.description = quizDraft.description ? quizDraft.description.trim() : "";

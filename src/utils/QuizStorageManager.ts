@@ -120,7 +120,13 @@ export const QuizStorageManager = {
       const promiseMeta = set(ref(database, `quizzesMeta/${quizMeta.testId}`), quizMeta);
       // const promiseQuestions = set(ref(database, `questions/${quizMeta.testId}`), JSON.stringify(questions, null, 2));
       const promiseQuestions = set(ref(database, `questions/${quizMeta.testId}`), JSON.stringify(questions, null, 2));
-      const promiseUserList = set(ref(database, `users/${userUid}/quizIds/${quizMeta.testId}`), true);
+
+      //Fake promise to control other user's tests
+      const immediateResolve = () => Promise.resolve();
+
+      const promiseUserList = (userUid === quizMeta.createdBy) ?
+        set(ref(database, `users/${userUid}/quizIds/${quizMeta.testId}`), true) :
+        immediateResolve;
       await Promise.all([promiseMeta, promiseQuestions, promiseUserList]);
     } catch (error) {
       console.error(error);
