@@ -17,6 +17,7 @@ export default defineConfig(({mode}) => ({
   ].filter(Boolean),
   server: {
     host: true,
+    open: true
   },
   build: {
     reportCompressedSize: true,

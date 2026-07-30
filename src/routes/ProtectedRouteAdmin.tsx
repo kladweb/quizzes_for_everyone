@@ -1,8 +1,8 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
+import { Page404 } from "../pages/Page404/Page404";
 import { useIsAuthLoading, useRole, useUser } from "../store/useUserStore";
 import { Loader } from "../components/Loader/Loader";
-
 
 export const ProtectedRouteAdmin = () => {
   const user = useUser();
@@ -18,7 +18,7 @@ export const ProtectedRouteAdmin = () => {
   }
 
   if (role !== "admin") {
-    return <Navigate to="/" replace/>;
+    return <Page404 />;
   }
 
   return <Outlet/>;
