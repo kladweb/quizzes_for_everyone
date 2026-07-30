@@ -45,7 +45,10 @@ export const AppRoutes = () => {
         </Route>
 
         <Route element={<ProtectedRouteAdmin/>}>
-          <Route path="/admin" element={<PageAdmin/>}/>
+          <Route path="/admin" element={<PageAdmin/>}>
+            <Route path="dashboard" element={<PageAdmin/>}/>
+            <Route path="users" element={<PageAdmin/>}/>
+          </Route>
         </Route>
 
         <Route path="/allquizzes" element={<PageAllQuizzes/>}/>
