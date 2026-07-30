@@ -16,16 +16,20 @@ export const PageEmpty: React.FC<IPageEmptyProps> = ({emptyReason}) => {
     noCreatedQuizzes: "Здесь будет отображаться список созданных Вами тестов.\n\nВы ещё не создали ни одного теста."
   }
 
-  const goToMain = () => {
-    navigate("/");
-  }
-
   return (
     <div className="page-empty-container">
       <p className='text-page-empty'>{errorsPage[emptyReason]}</p>
       {
-        (emptyReason !== "serviceWork") &&
-        <button className='btn button-to-main' onClick={goToMain}>ПЕРЕЙТИ НА ГЛАВНУЮ</button>
+        (emptyReason !== "serviceWork" && emptyReason !== "noCreatedQuizzes") &&
+        <button className='btn button-to-main' onClick={() => {
+          navigate("/")
+        }}>ПЕРЕЙТИ НА ГЛАВНУЮ</button>
+      }
+      {
+        (emptyReason === "noCreatedQuizzes") &&
+        <button className='btn button-to-main' onClick={() => {
+          navigate("/createquiz")
+        }}>СОЗДАТЬ ТЕСТ</button>
       }
     </div>
   )
