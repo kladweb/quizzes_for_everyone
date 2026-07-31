@@ -1,17 +1,14 @@
-import type { Handler, HandlerEvent } from "@netlify/functions";
+import { HandlerEvent } from "@netlify/functions";
 import { getAuth } from "firebase-admin/auth";
-import { initAdmin } from "./utils/initAdmin";
 
-export const handler: Handler = async (event: HandlerEvent) => {
+export async function requireAdmin(event: HandlerEvent) {
   try {
-    initAdmin();
-
     const authHeader = event.headers.authorization;
 
     if (!authHeader?.startsWith("Bearer ")) {
       return {
         statusCode: 401,
-        body: JSON.stringify({ error: "Unauthorized" }),
+        body: JSON.stringify({error: "Unauthorized"}),
       };
     }
 
@@ -19,15 +16,8 @@ export const handler: Handler = async (event: HandlerEvent) => {
 
     const decoded = await getAuth().verifyIdToken(token);
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
-        role:
-          decoded.uid === process.env.ADMIN_UID
-            ? "admin"
-            : "user",
-      }),
-    };
+    return decoded;
+
   } catch (e) {
     console.error(e);
 
@@ -38,4 +28,4 @@ export const handler: Handler = async (event: HandlerEvent) => {
       }),
     };
   }
-};
+}

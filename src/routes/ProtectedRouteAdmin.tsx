@@ -13,12 +13,12 @@ export const ProtectedRouteAdmin = () => {
     return <div className='loader-container'><Loader/></div>;
   }
 
-  if (!user) {
-    return <Navigate to="/" replace/>;
-  }
-
   if (role !== "admin") {
     return <Page404 />;
+  }
+
+  if (!user) {
+    return <Navigate to="/" replace/>;
   }
 
   return <Outlet/>;
