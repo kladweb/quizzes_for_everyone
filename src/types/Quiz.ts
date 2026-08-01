@@ -158,3 +158,15 @@ export type Toast = {
 //   incorrectCount: number | null;
 //   score: number | null;
 // }
+
+export interface IUserAdmin {
+  email: string | undefined;
+  displayName: string;
+  photoURL: string;
+  quizzesCount: number;
+  tokensDailyCount: number;
+  tokensCurrentCount: number;
+  tokensPlan: string;
+}
+
+export type UsersAdminMap = Record<string, IUserAdmin>;
