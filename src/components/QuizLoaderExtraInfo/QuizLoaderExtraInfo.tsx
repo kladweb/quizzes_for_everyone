@@ -9,6 +9,7 @@ import { IQuizMeta, type Question, ToastType } from "../../types/Quiz";
 import { showToast } from "../../store/useNoticeStore";
 import "./quizLoaderExtraInfo.css"
 import { useLocation } from "react-router-dom";
+import { setCreatedQuizDate } from "../../api/userDatesApi";
 
 interface IQuizLoaderExtraInfo {
   userUID: string,
@@ -93,6 +94,8 @@ export const QuizLoaderExtraInfo: React.FC<IQuizLoaderExtraInfo> = ({userUID, se
     setQuizComplete(quiz);
     setIsCreatingNewTest(true);
     try {
+
+
       await saveUserQuiz(quiz, userUID);
       resetFormError();
       setIsCreatingNewTest(false);
