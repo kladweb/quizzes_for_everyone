@@ -18,15 +18,12 @@ export const UserCard: React.FC<IUserCardProps> = ({userAdmin, userUid}) => {
   const getParamClassName = (date: string) => {
     const dateNow = Number(new Date());
     if (date === "unknown") {
-      return "param-gray";
-    }
-    if (dateNow - Number(date) < 604800000) {
-      return;
-    }
-    if (dateNow - Number(date) < 2592000000) {
       return "param-yellow";
     }
-    return "param-gray";
+    if (dateNow - Number(date) < 2592000000) {
+      return;
+    }
+    return "param-yellow";
   }
 
   return (

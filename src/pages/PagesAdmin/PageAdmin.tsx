@@ -1,7 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { NavLink, Outlet } from "react-router-dom";
+import { loadUsers, useIsLoadingUsers } from "../../store/useAdminStore";
+import { Loader } from "../../components/Loader/Loader";
 
 export const PageAdmin = () => {
+  useEffect(() => {
+    loadUsers();
+  }, [])
+
+  const isLoadingUsers = useIsLoadingUsers();
+
+  if (isLoadingUsers) {
+    return <div className="loader-container"><Loader/></div>;
+  }
 
   return (
     <div className='tests-container'>

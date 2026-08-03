@@ -56,8 +56,4 @@
   div.param-yellow {
     color: var(--color-warning);
   }
-
-  div.param-gray {
-    color: var(--color-text-secondary);
-  }
 }

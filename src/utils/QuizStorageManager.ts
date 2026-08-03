@@ -2,23 +2,6 @@ import { child, get, ref, set } from "firebase/database";
 import { database } from "../firebase/firebase";
 import { IQuizMeta, IQuizzes, IStatistics, Question } from "../types/Quiz";
 
-// interface QuizAnswer {
-//   questionId: string;
-//   userAnswer: string;
-//   correctAnswer: string;
-//   isCorrect: boolean;
-// }
-
-// interface QuizResult {
-//   quizId: string;
-//   completedAt: string;
-//   score: number;
-//   totalQuestions: number;
-//   percentage: number;
-//   answers: QuizAnswer[];
-//   timeTaken?: number;
-// }
-
 export const QuizStorageManager = {
   async fetchAllQuizzes(): Promise<IQuizzes> {
     const dbRef = ref(database);

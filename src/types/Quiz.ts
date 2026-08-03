@@ -32,9 +32,11 @@ export interface IQuizMeta {
   questions?: Question[];
 }
 
-export interface IQuizzes {
-  [testId: string]: IQuizMeta
-}
+// export interface IQuizzes {
+//   [testId: string]: IQuizMeta
+// }
+
+export type IQuizzes = Record<string, IQuizMeta>;
 
 // interface IAnswer {
 //   questionId: string;
