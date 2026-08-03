@@ -1,4 +1,4 @@
-import { UsersAdminMap } from "../types/Quiz";
+import type { IQuizzes, UsersAdminMap } from "../types/Quiz";
 
 const TIME_PERIOD = 2592000000; //30 days;
 
@@ -24,4 +24,13 @@ export const getUsersExtraInfo = (users: UsersAdminMap) => {
     }
   });
   return usersExtraInfo;
+}
+
+export const getQuizzesExtraInfo = (quizzes: IQuizzes) => {
+  const quizzesExtraInfo = {
+    countAllQuizzes: Object.keys(quizzes).length,
+    countLastCreatedQuizzes: 0,
+    countUsersPassedQuizzes: 0,
+    countUnknownPassedQuizzes: 0
+  }
 }

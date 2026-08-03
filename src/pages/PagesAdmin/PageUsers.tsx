@@ -4,7 +4,6 @@ import "../../components/UsersList/userCard.css"
 
 export const PageUsers = () => {
   const users = useUsers();
-  console.log(users);
 
   return (
     <div className="user-cards-container">

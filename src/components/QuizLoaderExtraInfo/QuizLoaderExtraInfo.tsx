@@ -9,7 +9,6 @@ import { IQuizMeta, type Question, ToastType } from "../../types/Quiz";
 import { showToast } from "../../store/useNoticeStore";
 import "./quizLoaderExtraInfo.css"
 import { useLocation } from "react-router-dom";
-import { setCreatedQuizDate } from "../../api/userDatesApi";
 
 interface IQuizLoaderExtraInfo {
   userUID: string,

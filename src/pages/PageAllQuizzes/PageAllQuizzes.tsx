@@ -9,8 +9,8 @@ import { useGuestUserId, useUser } from "../../store/useUserStore";
 import { CAT_LABELS_RU_EXT, PAGE_SIZE } from "../../variables/quizData";
 import { filterQuizzes, getUniqueCategories } from "../../utils/quizUtils";
 import { FiltersMenu } from "../../components/FiltersMenu/FiltersMenu";
-import "./pageAllQuizzes.css";
 import { Page404 } from "../Page404/Page404";
+import "./pageAllQuizzes.css";
 
 const ModalQRCodeLazy = lazy(() =>
   import("../../components/ModalQRCode/ModalQRCodeLazy").then((module) => ({

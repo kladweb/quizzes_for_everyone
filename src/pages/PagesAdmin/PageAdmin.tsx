@@ -1,12 +1,21 @@
 import React, { useEffect } from "react";
 import { NavLink, Outlet } from "react-router-dom";
-import { loadUsers, useIsLoadingUsers } from "../../store/useAdminStore";
+import { loadUsers, useIsLoadedUsers, useIsLoadingUsers } from "../../store/useAdminStore";
 import { Loader } from "../../components/Loader/Loader";
+import { loadAllQuizzes, useIsAllLoaded } from "../../store/useQuizzesStore";
 
 export const PageAdmin = () => {
+  const isAllLoaded = useIsAllLoaded();
+  const isLoadedUsers = useIsLoadedUsers();
+
   useEffect(() => {
-    loadUsers();
-  }, [])
+    if (!isLoadedUsers) {
+      loadUsers();
+    }
+    if (!isAllLoaded) {
+      loadAllQuizzes();
+    }
+  }, []);
 
   const isLoadingUsers = useIsLoadingUsers();
 

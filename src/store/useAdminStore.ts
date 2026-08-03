@@ -7,8 +7,9 @@ interface IInitialAdminState {
   users: UsersAdminMap | null,
   usersExtraInfo: IUsersExtraInfo | null,
   isLoadingUsers: boolean,
-  quizzes: IQuizzes | null,
-  isLoadingQuizzes: boolean,
+  isLoadedUsers: boolean,
+  // quizzes: IQuizzes | null,
+  // isLoadingQuizzes: boolean,
 }
 
 interface IAdminActions {
@@ -19,8 +20,9 @@ const initialState: IInitialAdminState = {
   users: null,
   usersExtraInfo: null,
   isLoadingUsers: false,
-  quizzes: null,
-  isLoadingQuizzes: false,
+  isLoadedUsers: false,
+  // quizzes: null,
+  // isLoadingQuizzes: false,
 }
 
 interface IAdminState extends IInitialAdminState, IAdminActions {
@@ -35,7 +37,7 @@ const adminStore: StateCreator<IAdminState> = (set, get) => ({
     set({isLoadingUsers: true});
     const users = await getUsers();
     const usersExtraInfo = getUsersExtraInfo(users);
-    set({users, usersExtraInfo, isLoadingUsers: false});
+    set({users, usersExtraInfo, isLoadingUsers: false, isLoadedUsers: false});
   },
 });
 
@@ -43,6 +45,7 @@ const useAdminStore = create<IAdminState>()(adminStore);
 
 export const useUsers = () => useAdminStore((state) => state.users);
 export const useIsLoadingUsers = () => useAdminStore((state) => state.isLoadingUsers);
+export const useIsLoadedUsers = () => useAdminStore((state) => state.isLoadedUsers);
 export const useUsersExtraInfo = () => useAdminStore((state) => state.usersExtraInfo);
 
 

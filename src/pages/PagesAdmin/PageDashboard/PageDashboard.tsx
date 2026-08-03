@@ -1,9 +1,14 @@
 import React from "react";
 import { useUsersExtraInfo } from "../../../store/useAdminStore";
+import type { IQuizzes } from "../../../types/Quiz";
+import { useAllQuizzes } from "../../../store/useQuizzesStore";
 import "./pageDashboard.css"
 
 export const PageDashboard = () => {
   const usersExtraInfo = useUsersExtraInfo();
+  const testsListObj: IQuizzes | null = useAllQuizzes();
+
+  console.log(testsListObj);
 
   if (!usersExtraInfo) {
     return null;
