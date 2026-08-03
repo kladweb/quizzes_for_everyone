@@ -11,6 +11,7 @@ import { calculateQuestionScore, isQuestionFullyCorrect } from "../../utils/quiz
 import type { IStatistics, Question, IQuizMeta, IAnswer } from "../../types/Quiz";
 import { DownloadPDFQuizButton } from "../PDF/DownloadPDFQuizButton/DownloadPDFQuizButton";
 import "./quizComponent.css";
+import { setPassedQuizDate } from "../../api/userDatesApi";
 
 interface IQuizProps {
   quiz: IQuizMeta;
@@ -125,12 +126,15 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, questions, onReset, s
       quizExecutionCount = snapshot.val();
     } else {
       quizExecutionCount = quiz.executionCount;
-      console.log("B:", quiz.executionCount);
+      // console.log("B:", quiz.executionCount);
     }
     quizExecutionCount++;
     quiz.executionCount = quizExecutionCount;
     updateQuiz(quiz);
     await set(ref(database, `quizzesMeta/${quiz.testId}/executionCount`), quizExecutionCount);
+    if (user?.uid) {
+      await setPassedQuizDate(user.uid);
+    }
   };
 
   const allAnswered = selectedAnswers.every(answer => answer.length > 0);
@@ -149,7 +153,6 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, questions, onReset, s
       });
     }, 100);
   }
-
 
 
   return (

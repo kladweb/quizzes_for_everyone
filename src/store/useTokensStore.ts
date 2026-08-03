@@ -161,7 +161,7 @@ const useTokensStore = create<TokensStore>()(tokensStore);
 
 export { useTokensStore };
 
-export const useTokens = () => useTokensStore((state) => state.tokens);
+// export const useTokens = () => useTokensStore((state) => state.tokens);
 export const useLoadingTokens = () => useTokensStore((state) => state.loadingTokens);
 
 export const useRemaining = () =>
@@ -180,13 +180,13 @@ export const useCanSpend = () =>
     return remaining >= 20;
   });
 
-export const useIsSubscribed = () =>
-  useTokensStore((state) => {
-    return (
-      state.tokens.plan !== "start" &&
-      Date.now() < state.tokens.expiresAt
-    );
-  });
+// export const useIsSubscribed = () =>
+//   useTokensStore((state) => {
+//     return (
+//       state.tokens.plan !== "start" &&
+//       Date.now() < state.tokens.expiresAt
+//     );
+//   });
 
 
 export const loadTokens = (userId: string): Promise<void> =>

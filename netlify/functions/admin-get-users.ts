@@ -26,6 +26,14 @@ export const handler = async (event: HandlerEvent) => {
         tokensCurrentCount: usersFirebase[user.uid]?.tokens ? usersFirebase[user.uid].tokens.dailyCount -
           usersFirebase[user.uid].tokens.usedToday : 0,
         tokensPlan: usersFirebase[user.uid]?.tokens ? usersFirebase[user.uid].tokens.plan : 'none',
+        registrationDate: usersFirebase[user.uid]?.userDatesInfo?.registration ?
+          usersFirebase[user.uid].userDatesInfo.registration : 'unknown',
+        lastVisitedDate: usersFirebase[user.uid]?.userDatesInfo?.lastVisited ?
+          usersFirebase[user.uid].userDatesInfo.lastVisited : 'unknown',
+        lastCreatedQuizDate: usersFirebase[user.uid]?.userDatesInfo?.lastCreatedQuiz ?
+          usersFirebase[user.uid].userDatesInfo.lastCreatedQuiz : 'unknown',
+        lastPassedQuizDate: usersFirebase[user.uid]?.userDatesInfo?.lastPassedQuiz ?
+          usersFirebase[user.uid].userDatesInfo.lastPassedQuiz : 'unknown',
       };
       return acc;
     }, {} as UsersAdminMap);

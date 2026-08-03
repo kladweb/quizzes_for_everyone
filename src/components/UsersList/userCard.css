@@ -46,10 +46,18 @@
   display: flex;
   width: 100%;
   font-size: 0.9em;
-  gap: 1em 0.8em;
+  gap: 1em 0.5em;
   line-height: 1em;
 
   div:nth-child(2) {
     color: var(--color-success);
+  }
+
+  div.param-yellow {
+    color: var(--color-warning);
+  }
+
+  div.param-gray {
+    color: var(--color-text-secondary);
   }
 }

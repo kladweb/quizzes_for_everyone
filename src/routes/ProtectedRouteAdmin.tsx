@@ -9,12 +9,12 @@ export const ProtectedRouteAdmin = () => {
   const role = useRole();
   const isAuthLoading = useIsAuthLoading();
 
-  if (isAuthLoading) {
+  if (isAuthLoading || !role) {
     return <div className='loader-container'><Loader/></div>;
   }
 
   if (role !== "admin") {
-    return <Page404 />;
+    return <Page404/>;
   }
 
   if (!user) {

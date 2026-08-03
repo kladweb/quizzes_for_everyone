@@ -1,6 +1,7 @@
 import { create, type StateCreator } from "zustand";
 import { QuizStorageManager } from "../utils/QuizStorageManager";
 import { IQuizMeta, IQuizzes } from "../types/Quiz";
+import { setCreatedQuizDate } from "../api/userDatesApi";
 
 interface IInitialState {
   allQuizzes: IQuizzes | null;
@@ -97,6 +98,7 @@ const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
     if (quizIdsListPrev && !quizIdsListPrev.includes(quiz.testId) && userUid === quiz.createdBy) {
       const quizIdsListNext = [quiz.testId, ...quizIdsListPrev];
       set(() => ({myQuizzesIds: quizIdsListNext}));
+      await setCreatedQuizDate(userUid);
     }
 
     let allTestListNext: IQuizzes;
@@ -107,6 +109,7 @@ const quizzesStore: StateCreator<IQuizzesState> = (set, get) => ({
     }
     set(() => ({allQuizzes: allTestListNext}));
     try {
+
       await QuizStorageManager.saveQuizToFirebase(quiz, questions, userUid);
       // set(() => ({errorLoading: ""}));
     } catch (error) {
