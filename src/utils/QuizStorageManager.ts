@@ -71,14 +71,32 @@ export const QuizStorageManager = {
     const dbRef = ref(database);
     try {
       const snapshot = await get(child(dbRef, `questions/${quizId}`));
-      if (!snapshot.exists()
-      ) {
+      if (!snapshot.exists()) {
         // throw new Error('No such quiz found!');
         return;
       }
       return JSON.parse(snapshot.val());
-    } catch
-      (error) {
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  },
+
+  async fetchAllStatistics() {
+    const dbRef = ref(database);
+    try {
+      const snapshot = await get(child(dbRef, `statistics`));
+      if (!snapshot.exists()) {
+        return;
+      }
+      const statObj = snapshot.val();
+      Object.keys(statObj).forEach((key: string) => {
+        Object.keys(statObj[key]).forEach((keyValue: string) => {
+          statObj[key][keyValue] = JSON.parse(statObj[key][keyValue]);
+        });
+      });
+      return statObj;
+    } catch (error) {
       console.error(error);
       throw error;
     }

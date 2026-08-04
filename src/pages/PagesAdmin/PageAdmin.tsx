@@ -1,25 +1,19 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { NavLink, Outlet } from "react-router-dom";
-import { loadUsers, useIsLoadedUsers, useIsLoadingUsers } from "../../store/useAdminStore";
+import {
+  useIsLoadingQuizzesInfo, useIsLoadingStatInfo,
+  useIsLoadingUsers
+} from "../../store/useAdminStore";
 import { Loader } from "../../components/Loader/Loader";
-import { loadAllQuizzes, useIsAllLoaded } from "../../store/useQuizzesStore";
+import "./pageAdmin.css"
 
 export const PageAdmin = () => {
-  const isAllLoaded = useIsAllLoaded();
-  const isLoadedUsers = useIsLoadedUsers();
-
-  useEffect(() => {
-    if (!isLoadedUsers) {
-      loadUsers();
-    }
-    if (!isAllLoaded) {
-      loadAllQuizzes();
-    }
-  }, []);
 
   const isLoadingUsers = useIsLoadingUsers();
+  const isLoadingQuizzesInfo = useIsLoadingQuizzesInfo();
+  const isLoadingStatInfo = useIsLoadingStatInfo();
 
-  if (isLoadingUsers) {
+  if (isLoadingUsers || isLoadingQuizzesInfo || isLoadingStatInfo) {
     return <div className="loader-container"><Loader/></div>;
   }
 
@@ -27,11 +21,17 @@ export const PageAdmin = () => {
     <div className='tests-container'>
       <h2 className="test-list-name">СТРАНИЦА АДМИНИСТРАТОРА</h2>
       <nav className="navbar">
-        <NavLink className='link-nav' to={'dashboard'}>
-          <span>Dashboard</span>
+        <NavLink className='link-nav' to={'userslist'}>
+          <span>Users List</span>
         </NavLink>
-        <NavLink className='link-nav' to={'users'}>
-          <span>Users</span>
+        <NavLink className='link-nav' to={"usersgeneralinfo"}>
+          <span>Users Info</span>
+        </NavLink>
+        <NavLink className='link-nav' to={"quizzesinfo"}>
+          <span>Quizzes Info</span>
+        </NavLink>
+        <NavLink className='link-nav' to={"statinfo"}>
+          <span>Statistics Info</span>
         </NavLink>
       </nav>
       <Outlet/>

@@ -1,9 +1,17 @@
 import { UserCard } from "../../components/UsersList/UserCard";
-import { useUsers } from "../../store/useAdminStore";
+import { loadUsers, useIsLoadedUsers, useUsers } from "../../store/useAdminStore";
 import "../../components/UsersList/userCard.css"
+import { useEffect } from "react";
 
 export const PageUsers = () => {
   const users = useUsers();
+  const isLoadedUsers = useIsLoadedUsers();
+
+  useEffect(() => {
+    if (!isLoadedUsers) {
+      loadUsers();
+    }
+  }, []);
 
   return (
     <div className="user-cards-container">

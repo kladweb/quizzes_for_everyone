@@ -87,6 +87,8 @@ export interface IStatistics {
   }
 }
 
+export type IStatisticsAll = Record<string, IStatistics>;
+
 // interface IFirestoreData {
 //   quizzesMeta: {
 //     [testId: string]: {
