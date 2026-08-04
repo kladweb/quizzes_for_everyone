@@ -57,7 +57,7 @@ async function getUserRole(): Promise<IUserRole> {
 const userStore: StateCreator<IUserState> = (set) => ({
   ...initialState,
   initUser: () => {
-    console.log("ИНИЦИАЛИЗАЦИЯ ПОЛЬЗОВАТЕЛЯ");
+    // console.log("ИНИЦИАЛИЗАЦИЯ ПОЛЬЗОВАТЕЛЯ");
     set(() => ({isAuthLoading: true}));
     onAuthStateChanged(auth, async (getUser) => {
       if (getUser) {
@@ -85,7 +85,7 @@ const userStore: StateCreator<IUserState> = (set) => ({
     set(() => ({guestUserId: guestId, isAuthLoading: false}));
   },
   loginGoogle: () => {
-    console.log("АВТОРИЗАЦИЯ ПОЛЬЗОВАТЕЛЯ");
+    // console.log("АВТОРИЗАЦИЯ ПОЛЬЗОВАТЕЛЯ");
     set(() => ({isAuthLoading: true}));
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)

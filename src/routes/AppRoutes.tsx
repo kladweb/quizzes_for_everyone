@@ -8,8 +8,11 @@ import { PageAllQuizzes } from "../pages/PageAllQuizzes/PageAllQuizzes";
 import { PageEmpty } from "../pages/PageEmpty/PageEmpty";
 import { Page404 } from "../pages/Page404/Page404";
 import { ProtectedRouteAdmin } from "./ProtectedRouteAdmin";
-import { PageAdmin } from "../pages/PageAdmin/PageAdmin";
-import { UsersList } from "../components/UsersList/UsersList";
+import { PageAdmin } from "../pages/PagesAdmin/PageAdmin";
+import { PageUsers } from "../pages/PagesAdmin/PageUsers";
+import { PageUsersInfo } from "../pages/PagesAdmin/PageUsersInfo";
+import { PageQuizzesInfo } from "../pages/PagesAdmin/PageQuizzesInfo";
+import { PageQuizzesStatistics } from "../pages/PagesAdmin/PageQuizzesStatistics";
 
 const PageCreateQuiz = lazy(() => import ("../pages/PageCreateQuiz/PageCreateQuiz")
   .then((module) => ({default: module.PageCreateQuiz})));
@@ -47,8 +50,10 @@ export const AppRoutes = () => {
 
         <Route element={<ProtectedRouteAdmin/>}>
           <Route path="/admin" element={<PageAdmin/>}>
-            <Route path="dashboard" element={<UsersList/>}/>
-            <Route path="users" element={<UsersList/>}/>
+            <Route path="userslist" element={<PageUsers/>}/>
+            <Route path="usersgeneralinfo" element={<PageUsersInfo/>}/>
+            <Route path="quizzesinfo" element={<PageQuizzesInfo/>}/>
+            <Route path="statinfo" element={<PageQuizzesStatistics/>}/>
           </Route>
         </Route>
 

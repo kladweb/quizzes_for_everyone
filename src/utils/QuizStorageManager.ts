@@ -2,23 +2,6 @@ import { child, get, ref, set } from "firebase/database";
 import { database } from "../firebase/firebase";
 import { IQuizMeta, IQuizzes, IStatistics, Question } from "../types/Quiz";
 
-// interface QuizAnswer {
-//   questionId: string;
-//   userAnswer: string;
-//   correctAnswer: string;
-//   isCorrect: boolean;
-// }
-
-// interface QuizResult {
-//   quizId: string;
-//   completedAt: string;
-//   score: number;
-//   totalQuestions: number;
-//   percentage: number;
-//   answers: QuizAnswer[];
-//   timeTaken?: number;
-// }
-
 export const QuizStorageManager = {
   async fetchAllQuizzes(): Promise<IQuizzes> {
     const dbRef = ref(database);
@@ -88,14 +71,32 @@ export const QuizStorageManager = {
     const dbRef = ref(database);
     try {
       const snapshot = await get(child(dbRef, `questions/${quizId}`));
-      if (!snapshot.exists()
-      ) {
+      if (!snapshot.exists()) {
         // throw new Error('No such quiz found!');
         return;
       }
       return JSON.parse(snapshot.val());
-    } catch
-      (error) {
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  },
+
+  async fetchAllStatistics() {
+    const dbRef = ref(database);
+    try {
+      const snapshot = await get(child(dbRef, `statistics`));
+      if (!snapshot.exists()) {
+        return;
+      }
+      const statObj = snapshot.val();
+      Object.keys(statObj).forEach((key: string) => {
+        Object.keys(statObj[key]).forEach((keyValue: string) => {
+          statObj[key][keyValue] = JSON.parse(statObj[key][keyValue]);
+        });
+      });
+      return statObj;
+    } catch (error) {
       console.error(error);
       throw error;
     }

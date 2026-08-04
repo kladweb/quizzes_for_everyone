@@ -32,9 +32,11 @@ export interface IQuizMeta {
   questions?: Question[];
 }
 
-export interface IQuizzes {
-  [testId: string]: IQuizMeta
-}
+// export interface IQuizzes {
+//   [testId: string]: IQuizMeta
+// }
+
+export type IQuizzes = Record<string, IQuizMeta>;
 
 // interface IAnswer {
 //   questionId: string;
@@ -84,6 +86,8 @@ export interface IStatistics {
     [questionId: string]: IAnswer;
   }
 }
+
+export type IStatisticsAll = Record<string, IStatistics>;
 
 // interface IFirestoreData {
 //   quizzesMeta: {

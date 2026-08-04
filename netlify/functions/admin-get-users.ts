@@ -2,7 +2,7 @@ import type { HandlerEvent } from "@netlify/functions";
 import { requireAdmin } from "./utils/requireAdmin";
 import { getAuth } from "firebase-admin/auth";
 import { getAdminDatabase, initAdmin } from "./utils/initAdmin";
-import { IUserAdmin, UsersAdminMap } from "../../src/types/Quiz";
+import { UsersAdminMap } from "../../src/types/Quiz";
 
 export const handler = async (event: HandlerEvent) => {
 
