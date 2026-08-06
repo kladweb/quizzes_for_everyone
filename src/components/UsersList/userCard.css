@@ -14,8 +14,8 @@
   display: flex;
   padding: 0 0.5em;
   margin: 0.3em 0.2em;
-  width: 45%;
-  align-self: start;
+  width: 18em;
+  align-self: stretch;
   flex-wrap: wrap;
   justify-content: center;
   background-color: var(--color-bg-contrast);
