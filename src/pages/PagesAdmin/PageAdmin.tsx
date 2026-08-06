@@ -18,9 +18,9 @@ export const PageAdmin = () => {
   }
 
   return (
-    <div className='tests-container'>
+    <div className='admin-container'>
       <h2 className="test-list-name">СТРАНИЦА АДМИНИСТРАТОРА</h2>
-      <nav className="navbar">
+      <nav className="admin-navbar">
         <NavLink className='link-nav' to={'userslist'}>
           <span>Users List</span>
         </NavLink>

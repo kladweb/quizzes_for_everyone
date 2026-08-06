@@ -1,5 +1,20 @@
-.dashboard-container {
+.admin-container {
+  max-width: min(100rem, 90%);
+  margin: 10px auto;
+  padding: 10px 20px;
+  container-type: inline-size;
+  text-align: center;
+  border: 2px dashed var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-bg-card);
+  transition: background-color ease 0.25s;
+}
 
+.admin-navbar {
+  margin-bottom: 1em;
+}
+
+.dashboard-container {
   table {
     font-size: 0.96em;
     margin: 1em auto;
@@ -14,5 +29,11 @@
   td:nth-child(1) {
     width: 75%;
     text-align: left;
+  }
+}
+
+@media (max-width: 660px) {
+  .admin-container {
+    margin: 0.8em 1em;
   }
 }
