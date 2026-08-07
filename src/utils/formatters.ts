@@ -4,3 +4,7 @@ export const formatScore = (score: number): string => {
   }
   return score.toFixed(2);
 };
+
+const locale = navigator.languages?.[0] || navigator.language;
+
+export const formatterDate: Intl.DateTimeFormat = new Intl.DateTimeFormat(locale);

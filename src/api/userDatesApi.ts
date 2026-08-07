@@ -6,11 +6,10 @@ export async function setUserAuthDate(userId: string) {
   const userRef = ref(db, `users/${userId}/userDatesInfo`);
   const snapshot = await get(userRef);
   const userRegistrationDate = snapshot.exists() ? snapshot.val() : null
-  const dateNow = new Date();
   if (!userRegistrationDate) {
-    await update(userRef, {registration: dateNow});
+    await update(userRef, {registration: Date.now()});
   }
-  await update(userRef, {lastVisited: dateNow});
+  await update(userRef, {lastVisited: Date.now()});
 }
 
 export async function setCreatedQuizDate(userId: string) {

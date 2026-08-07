@@ -8,6 +8,10 @@
   border-radius: 12px;
   background-color: var(--color-bg-card);
   transition: background-color ease 0.25s;
+
+  &:not(:has(.user-cards-container)) {
+    max-width: 40rem;
+  }
 }
 
 .admin-navbar {
@@ -29,6 +33,12 @@
   td:nth-child(1) {
     width: 75%;
     text-align: left;
+  }
+}
+
+.test-list-name {
+  span {
+    color: var(--color-success);
   }
 }
 

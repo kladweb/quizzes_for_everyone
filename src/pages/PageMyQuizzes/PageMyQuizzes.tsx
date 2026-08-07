@@ -15,8 +15,8 @@ import { PageEmpty } from "../PageEmpty/PageEmpty";
 import { filterQuizzes, getUniqueCategories } from "../../utils/quizUtils";
 import { CAT_LABELS_RU_EXT, PAGE_SIZE } from "../../variables/quizData";
 import { FiltersMenu } from "../../components/FiltersMenu/FiltersMenu";
-import "./PageMyQuizzes.css";
 import { Page404 } from "../Page404/Page404";
+import "./PageMyQuizzes.css";
 
 const ModalQRCodeLazy = lazy(() =>
   import("../../components/ModalQRCode/ModalQRCodeLazy").then((module) => ({
@@ -34,8 +34,6 @@ export const PageMyQuizzes: React.FC = () => {
   const userQuizzesIds = useMyQuizzesIds();
   const testsListObj: IQuizzes | null = useAllQuizzes();
   const guestUserId = useGuestUserId();
-  const locale = navigator.languages?.[0] || navigator.language;
-  const formatter = new Intl.DateTimeFormat(locale);
   const [quizIdStatistics, setQuizIdStatistics] = useState<string | null>(null);
   const [isModalConfirmOpen, setIsModalConfirmOpen] = useState<boolean>(false);
   const [quizToDelete, setQuizToDelete] = useState<IQuizMeta | null>(null);
@@ -146,7 +144,6 @@ export const PageMyQuizzes: React.FC = () => {
                     quiz={quiz}
                     userUID={user?.uid}
                     guestUserId={guestUserId}
-                    dateFormatter={formatter}
                     openStatistic={openStatistic}
                     isShowStatistics={!!quizIdStatistics && quizIdStatistics === quiz.testId}
                     handlerDeleteQuiz={handlerDeleteQuiz}

@@ -74,6 +74,10 @@
   }
 }
 
+.link-admin {
+  color: var(--color-error-msg);
+}
+
 .login-theme {
   display: inline-block;
   /*margin: 0;*/
