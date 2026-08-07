@@ -1,5 +1,6 @@
 import React from "react";
 import { IUserAdmin } from "../../types/Quiz";
+import { NavLink } from "react-router-dom";
 
 interface IUserCardProps {
   userAdmin: IUserAdmin,
@@ -16,11 +17,11 @@ export const UserCard: React.FC<IUserCardProps> = ({userAdmin, userUid}) => {
   }
 
   const getParamClassName = (date: string) => {
-    const dateNow = Number(new Date());
+    const dateNow = Date.now();
     if (date === "unknown") {
       return "param-yellow";
     }
-    if (dateNow - Number(date) < 2592000000) {
+    if (dateNow - Number(date) <= 2592000000) {
       return;
     }
     return "param-yellow";
@@ -38,7 +39,14 @@ export const UserCard: React.FC<IUserCardProps> = ({userAdmin, userUid}) => {
       </div>
       <div className="user-params-container">
         <div>Количество созданных тестов:</div>
-        <div>{userAdmin.quizzesCount}</div>
+        {
+          userAdmin.quizzesCount ?
+            <NavLink to={`/admin/userquizzes/${userUid}`}>
+              <div>{userAdmin.quizzesCount}</div>
+            </NavLink>
+            :
+            <div>{userAdmin.quizzesCount}</div>
+        }
       </div>
       <div className="user-params-container">
         <div>Тарифный план:</div>

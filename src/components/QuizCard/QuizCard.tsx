@@ -5,25 +5,24 @@ import { checkCategory, handleCopy, toggleLike } from "../../utils/quizUtils";
 import { Statistics } from "../Statistics/Statistics";
 import type { IQuizMeta } from "../../types/Quiz";
 import { CATEGORY_LABELS_RU, QUIZ_LANGUAGES } from "../../variables/quizData";
+import { formatterDate } from "../../utils/formatters";
 import "./quizCard.css"
 
 interface ITestCardProps {
   quiz: IQuizMeta;
-  dateFormatter: Intl.DateTimeFormat;
   openStatistic?: (testId: string) => void;
   userUID?: string;
   category?: string;
   guestUserId: string | null;
   isShowStatistics?: boolean;
   handlerDeleteQuiz?: (quiz: IQuizMeta) => void;
-  setQrCodeToShow: (code: string | null) => void;
+  setQrCodeToShow?: (code: string | null) => void;
 }
 
 export const QuizCard: React.FC<ITestCardProps> = memo(
   ({
      quiz,
      openStatistic,
-     dateFormatter,
      userUID,
      guestUserId,
      isShowStatistics,
@@ -82,40 +81,46 @@ export const QuizCard: React.FC<ITestCardProps> = memo(
               <span>{quiz.executionCount}</span>
             </div>
           </div>
-          <div className="info-item">Создан: <span>{dateFormatter.format(quiz.createdAt)}</span></div>
+          <div className="info-item">Создан: <span>{formatterDate.format(quiz.createdAt)}</span></div>
         </div>
         <div>
         </div>
-        {
-          openStatistic &&
-          <div className='test-buttons-block'>
-            <button className='button-test' onClick={() => openStatistic(quiz.testId)}>Статистика</button>
-            <button className='button-test' onClick={() => {
-              navigate(`/createquiz/manual/${quiz.testId}`);
-              // showToast("Эта возможность пока не реализована.", ToastType.WARNING);
-            }}>Редактировать
-            </button>
-            {
-              (userUID && handlerDeleteQuiz) &&
-              // <button className='button-test' onClick={() => deleteUserQuiz(quiz.testId, userUID)}>Удалить</button>
-              <button className='button-test'
-                      onClick={() => {
-                        setIsDeleting(true);
-                        handlerDeleteQuiz(quiz);
-                      }}>
-                Удалить
-              </button>
-            }
-          </div>
-        }
+
         <div className='test-buttons-block'>
-          <button
-            className="btn qrcode-icon-link"
-            title="QR код теста"
-            onClick={() => setQrCodeToShow(quiz.testId)}
-          >
-            <img src="/images/qr_icon.png" alt="qr code icon"/>
-          </button>
+          {
+            openStatistic &&
+            <button className='button-test' onClick={() => openStatistic(quiz.testId)}>Статистика</button>
+          }
+          {
+            (userUID && handlerDeleteQuiz) &&
+            <>
+              <button className='button-test' onClick={() => {
+                navigate(`/createquiz/manual/${quiz.testId}`);
+              }}>
+                Редактировать
+              </button>
+            <button className='button-test'
+                    onClick={() => {
+                      setIsDeleting(true);
+                      handlerDeleteQuiz(quiz);
+                    }}>
+              Удалить
+            </button>
+            </>
+          }
+        </div>
+
+        <div className='test-buttons-block'>
+          {
+            setQrCodeToShow &&
+            <button
+              className="btn qrcode-icon-link"
+              title="QR код теста"
+              onClick={() => setQrCodeToShow(quiz.testId)}
+            >
+              <img src="/images/qr_icon.png" alt="qr code icon"/>
+            </button>
+          }
           <button
             className={`btn quiz-link-copy ${copied ? " quiz-link-copy--copied" : ""}`}
             onClick={() => handleCopy(currentLink, setCopied)}

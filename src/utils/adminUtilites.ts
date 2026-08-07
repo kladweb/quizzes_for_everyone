@@ -24,12 +24,13 @@ export const getUsersExtraInfo = (users: UsersAdminMap) => {
     countUsersReg: 0,
     countUsersVisited: 0,
   };
-  const dateNow = new Date();
+  const dateNow = Date.now();
   Object.values(users).forEach((user) => {
-    if (Number(dateNow) - Number(user.registrationDate) < TIME_PERIOD) {
+    if (user.registrationDate === "unknown") return;
+    if (dateNow - Number(user.registrationDate) < TIME_PERIOD) {
       usersExtraInfo.countUsersReg++;
     }
-    if (Number(dateNow) - Number(user.lastVisitedDate) < TIME_PERIOD) {
+    if (dateNow - Number(user.lastVisitedDate) < TIME_PERIOD) {
       usersExtraInfo.countUsersVisited++;
     }
   });
@@ -41,7 +42,7 @@ export const getQuizzesAdminInfo = (quizzes: IQuizzes) => {
     countAllQuizzes: Object.keys(quizzes).length,
     countLastCreatedQuizzes: 0,
   }
-  const dateNow = Number(new Date());
+  const dateNow = Date.now();
   Object.values(quizzes).forEach((quiz) => {
     if (dateNow - Number(quiz.createdAt) < TIME_PERIOD) {
       quizzesAdminInfo.countLastCreatedQuizzes++;
@@ -55,11 +56,11 @@ export const getQuizzesStatInfo = (statisticsAll: IStatisticsAll) => {
     countUsersPassedQuizzes: 0,
     countUnknownPassedQuizzes: 0,
   }
-  const dateNow = Number(new Date());
+  const dateNow = Date.now();
 
   Object.values(statisticsAll).forEach((statisticsQuiz) => {
     Object.values(statisticsQuiz).forEach((statistics) => {
-      if (dateNow - Number(statistics.finishedAt) < TIME_PERIOD) {
+      if (dateNow - statistics.finishedAt < TIME_PERIOD) {
         quizzesStatInfo.countUsersPassedQuizzes++;
         if (!statistics.userUid.includes("user")) {
           quizzesStatInfo.countUnknownPassedQuizzes++;

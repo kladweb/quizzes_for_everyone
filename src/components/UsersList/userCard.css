@@ -56,4 +56,9 @@
   div.param-yellow {
     color: var(--color-warning);
   }
+
+  a {
+    text-decoration: none;
+    color: var(--color-success);
+  }
 }

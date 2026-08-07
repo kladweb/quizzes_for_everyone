@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink, useMatch } from "react-router-dom";
 import ThemeSwitch from "../ThemeSwitch/ThemeSwitch";
-import { type IUser, loginGoogle, logoutGoogle, useIsAuthLoading, useUser } from "../../store/useUserStore";
+import { type IUser, loginGoogle, logoutGoogle, useIsAuthLoading, useRole, useUser } from "../../store/useUserStore";
 import { TokenBadge } from "../TokenBadge/TokenBadge";
 import "./header.css"
 
@@ -9,6 +9,7 @@ export const Header: React.FC = () => {
   const isQuizPage = useMatch("/quizzes/:testid");
   const user: IUser | null = useUser();
   const isAuthLoading = useIsAuthLoading();
+  const role = useRole();
 
   return (
     <header className="header-container">
@@ -18,6 +19,12 @@ export const Header: React.FC = () => {
       </NavLink>
       <div className="nav-container">
         <nav className="navbar">
+          {
+            role === "admin" &&
+            <NavLink className='link-nav link-admin' to={'/admin'}>
+              <span>admin</span>
+            </NavLink>
+          }
           <NavLink className='link-nav' to={'/allquizzes'}>
             <span>ВСЕ ТЕСТЫ</span>
           </NavLink>

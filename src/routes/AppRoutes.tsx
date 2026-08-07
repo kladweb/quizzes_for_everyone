@@ -13,6 +13,7 @@ import { PageUsers } from "../pages/PagesAdmin/PageUsers";
 import { PageUsersInfo } from "../pages/PagesAdmin/PageUsersInfo";
 import { PageQuizzesInfo } from "../pages/PagesAdmin/PageQuizzesInfo";
 import { PageQuizzesStatistics } from "../pages/PagesAdmin/PageQuizzesStatistics";
+import { PageUserQuizzes } from "../pages/PagesAdmin/PageUserQuizzes";
 
 const PageCreateQuiz = lazy(() => import ("../pages/PageCreateQuiz/PageCreateQuiz")
   .then((module) => ({default: module.PageCreateQuiz})));
@@ -54,6 +55,7 @@ export const AppRoutes = () => {
             <Route path="usersgeneralinfo" element={<PageUsersInfo/>}/>
             <Route path="quizzesinfo" element={<PageQuizzesInfo/>}/>
             <Route path="statinfo" element={<PageQuizzesStatistics/>}/>
+            <Route path="userquizzes/:userid" element={<PageUserQuizzes/>}/>
           </Route>
         </Route>
 

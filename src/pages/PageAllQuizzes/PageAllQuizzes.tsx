@@ -20,8 +20,6 @@ const ModalQRCodeLazy = lazy(() =>
 export const PageAllQuizzes = () => {
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const {category} = useParams();
-  const locale = navigator.languages?.[0] || navigator.language;
-  const formatter = new Intl.DateTimeFormat(locale);
   const user = useUser();
   const isAllLoaded = useIsAllLoaded();
   const testsListObj: IQuizzes | null = useAllQuizzes();
@@ -94,7 +92,6 @@ export const PageAllQuizzes = () => {
                   userUID={user?.uid}
                   category={category}
                   guestUserId={guestUserId}
-                  dateFormatter={formatter}
                   setQrCodeToShow={setQrCodeToShow}
                 />)
               )}

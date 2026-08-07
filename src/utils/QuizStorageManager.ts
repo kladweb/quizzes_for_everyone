@@ -161,7 +161,7 @@ export const QuizStorageManager = {
     const recentStatistic: IStatistics[] | null = this.getRecentAllStat();
     let isCurrentExists = false;
     if (recentStatistic && recentStatistic.length > 0) {
-      const currentDate = Number(new Date());
+      const currentDate = Date.now();
       const recentStatisticClear = recentStatistic.filter((stat: IStatistics) => {
         if ((currentDate - stat.finishedAt) > 2592000000) {
           return false;
