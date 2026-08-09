@@ -61,7 +61,7 @@ describe("useTokensStore", () => {
       vi.mocked(tokensApi.fetchUserTokens).mockResolvedValue({
         tokens: {
           dailyCount: 30,
-          plan: "basic",
+          plan: "pro",
           usedToday: 10,
           lastReset: NOW,
           expiresAt: NOW + 1_000_000,
@@ -73,7 +73,7 @@ describe("useTokensStore", () => {
       expect(tokensApi.createDefaultTokens).not.toHaveBeenCalled();
       expect(useTokensStore.getState().tokens).toMatchObject({
         dailyCount: 30,
-        plan: "basic",
+        plan: "pro",
         usedToday: 10,
       });
     });
@@ -153,9 +153,9 @@ describe("useTokensStore", () => {
       expect(useTokensStore.getState().tokens.usedToday).toBe(20);
     });
 
-    it("uses pro plan limit for active subscription", async () => {
+    it("uses vip plan limit for active subscription", async () => {
       resetStore(makeTokens({
-        plan: "pro",
+        plan: "vip",
         usedToday: 480,
         expiresAt: NOW + 1_000_000,
       }));

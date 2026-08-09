@@ -29,9 +29,9 @@ export const PageUsers = () => {
           .sort((a, b) => {
             const valueAobj: IUserAdmin = users[a];
             const valueBobj: IUserAdmin = users[b];
-            const valueA = valueAobj[userParam] === "unknown" ? 0 : valueAobj[userParam];
-            const valueB = valueBobj[userParam] === "unknown" ? 0 : valueBobj[userParam];
-            return Number(valueB) - Number(valueA);
+            const valueA = valueAobj[userParam];
+            const valueB = valueBobj[userParam];
+            return valueB - valueA;
           })
           .map((key: string) => (
             <UserCard userAdmin={users[key]} userUid={key} key={key}/>

@@ -171,10 +171,10 @@ export interface IUserAdmin {
   tokensDailyCount: number;
   tokensCurrentCount: number;
   tokensPlan: string;
-  registrationDate: string;
-  lastVisitedDate: string;
-  lastCreatedQuizDate: string;
-  lastPassedQuizDate: string;
+  registrationDate: number;
+  lastVisitedDate: number;
+  lastCreatedQuizDate: number;
+  lastPassedQuizDate: number;
 }
 
 export type UsersAdminMap = Record<string, IUserAdmin>;

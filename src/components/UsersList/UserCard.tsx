@@ -9,19 +9,19 @@ interface IUserCardProps {
 
 export const UserCard: React.FC<IUserCardProps> = ({userAdmin, userUid}) => {
 
-  const dateFormatter = (date: string) => {
-    if (date === "unknown") {
+  const dateFormatter = (date: number) => {
+    if (date === 0) {
       return date;
     }
     return new Date(date).toLocaleDateString('ru-RU')
   }
 
-  const getParamClassName = (date: string) => {
+  const getParamClassName = (date: number) => {
     const dateNow = Date.now();
-    if (date === "unknown") {
+    if (date === 0) {
       return "param-yellow";
     }
-    if (dateNow - Number(date) <= 2592000000) {
+    if (dateNow - date <= 2592000000) {
       return;
     }
     return "param-yellow";
@@ -38,6 +38,10 @@ export const UserCard: React.FC<IUserCardProps> = ({userAdmin, userUid}) => {
         <div>{userUid}</div>
       </div>
       <div className="user-params-container">
+        <div>email:</div>
+        <div>{userAdmin.email}</div>
+      </div>
+      <div className="user-params-container">
         <div>Количество созданных тестов:</div>
         {
           userAdmin.quizzesCount ?
@@ -47,14 +51,6 @@ export const UserCard: React.FC<IUserCardProps> = ({userAdmin, userUid}) => {
             :
             <div>{userAdmin.quizzesCount}</div>
         }
-      </div>
-      <div className="user-params-container">
-        <div>Тарифный план:</div>
-        <div>{userAdmin.tokensPlan}</div>
-      </div>
-      <div className="user-params-container">
-        <div>Имеется токенов:</div>
-        <div>{userAdmin.tokensCurrentCount}</div>
       </div>
       <div className="user-params-container">
         <div>Дата регистрации:</div>
@@ -79,6 +75,14 @@ export const UserCard: React.FC<IUserCardProps> = ({userAdmin, userUid}) => {
         <div className={getParamClassName(userAdmin.lastPassedQuizDate)}>
           {dateFormatter(userAdmin.lastPassedQuizDate)}
         </div>
+      </div>
+      <div className="user-params-container">
+        <div>Тарифный план:</div>
+        <div>{userAdmin.tokensPlan}</div>
+      </div>
+      <div className="user-params-container">
+        <div>Имеется токенов:</div>
+        <div>{userAdmin.tokensCurrentCount}</div>
       </div>
     </div>
   )
