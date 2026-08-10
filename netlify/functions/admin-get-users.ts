@@ -1,6 +1,6 @@
 import type { HandlerEvent } from "@netlify/functions";
-import { requireAdmin } from "./utils/requireAdmin";
 import { getAuth } from "firebase-admin/auth";
+import { requireAdmin } from "./utils/requireAdmin";
 import { getAdminDatabase, initAdmin } from "./utils/initAdmin";
 import { type UsersAdminMap } from "../../src/types/Quiz";
 
