@@ -6,10 +6,9 @@ import { type UsersAdminMap } from "../../src/types/Quiz";
 
 export const handler = async (event: HandlerEvent) => {
 
-  await requireAdmin(event);
-
   try {
     initAdmin();
+    await requireAdmin(event);
 
     const users = await getAuth().listUsers();
     const db = getAdminDatabase();

@@ -4,6 +4,7 @@ import ThemeSwitch from "../ThemeSwitch/ThemeSwitch";
 import { type IUser, loginGoogle, logoutGoogle, useIsAuthLoading, useRole, useUser } from "../../store/useUserStore";
 import { TokenBadge } from "../TokenBadge/TokenBadge";
 import "./header.css"
+import { addTokensToUser } from "../../api/adminActions";
 
 export const Header: React.FC = () => {
   const isQuizPage = useMatch("/quizzes/:testid");
@@ -17,6 +18,12 @@ export const Header: React.FC = () => {
         <img className="logo-image" src="/images/Logo_v3.png" alt="logo"/>
         <h1>ANY QUIZ</h1>
       </NavLink>
+      <button onClick={async () => {
+        const ttt = await addTokensToUser();
+        console.log(ttt);
+      }}>
+        TEST
+      </button>
       <div className="nav-container">
         <nav className="navbar">
           {

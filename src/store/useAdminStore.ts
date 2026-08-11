@@ -20,6 +20,7 @@ interface IInitialAdminState {
   quizzesStatInfo: any,
   isLoadingStatInfo: boolean,
   isLoadedStatInfo: boolean,
+  loadError: boolean,
   // quizzes: IQuizzes | null,
   // isLoadingQuizzes: boolean,
 }
@@ -43,6 +44,8 @@ const initialState: IInitialAdminState = {
   quizzesStatInfo: null,
   isLoadingStatInfo: false,
   isLoadedStatInfo: false,
+
+  loadError: false,
 }
 
 interface IAdminState extends IInitialAdminState, IAdminActions {
@@ -55,9 +58,14 @@ const adminStore: StateCreator<IAdminState> = (set, get) => ({
       return;
     }
     set({isLoadingUsers: true});
-    const users = await getUsers();
-    const usersExtraInfo = getUsersExtraInfo(users);
-    set({users, usersExtraInfo, isLoadingUsers: false, isLoadedUsers: true});
+    try {
+      const users = await getUsers();
+      const usersExtraInfo = getUsersExtraInfo(users);
+      set({users, usersExtraInfo, isLoadingUsers: false, isLoadedUsers: true, loadError: false});
+    } catch {
+      console.log("E R R")
+      set({isLoadingUsers: false, loadError: true});
+    }
   },
   loadQuizzesAdminInfo: async () => {
     if (get().quizzesAdminInfo) {
@@ -66,7 +74,7 @@ const adminStore: StateCreator<IAdminState> = (set, get) => ({
     set({isLoadingQuizzesInfo: true});
     const quizzesAll = await QuizStorageManager.fetchAllQuizzes();
     const quizzesAdminInfo = getQuizzesAdminInfo(quizzesAll);
-    set({quizzesAdminInfo, isLoadingQuizzesInfo: false, isLoadedQuizzesInfo: true});
+    set({quizzesAdminInfo, isLoadingQuizzesInfo: false, isLoadedQuizzesInfo: true, loadError: false});
   },
   loadQuizzesStatInfo: async () => {
     if (get().quizzesStatInfo) {
@@ -75,7 +83,7 @@ const adminStore: StateCreator<IAdminState> = (set, get) => ({
     set({isLoadingStatInfo: true});
     const statisticsAll = await QuizStorageManager.fetchAllStatistics();
     const quizzesStatInfo = getQuizzesStatInfo(statisticsAll);
-    set({quizzesStatInfo, isLoadingStatInfo: false, isLoadedStatInfo: true});
+    set({quizzesStatInfo, isLoadingStatInfo: false, isLoadedStatInfo: true, loadError: false});
   },
 });
 
@@ -93,6 +101,8 @@ export const useIsLoadedQuizzesInfo = () => useAdminStore((state) => state.isLoa
 export const useQuizzesStatInfo = () => useAdminStore((state) => state.quizzesStatInfo);
 export const useIsLoadingStatInfo = () => useAdminStore((state) => state.isLoadingStatInfo);
 export const useIsLoadedStatInfo = () => useAdminStore((state) => state.isLoadedStatInfo);
+
+export const useAdminLoadError = () => useAdminStore((state) => state.loadError);
 
 export const loadUsers = (): Promise<void> => useAdminStore.getState().loadUsers();
 export const loadQuizzesAdminInfo = (): Promise<void> => useAdminStore.getState().loadQuizzesAdminInfo();

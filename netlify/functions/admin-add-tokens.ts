@@ -5,20 +5,26 @@ import { getDatabase } from "firebase/database";
 
 export const handler = async (event: HandlerEvent) => {
 
-  console.log(event);
+  try {
+    initAdmin();
+    await requireAdmin(event);
+    console.log("УСПЕХ 4");
+    const db = getDatabase();
 
-  // try {
-  //   initAdmin();
-  //   const db = getDatabase();
-  //
-  //
-  // } catch (e) {
-  //   console.error(e);
-  // }
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      toket: 10,
-    }),
-  };
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        toket: 10,
+      }),
+    };
+
+  } catch (e) {
+    console.error(e);
+    return {
+      statusCode: 401,
+      body: JSON.stringify({
+        error: "Unauthorized",
+      }),
+    };
+  }
 }

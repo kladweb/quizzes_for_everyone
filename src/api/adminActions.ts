@@ -2,7 +2,8 @@ export const getUsers = async () => {
   const response = await fetch(
     "/.netlify/functions/admin-get-users"
   );
-  if (!response.ok) {
+  console.log(response);
+  if (!response.ok && response.status !== 200) {
     throw new Error("Failed to get users");
   }
   return await response.json();

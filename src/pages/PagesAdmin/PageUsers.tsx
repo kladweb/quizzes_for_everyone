@@ -1,13 +1,17 @@
 import { useEffect, useState } from "react";
 import { UserCard } from "../../components/UsersList/UserCard";
-import { loadUsers, useIsLoadedUsers, useUsers } from "../../store/useAdminStore";
+import { loadUsers, useAdminLoadError, useIsLoadedUsers, useUsers } from "../../store/useAdminStore";
 import { type IUserParams, userParams } from "../../variables/quizData";
 import { FiltersUsers } from "../../components/FiltersUsers/FiltersUsers";
 import "../../components/UsersList/userCard.css"
-import { IUserAdmin, type UsersAdminMap } from "../../types/Quiz";
+import { type IUserAdmin, ToastType, type UsersAdminMap } from "../../types/Quiz";
+import { showToast } from "../../store/useNoticeStore";
+import { useNavigate } from "react-router-dom";
 
 export const PageUsers = () => {
+  const navigate = useNavigate();
   const users: UsersAdminMap | null = useUsers();
+  const loadError = useAdminLoadError();
   const isLoadedUsers = useIsLoadedUsers();
   const [userParam, setUserParam] = useState<IUserParams>("quizzesCount");
 
@@ -16,6 +20,13 @@ export const PageUsers = () => {
       loadUsers();
     }
   }, []);
+
+  useEffect(() => {
+    if (loadError) {
+      navigate("/admin");
+      showToast("Ошибка загрузки данных", ToastType.ERROR);
+    }
+  }, [loadError]);
 
   if (!users) {
     return null;
