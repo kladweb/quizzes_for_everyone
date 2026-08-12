@@ -98,6 +98,16 @@ export const catTitles = {
   access: "Будет ли Ваш тест виден в общем списке тестов или только в Вашем"
 }
 
+export const userParams = {
+  quizzesCount: "Количество созданных тестов",
+  registrationDate: "Дата регистрации",
+  lastVisitedDate: "Последний визит",
+  lastCreatedQuizDate: "Последнее создание теста",
+  lastPassedQuizDate: "Последнее прохождение теста"
+}
+
+export type IUserParams = keyof typeof userParams;
+
 export const steps: string[] = [
   "Генерируем вопросы...",
   "Формируем ответы...",

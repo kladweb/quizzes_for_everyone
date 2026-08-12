@@ -6,6 +6,7 @@ import {
 } from "../../store/useAdminStore";
 import { Loader } from "../../components/Loader/Loader";
 import "./pageAdmin.css"
+import { addTokensToUser } from "../../api/adminActions";
 
 export const PageAdmin = () => {
 
@@ -34,6 +35,12 @@ export const PageAdmin = () => {
           <span>Statistics Info</span>
         </NavLink>
       </nav>
+      <button onClick={async () => {
+        const ttt = await addTokensToUser();
+        console.log(ttt);
+      }}>
+        TEST
+      </button>
       <Outlet/>
     </div>
   )

@@ -9,8 +9,8 @@ const DAY_MS = 86400000;
 
 const PLAN_LIMITS = {
   start: 50,
-  basic: 200,
-  pro: 500
+  pro: 200,
+  vip: 500
 } as const;
 
 type Plan = keyof typeof PLAN_LIMITS;
@@ -73,7 +73,7 @@ const tokensStore: StateCreator<TokensStore> = (set, get) => ({
         const t = data.tokens;
         nextTokens = {
           dailyCount: t.dailyCount ?? 50,
-          plan: ["start", "basic", "pro"].includes(t.plan)
+          plan: ["start", "pro", "vip"].includes(t.plan)
             ? t.plan
             : "start",
           usedToday: t.usedToday ?? 0,
