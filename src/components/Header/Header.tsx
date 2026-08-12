@@ -18,12 +18,6 @@ export const Header: React.FC = () => {
         <img className="logo-image" src="/images/Logo_v3.png" alt="logo"/>
         <h1>ANY QUIZ</h1>
       </NavLink>
-      <button onClick={async () => {
-        const ttt = await addTokensToUser(10);
-        console.log(ttt);
-      }}>
-        TEST
-      </button>
       <div className="nav-container">
         <nav className="navbar">
           {

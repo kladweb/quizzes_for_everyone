@@ -5,7 +5,7 @@ import {
   updateTokens
 } from "../api/tokensApi";
 
-const DAY_MS = 86400000;
+const DAY_MS = 86400000;  //одни сутки;
 
 const PLAN_LIMITS = {
   start: 50,
@@ -16,11 +16,12 @@ const PLAN_LIMITS = {
 type Plan = keyof typeof PLAN_LIMITS;
 
 export interface Tokens {
-  dailyCount: number;
   plan: Plan;
+  expiresAt: number;
+  dailyCount: number;
+  extraCount: number;
   usedToday: number;
   lastReset: number;
-  expiresAt: number;
 }
 
 interface TokensStore {
@@ -38,18 +39,18 @@ interface TokensStore {
 
 function getDefaultTokens(): Tokens {
   return {
-    dailyCount: 50,
     plan: "start",
+    expiresAt: 0,
+    dailyCount: 50,
+    extraCount: 0,
     usedToday: 0,
     lastReset: Date.now(),
-    expiresAt: 0
   };
 }
 
 function getLimit(tokens: Tokens): number {
   const now = Date.now();
-  const isActive =
-    tokens.plan !== "start" && now < (tokens.expiresAt || 0);
+  const isActive = tokens.plan !== "start" && now < (tokens.expiresAt || 0);
   if (isActive) {
     return PLAN_LIMITS[tokens.plan];
   }
@@ -72,13 +73,14 @@ const tokensStore: StateCreator<TokensStore> = (set, get) => ({
       } else {
         const t = data.tokens;
         nextTokens = {
-          dailyCount: t.dailyCount ?? 50,
           plan: ["start", "pro", "vip"].includes(t.plan)
             ? t.plan
             : "start",
+          expiresAt: t.expiresAt ?? 0,
+          dailyCount: t.dailyCount ?? 50,
+          extraCount: t.dailyCount ?? 0,
           usedToday: t.usedToday ?? 0,
           lastReset: t.lastReset ?? Date.now(),
-          expiresAt: t.expiresAt ?? 0
         };
       }
       const now = Date.now();
@@ -112,10 +114,21 @@ const tokensStore: StateCreator<TokensStore> = (set, get) => ({
       updated.lastReset = now;
     }
     const limit = getLimit(updated);
-    if (updated.usedToday + amount > limit) {
+    let newUsed = 0;
+    if (updated.usedToday + amount > limit + updated.extraCount) {
       throw new Error("Not enough tokens");
     }
-    const newUsed = updated.usedToday + amount;
+    if (updated.extraCount > amount) {
+      updated.extraCount = updated.extraCount - amount;
+    }
+    if (updated.extraCount > 0 && updated.extraCount <= amount) {
+      newUsed = updated.usedToday - updated.extraCount + amount;
+      updated.extraCount = 0;
+    }
+    if (updated.extraCount === 0) {
+      newUsed = updated.usedToday + amount;
+    }
+
     // сначала обновляем локально (моментальный UI)
     const prev = {...tokens};
     set({
@@ -135,26 +148,6 @@ const tokensStore: StateCreator<TokensStore> = (set, get) => ({
       throw e;
     }
   },
-
-  //DERIVED STATE
-  // get remaining() {
-  //   const {tokens} = get();
-  //   const limit = getLimit(tokens);
-  //   return Math.max(0, limit - tokens.usedToday);
-  // },
-  //
-  // get limit() {
-  //   return getLimit(get().tokens);
-  // },
-  //
-  // get canSpend() {
-  //   return get().remaining >= 20;
-  // },
-  //
-  // get isSubscribed() {
-  //   const {tokens} = get();
-  //   return tokens.plan !== "start" && Date.now() < tokens.expiresAt;
-  // }
 });
 
 const useTokensStore = create<TokensStore>()(tokensStore);
@@ -179,15 +172,6 @@ export const useCanSpend = () =>
     const remaining = limit - state.tokens.usedToday;
     return remaining >= 20;
   });
-
-// export const useIsSubscribed = () =>
-//   useTokensStore((state) => {
-//     return (
-//       state.tokens.plan !== "start" &&
-//       Date.now() < state.tokens.expiresAt
-//     );
-//   });
-
 
 export const loadTokens = (userId: string): Promise<void> =>
   useTokensStore.getState().loadTokens(userId);

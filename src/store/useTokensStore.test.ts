@@ -15,17 +15,18 @@ const NOW = 1_700_000_000_000;
 
 function makeTokens(overrides: Partial<Tokens> = {}): Tokens {
   return {
-    dailyCount: 50,
     plan: "start",
+    expiresAt: 0,
+    dailyCount: 50,
+    extraCount: 0,
     usedToday: 0,
     lastReset: NOW,
-    expiresAt: 0,
     ...overrides,
   };
 }
 
 function resetStore(tokens: Tokens = makeTokens()) {
-  useTokensStore.setState({ tokens, loadingTokens: false });
+  useTokensStore.setState({tokens, loadingTokens: false});
 }
 
 describe("useTokensStore", () => {
@@ -51,7 +52,7 @@ describe("useTokensStore", () => {
 
       expect(tokensApi.createDefaultTokens).toHaveBeenCalledWith(
         USER_ID,
-        expect.objectContaining({ dailyCount: 50, plan: "start", usedToday: 0 })
+        expect.objectContaining({dailyCount: 50, plan: "start", usedToday: 0})
       );
       expect(useTokensStore.getState().loadingTokens).toBe(false);
       expect(useTokensStore.getState().tokens.plan).toBe("start");
@@ -60,11 +61,12 @@ describe("useTokensStore", () => {
     it("loads existing tokens from API", async () => {
       vi.mocked(tokensApi.fetchUserTokens).mockResolvedValue({
         tokens: {
-          dailyCount: 30,
           plan: "pro",
+          expiresAt: NOW + 1_000_000,
+          dailyCount: 30,
+          extraCount: 0,
           usedToday: 10,
           lastReset: NOW,
-          expiresAt: NOW + 1_000_000,
         },
       });
 
@@ -81,11 +83,12 @@ describe("useTokensStore", () => {
     it("normalizes invalid plan to start", async () => {
       vi.mocked(tokensApi.fetchUserTokens).mockResolvedValue({
         tokens: {
-          dailyCount: 50,
           plan: "invalid",
+          expiresAt: 0,
+          dailyCount: 50,
+          extraCount: 0,
           usedToday: 0,
           lastReset: NOW,
-          expiresAt: 0,
         },
       });
 
@@ -97,11 +100,12 @@ describe("useTokensStore", () => {
     it("resets usedToday when last reset was more than a day ago", async () => {
       vi.mocked(tokensApi.fetchUserTokens).mockResolvedValue({
         tokens: {
-          dailyCount: 50,
           plan: "start",
+          expiresAt: 0,
+          dailyCount: 50,
+          extraCount: 0,
           usedToday: 25,
           lastReset: NOW - DAY_MS - 1,
-          expiresAt: 0,
         },
       });
 
@@ -118,7 +122,7 @@ describe("useTokensStore", () => {
 
   describe("spendTokens", () => {
     it("spends tokens and updates API", async () => {
-      resetStore(makeTokens({ usedToday: 10 }));
+      resetStore(makeTokens({usedToday: 10}));
 
       await spendTokens(USER_ID, 5);
 
@@ -130,7 +134,7 @@ describe("useTokensStore", () => {
     });
 
     it("throws when not enough tokens remain", async () => {
-      resetStore(makeTokens({ usedToday: 45 }));
+      resetStore(makeTokens({usedToday: 45}));
 
       await expect(spendTokens(USER_ID, 10)).rejects.toThrow("Not enough tokens");
       expect(tokensApi.updateTokens).not.toHaveBeenCalled();
@@ -138,7 +142,7 @@ describe("useTokensStore", () => {
     });
 
     it("rolls back local state when API update fails", async () => {
-      resetStore(makeTokens({ usedToday: 10 }));
+      resetStore(makeTokens({usedToday: 10}));
       vi.mocked(tokensApi.updateTokens).mockRejectedValue(new Error("Network error"));
 
       await expect(spendTokens(USER_ID, 5)).rejects.toThrow("Network error");
@@ -146,7 +150,7 @@ describe("useTokensStore", () => {
     });
 
     it("resets daily usage before spending when a day has passed", async () => {
-      resetStore(makeTokens({ usedToday: 40, lastReset: NOW - DAY_MS - 1 }));
+      resetStore(makeTokens({usedToday: 40, lastReset: NOW - DAY_MS - 1}));
 
       await spendTokens(USER_ID, 20);
 
@@ -168,9 +172,10 @@ describe("useTokensStore", () => {
     it("uses dailyCount when subscription has expired", async () => {
       resetStore(makeTokens({
         plan: "pro",
-        dailyCount: 50,
-        usedToday: 40,
         expiresAt: NOW - 1,
+        dailyCount: 50,
+        extraCount: 0,
+        usedToday: 40,
       }));
 
       await expect(spendTokens(USER_ID, 15)).rejects.toThrow("Not enough tokens");

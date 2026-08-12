@@ -11,15 +11,13 @@ export const handler = async (event: HandlerEvent) => {
     initAdmin();
     await requireAdmin(event);
 
-
     const tokenPackage = JSON.parse(event.body);
     console.log(tokenPackage);
     // const usersSnapshot = await db.ref("users").once("value");
     const jobRef = ref(db, `users/${tokenPackage.userUID}/tokens`);
 
-
     try {
-      const snapshot = await get(child(jobRef, `dailyCount`));
+      const snapshot = await get(child(jobRef, `extraCount`));
       if (!snapshot.exists()) {
         return new Error('No such quiz found!');
       }
