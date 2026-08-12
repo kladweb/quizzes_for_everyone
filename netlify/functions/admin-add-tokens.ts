@@ -1,20 +1,49 @@
 import type { HandlerEvent } from "@netlify/functions";
 import { requireAdmin } from "./utils/requireAdmin";
-import { initAdmin } from "./utils/initAdmin";
-import { getDatabase } from "firebase/database";
+import { getAdminDatabase, initAdmin } from "./utils/initAdmin";
+import { db } from "./utils/firebaseClientServer";
+import { child, get, ref, update } from "firebase/database";
+
 
 export const handler = async (event: HandlerEvent) => {
 
   try {
     initAdmin();
     await requireAdmin(event);
-    console.log("УСПЕХ 4");
-    const db = getDatabase();
+
+
+    const tokenPackage = JSON.parse(event.body);
+    console.log(tokenPackage);
+    // const usersSnapshot = await db.ref("users").once("value");
+    const jobRef = ref(db, `users/${tokenPackage.userUID}/tokens`);
+
+
+    try {
+      const snapshot = await get(child(jobRef, `dailyCount`));
+      if (!snapshot.exists()) {
+        return new Error('No such quiz found!');
+      }
+      const currentUserTokens = snapshot.val();
+      console.log("currentUserTokens:", currentUserTokens);
+
+
+      await update(jobRef, {
+        dailyCount: currentUserTokens + tokenPackage.tokensAmount,
+      })
+    } catch (error) {
+      console.error(error);
+      return {
+        statusCode: 403,
+        body: JSON.stringify({
+          error: "UNKNOWN_ERROR",
+        }),
+      };
+    }
 
     return {
       statusCode: 200,
       body: JSON.stringify({
-        toket: 10,
+        message: "Tokens have been sent!",
       }),
     };
 

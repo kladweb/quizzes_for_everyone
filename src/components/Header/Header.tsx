@@ -19,7 +19,7 @@ export const Header: React.FC = () => {
         <h1>ANY QUIZ</h1>
       </NavLink>
       <button onClick={async () => {
-        const ttt = await addTokensToUser();
+        const ttt = await addTokensToUser(10);
         console.log(ttt);
       }}>
         TEST

@@ -1,7 +1,12 @@
 import React, { useEffect } from "react";
-import { loadUsers, useIsLoadedUsers, useUsersExtraInfo } from "../../store/useAdminStore";
+import { useNavigate } from "react-router-dom";
+import { loadUsers, useAdminLoadError, useIsLoadedUsers, useUsersExtraInfo } from "../../store/useAdminStore";
+import { showToast } from "../../store/useNoticeStore";
+import { ToastType } from "../../types/Quiz";
 
 export const PageUsersInfo = () => {
+  const navigate = useNavigate();
+  const loadError = useAdminLoadError();
   const usersExtraInfo = useUsersExtraInfo();
 
   const isLoadedUsers = useIsLoadedUsers();
@@ -11,6 +16,13 @@ export const PageUsersInfo = () => {
       loadUsers();
     }
   }, []);
+
+  useEffect(() => {
+    if (loadError) {
+      navigate("/admin");
+      showToast("Ошибка загрузки данных", ToastType.ERROR);
+    }
+  }, [loadError]);
 
   if (!usersExtraInfo) {
     return null;
