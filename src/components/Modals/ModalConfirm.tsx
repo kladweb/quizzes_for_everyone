@@ -1,6 +1,6 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import "./modalConfirm.css"
+import "./modals.css"
 
 interface IModalConfirmProps {
   isModalConfirmOpen: boolean;
@@ -30,7 +30,7 @@ export const ModalConfirm: React.FC<IModalConfirmProps> = (
             onClick={() => handlerConfirmDelete(false)}
           >
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-              <h2>{modalQuestion}</h2>
+              <p>{modalQuestion}</p>
               <button className="btn btn-modal" onClick={() => handlerConfirmDelete(true)}>ДА</button>
               <button className="btn btn-modal" onClick={() => handlerConfirmDelete(false)}>НЕТ</button>
             </div>

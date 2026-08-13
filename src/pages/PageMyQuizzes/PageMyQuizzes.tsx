@@ -10,7 +10,7 @@ import { clearCurrentQuiz } from "../../store/useCurrentCreatingQuiz";
 import { Loader } from "../../components/Loader/Loader";
 import type { IQuizMeta, IQuizzes } from "../../types/Quiz";
 import { QuizCard } from "../../components/QuizCard/QuizCard";
-import { ModalConfirm } from "../../components/ModalConfirm/ModalConfirm";
+import { ModalConfirm } from "../../components/Modals/ModalConfirm";
 import { PageEmpty } from "../PageEmpty/PageEmpty";
 import { filterQuizzes, getUniqueCategories } from "../../utils/quizUtils";
 import { CAT_LABELS_RU_EXT, PAGE_SIZE } from "../../variables/quizData";

@@ -4,8 +4,13 @@ import ThemeSwitch from "../ThemeSwitch/ThemeSwitch";
 import { type IUser, loginGoogle, logoutGoogle, useIsAuthLoading, useRole, useUser } from "../../store/useUserStore";
 import { TokenBadge } from "../TokenBadge/TokenBadge";
 import "./header.css"
+import { ModalInfo } from "../Modals/ModalInfo";
 
-export const Header: React.FC = () => {
+interface IHeaderProps {
+  handlerClose: () => void;
+}
+
+export const Header: React.FC<IHeaderProps> = ({handlerClose}) => {
   const isQuizPage = useMatch("/quizzes/:testid");
   const user: IUser | null = useUser();
   const isAuthLoading = useIsAuthLoading();
@@ -37,7 +42,7 @@ export const Header: React.FC = () => {
         </nav>
         {
           user &&
-          <TokenBadge/>
+          <TokenBadge handlerClose={handlerClose}/>
         }
         <div className="login-theme">
           {

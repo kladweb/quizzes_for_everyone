@@ -8,7 +8,7 @@ import { QuizStorageManager } from "../../utils/QuizStorageManager";
 import { showToast } from "../../store/useNoticeStore";
 import { PAGE_SIZE } from "../../variables/quizData";
 import { QuizCard } from "../../components/QuizCard/QuizCard";
-import { ModalConfirm } from "../../components/ModalConfirm/ModalConfirm";
+import { ModalConfirm } from "../../components/Modals/ModalConfirm";
 
 export const PageUserQuizzes = () => {
   const sentinelRef = useRef<HTMLDivElement | null>(null);

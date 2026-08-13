@@ -92,12 +92,16 @@ const adminStore: StateCreator<IAdminState> = (set, get) => ({
       return;
     }
     const usersUpdated = {...users};
+    const usedTokens = usersUpdated[userId].tokensDailyCount + usersUpdated[userId].tokensExtraCount -
+      usersUpdated[userId].tokensCurrentCount;
     let newExtraCount = usersUpdated[userId].tokensExtraCount + extraCountTokens;
     if (newExtraCount < 0) {
       newExtraCount = 0;
     }
     usersUpdated[userId].tokensExtraCount = newExtraCount;
-    usersUpdated[userId].tokensCurrentCount = usersUpdated[userId].tokensCurrentCount + extraCountTokens;
+
+    usersUpdated[userId].tokensCurrentCount = usersUpdated[userId].tokensDailyCount - usedTokens +
+      usersUpdated[userId].tokensExtraCount;
     set({users: usersUpdated});
   },
 });

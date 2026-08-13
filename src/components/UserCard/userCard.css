@@ -48,6 +48,11 @@
   font-size: 0.9em;
   gap: 1em 0.5em;
   line-height: 1em;
+  text-align: left;
+
+  div {
+    width: max-content;
+  }
 
   div:nth-child(2) {
     color: var(--color-success);
@@ -61,10 +66,23 @@
     text-decoration: none;
     color: var(--color-success);
   }
-}
 
-.add-tokens-btn {
-  min-width: 50%;
+  .add-tokens-btn {
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-card);
+    border: 1px solid var(--color-primary);
+    border-radius: 0.3em;
+
+    &:hover {
+      background-color: var(--color-bg-page);
+      border-color: var(--color-tertiary);
+    }
+
+    &:active {
+      background-color: var(--color-success-bg);
+      border-color: var(--color-success-bg);
+    }
+  }
 }
 
 .input-tokens {
@@ -72,6 +90,18 @@
 }
 
 .tokens-count-info {
+  width: 10%;
   display: inline-block;
   line-height: 1.2em;
+  text-align: center;
+}
+
+@media (max-width: 660px) {
+  .user-card {
+    font-size: 0.9rem;
+  }
+
+  .add-tokens-btn {
+    font-size: 0.9em;
+  }
 }
