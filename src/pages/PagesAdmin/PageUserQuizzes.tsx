@@ -21,6 +21,7 @@ export const PageUserQuizzes = () => {
   const [testList, setTestList] = useState<IQuizMeta[]>([]);
   const [quizToDelete, setQuizToDelete] = useState<IQuizMeta | null>(null);
   const [isModalConfirmOpen, setIsModalConfirmOpen] = useState<boolean>(false);
+  const [quizIdStatistics, setQuizIdStatistics] = useState<string | null>(null);
 
   const visibleQuizzes: IQuizMeta[] = useMemo(() => {
     return testList.slice(0, visibleCount);
@@ -29,6 +30,14 @@ export const PageUserQuizzes = () => {
   const handlerDeleteQuiz = (quiz: IQuizMeta) => {
     setQuizToDelete(quiz);
     setIsModalConfirmOpen(true);
+  }
+
+  const openStatistic = (testId: string) => {
+    if (quizIdStatistics !== testId) {
+      setQuizIdStatistics(testId);
+    } else {
+      setQuizIdStatistics(null);
+    }
   }
 
   useEffect(
@@ -93,6 +102,8 @@ export const PageUserQuizzes = () => {
                 quiz={quiz}
                 userUID={userID}
                 guestUserId={null}
+                openStatistic={openStatistic}
+                isShowStatistics={!!quizIdStatistics && quizIdStatistics === quiz.testId}
                 handlerDeleteQuiz={handlerDeleteQuiz}
               />)
             )}

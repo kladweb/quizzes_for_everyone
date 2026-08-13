@@ -1,5 +1,5 @@
 import { getDatabase, ref, get, update } from "firebase/database";
-import { Tokens } from "../store/useTokensStore";
+import { ITokens } from "../types/Quiz";
 
 const db = getDatabase();
 
@@ -10,7 +10,7 @@ export async function fetchUserTokens(userId: string) {
   return snapshot.exists() ? snapshot.val() : null;
 }
 
-export async function createDefaultTokens(userId: string, tokens: Tokens) {
+export async function createDefaultTokens(userId: string, tokens: ITokens) {
   const userRef = ref(db, `users/${userId}`);
 
   await update(userRef, {tokens})
@@ -21,3 +21,4 @@ export async function updateTokens(userId: string, data: Record<string, any>) {
 
   await update(userRef, data);
 }
+

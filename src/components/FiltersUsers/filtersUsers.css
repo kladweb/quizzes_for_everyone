@@ -1,9 +1,9 @@
-.filters-menu {
-  /*svg {*/
-  /*  stroke: var(--color-text-secondary);*/
-  /*}*/
+.filters-users {
+  font-size: 0.9em;
+  margin: 0 auto;
 
-  .input-filters {
+  .input-users {
+    min-width: 17em;
     background-color: var(--color-bg-card2);
 
     &:focus-visible, &:focus {
@@ -11,4 +11,3 @@
     }
   }
 }
-

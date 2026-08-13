@@ -3,6 +3,7 @@ import { GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from
 import { auth } from "../firebase/firebase";
 import { nanoid } from "nanoid";
 import { setUserAuthDate } from "../api/userDatesApi";
+import { subscribeToUserTokens, unsubscribeFromUserTokens, unsubscribeTokens } from "./useTokensStore";
 
 export interface IUser {
   uid: string;
@@ -60,12 +61,14 @@ const userStore: StateCreator<IUserState> = (set) => ({
     // console.log("ИНИЦИАЛИЗАЦИЯ ПОЛЬЗОВАТЕЛЯ");
     set(() => ({isAuthLoading: true}));
     onAuthStateChanged(auth, async (getUser) => {
+      unsubscribeTokens?.();
       if (getUser) {
         const user: IUser = {
           uid: getUser.uid,
           email: getUser.email,
           displayName: getUser.displayName,
         };
+        subscribeToUserTokens(getUser.uid);
         let role: IUserRole = "user";
         try {
           role = await getUserRole();
@@ -100,6 +103,7 @@ const userStore: StateCreator<IUserState> = (set) => ({
     signOut(auth).then(() => {
       console.log('Sign-out successful', auth.currentUser);
       set(() => ({user: null}));
+      unsubscribeFromUserTokens();
     }).catch((error) => {
       console.log('Sign-out error', error);
     }).finally(() => {

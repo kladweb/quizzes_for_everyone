@@ -1,6 +1,6 @@
 import { create, type StateCreator } from "zustand";
 import { getUsers } from "../api/adminActions";
-import { UsersAdminMap } from "../types/Quiz";
+import type { ITokens, UsersAdminMap } from "../types/Quiz";
 import {
   getQuizzesAdminInfo, getQuizzesStatInfo,
   getUsersExtraInfo,
@@ -20,6 +20,7 @@ interface IInitialAdminState {
   quizzesStatInfo: any,
   isLoadingStatInfo: boolean,
   isLoadedStatInfo: boolean,
+  loadError: boolean,
   // quizzes: IQuizzes | null,
   // isLoadingQuizzes: boolean,
 }
@@ -28,6 +29,7 @@ interface IAdminActions {
   loadUsers: () => Promise<void>;
   loadQuizzesAdminInfo: () => Promise<void>;
   loadQuizzesStatInfo: () => Promise<void>;
+  updateUserExtraTokens: (userId: string, extraCountTokens: number) => void;
 }
 
 const initialState: IInitialAdminState = {
@@ -43,6 +45,8 @@ const initialState: IInitialAdminState = {
   quizzesStatInfo: null,
   isLoadingStatInfo: false,
   isLoadedStatInfo: false,
+
+  loadError: false,
 }
 
 interface IAdminState extends IInitialAdminState, IAdminActions {
@@ -55,9 +59,14 @@ const adminStore: StateCreator<IAdminState> = (set, get) => ({
       return;
     }
     set({isLoadingUsers: true});
-    const users = await getUsers();
-    const usersExtraInfo = getUsersExtraInfo(users);
-    set({users, usersExtraInfo, isLoadingUsers: false, isLoadedUsers: true});
+    try {
+      const users = await getUsers();
+      const usersExtraInfo = getUsersExtraInfo(users);
+      set({users, usersExtraInfo, isLoadingUsers: false, isLoadedUsers: true, loadError: false});
+    } catch {
+      console.log("E R R")
+      set({isLoadingUsers: false, loadError: true});
+    }
   },
   loadQuizzesAdminInfo: async () => {
     if (get().quizzesAdminInfo) {
@@ -66,7 +75,7 @@ const adminStore: StateCreator<IAdminState> = (set, get) => ({
     set({isLoadingQuizzesInfo: true});
     const quizzesAll = await QuizStorageManager.fetchAllQuizzes();
     const quizzesAdminInfo = getQuizzesAdminInfo(quizzesAll);
-    set({quizzesAdminInfo, isLoadingQuizzesInfo: false, isLoadedQuizzesInfo: true});
+    set({quizzesAdminInfo, isLoadingQuizzesInfo: false, isLoadedQuizzesInfo: true, loadError: false});
   },
   loadQuizzesStatInfo: async () => {
     if (get().quizzesStatInfo) {
@@ -75,7 +84,21 @@ const adminStore: StateCreator<IAdminState> = (set, get) => ({
     set({isLoadingStatInfo: true});
     const statisticsAll = await QuizStorageManager.fetchAllStatistics();
     const quizzesStatInfo = getQuizzesStatInfo(statisticsAll);
-    set({quizzesStatInfo, isLoadingStatInfo: false, isLoadedStatInfo: true});
+    set({quizzesStatInfo, isLoadingStatInfo: false, isLoadedStatInfo: true, loadError: false});
+  },
+  updateUserExtraTokens: async (userId, extraCountTokens) => {
+    const users = get().users;
+    if (!users) {
+      return;
+    }
+    const usersUpdated = {...users};
+    let newExtraCount = usersUpdated[userId].tokensExtraCount + extraCountTokens;
+    if (newExtraCount < 0) {
+      newExtraCount = 0;
+    }
+    usersUpdated[userId].tokensExtraCount = newExtraCount;
+    usersUpdated[userId].tokensCurrentCount = usersUpdated[userId].tokensCurrentCount + extraCountTokens;
+    set({users: usersUpdated});
   },
 });
 
@@ -94,6 +117,9 @@ export const useQuizzesStatInfo = () => useAdminStore((state) => state.quizzesSt
 export const useIsLoadingStatInfo = () => useAdminStore((state) => state.isLoadingStatInfo);
 export const useIsLoadedStatInfo = () => useAdminStore((state) => state.isLoadedStatInfo);
 
+export const useAdminLoadError = () => useAdminStore((state) => state.loadError);
+
 export const loadUsers = (): Promise<void> => useAdminStore.getState().loadUsers();
 export const loadQuizzesAdminInfo = (): Promise<void> => useAdminStore.getState().loadQuizzesAdminInfo();
 export const loadQuizzesStatInfo = (): Promise<void> => useAdminStore.getState().loadQuizzesStatInfo();
+export const updateUserExtraTokens = (userId: string, extraCountTokens: number): void => useAdminStore.getState().updateUserExtraTokens(userId, extraCountTokens);

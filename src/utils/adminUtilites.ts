@@ -26,11 +26,11 @@ export const getUsersExtraInfo = (users: UsersAdminMap) => {
   };
   const dateNow = Date.now();
   Object.values(users).forEach((user) => {
-    if (user.registrationDate === "unknown") return;
-    if (dateNow - Number(user.registrationDate) < TIME_PERIOD) {
+    if (user.registrationDate === 0) return;
+    if (dateNow - user.registrationDate < TIME_PERIOD) {
       usersExtraInfo.countUsersReg++;
     }
-    if (dateNow - Number(user.lastVisitedDate) < TIME_PERIOD) {
+    if (dateNow - user.lastVisitedDate < TIME_PERIOD) {
       usersExtraInfo.countUsersVisited++;
     }
   });

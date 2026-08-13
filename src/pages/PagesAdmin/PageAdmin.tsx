@@ -6,9 +6,12 @@ import {
 } from "../../store/useAdminStore";
 import { Loader } from "../../components/Loader/Loader";
 import "./pageAdmin.css"
+import { addTokensToUser } from "../../api/adminActions";
+import { useUser } from "../../store/useUserStore";
 
 export const PageAdmin = () => {
 
+  const user = useUser();
   const isLoadingUsers = useIsLoadingUsers();
   const isLoadingQuizzesInfo = useIsLoadingQuizzesInfo();
   const isLoadingStatInfo = useIsLoadingStatInfo();
@@ -34,6 +37,13 @@ export const PageAdmin = () => {
           <span>Statistics Info</span>
         </NavLink>
       </nav>
+      <button onClick={async () => {
+        if (!user) return;
+        const ttt = await addTokensToUser(user?.uid, 10);
+        console.log(ttt);
+      }}>
+        TEST
+      </button>
       <Outlet/>
     </div>
   )

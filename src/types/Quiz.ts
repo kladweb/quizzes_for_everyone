@@ -169,12 +169,30 @@ export interface IUserAdmin {
   photoURL: string;
   quizzesCount: number;
   tokensDailyCount: number;
+  tokensExtraCount: number;
   tokensCurrentCount: number;
   tokensPlan: string;
-  registrationDate: string;
-  lastVisitedDate: string;
-  lastCreatedQuizDate: string;
-  lastPassedQuizDate: string;
+  registrationDate: number;
+  lastVisitedDate: number;
+  lastCreatedQuizDate: number;
+  lastPassedQuizDate: number;
 }
 
 export type UsersAdminMap = Record<string, IUserAdmin>;
+
+export const PLAN_LIMITS = {
+  start: 50,
+  pro: 200,
+  vip: 500
+} as const;
+
+type Plan = keyof typeof PLAN_LIMITS;
+
+export interface ITokens {
+  plan: Plan;
+  expiresAt: number;
+  dailyCount: number;
+  extraCount: number;
+  usedToday: number;
+  lastReset: number;
+}
