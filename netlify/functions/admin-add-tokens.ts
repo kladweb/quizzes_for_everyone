@@ -1,6 +1,6 @@
 import type { HandlerEvent } from "@netlify/functions";
 import { requireAdmin } from "./utils/requireAdmin";
-import { getAdminDatabase, initAdmin } from "./utils/initAdmin";
+import { initAdmin } from "./utils/initAdmin";
 import { db } from "./utils/firebaseClientServer";
 import { child, get, ref, update } from "firebase/database";
 
@@ -17,16 +17,18 @@ export const handler = async (event: HandlerEvent) => {
     const jobRef = ref(db, `users/${tokenPackage.userUID}/tokens`);
 
     try {
-      const snapshot = await get(child(jobRef, `extraCount`));
+      const snapshot = await get(child(jobRef, "extraCount"));
       if (!snapshot.exists()) {
         return new Error('No such quiz found!');
       }
       const currentUserTokens = snapshot.val();
       console.log("currentUserTokens:", currentUserTokens);
-
-
+      let newExtraCount = currentUserTokens + tokenPackage.tokensAmount;
+      if (newExtraCount < 0) {
+        newExtraCount = 0;
+      }
       await update(jobRef, {
-        dailyCount: currentUserTokens + tokenPackage.tokensAmount,
+        extraCount: newExtraCount,
       })
     } catch (error) {
       console.error(error);

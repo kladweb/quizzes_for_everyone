@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { UserCard } from "../../components/UsersList/UserCard";
+import { UserCard } from "../../components/UserCard/UserCard";
 import { loadUsers, useAdminLoadError, useIsLoadedUsers, useUsers } from "../../store/useAdminStore";
 import { type IUserParams, userParams } from "../../variables/quizData";
 import { FiltersUsers } from "../../components/FiltersUsers/FiltersUsers";
-import "../../components/UsersList/userCard.css"
+import "../../components/UserCard/userCard.css"
 import { type IUserAdmin, ToastType, type UsersAdminMap } from "../../types/Quiz";
 import { showToast } from "../../store/useNoticeStore";
 import { useNavigate } from "react-router-dom";

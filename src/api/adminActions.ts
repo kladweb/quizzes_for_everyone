@@ -1,6 +1,5 @@
 import { auth } from "../firebase/firebase";
 
-
 export const adminFetch = async (
   url: string,
   options: RequestInit = {}
@@ -18,7 +17,6 @@ export const adminFetch = async (
 
 export const getUsers = async () => {
   const response = await adminFetch("/.netlify/functions/admin-get-users");
-  console.log(response);
   if (!response.ok && response.status !== 200) {
     throw new Error("Failed to get users");
   }
@@ -46,4 +44,3 @@ export const addTokensToUser = async (userUID: string, tokensAmount: number) => 
   }
   return await response.json();
 }
-

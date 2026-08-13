@@ -1,6 +1,10 @@
-import React from "react";
-import { IUserAdmin } from "../../types/Quiz";
+import React, { useEffect, useState } from "react";
+import { IUserAdmin, ToastType } from "../../types/Quiz";
 import { NavLink } from "react-router-dom";
+import { addTokensToUser } from "../../api/adminActions";
+import { dateFormatter, getParamClassName } from "../../utils/formatters";
+import { showToast } from "../../store/useNoticeStore";
+import { updateUserExtraTokens } from "../../store/useAdminStore";
 
 interface IUserCardProps {
   userAdmin: IUserAdmin,
@@ -8,24 +12,13 @@ interface IUserCardProps {
 }
 
 export const UserCard: React.FC<IUserCardProps> = ({userAdmin, userUid}) => {
-
-  const dateFormatter = (date: number) => {
-    if (date === 0) {
-      return date;
-    }
-    return new Date(date).toLocaleDateString('ru-RU')
-  }
-
-  const getParamClassName = (date: number) => {
-    const dateNow = Date.now();
-    if (date === 0) {
-      return "param-yellow";
-    }
-    if (dateNow - date <= 2592000000) {
-      return;
-    }
-    return "param-yellow";
-  }
+  const [tokensCount, setTokensCount] = useState(10);
+  //
+  // useEffect(() => {
+  //   if (userAdmin) {
+  //     setTokensCount(0);
+  //   }
+  // }, [userAdmin.tokensExtraCount]);
 
   return (
     <div className="user-card">
@@ -81,8 +74,46 @@ export const UserCard: React.FC<IUserCardProps> = ({userAdmin, userUid}) => {
         <div>{userAdmin.tokensPlan}</div>
       </div>
       <div className="user-params-container">
-        <div>Имеется токенов:</div>
+        <div>Доступные токены:</div>
         <div>{userAdmin.tokensCurrentCount}</div>
+      </div>
+      <div className="user-params-container">
+        <div>Дневной лимит:</div>
+        <div>{userAdmin.tokensDailyCount}</div>
+      </div>
+      <div className="user-params-container">
+        <div>Куплено токенов:</div>
+        <div>{userAdmin.tokensExtraCount}</div>
+      </div>
+      <div className="user-params-container">
+        <button
+          className="add-tokens-btn"
+          onClick={async () => {
+            if (!userUid) return;
+            try {
+              const addTokensAction = await addTokensToUser(userUid, tokensCount);
+              if (addTokensAction) {
+                updateUserExtraTokens(userUid, tokensCount);
+                setTokensCount(0);
+              }
+            } catch (e) {
+              console.error(e);
+              showToast("Ошибка добавления токенов. Попробуйте позже...", ToastType.ERROR);
+            }
+          }}>
+          Добавить токенов:
+        </button>
+        <input
+          className="input-tokens"
+          type="range"
+          name="questionCount"
+          min="-100"
+          max="100"
+          step="10"
+          value={tokensCount}
+          onChange={(e) => setTokensCount(Number(e.target.value))}
+        />
+        <span className="tokens-count-info">{tokensCount}</span>
       </div>
     </div>
   )

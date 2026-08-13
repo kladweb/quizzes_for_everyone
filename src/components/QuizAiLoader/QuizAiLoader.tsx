@@ -160,6 +160,13 @@ export const QuizAiLoader: React.FC<IQuizAiLoaderProps> = ({userUID, changeStepI
           результат может отличаться от ожидаемого. Возврат токенов при этом не предусмотрен.
         </p>
       </div>
+      {/*<button*/}
+      {/*  onClick={() => {*/}
+      {/*    console.log("СНИМАЕМ ТОКИ");*/}
+      {/*    spendTokens(userUID, 20);*/}
+      {/*  }}>*/}
+      {/*  Снять токены*/}
+      {/*</button>*/}
     </div>
   );
 }

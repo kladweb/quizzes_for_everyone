@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { Tokens } from "./useTokensStore";
 import { loadTokens, spendTokens, useTokensStore } from "./useTokensStore";
 import * as tokensApi from "../api/tokensApi";
+import type { ITokens } from "../types/Quiz";
 
 vi.mock("../api/tokensApi", () => ({
   fetchUserTokens: vi.fn(),
@@ -13,7 +13,7 @@ const DAY_MS = 86_400_000;
 const USER_ID = "user-123";
 const NOW = 1_700_000_000_000;
 
-function makeTokens(overrides: Partial<Tokens> = {}): Tokens {
+function makeTokens(overrides: Partial<ITokens> = {}): ITokens {
   return {
     plan: "start",
     expiresAt: 0,
@@ -25,7 +25,7 @@ function makeTokens(overrides: Partial<Tokens> = {}): Tokens {
   };
 }
 
-function resetStore(tokens: Tokens = makeTokens()) {
+function resetStore(tokens: ITokens = makeTokens()) {
   useTokensStore.setState({tokens, loadingTokens: false});
 }
 
@@ -129,6 +129,7 @@ describe("useTokensStore", () => {
       expect(useTokensStore.getState().tokens.usedToday).toBe(15);
       expect(tokensApi.updateTokens).toHaveBeenCalledWith(USER_ID, {
         "tokens/usedToday": 15,
+        "tokens/extraCount": 0,
         "tokens/lastReset": NOW,
       });
     });
@@ -160,6 +161,7 @@ describe("useTokensStore", () => {
     it("uses vip plan limit for active subscription", async () => {
       resetStore(makeTokens({
         plan: "vip",
+        dailyCount: 500,
         usedToday: 480,
         expiresAt: NOW + 1_000_000,
       }));

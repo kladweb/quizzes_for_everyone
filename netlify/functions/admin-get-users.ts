@@ -16,23 +16,27 @@ export const handler = async (event: HandlerEvent) => {
     const usersFirebase = usersSnapshot.val() || {};
 
     const usersAdmin = users.users.reduce((acc, user) => {
+      const userData = usersFirebase[user.uid];
       acc[user.uid] = {
         email: user.email,
         displayName: user.displayName,
         photoURL: user.photoURL,
-        quizzesCount: usersFirebase[user.uid]?.quizIds ? Object.keys(usersFirebase[user.uid].quizIds).length : 0,
-        tokensDailyCount: usersFirebase[user.uid]?.tokens ? usersFirebase[user.uid].tokens.dailyCount : 0,
-        tokensCurrentCount: usersFirebase[user.uid]?.tokens ? usersFirebase[user.uid].tokens.dailyCount -
-          usersFirebase[user.uid].tokens.usedToday : 0,
-        tokensPlan: usersFirebase[user.uid]?.tokens ? usersFirebase[user.uid].tokens.plan : 'none',
-        registrationDate: usersFirebase[user.uid]?.userDatesInfo?.registration ?
-          usersFirebase[user.uid].userDatesInfo.registration : 0,
-        lastVisitedDate: usersFirebase[user.uid]?.userDatesInfo?.lastVisited ?
-          usersFirebase[user.uid].userDatesInfo.lastVisited : 0,
-        lastCreatedQuizDate: usersFirebase[user.uid]?.userDatesInfo?.lastCreatedQuiz ?
-          usersFirebase[user.uid].userDatesInfo.lastCreatedQuiz : 0,
-        lastPassedQuizDate: usersFirebase[user.uid]?.userDatesInfo?.lastPassedQuiz ?
-          usersFirebase[user.uid].userDatesInfo.lastPassedQuiz : 0,
+        quizzesCount: userData?.quizIds ? Object.keys(userData.quizIds).length : 0,
+        tokensDailyCount: userData?.tokens ? userData.tokens.dailyCount : 0,
+        tokensExtraCount: userData?.tokens ? userData.tokens.extraCount : 0,
+        tokensCurrentCount: userData?.tokens ?
+          userData.tokens.dailyCount + userData.tokens.extraCount - userData.tokens.usedToday
+          :
+          0,
+        tokensPlan: userData?.tokens ? usersFirebase[user.uid].tokens.plan : 'none',
+        registrationDate: userData?.userDatesInfo?.registration ?
+          userData.userDatesInfo.registration : 0,
+        lastVisitedDate: userData?.userDatesInfo?.lastVisited ?
+          userData.userDatesInfo.lastVisited : 0,
+        lastCreatedQuizDate: userData?.userDatesInfo?.lastCreatedQuiz ?
+          userData.userDatesInfo.lastCreatedQuiz : 0,
+        lastPassedQuizDate: userData?.userDatesInfo?.lastPassedQuiz ?
+          userData.userDatesInfo.lastPassedQuiz : 0,
       };
       return acc;
     }, {} as UsersAdminMap);

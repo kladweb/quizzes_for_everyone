@@ -62,3 +62,16 @@
     color: var(--color-success);
   }
 }
+
+.add-tokens-btn {
+  min-width: 50%;
+}
+
+.input-tokens {
+  width: 35%;
+}
+
+.tokens-count-info {
+  display: inline-block;
+  line-height: 1.2em;
+}

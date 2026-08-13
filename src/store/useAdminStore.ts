@@ -1,6 +1,6 @@
 import { create, type StateCreator } from "zustand";
 import { getUsers } from "../api/adminActions";
-import { UsersAdminMap } from "../types/Quiz";
+import type { ITokens, UsersAdminMap } from "../types/Quiz";
 import {
   getQuizzesAdminInfo, getQuizzesStatInfo,
   getUsersExtraInfo,
@@ -29,6 +29,7 @@ interface IAdminActions {
   loadUsers: () => Promise<void>;
   loadQuizzesAdminInfo: () => Promise<void>;
   loadQuizzesStatInfo: () => Promise<void>;
+  updateUserExtraTokens: (userId: string, extraCountTokens: number) => void;
 }
 
 const initialState: IInitialAdminState = {
@@ -85,6 +86,20 @@ const adminStore: StateCreator<IAdminState> = (set, get) => ({
     const quizzesStatInfo = getQuizzesStatInfo(statisticsAll);
     set({quizzesStatInfo, isLoadingStatInfo: false, isLoadedStatInfo: true, loadError: false});
   },
+  updateUserExtraTokens: async (userId, extraCountTokens) => {
+    const users = get().users;
+    if (!users) {
+      return;
+    }
+    const usersUpdated = {...users};
+    let newExtraCount = usersUpdated[userId].tokensExtraCount + extraCountTokens;
+    if (newExtraCount < 0) {
+      newExtraCount = 0;
+    }
+    usersUpdated[userId].tokensExtraCount = newExtraCount;
+    usersUpdated[userId].tokensCurrentCount = usersUpdated[userId].tokensCurrentCount + extraCountTokens;
+    set({users: usersUpdated});
+  },
 });
 
 const useAdminStore = create<IAdminState>()(adminStore);
@@ -107,3 +122,4 @@ export const useAdminLoadError = () => useAdminStore((state) => state.loadError)
 export const loadUsers = (): Promise<void> => useAdminStore.getState().loadUsers();
 export const loadQuizzesAdminInfo = (): Promise<void> => useAdminStore.getState().loadQuizzesAdminInfo();
 export const loadQuizzesStatInfo = (): Promise<void> => useAdminStore.getState().loadQuizzesStatInfo();
+export const updateUserExtraTokens = (userId: string, extraCountTokens: number): void => useAdminStore.getState().updateUserExtraTokens(userId, extraCountTokens);

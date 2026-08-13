@@ -4,7 +4,6 @@ import ThemeSwitch from "../ThemeSwitch/ThemeSwitch";
 import { type IUser, loginGoogle, logoutGoogle, useIsAuthLoading, useRole, useUser } from "../../store/useUserStore";
 import { TokenBadge } from "../TokenBadge/TokenBadge";
 import "./header.css"
-import { addTokensToUser } from "../../api/adminActions";
 
 export const Header: React.FC = () => {
   const isQuizPage = useMatch("/quizzes/:testid");
