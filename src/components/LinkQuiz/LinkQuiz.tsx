@@ -57,7 +57,7 @@ export const LinkQuiz: React.FC<{ testId: string }> = ({testId}) => {
       {qrCodeToShow &&
         <Suspense fallback={null}>
           <ModalQRCodeLazy
-            url={`https://any-quiz.netlify.app/quizzes/${qrCodeToShow}`}
+            url={`https://anyquiz.net/quizzes/${qrCodeToShow}`}
             qrCodeToShow={qrCodeToShow}
             setQrCodeToShow={setQrCodeToShow}
           />
