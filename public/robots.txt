@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://any-quiz.netlify.app/sitemap.xml
+Sitemap: https://anyquiz.net/sitemap.xml

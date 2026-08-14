@@ -57,7 +57,7 @@ export const MainLayout = () => {
         isModalInfoOpen={isModalInfoOpen}
         modalInfo="Токены обновляются через 24 часа. Для получения дополнительных токенов пишите на почту:
         easywebapp-anyquiz@yahoo.com
-        На указзанную почту также пишите по любым другим вопросам.
+        На указанную почту также пишите по любым другим вопросам.
         Мы обязательно свяжемся с вами!"
         handlerClose={handlerClose}
       />
