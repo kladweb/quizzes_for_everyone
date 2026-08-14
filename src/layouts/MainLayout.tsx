@@ -8,6 +8,7 @@ import { ScrollUp } from "../components/ScrollUp/ScrollUp";
 import { useErrorLoading } from "../store/useQuizzesStore";
 import { useUser } from "../store/useUserStore";
 import { loadTokens, useLoadingTokens } from "../store/useTokensStore";
+import { ModalInfo } from "../components/Modals/ModalInfo";
 
 export const MainLayout = () => {
   const navigate = useNavigate();
@@ -15,6 +16,11 @@ export const MainLayout = () => {
   const errorLoading = useErrorLoading();
   const user = useUser();
   const loadingTokens = useLoadingTokens();
+  const [isModalInfoOpen, setIsModalInfoOpen] = React.useState(false);
+
+  const handlerClose = () => {
+    setIsModalInfoOpen(prev => !prev);
+  }
 
   useEffect(() => {
     if (user?.uid && loadingTokens) {
@@ -35,7 +41,7 @@ export const MainLayout = () => {
 
   return (
     <>
-      <Header/>
+      <Header handlerClose={handlerClose}/>
       <main className="main">
         <Suspense fallback={<div className="loader-container"><Loader/></div>}>
           <Outlet/>
@@ -47,6 +53,14 @@ export const MainLayout = () => {
           <div className="dot_light dot_light_2"></div>
         </div>
       </main>
+      <ModalInfo
+        isModalInfoOpen={isModalInfoOpen}
+        modalInfo="Токены обновляются через 24 часа. Для получения дополнительных токенов пишите на почту:
+        easywebapp-anyquiz@yahoo.com
+        На указзанную почту также пишите по любым другим вопросам.
+        Мы обязательно свяжемся с вами!"
+        handlerClose={handlerClose}
+      />
       <Footer/>
     </>
   );

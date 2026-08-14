@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { IUserAdmin, ToastType } from "../../types/Quiz";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { IUserAdmin, ToastType } from "../../types/Quiz";
 import { addTokensToUser } from "../../api/adminActions";
 import { dateFormatter, getParamClassName } from "../../utils/formatters";
 import { showToast } from "../../store/useNoticeStore";
@@ -12,13 +12,7 @@ interface IUserCardProps {
 }
 
 export const UserCard: React.FC<IUserCardProps> = ({userAdmin, userUid}) => {
-  const [tokensCount, setTokensCount] = useState(10);
-  //
-  // useEffect(() => {
-  //   if (userAdmin) {
-  //     setTokensCount(0);
-  //   }
-  // }, [userAdmin.tokensExtraCount]);
+  const [tokensCount, setTokensCount] = useState(0);
 
   return (
     <div className="user-card">
@@ -87,7 +81,7 @@ export const UserCard: React.FC<IUserCardProps> = ({userAdmin, userUid}) => {
       </div>
       <div className="user-params-container">
         <button
-          className="add-tokens-btn"
+          className="btn add-tokens-btn"
           onClick={async () => {
             if (!userUid) return;
             try {

@@ -16,7 +16,7 @@ import { QuizStorageManager } from "../../utils/QuizStorageManager";
 import { showToast } from "../../store/useNoticeStore";
 import { QuestionEdit } from "../../components/QuestionEdit/QuestionEdit";
 import { LinkQuiz } from "../../components/LinkQuiz/LinkQuiz";
-import { ModalConfirm } from "../../components/ModalConfirm/ModalConfirm";
+import { ModalConfirm } from "../../components/Modals/ModalConfirm";
 import { useQuizEditor } from "../../hooks/useQuizEditor";
 import "./pageQuizEdit.css";
 
