@@ -13,3 +13,8 @@ function = "og"
 [[edge_functions]]
 path = "/quizzes/*"
 function = "og"
+
+[[redirects]]
+from = "/quizzes-sitemap.xml"
+to = "/.netlify/functions/quizzes-sitemap"
+status = 200

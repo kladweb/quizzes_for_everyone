@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://anyquiz.net/sitemap.xml
+Sitemap: https://anyquiz.net/quizzes-sitemap.xml

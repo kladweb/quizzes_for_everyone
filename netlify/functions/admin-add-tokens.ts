@@ -4,7 +4,6 @@ import { initAdmin } from "./utils/initAdmin";
 import { db } from "./utils/firebaseClientServer";
 import { child, get, ref, update } from "firebase/database";
 
-
 export const handler = async (event: HandlerEvent) => {
 
   try {
