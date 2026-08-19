@@ -29,21 +29,11 @@ export const PageMain = () => {
           onError={() => setIsImgLoaded(true)}
         />
       </Link>
-      {
-        user ?
-          <div className='noticeBlock'>
-            <h1 className='noticeText'>Что Вы хотите сделать?</h1>
-            <Link className="link-btn link-main" to='/createquiz'>Создать новый тест</Link>
-            <Link className="link-btn link-main" to='/allquizzes'>Пройти тест</Link>
-          </div>
-          :
-          <div className='noticeBlock'>
-            <p className='noticeText'>Авторизуйтесь, чтобы начать создавать свои тесты...</p>
-            <button className='btn button-login ' onClick={loginGoogle} disabled={isAuthLoading}>
-              {isAuthLoading ? "GOOGLE IN..." : "GOOGLE LOGIN"}
-            </button>
-          </div>
-      }
+      <div className='noticeBlock'>
+        <h1 className='noticeText'>Что Вы хотите сделать?</h1>
+        <Link className="link-btn link-main" to='/createquiz'>Создать новый тест</Link>
+        <Link className="link-btn link-main" to='/allquizzes'>Пройти тест</Link>
+      </div>
       <Link className='link-nav link-all-quizzes' to={'/allquizzes'}>
         <span>Перейти к списку всех тестов</span>
       </Link>

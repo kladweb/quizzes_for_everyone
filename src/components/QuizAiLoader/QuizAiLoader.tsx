@@ -30,10 +30,7 @@ export const QuizAiLoader: React.FC<IQuizAiLoaderProps> = ({userUID, changeStepI
     if (!aiUserPrompt || !userUID) return;
 
     if (!canSpend) {
-      showToast(
-        "Недостаточно токенов для генерации теста.",
-        ToastType.WARNING
-      );
+      showToast("Недостаточно токенов для генерации теста.", ToastType.WARNING);
       return;
     }
 

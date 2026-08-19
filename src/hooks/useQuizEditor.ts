@@ -28,7 +28,6 @@ export const useQuizEditor = () => {
       ...quiz,
       questions: [...questions, getQuestionTemplate(quiz.questions ? quiz.questions.length + 1 : 0)],
     };
-    console.log(newQuiz);
     resetFormError();
     setQuizDraft(newQuiz);
   }

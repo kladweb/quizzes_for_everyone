@@ -1,16 +1,13 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import React from "react";
 import { vi } from "vitest";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import { IWayCardsData } from "./wayCardsData";
 import { CreateQuizWay } from "./CreateQuizWay";
 
-interface IDataCreateQuizWayProps {
-  card: IWayCardsData;
-  handlerCreateWay: () => void;
-}
-
 const clickCallback = vi.fn();
 
-const testCard = {
+const testCard: IWayCardsData = {
   id: "json",
   head: "Создайте пробный тест",
   features: [
@@ -19,34 +16,39 @@ const testCard = {
     "строка описания 3",
     "строка описания 4",
     "строка описания 5",
-  ]
-}
+  ],
+};
 
-const testProps: IDataCreateQuizWayProps = {
-  card: testCard,
-  handlerCreateWay: clickCallback,
-}
-
-
-const renderCreateQuizWay = (props: IDataCreateQuizWayProps) => {
+const renderCreateQuizWay = (card: IWayCardsData, handleStartCreating: typeof clickCallback) => {
   render(
-    <CreateQuizWay
-      card={testCard}
-      handlerCreateWay={props.handlerCreateWay}
-    />
-  )
-}
+    <MemoryRouter>
+      <CreateQuizWay card={card} handleStartCreating={handleStartCreating} />
+    </MemoryRouter>
+  );
+};
 
 describe("Creating quiz way card", () => {
   beforeEach(() => {
-    renderCreateQuizWay(testProps);
+    renderCreateQuizWay(testCard, clickCallback);
   });
+
   it("renders creating quiz way card", () => {
     expect(screen.getByText(testCard.head)).toBeInTheDocument();
-  })
+    // Проверяем, что все пункты списка отображаются
+    testCard.features.forEach((feature) => {
+      expect(screen.getByText(feature)).toBeInTheDocument();
+    });
+  });
 
   it("onClick is triggered when card is clicked", () => {
-    fireEvent.click(screen.getByText(testCard.head));
+    // Находим ссылку по роли или по классу
+    const link = screen.getByRole("link", { name: /Создайте пробный тест/i });
+    fireEvent.click(link);
     expect(clickCallback).toHaveBeenCalledTimes(1);
+  });
+
+  it("has correct link to create quiz", () => {
+    const link = screen.getByRole("link", { name: /Создайте пробный тест/i });
+    expect(link).toHaveAttribute("href", "/createquiz/json");
   });
 });
