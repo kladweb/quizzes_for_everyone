@@ -38,9 +38,9 @@ export const AppRoutes = () => {
     <Routes>
       <Route element={<MainLayout/>}>
         <Route path="/" element={<PageMain/>}/>
+        <Route path="/createquiz" element={<PageCreateQuiz/>}/>
 
         <Route element={<ProtectedRoute/>}>
-          <Route path="/createquiz" element={<PageCreateQuiz/>}/>
           <Route path="/createquiz/json" element={<PageCreateQuizJson/>}/>
           <Route path="/createquiz/manual" element={<PageCreateQuizManual/>}/>
           <Route path="/createquiz/manual/:testid" element={<PageQuizEdit/>}/>

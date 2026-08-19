@@ -11,5 +11,9 @@ path = "/allquizzes"
 function = "og"
 
 [[edge_functions]]
+path = "/createquiz"
+function = "og"
+
+[[edge_functions]]
 path = "/quizzes/*"
 function = "og"

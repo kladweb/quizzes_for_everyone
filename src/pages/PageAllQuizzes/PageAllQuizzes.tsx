@@ -46,13 +46,15 @@ export const PageAllQuizzes = () => {
 
   useEffect(
     () => {
-      document.title = "ВСЕ ТЕСТЫ | ANY QUIZ";
+      document.title = "Квизы и викторины на любую тему | ANY QUIZ";
       if (isAllLoaded) {
-        // console.log("All Quizzes already loaded");
         return;
       }
-      // console.log('loadAllQuizzes');
       loadAllQuizzes();
+
+      return () => {
+        document.title = "ANY QUIZ";
+      };
     }, []);
 
   useEffect(

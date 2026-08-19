@@ -68,10 +68,11 @@ export default async (request: Request) => {
 
     const isHomePage = url.pathname === "/";
     const isAllQuizzesPage = url.pathname === "/allquizzes";
+    const isCreateQuizPage = url.pathname === "/createquiz";
     const quizMatch = url.pathname.match(/^\/quizzes\/([^/]+)\/?$/);
     const isQuizPage = Boolean(quizMatch);
 
-    if (!isHomePage && !isAllQuizzesPage && !isQuizPage) {
+    if (!isHomePage && !isAllQuizzesPage && !isCreateQuizPage && !isQuizPage) {
       return fetch(request);
     }
 
@@ -82,11 +83,21 @@ export default async (request: Request) => {
     let ogImageUrl = new URL("/open.png", url.origin).toString();
 
     if (isAllQuizzesPage) {
-      title = "ANY QUIZ";
+      title = "Квизы и викторины на любую тему";
       description = "Каталог онлайн тестов и викторин | ANY QUIZ. Проходите тесты по английскому языку, химии," +
         " биологии, географии, математике и другим различным предметам. Проверяйте знания, готовьтесь к экзаменам" +
         " или развлекайтесь с интересными викторинами онлайн без регистрации.";
     }
+
+    console.log("ПРИГОТОВИТься");
+
+    if (isCreateQuizPage) {
+      console.log("ДА ДА")
+      title = "Создать интерактивный тест или викторину";
+      description = "ANY QUIZ — бесплатная платформа, где можно создать интерактивный тест при помощи ИИ за несколько" +
+        " минут. Генерация вопросов, публикация по ссылке и прохождение тестов онлайн.";
+    }
+
 
     if (isQuizPage && quizMatch) {
       const quizId = quizMatch[1];
