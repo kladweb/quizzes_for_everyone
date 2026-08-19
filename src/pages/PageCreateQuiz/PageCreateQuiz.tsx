@@ -1,16 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { CreateQuizWay } from "../../components/CreateQuizWay/CreateQuizWay";
 import { type IWayCardsData, wayCardsData } from "../../components/CreateQuizWay/wayCardsData";
-import { IUser, useUser } from "../../store/useUserStore";
 import { showToast } from "../../store/useNoticeStore";
 import { ToastType } from "../../types/Quiz";
 import { useCanSpend } from "../../store/useTokensStore";
+import { clearCurrentQuiz } from "../../store/useCurrentCreatingQuiz";
 import "./pageCreateQuiz.css";
 
 export const PageCreateQuiz = () => {
   const navigate = useNavigate();
-  const user = useUser() as IUser;
   const canSpend = useCanSpend();
 
   const handlerCreateWay = (e: React.MouseEvent<HTMLElement>) => {
@@ -21,14 +20,15 @@ export const PageCreateQuiz = () => {
     }
 
     navigate(`/createquiz/${e.currentTarget.id}`);
-    // console.log(e.currentTarget.id);
   }
 
-  // useEffect(() => {
-  //   if (!user) {
-  //     navigate("/");
-  //   }
-  // }, [user]);
+  useEffect(() => {
+    document.title = "Создать интерактивный тест или викторину | ANY QUIZ";
+    clearCurrentQuiz();
+    return () => {
+      document.title = "ANY QUIZ";
+    };
+  }, []);
 
   return (
     <div className='creating-container'>

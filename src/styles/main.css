@@ -38,6 +38,12 @@ h1 {
   font-size: 24px;
 }
 
+.noticeText {
+  font-size: 1.1em;
+  font-weight: 500;
+  padding: 1em 0;
+}
+
 input[type="file"] {
   padding: 6px 8px;
 }
@@ -130,6 +136,13 @@ input[type="file"] {
   &:active {
     background-color: var(--color-tertiary);
   }
+}
+
+.link-btn {
+  display: inline-block;
+  text-decoration: none;
+  line-height: 1;
+  transition: all 0.3s ease;
 }
 
 /*Dot lights*/

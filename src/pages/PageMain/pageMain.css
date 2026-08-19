@@ -1,0 +1,59 @@
+.link-main {
+  min-width: 9em;
+  margin: 0 1em;
+  padding: 0.5em 1em 0.6em;
+  font-size: 1em;
+  color: var(--color-text-contrast);
+  background-color: var(--color-primary);
+  border-radius: 6px;
+
+  &:hover {
+    background-color: var(--color-secondary);
+  }
+
+  &:active {
+    background-color: var(--color-tertiary);
+  }
+}
+
+.faq-block {
+  margin: 2em -0;
+
+  h2 {
+    border-top: 1px solid var(--color-border);
+    margin-top: 1.5em;
+    padding-top: 0.5em;
+    font-size: 1.1em;
+    font-weight: 500;
+  }
+
+  details {
+    text-align: left;
+    margin-top: 1em;
+  }
+
+  summary {
+    font-style: italic;
+    color: var(--color-text-primary);
+    cursor: pointer;
+  }
+
+  p {
+    margin: 0.5em 0;
+    text-indent: 1em;
+    text-align: justify;
+    color: var(--color-text-secondary);
+
+  }
+
+  .info-mail {
+    text-align: center;
+    text-decoration-line: underline;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .mail-copied {
+    color: var(--color-success);
+  }
+}
