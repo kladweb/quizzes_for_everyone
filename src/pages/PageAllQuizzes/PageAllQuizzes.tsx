@@ -46,7 +46,7 @@ export const PageAllQuizzes = () => {
 
   useEffect(
     () => {
-      document.title = "ВСЕ ТЕСТЫ | ANY QUIZ";
+      document.title = "Квизы и викторины на любую тему | ANY QUIZ";
       if (isAllLoaded) {
         return;
       }
