@@ -83,17 +83,14 @@ export default async (request: Request) => {
     let ogImageUrl = new URL("/open.png", url.origin).toString();
 
     if (isAllQuizzesPage) {
-      title = "Квизы и викторины на любую тему";
+      title = "Квизы и викторины на любую тему | ANY QUIZ";
       description = "Каталог онлайн тестов и викторин | ANY QUIZ. Проходите тесты по английскому языку, химии," +
         " биологии, географии, математике и другим различным предметам. Проверяйте знания, готовьтесь к экзаменам" +
         " или развлекайтесь с интересными викторинами онлайн без регистрации.";
     }
 
-    console.log("ПРИГОТОВИТься");
-
     if (isCreateQuizPage) {
-      console.log("ДА ДА")
-      title = "Создать интерактивный тест или викторину";
+      title = "Создать интерактивный тест или викторину | ANY QUIZ";
       description = "ANY QUIZ — бесплатная платформа, где можно создать интерактивный тест при помощи ИИ за несколько" +
         " минут. Генерация вопросов, публикация по ссылке и прохождение тестов онлайн.";
     }
@@ -115,6 +112,7 @@ export default async (request: Request) => {
         typeof data?.description === "string" ? data.description : "Create and share quizzes easily";
 
       title = rawTitle.slice(0, 120).trim();
+      title = `${rawTitle.slice(0, 120).trim()} | ANY QUIZ`;
       description = rawDescription.slice(0, 200).trim();
       ogImageUrl = await resolveOgImageUrl(request, data?.category);
     }
@@ -123,7 +121,7 @@ export default async (request: Request) => {
     const htmlRes = await fetch(new URL("/index.html", request.url));
     let html = await htmlRes.text();
 
-    html = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${escapeHtmlAttr(title)} | ANY QUIZ</title>`);
+    html = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${escapeHtmlAttr(title)}</title>`);
     html = replaceMetaContent(html, "name", "description", description);
     html = replaceMetaContent(html, "property", "og:title", title);
     html = replaceMetaContent(html, "property", "og:description", description);

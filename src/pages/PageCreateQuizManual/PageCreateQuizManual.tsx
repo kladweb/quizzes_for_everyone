@@ -23,7 +23,7 @@ export const PageCreateQuizManual = () => {
 
   return (
     <>
-      {testId ? <Navigate to={`/createquiz/manual/${testId}`}/> : null}
+      {testId && <Navigate to={`/createquiz/manual/${testId}`}/>}
     </>
   )
 }

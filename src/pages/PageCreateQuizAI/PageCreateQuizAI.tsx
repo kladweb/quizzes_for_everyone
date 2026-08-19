@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
 import { QuizAiLoader } from "../../components/QuizAiLoader/QuizAiLoader";
 import { QuizLoaderExtraInfo } from "../../components/QuizLoaderExtraInfo/QuizLoaderExtraInfo";
 import { Loader } from "../../components/Loader/Loader";
@@ -6,6 +7,9 @@ import { LinkQuiz } from "../../components/LinkQuiz/LinkQuiz";
 import { type IUser, useUser } from "../../store/useUserStore";
 import { clearCurrentQuiz, useIsJsonLoading, useQuizComplete, useQuizDraft } from "../../store/useCurrentCreatingQuiz";
 import { steps } from "../../variables/quizData";
+import { useCanSpend } from "../../store/useTokensStore";
+import { showToast } from "../../store/useNoticeStore";
+import { ToastType } from "../../types/Quiz";
 import "./pageCreateQuizAI.css";
 
 export const PageCreateQuizAI = () => {
@@ -14,9 +18,9 @@ export const PageCreateQuizAI = () => {
   const quizDraft = useQuizDraft();
   const quizComplete = useQuizComplete();
   const isCreatingQuiz = useIsJsonLoading();
+  const canSpend = useCanSpend();
   const [isCreatingNewTest, setIsCreatingNewTest] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
-  // const [jobUID, setJobUID] = useState<string | null>(null);
 
   const changeStepIndex = (questionCount: number) => {
     setStepIndex(0);
@@ -38,6 +42,11 @@ export const PageCreateQuizAI = () => {
       }
     )
   }, []);
+
+  if (!canSpend) {
+    showToast("У Вас недостаточно токенов.", ToastType.WARNING);
+    return <Navigate to="/createquiz"/>;
+  }
 
   if (isCreatingQuiz) {
     return (

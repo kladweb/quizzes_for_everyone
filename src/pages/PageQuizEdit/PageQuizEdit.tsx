@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import type { IQuizMeta, IQuizzes, Option, Question } from "../../types/Quiz";
+import type { IQuizMeta, IQuizzes, Question } from "../../types/Quiz";
 import { ToastType } from "../../types/Quiz";
-import { setIsLoading, useAllQuizzes, useIsLoading } from "../../store/useQuizzesStore";
+import { setIsLoading, useAllQuizzes  } from "../../store/useQuizzesStore";
 import { useUser } from "../../store/useUserStore";
 import { QuizLoaderExtraInfo } from "../../components/QuizLoaderExtraInfo/QuizLoaderExtraInfo";
 import {
@@ -91,7 +91,6 @@ export const PageQuizEdit = () => {
       dislikeUsers: {},
       questions: [getQuestionTemplate()],
     }
-    // console.log(quizTemplate);
     setQuizDraft(quizTemplate);
   }
 
