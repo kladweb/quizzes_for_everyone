@@ -1,3 +1,7 @@
+:root {
+  interpolate-size: allow-keywords;
+}
+
 .link-main {
   min-width: 9em;
   margin: 0 1em;
@@ -30,6 +34,16 @@
   details {
     text-align: left;
     margin-top: 1em;
+  }
+
+  details::details-content {
+    height: 0;
+    overflow: clip;
+    transition: height 0.4s ease, content-visibility 0.4s ease allow-discrete;
+  }
+
+  details[open]::details-content {
+    height: auto;
   }
 
   summary {
