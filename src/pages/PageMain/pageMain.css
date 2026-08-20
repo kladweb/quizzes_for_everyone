@@ -57,3 +57,18 @@
     color: var(--color-success);
   }
 }
+
+@media (max-width: 496px) {
+  .link-main {
+    margin: 0.5em 1em;
+  }
+
+  .faq-block {
+    margin-top: 1.5em;
+
+    h2 {
+      margin-top: 0.5em;
+      padding: 0;
+    }
+  }
+}

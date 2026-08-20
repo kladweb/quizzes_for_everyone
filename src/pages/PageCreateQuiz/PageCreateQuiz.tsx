@@ -24,6 +24,7 @@ export const PageCreateQuiz = () => {
       if (isStartedCreating) {
         showToast("Пожалуйста, авторизуйтесь для продолжения...", ToastType.WARNING);
       }
+      scrollToBottom();
       setIsStartedCreating(prevState => prevState + 1);
       e.preventDefault();
       e.stopPropagation();
@@ -31,6 +32,13 @@ export const PageCreateQuiz = () => {
       setIsStartedCreating(0);
     }
   }
+
+  const scrollToBottom = () => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth'
+    });
+  };
 
   useEffect(() => {
     document.title = "Создать интерактивный тест или викторину | ANY QUIZ";
@@ -42,7 +50,7 @@ export const PageCreateQuiz = () => {
 
   return (
     <div className='creating-container'>
-      <h2 className="creating-head">Создайте свой тест<br/>любым из способов</h2>
+      <h2 className="creating-head">Создайте свой тест любым из способов</h2>
       {
         wayCardsData.map((card: IWayCardsData) =>
           <CreateQuizWay
@@ -52,7 +60,7 @@ export const PageCreateQuiz = () => {
           />)
       }
       {
-        (!user && isStartedCreating) &&
+        (!user && !!isStartedCreating) &&
         <div className='noticeBlock'>
           <p className='noticeText'>Авторизуйтесь, чтобы начать создавать свои тесты...</p>
           <button className='btn button-login ' onClick={loginGoogle} disabled={isAuthLoading}>

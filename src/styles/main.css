@@ -215,6 +215,11 @@ input[type="file"] {
 }
 
 @media (max-width: 460px) {
+
+  .noticeText {
+    margin: 0;
+  }
+
   .tests-container {
     padding: 0.6em;
   }
