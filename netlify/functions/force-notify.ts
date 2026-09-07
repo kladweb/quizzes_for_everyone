@@ -1,7 +1,7 @@
 import type { Handler, HandlerEvent, HandlerResponse } from '@netlify/functions';
-import { parseSchedule } from '../../lib/parseSchedule';
-import { formatSchedule } from '../../lib/formatMessage';
-import { sendTelegramMessage } from '../../lib/runCheck';
+import { parseSchedule } from './lib/parseSchedule';
+import { formatSchedule } from './lib/formatMessage';
+import { sendTelegramMessage } from './lib/runCheck';
 
 const SOURCE_URL = 'http://ggpk.by/Raspisanie/Files/P_KURS.html';
 const GROUP_NAME = process.env.SCHEDULE_GROUP || 'ПГБ-121';
@@ -25,7 +25,7 @@ export const handler: Handler = async (event: HandlerEvent): Promise<HandlerResp
     };
   }
   if (providedKey !== expectedKey) {
-    return { statusCode: 403, body: 'Forbidden: missing or incorrect ?key=' };
+    return {statusCode: 403, body: 'Forbidden: missing or incorrect ?key='};
   }
 
   try {
@@ -35,12 +35,12 @@ export const handler: Handler = async (event: HandlerEvent): Promise<HandlerResp
       },
     });
     if (!res.ok) {
-      return { statusCode: 502, body: `Failed to fetch source page: ${res.status}` };
+      return {statusCode: 502, body: `Failed to fetch source page: ${res.status}`};
     }
     const buf = Buffer.from(await res.arrayBuffer());
     const allDays = parseSchedule(buf, GROUP_NAME);
     if (allDays.length === 0) {
-      return { statusCode: 502, body: `Расписание для группы ${GROUP_NAME} не найдено на странице` };
+      return {statusCode: 502, body: `Расписание для группы ${GROUP_NAME} не найдено на странице`};
     }
     // Same rule as in runCheck: only the last (newest) day on the page matters.
     const schedule = [allDays[allDays.length - 1]];
@@ -48,8 +48,8 @@ export const handler: Handler = async (event: HandlerEvent): Promise<HandlerResp
 
     await sendTelegramMessage(message);
 
-    return { statusCode: 200, body: 'Test message sent to Telegram.' };
+    return {statusCode: 200, body: 'Test message sent to Telegram.'};
   } catch (err) {
-    return { statusCode: 500, body: String((err as Error).message || err) };
+    return {statusCode: 500, body: String((err as Error).message || err)};
   }
 };
