@@ -14,7 +14,7 @@ export interface RunCheckResult {
   body: string;
 }
 
-export async function sendTelegramMessage(text: string): Promise<void> {
+async function sendTelegramMessage(text: string): Promise<void> {
   if (!TELEGRAM_TOKEN || !TELEGRAM_CHAT_ID) {
     throw new Error('TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID env vars are not set');
   }
@@ -101,15 +101,7 @@ export async function runCheck(event?: HandlerEvent): Promise<RunCheckResult> {
     const arrayBuffer = await res.arrayBuffer();
     const buf = Buffer.from(arrayBuffer);
 
-    const allDays = parseSchedule(buf, GROUP_NAME);
-    if (allDays.length === 0) {
-      throw new Error(`Расписание для группы ${GROUP_NAME} не найдено на странице`);
-    }
-    // The site sometimes leaves 1-2 older days published alongside the new
-    // one instead of removing them. Only the LAST table on the page is the
-    // actually-new day (tomorrow's schedule) — that's the only one we care
-    // about comparing and sending.
-    const schedule = [allDays[allDays.length - 1]];
+    const schedule = parseSchedule(buf, GROUP_NAME);
     const currentHash = hashSchedule(schedule);
 
     const previousHash = await (store.get('last-hash') as unknown as Promise<string | null>);
