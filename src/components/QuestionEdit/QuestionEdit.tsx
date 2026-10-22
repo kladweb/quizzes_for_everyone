@@ -2,6 +2,7 @@ import React from "react";
 import type { Question, Option } from "../../types/Quiz";
 import { useFormError } from "../../store/useCurrentCreatingQuiz";
 import { useQuizEditor } from "../../hooks/useQuizEditor";
+import { FormattedText } from "../FormattedText/FormattedText";
 import "./questionEdit.css";
 
 interface IQuestionEditProps {
@@ -10,6 +11,21 @@ interface IQuestionEditProps {
   handleDeleteQuestion: (question: Question) => void;
   isOnlyOneQuestion: boolean;
 }
+
+const FormulaPreview: React.FC<{ text?: string }> = ({text}) => {
+  if (!text || !/\\\(|\\\[/.test(text)) {
+    return null;
+  }
+
+  return (
+    <div className="formula-preview">
+      <span className="formula-preview-label">Предпросмотр:</span>
+      <div className="formula-preview-content">
+        <FormattedText text={text}/>
+      </div>
+    </div>
+  );
+};
 
 export const QuestionEdit: React.FC<IQuestionEditProps> = (
   {
@@ -44,28 +60,32 @@ export const QuestionEdit: React.FC<IQuestionEditProps> = (
           handleQuestionEdit(question, (e.target.value).split(") ", 2)[1])}
         onKeyDown={handleKeyDown}
       />
+      <FormulaPreview text={question.question}/>
       <div className='options-edit'>
         {
           question.options.map((option: Option, index: number) => (
             <div key={option.id} className="option-input-block">
-              <input
-                className={`question-edit option-edit${formError[option.id] ? " no-validate" : ""}`}
-                name={option.id}
-                type="text"
-                value={option.text}
-                // placeholder={question.question ? "" : "вариант ответа"}
-                required
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleOptionEdit(option, e.target.value)}
-                onKeyDown={handleKeyDown}
-              />
-              <input
-                className="option-correct"
-                name={option.id}
-                type="checkbox"
-                title="Верный/невеный ответ"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleCorrectCheck(e, option, question)}
-                checked={question.correctAnswers.includes(option.id)}
-              />
+              <div className="option-input-row">
+                <input
+                  className={`question-edit option-edit${formError[option.id] ? " no-validate" : ""}`}
+                  name={option.id}
+                  type="text"
+                  value={option.text}
+                  // placeholder={question.question ? "" : "вариант ответа"}
+                  required
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleOptionEdit(option, e.target.value)}
+                  onKeyDown={handleKeyDown}
+                />
+                <input
+                  className="option-correct"
+                  name={option.id}
+                  type="checkbox"
+                  title="Верный/невеный ответ"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleCorrectCheck(e, option, question)}
+                  checked={question.correctAnswers.includes(option.id)}
+                />
+              </div>
+              <FormulaPreview text={option.text}/>
             </div>
           ))
         }

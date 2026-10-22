@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import type { IQuizMeta, IQuizzes, Question } from "../../types/Quiz";
 import { ToastType } from "../../types/Quiz";
-import { setIsLoading, useAllQuizzes  } from "../../store/useQuizzesStore";
+import { setIsLoading, useAllQuizzes } from "../../store/useQuizzesStore";
 import { useUser } from "../../store/useUserStore";
 import { QuizLoaderExtraInfo } from "../../components/QuizLoaderExtraInfo/QuizLoaderExtraInfo";
 import {
@@ -175,6 +175,22 @@ export const PageQuizEdit = () => {
                 // onChange={handleChange}
                 onKeyDown={handleKeyDown}
               />
+
+              <div className="quiz-formula-help">
+                <strong>Справка по вводу формул</strong>
+                <p>
+                  Формулы внутри текста заключайте в <code>\(...\)</code>,
+                  например <code>{"\\(\\frac{a}{b}\\)"}</code>,{" "}
+                  <code>{"\\(\\sqrt{x}\\)"}</code>,{" "}
+                  <code>{"\\(\\sqrt[3]{x}\\)"}</code>.
+                </p>
+                <p>
+                  Для формулы на отдельной строке используйте{" "}
+                  <code>{"\\[...\\]"}</code>, например{" "}
+                  <code>{"\\[S = \\pi r^2\\]"}</code>.
+                  Греческие буквы можно вводить напрямую: α, β, γ, ω.
+                </p>
+              </div>
               {
                 quiz.questions &&
                 <>

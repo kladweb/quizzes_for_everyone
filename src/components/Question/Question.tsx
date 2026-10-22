@@ -1,6 +1,7 @@
 import React from "react";
 import { type Question } from "../../types/Quiz";
 import "./question.css";
+import { FormattedText } from "../FormattedText/FormattedText";
 
 export const QuestionComponent: React.FC<{
   num: number;
@@ -78,12 +79,12 @@ export const QuestionComponent: React.FC<{
 
   return (
     <div className='questionsContainer'>
-      <h3 className='questionsTitle'>
-        <span className='questionRadio'>{`${num}) `}</span>
-        {question.question}
-        {isMultipleChoice && <span className='questionCheckbox'>
-          (Несколько вариантов ответов)
-        </span>}
+      <h3 className="questionsTitle">
+        <span className="questionRadio">{`${num}) `}</span>
+        <FormattedText text={question.question}/>
+        {isMultipleChoice && (
+          <span className="questionCheckbox">(Несколько вариантов ответов)</span>
+        )}
       </h3>
       <div className='questionOptions'>
         {question.options.map((option) => (
@@ -93,13 +94,14 @@ export const QuestionComponent: React.FC<{
             disabled={isSubmitted}
             className={`questionButton ${getQuestionButtonClass(option.id)}`}
           >
-            {getButtonPrefix(option.id)}{option.text}
+            {getButtonPrefix(option.id)}
+            <FormattedText text={option.text}/>
           </button>
         ))}
       </div>
       {isSubmitted && showExplanation && question.explanation && (
         <div className='questionExplain'>
-          <strong>Объяснение:</strong> {question.explanation}
+          <strong>Объяснение:</strong> <FormattedText text={question.explanation}/>
         </div>
       )}
     </div>

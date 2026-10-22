@@ -22,7 +22,7 @@ body {
 }
 
 .tests-container {
-  max-width: 600px;
+  max-width: 720px;
   margin: 10px auto;
   padding: 10px 20px;
   container-type: inline-size;
@@ -143,6 +143,15 @@ input[type="file"] {
   text-decoration: none;
   line-height: 1;
   transition: all 0.3s ease;
+}
+
+.formula-error {
+  color: #b42318;
+  background: #fef3f2;
+  border: 1px dashed #d92d20;
+  border-radius: 4px;
+  padding: 1px 4px;
+  overflow-wrap: anywhere;
 }
 
 /*Dot lights*/
