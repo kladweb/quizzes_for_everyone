@@ -20,11 +20,14 @@ export const handler: BackgroundHandler = async (event) => {
     "${userDescription}"
     Generate exactly ${numQuestions} questions. Ignore any different number mentioned in the request.
     Output language: ${language}.
-    Return ONLY a valid JSON object matching this structure: ${jsonTemplateCat}
+    Return ONLY a valid JSON object following this JSON template: ${jsonTemplateCat}. Treat example array lengths as illustrative unless explicitly specified by the user.
     
     Rules:
     - If the user request contains profanity, obscene language, insults or offensive content, return exactly: {"status":"error","reason":"inappropriate_content"} instead of JSON with the test. In this case, no other rules need to be followed.
-    - Make the incorrect options plausible.
+    - Make all incorrect options plausible.
+    - Each question must have one or more correct answers, consistent with the requested question type.
+    - The number of answer options per question must follow the user's request. If unspecified, use 4 options. Treat the number of options shown in the JSON template as an example, not a fixed requirement.
+    - Use \\( ... \\) for inline math and \\[ ... \\] for display math; never use $...$ or $$...$$ as math delimiters.
     - Choose "category" only from:
     general, english, russian, math, algebra, geometry, physics, chemistry, biology, geography, history, informatics, logic, iq, astronomy, engineering, building, economics, finance, business, psychology, sociology, music, art, literature, cinema, sport, health, nutrition, travel, culture, traditions, cars, space.
     - Return valid JSON only.

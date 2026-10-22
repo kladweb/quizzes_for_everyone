@@ -167,6 +167,40 @@
   }
 }
 
+.formula-preview {
+  margin: 4px 0 10px;
+  padding: 8px 10px;
+  border: 1px dashed var(--color-primary, #017a9b);
+  border-radius: 6px;
+  min-width: 0;
+}
+
+.formula-preview-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+.formula-preview-content {
+  overflow-x: auto;
+  overflow-wrap: anywhere;
+}
+
+.formula-preview-content .katex-display {
+  margin: 0.4em 0;
+}
+
+.option-input-block {
+  min-width: 0;
+}
+
+.option-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 @media (max-width: 400px) {
   .name-question-edit {
     margin-top: 0.8em;

@@ -46,3 +46,20 @@
     box-shadow: 0 0 5px var(--color-success);
   }
 }
+
+.quiz-formula-help {
+  margin: 12px 0 20px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: var(--color-bg-footer, #e6f4fa);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.quiz-formula-help p {
+  margin: 6px 0 0;
+}
+
+.quiz-formula-help code {
+  overflow-wrap: anywhere;
+}
