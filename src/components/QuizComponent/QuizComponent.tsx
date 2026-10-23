@@ -129,8 +129,9 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, questions, onReset, s
     const quizMeta = quizSnapshot.val();
     let quizExecutionCount: number = quizMeta.executionCount ?? quiz.executionCount;
     quizExecutionCount++;
-    quiz.executionCount = quizExecutionCount;
-    updateQuiz(quiz);
+    // quiz.executionCount = quizExecutionCount;
+    // updateQuiz(quiz);
+    updateQuiz({...quizMeta, executionCount: quizExecutionCount});
     await set(ref(database, `quizzesMeta/${quiz.testId}/executionCount`), quizExecutionCount);
     if (user?.uid) {
       await setPassedQuizDate(user.uid);
