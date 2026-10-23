@@ -8,10 +8,11 @@ import { useGuestUserId, useUser } from "../../store/useUserStore";
 import { updateQuiz } from "../../store/useQuizzesStore";
 import { QuizStorageManager } from "../../utils/QuizStorageManager";
 import { calculateQuestionScore, isQuestionFullyCorrect } from "../../utils/quizScoring";
-import type { IStatistics, Question, IQuizMeta, IAnswer } from "../../types/Quiz";
+import { ToastType, type IStatistics, type Question, type IQuizMeta, type IAnswer } from "../../types/Quiz";
 import { DownloadPDFQuizButton } from "../PDF/DownloadPDFQuizButton/DownloadPDFQuizButton";
 import "./quizComponent.css";
 import { setPassedQuizDate } from "../../api/userDatesApi";
+import { showToast } from "../../store/useNoticeStore";
 
 interface IQuizProps {
   quiz: IQuizMeta;
@@ -120,14 +121,13 @@ export const QuizComponent: React.FC<IQuizProps> = ({quiz, questions, onReset, s
     saveStatistic(statistics);
     QuizStorageManager.saveRecentStat(statistics);
     const dbRef = ref(database);
-    const snapshot = await get(child(dbRef, `quizzesMeta/${quiz.testId}/executionCount`));
-    let quizExecutionCount: number;
-    if (snapshot.exists()) {
-      quizExecutionCount = snapshot.val();
-    } else {
-      quizExecutionCount = quiz.executionCount;
-      // console.log("B:", quiz.executionCount);
+    const quizSnapshot = await get(child(dbRef, `quizzesMeta/${quiz.testId}`));
+    if (!quizSnapshot.exists()) {
+      showToast("Тест был удалён. Счётчик прохождений не обновлён.", ToastType.ERROR);
+      return;
     }
+    const quizMeta = quizSnapshot.val();
+    let quizExecutionCount: number = quizMeta.executionCount ?? quiz.executionCount;
     quizExecutionCount++;
     quiz.executionCount = quizExecutionCount;
     updateQuiz(quiz);
