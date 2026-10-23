@@ -85,7 +85,7 @@ const userStore: StateCreator<IUserState> = (set) => ({
       guestId = 'userLS' + nanoid(10);
     }
     localStorage.setItem('guestUserId', guestId);
-    set(() => ({guestUserId: guestId, isAuthLoading: false}));
+    set(() => ({guestUserId: guestId}));
   },
   loginGoogle: () => {
     // console.log("АВТОРИЗАЦИЯ ПОЛЬЗОВАТЕЛЯ");

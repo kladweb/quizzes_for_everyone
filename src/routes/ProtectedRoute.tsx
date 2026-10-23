@@ -1,13 +1,14 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { useIsAuthLoading, useUser } from "../store/useUserStore";
+import { useIsAuthLoaded, useIsAuthLoading, useUser } from "../store/useUserStore";
 import { Loader } from "../components/Loader/Loader";
 
 export const ProtectedRoute = () => {
   const user = useUser();
   const isAuthLoading = useIsAuthLoading();
+  const isAuthLoaded = useIsAuthLoaded();
 
-  if (isAuthLoading) {
+  if (isAuthLoading || !isAuthLoaded) {
     return <div className='loader-container'><Loader/></div>;
   }
 

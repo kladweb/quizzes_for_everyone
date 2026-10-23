@@ -13,7 +13,8 @@
       "dependencies": [
         "npm:@eslint/js@^9.39.4",
         "npm:@netlify/functions@^5.1.5",
-        "npm:@react-pdf/renderer@^4.5.1",
+        "npm:@react-pdf/math@6",
+        "npm:@react-pdf/renderer@^4.9.0",
         "npm:@testing-library/jest-dom@^6.9.1",
         "npm:@testing-library/react@^16.3.2",
         "npm:@testing-library/user-event@^14.6.1",
