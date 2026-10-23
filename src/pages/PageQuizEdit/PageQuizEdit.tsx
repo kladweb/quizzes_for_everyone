@@ -176,21 +176,23 @@ export const PageQuizEdit = () => {
                 onKeyDown={handleKeyDown}
               />
 
-              <div className="quiz-formula-help">
-                <strong>Справка по вводу формул</strong>
+              <details className="quiz-formula-help">
+                <summary>Справка по вводу формул</summary>
+
                 <p>
                   Формулы внутри текста заключайте в <code>\(...\)</code>,
                   например <code>{"\\(\\frac{a}{b}\\)"}</code>,{" "}
                   <code>{"\\(\\sqrt{x}\\)"}</code>,{" "}
                   <code>{"\\(\\sqrt[3]{x}\\)"}</code>.
                 </p>
+
                 <p>
                   Для формулы на отдельной строке используйте{" "}
                   <code>{"\\[...\\]"}</code>, например{" "}
                   <code>{"\\[S = \\pi r^2\\]"}</code>.
                   Греческие буквы можно вводить напрямую: α, β, γ, ω.
                 </p>
-              </div>
+              </details>
               {
                 quiz.questions &&
                 <>

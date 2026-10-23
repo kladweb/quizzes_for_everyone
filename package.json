@@ -21,7 +21,8 @@
   },
   "dependencies": {
     "@netlify/functions": "^5.1.5",
-    "@react-pdf/renderer": "^4.5.1",
+    "@react-pdf/math": "^6.0.0",
+    "@react-pdf/renderer": "^4.9.0",
     "file-saver": "^2.0.5",
     "firebase": "^12.6.0",
     "firebase-admin": "^14.2.0",
